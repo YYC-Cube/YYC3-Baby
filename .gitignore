@@ -1,0 +1,621 @@
+# ========================================
+# YYC³ Project - Git Ignore Configuration
+# Project: yyc3-xy-05
+# Purpose: Remote Repository Security & Cleanliness
+# Last Updated: 2026-01-02
+# ========================================
+
+# ========================================
+# 🔒 Security & Sensitive Information
+# ========================================
+
+# Environment Variables (CRITICAL - Never commit these)
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging.local
+
+# API Keys & Secrets (CRITICAL - Never commit these)
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+secrets/
+credentials/
+.keys/
+.secrets/
+
+# Database Credentials & Configs
+db-credentials.json
+database-secrets.json
+pgpass
+my.cnf
+*.sql.enc
+
+# Cloud Provider Credentials
+.aws/
+.aws-sam/
+.aws-sam/persisted-sam.json
+.azure/
+.google/
+.gcloud/
+*.pem.gpg
+
+# SSH Keys
+id_rsa
+id_rsa.pub
+id_dsa
+id_dsa.pub
+id_ecdsa
+id_ecdsa.pub
+id_ed25519
+id_ed25519.pub
+ssh_config
+known_hosts
+
+# ========================================
+# 📦 Dependencies & Packages
+# ========================================
+
+# Node.js
+node_modules/
+.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+target/
+.mvn/
+mvnw
+mvnw.cmd
+
+# ========================================
+# 🏗️ Build & Distribution
+# ========================================
+
+# Production Builds
+.next/
+out/
+build/
+dist/
+.nuxt/
+.cache/
+.parcel-cache/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+
+# TypeScript
+*.tsbuildinfo
+
+# Webpack
+.webpack/
+
+# ========================================
+# 🗄️ Database & Data Files
+# ========================================
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+*.db3
+*.mdb
+*.accdb
+data/
+db-data/
+database/
+backups/
+dumps/
+
+# PostgreSQL
+*.dump
+*.sql.backup
+
+# MongoDB
+dump/
+mongod.lock
+
+# Redis
+dump.rdb
+
+# ========================================
+# 🧪 Testing & Coverage
+# ========================================
+
+# Test Coverage
+coverage/
+*.lcov
+.nyc_output/
+test-results/
+*.coverage
+.coverage
+.coverage.*
+htmlcov/
+junit.xml
+
+# Test Logs
+test-logs/
+*.test.log
+
+# ========================================
+# 📝 Logs & Debug Files
+# ========================================
+
+# Application Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Debug Files
+debug.log
+error.log
+access.log
+combined.log
+
+# ========================================
+# 🔧 Development & IDE
+# ========================================
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/snippets/
+!.vscode/extensions.json
+.history/
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ========================================
+# 🐳 Docker & Containers
+# ========================================
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+.docker/
+
+# Container Volumes
+volumes/
+docker-volumes/
+
+# ========================================
+# ☁️ Cloud & Deployment
+# ========================================
+
+# AWS
+.aws/
+.serverless/
+
+# Azure
+.azure/
+
+# Google Cloud
+.gcloud/
+
+# Vercel
+.vercel/
+
+# Netlify
+.netlify/
+
+# Heroku
+.heroku/
+
+# ========================================
+# 🔐 Encryption & Certificates
+# ========================================
+
+# Certificates
+*.crt
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.der
+*.csr
+keystore/
+truststore/
+
+# Encrypted Files
+*.enc
+*.gpg
+*.asc
+
+# ========================================
+# 📊 Monitoring & Analytics
+# ========================================
+
+# Monitoring
+monitoring/
+metrics/
+traces/
+
+# Analytics
+analytics/
+tracking/
+
+# ========================================
+# 🎨 Assets & Media
+# ========================================
+
+# Large Binary Files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.iso
+*.dmg
+*.pkg
+
+# Media Files (if not tracked)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.mp3
+*.wav
+*.flac
+*.jpg
+*.jpeg
+*.gif
+*.svg
+# Exception: Allow specific PNG files for project branding
+!public/git_1800_400-5.png
+!public/git_1800_450-6.png
+!public/placeholder-logo.png
+!public/yyc3-*.png
+!public/yyc3-white.png
+!public/yyc3-pwa-icon.png
+# Ignore other PNG files
+*.png
+
+# ========================================
+# 📄 Documentation & Reports
+# ========================================
+
+# Generated Documentation
+docs/generated/
+api-docs/
+swagger-ui/
+
+# Reports
+reports/
+*.report
+benchmark-results/
+
+# ========================================
+# 🔄 Temporary & Cache Files
+# ========================================
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+.cache/
+tmp/
+temp/
+*.cache
+
+# OS Cache
+.cache/
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ========================================
+# 🎯 Project Specific
+# ========================================
+
+# YYC³ Project Specific
+xiaoyu-enhanced-server.js
+project-config.local.json
+local-config.json
+dev-config.json
+staging-config.json
+
+# AI/ML Models
+models/
+*.model
+*.h5
+*.pkl
+*.pb
+*.onnx
+
+# Training Data
+training-data/
+datasets/
+data-raw/
+
+# Experiment Results
+experiments/
+runs/
+mlruns/
+
+# ========================================
+# 🔍 Security Scanning & Analysis
+# ========================================
+
+# Security Scan Results
+security-scan/
+vulnerability-report/
+audit-report/
+*.security
+
+# ========================================
+# 📦 Package Manager Lock Files
+# ========================================
+
+# npm
+package-lock.json
+
+# yarn
+yarn.lock
+
+# pnpm
+pnpm-lock.yaml
+
+# bower
+bower.json
+
+# composer
+composer.lock
+
+# pip
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# ========================================
+# 🌐 Browser & Web
+# ========================================
+
+# Browser
+.browser
+.browserslistrc
+
+# Webpack
+.webpack/
+
+# Parcel
+.parcel-cache/
+
+# Rollup
+.rollup.cache/
+
+# ========================================
+# 📱 Mobile Development
+# ========================================
+
+# iOS
+ios/Pods/
+ios/*.xcworkspace
+ios/*.xcuserdata
+ios/DerivedData/
+ios/*.moved-aside
+ios/*.pbxuser
+ios/*.mode1v3
+ios/*.mode2v3
+ios/*.perspectivev3
+
+# Android
+android/.gradle/
+android/app/build/
+android/local.properties
+android/*.iml
+android/.idea/
+
+# ========================================
+# 🧪 Experimental & Feature Flags
+# ========================================
+
+# Experimental Features
+experimental/
+features/
+feature-flags/
+
+# A/B Testing
+ab-tests/
+experiments/
+
+# ========================================
+# 📋 CI/CD & Automation
+# ========================================
+
+# CI/CD
+.github/workflows/*.local.yml
+.gitlab-ci.local.yml
+bitbucket-pipelines.local.yml
+
+# Automation
+automation/
+scripts/local-*.sh
+
+# ========================================
+# 🎨 UI/UX Design
+# ========================================
+
+# Design Files
+design/
+assets/design/
+*.fig
+*.sketch
+*.psd
+*.ai
+
+# ========================================
+# 📊 Performance & Profiling
+# ========================================
+
+# Performance
+performance/
+profiling/
+benchmark/
+*.prof
+*.profile
+
+# ========================================
+# 🔌 Plugins & Extensions
+# ========================================
+
+# Plugins
+plugins/
+extensions/
+addons/
+
+# ========================================
+# 📝 Notes & Documentation
+# ========================================
+
+# Notes
+notes/
+scratchpad/
+todo/
+TODO.md
+
+# ========================================
+# 🎬 Scripts & Automation
+# ========================================
+
+# Scripts
+scripts/local-*.sh
+scripts/dev-*.sh
+scripts/test-*.sh
+
+# ========================================
+# 🌍 Localization & i18n
+# ========================================
+
+# Localization
+locales/
+i18n/
+translations/
+
+# ========================================
+# 📦 Archive & Backup
+# ========================================
+
+# Archives
+archive/
+backup/
+*.backup
+*.old
+
+# ========================================
+# 🎯 End of Configuration
+# ========================================
+
+# YYC³ - YanYuCloudCube
+# "Words Initiate Quadrants, Language Serves as Core for the Future"
+# "All things converge in the cloud pivot; Deep stacks ignite a new era of intelligence"
