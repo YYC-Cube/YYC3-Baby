@@ -1,7 +1,7 @@
 'use client'
 
-import React, { forwardRef, useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { useCharacterTheme } from '../CharacterThemeContext'
 
 // 输入框变体类型
@@ -9,7 +9,7 @@ type InputVariant = 'default' | 'filled' | 'outlined' | 'ghost'
 type InputSize = 'small' | 'medium' | 'large'
 type InputState = 'idle' | 'focus' | 'error' | 'success'
 
-export interface CharacterInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface CharacterInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   variant?: InputVariant
   size?: InputSize
   label?: string
@@ -110,8 +110,8 @@ export const CharacterInput = forwardRef<HTMLInputElement, CharacterInputProps>(
     if (!themeColors) return {}
 
     const borderColor = state === 'error' ? '#ef4444' :
-                       state === 'success' ? '#10b981' :
-                       state === 'focus' ? themeColors.primaryColor : themeColors.border
+      state === 'success' ? '#10b981' :
+        state === 'focus' ? themeColors.primary : themeColors.border
 
     const backgroundColor = variant === 'filled' ? themeColors.accent : 'transparent'
     const borderWidth = variant === 'ghost' ? '0' : '2px'
@@ -134,7 +134,7 @@ export const CharacterInput = forwardRef<HTMLInputElement, CharacterInputProps>(
     },
     focus: {
       scale: 1.02,
-      borderColor: themeColors?.primaryColor
+      borderColor: themeColors?.primary
     },
     error: {
       x: animate ? [-5, 5, -5, 5, 0] : 0,
@@ -216,7 +216,7 @@ export const CharacterInput = forwardRef<HTMLInputElement, CharacterInputProps>(
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          {...props}
+          {...(props as unknown as React.ComponentProps<typeof motion.input>)}
         />
 
         {/* 右侧图标 */}
@@ -238,10 +238,10 @@ export const CharacterInput = forwardRef<HTMLInputElement, CharacterInputProps>(
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <div
+            <motion.div
               className="w-4 h-4 border-2 border-t-2 border-t-transparent rounded-full"
               style={{
-                borderColor: themeColors?.primaryColor,
+                borderColor: themeColors?.primary,
                 borderTopColor: 'transparent'
               }}
               animate={{ rotate: 360 }}

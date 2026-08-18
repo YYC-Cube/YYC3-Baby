@@ -20,7 +20,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
   const [confirmPassword, setConfirmPassword] = useState("")
   const [localError, setLocalError] = useState<string | null>(null)
 
-  const { signIn, signUp, resetPassword, isLoading, error } = useAuth()
+  const { login, register, isLoading, error } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,9 +28,11 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
 
     try {
       if (mode === "login") {
-        await signIn(email, password)
-        onSuccess?.()
-        onClose()
+        const ok = await login(email, password)
+        if (ok) {
+          onSuccess?.()
+          onClose()
+        }
       } else if (mode === "register") {
         if (password !== confirmPassword) {
           setLocalError("两次输入的密码不一致")
@@ -40,12 +42,18 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
           setLocalError("密码长度至少6位")
           return
         }
-        await signUp(email, password, name)
-        onSuccess?.()
-        onClose()
+        const ok = await register({
+          email,
+          password,
+          firstName: name,
+          lastName: '',
+        })
+        if (ok) {
+          onSuccess?.()
+          onClose()
+        }
       } else {
-        await resetPassword(email)
-        setLocalError("重置链接已发送到您的邮箱")
+        setLocalError("如需重置密码，请联系管理员")
       }
     } catch {
       // 错误已在useAuth中处理
@@ -80,7 +88,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             className="bg-white rounded-2xl w-full max-w-md overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); }}
           >
             {/* 头部 */}
             <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6 text-white">
@@ -122,7 +130,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                   <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => { setName(e.target.value); }}
                     placeholder="请输入您的姓名"
                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
@@ -136,7 +144,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value); }}
                   placeholder="请输入邮箱地址"
                   className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
@@ -150,7 +158,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                   <input
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => { setPassword(e.target.value); }}
                     placeholder="请输入密码"
                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
@@ -165,7 +173,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                   <input
                     type="password"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={(e) => { setConfirmPassword(e.target.value); }}
                     placeholder="请再次输入密码"
                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
@@ -178,7 +186,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                 <div className="text-right">
                   <button
                     type="button"
-                    onClick={() => switchMode("reset")}
+                    onClick={() => { switchMode("reset"); }}
                     className="text-sm text-blue-500 hover:text-blue-600"
                   >
                     忘记密码？
@@ -213,7 +221,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                     还没有账号？
                     <button
                       type="button"
-                      onClick={() => switchMode("register")}
+                      onClick={() => { switchMode("register"); }}
                       className="text-blue-500 hover:text-blue-600 ml-1"
                     >
                       立即注册
@@ -224,7 +232,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                     已有账号？
                     <button
                       type="button"
-                      onClick={() => switchMode("login")}
+                      onClick={() => { switchMode("login"); }}
                       className="text-blue-500 hover:text-blue-600 ml-1"
                     >
                       立即登录

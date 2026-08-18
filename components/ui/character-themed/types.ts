@@ -39,6 +39,7 @@ export interface VariantConfig {
   borderColor?: string
   borderWidth?: number
   boxShadow?: string
+  transform?: string
   hover?: {
     backgroundColor?: string
     color?: string

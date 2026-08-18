@@ -250,7 +250,7 @@ const PredictionDashboard: React.FC<PredictionDashboardProps> = ({
               </CardDescription>
             </div>
             <div className="flex items-center space-x-4">
-              <Select value={chartType} onValueChange={(value: 'line' | 'area' | 'scatter') => setChartType(value)}>
+              <Select value={chartType} onValueChange={(value: 'line' | 'area' | 'scatter') => { setChartType(value); }}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -261,7 +261,7 @@ const PredictionDashboard: React.FC<PredictionDashboardProps> = ({
                 </SelectContent>
               </Select>
 
-              <Select value={selectedTimeRange} onValueChange={(value: '24h' | '7d' | '30d' | 'all') => setSelectedTimeRange(value)}>
+              <Select value={selectedTimeRange} onValueChange={(value: '24h' | '7d' | '30d' | 'all') => { setSelectedTimeRange(value); }}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -490,7 +490,7 @@ const PredictionDashboard: React.FC<PredictionDashboardProps> = ({
           <AlertDescription>
             {insights.driftAlerts.map((alert, index) => (
               <div key={index} className="mb-2">
-                <Badge variant={alert.severity === 'high' ? 'destructive' : 'default'}>
+                <Badge variant={(alert.severity === 'critical' || alert.severity === 'error') ? 'destructive' : 'default'}>
                   {alert.type}
                 </Badge>
                 <span className="ml-2">{alert.description}</span>

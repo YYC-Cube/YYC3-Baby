@@ -57,7 +57,7 @@ export default function VideoPlayer({ video, onClose, onViewCountUpdate }: Video
     }
 
     window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
+    return () => { window.removeEventListener("keydown", handleKeyDown); }
   }, [onClose])
 
   const formatTime = (seconds: number): string => {
@@ -78,7 +78,7 @@ export default function VideoPlayer({ video, onClose, onViewCountUpdate }: Video
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 bg-black flex items-center justify-center"
-      onMouseMove={() => setShowControls(true)}
+      onMouseMove={() => { setShowControls(true); }}
     >
       {/* 视频内容区域 */}
       <div ref={playerRef} className="relative w-full h-full max-w-6xl max-h-[80vh] mx-auto">
@@ -102,7 +102,7 @@ export default function VideoPlayer({ video, onClose, onViewCountUpdate }: Video
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsPlaying(true)}
+                  onClick={() => { setIsPlaying(true); }}
                   className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-xl"
                 >
                   <i className="ri-play-fill text-4xl text-slate-900 ml-1" />
@@ -144,7 +144,7 @@ export default function VideoPlayer({ video, onClose, onViewCountUpdate }: Video
                 <div className="flex items-center gap-4">
                   {/* 播放/暂停 */}
                   <button
-                    onClick={() => setIsPlaying((prev) => !prev)}
+                    onClick={() => { setIsPlaying((prev) => !prev); }}
                     className="text-white hover:text-white/80 transition-colors"
                   >
                     <i className={`${isPlaying ? "ri-pause-fill" : "ri-play-fill"} text-2xl`} />

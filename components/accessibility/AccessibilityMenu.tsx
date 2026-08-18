@@ -28,7 +28,7 @@ export default function AccessibilityMenu() {
     <>
       {/* 快速操作按钮 */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => { setIsOpen(!isOpen); }}
         className="a11y-quick-actions"
         aria-label="可访问性快速设置"
         aria-expanded={isOpen}
@@ -55,7 +55,7 @@ export default function AccessibilityMenu() {
                 ♿ 快速设置
               </h3>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => { setIsOpen(false); }}
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="关闭快速设置"
               >
@@ -177,7 +177,7 @@ export default function AccessibilityMenu() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/20 z-40"
-            onClick={() => setIsOpen(false)}
+            onClick={() => { setIsOpen(false); }}
           />
         )}
       </AnimatePresence>

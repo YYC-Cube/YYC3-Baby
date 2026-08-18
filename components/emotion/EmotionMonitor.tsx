@@ -5,10 +5,10 @@
 
 "use client"
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useEmotionMonitor } from '@/hooks/useEmotionMonitor'
+import { useEmotionMonitor, type EmotionInsight } from '@/hooks/useEmotionMonitor'
 import { EmotionType } from '@/lib/ai/voice-interaction'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 interface EmotionMonitorProps {
   compact?: boolean
@@ -24,13 +24,6 @@ interface EmotionAlert {
   emotion: EmotionType
   timestamp: number
   suggestions?: string[]
-}
-
-interface EmotionInsight {
-  timestamp: number
-  severity: 'success' | 'warning' | 'info'
-  type: 'trend' | 'pattern' | 'recommendation'
-  message: string
 }
 
 interface EmotionEvent {
@@ -118,7 +111,7 @@ export default function EmotionMonitor({
           summary: report.summary || '',
           emotions: Object.fromEntries(
             Object.entries(report.emotions || {}).filter(([_, v]) => v !== undefined)
-          ) as Record<string, number>,
+          ),
           trends: report.trends,
           recommendations: report.recommendations
         })
@@ -144,12 +137,11 @@ export default function EmotionMonitor({
       <motion.div
         className={`bg-white rounded-2xl p-3 shadow-sm border border-gray-100 cursor-pointer ${className}`}
         whileHover={{ scale: 1.02 }}
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={() => { setIsExpanded(!isExpanded); }}
       >
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-2xl ${
-            currentEmotionState ? emotionColors[String(currentEmotionState.currentEmotion).toLowerCase()] : 'bg-gray-100'
-          }`}>
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-2xl ${currentEmotionState ? emotionColors[String(currentEmotionState.currentEmotion).toLowerCase()] : 'bg-gray-100'
+            }`}>
             {currentEmotionState ? emotionEmojis[String(currentEmotionState.currentEmotion).toLowerCase()] : '😊'}
           </div>
           <div className="flex-1">
@@ -198,7 +190,7 @@ export default function EmotionMonitor({
         </div>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setShowDetailedReport(!showDetailedReport)}
+            onClick={() => { setShowDetailedReport(!showDetailedReport); }}
             className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition"
           >
             {showDetailedReport ? '收起报告' : '详细报告'}
@@ -236,13 +228,12 @@ export default function EmotionMonitor({
             {/* 趋势指示器 */}
             <div className="flex items-center gap-2 mt-2">
               <span className="text-sm text-gray-600">趋势:</span>
-              <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                currentEmotionState.trend === 'improving' ? 'bg-green-100 text-green-700' :
-                currentEmotionState.trend === 'declining' ? 'bg-red-100 text-red-700' :
-                'bg-gray-100 text-gray-700'
-              }`}>
+              <div className={`px-2 py-1 rounded-full text-xs font-medium ${currentEmotionState.trend === 'improving' ? 'bg-green-100 text-green-700' :
+                  currentEmotionState.trend === 'declining' ? 'bg-red-100 text-red-700' :
+                    'bg-gray-100 text-gray-700'
+                }`}>
                 {currentEmotionState.trend === 'improving' ? '📈 改善中' :
-                 currentEmotionState.trend === 'declining' ? '📉 下降中' : '➡️ 稳定'}
+                  currentEmotionState.trend === 'declining' ? '📉 下降中' : '➡️ 稳定'}
               </div>
             </div>
           </div>
@@ -320,18 +311,16 @@ function EmotionAlerts({ alerts, onClear }: { alerts: EmotionAlert[], onClear: (
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: index * 0.1 }}
-          className={`p-3 rounded-lg border ${
-            alert.severity === 'high' ? 'bg-red-50 border-red-200' :
-            alert.severity === 'medium' ? 'bg-orange-50 border-orange-200' :
-            'bg-blue-50 border-blue-200'
-          }`}
+          className={`p-3 rounded-lg border ${alert.severity === 'high' ? 'bg-red-50 border-red-200' :
+              alert.severity === 'medium' ? 'bg-orange-50 border-orange-200' :
+                'bg-blue-50 border-blue-200'
+            }`}
         >
           <div className="flex items-start gap-2">
-            <i className={`${
-              alert.severity === 'high' ? 'ri-error-warning-line text-red-500' :
-              alert.severity === 'medium' ? 'ri-alert-line text-orange-500' :
-              'ri-information-line text-blue-500'
-            } mt-0.5`} />
+            <i className={`${alert.severity === 'high' ? 'ri-error-warning-line text-red-500' :
+                alert.severity === 'medium' ? 'ri-alert-line text-orange-500' :
+                  'ri-information-line text-blue-500'
+              } mt-0.5`} />
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-800">{alert.message}</p>
               {alert.suggestions && alert.suggestions.length > 0 && (
@@ -361,22 +350,20 @@ function EmotionInsights({ insights }: { insights: EmotionInsight[] }) {
       <div className="space-y-2">
         {insights.map((insight, index) => (
           <motion.div
-            key={`${insight.timestamp}-${index}`}
+            key={`${insight.timestamp instanceof Date ? insight.timestamp.toISOString() : String(insight.timestamp)}-${index}`}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className={`p-3 rounded-lg border ${
-              insight.severity === 'success' ? 'bg-green-50 border-green-200' :
-              insight.severity === 'warning' ? 'bg-yellow-50 border-yellow-200' :
-              'bg-gray-50 border-gray-200'
-            }`}
+            className={`p-3 rounded-lg border ${insight.severity === 'success' ? 'bg-green-50 border-green-200' :
+                insight.severity === 'warning' ? 'bg-yellow-50 border-yellow-200' :
+                  'bg-gray-50 border-gray-200'
+              }`}
           >
             <div className="flex items-center gap-2">
-              <i className={`${
-                insight.type === 'trend' ? 'ri-line-chart-line' :
-                insight.type === 'pattern' ? 'ri-pulse-line' :
-                'ri-lightbulb-line'
-              } text-sm`} />
+              <i className={`${insight.type === 'trend' ? 'ri-line-chart-line' :
+                  insight.type === 'pattern' ? 'ri-pulse-line' :
+                    'ri-lightbulb-line'
+                } text-sm`} />
               <p className="text-sm text-gray-700">{insight.message}</p>
             </div>
           </motion.div>
@@ -427,7 +414,7 @@ function DetailedEmotionReport({ report }: { report: DetailedReport }) {
                 <div className="flex-1 bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: `${(count as number / maxObjectValues(report.emotions || {})) * 100}%` }}
+                    style={{ width: `${(count / maxObjectValues(report.emotions || {})) * 100}%` }}
                   />
                 </div>
                 <span className="text-sm font-medium">{count}</span>
@@ -471,7 +458,7 @@ function DetailedEmotionReport({ report }: { report: DetailedReport }) {
 }
 
 // 工具函数
-function getEmotionName(emotion: EmotionType): string {
+function getEmotionName(emotion: string): string {
   const names: Record<string, string> = {
     happiness: '开心',
     sadness: '难过',

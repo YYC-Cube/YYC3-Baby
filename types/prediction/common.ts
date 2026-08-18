@@ -30,7 +30,6 @@ export interface PredictionResult {
  */
 export interface QualityMetrics {
   timestamp?: number
-  timestamp: number
   accuracy: number
   precision: number
   recall: number
@@ -122,7 +121,7 @@ export interface PredictionConfig {
   name: string
   algorithm: string
   parameters: Record<string, unknown>
-  priority?: 'low' | 'medium' | 'high' | string
+  priority?: string
   requirements?: Partial<PredictionTask['requirements']>
   preprocessing?: {
     normalize: boolean
@@ -187,12 +186,7 @@ export interface PredictionInsights {
     avgLatency: number
     predictionCount?: number
   }
-  driftAlerts: Array<{
-    type: string
-    severity: string
-    description: string
-    timestamp: number
-  }>
+  driftAlerts: DriftAlert[]
   recommendations: Array<{
     category: string
     priority: string
@@ -239,11 +233,10 @@ export interface DataStream {
  * 模型选择
  */
 export interface ModelSelection {
-  reasoning?: string
   selectedModel: string
   alternativeModels: string[]
   confidence: number
-  reasoning: string
+  reasoning?: string
 }
 
 /**
@@ -286,16 +279,6 @@ export interface PerformanceMetrics {
   stability: number
   avgLatency: number
   predictionCount?: number
-}
-
-/**
- * 漂移警报
- */
-export interface DriftAlert {
-  type: string
-  severity: string
-  description: string
-  timestamp: number
 }
 
 /**
@@ -566,29 +549,8 @@ export interface DriftAlert {
   id: string
   type: string
   severity: 'info' | 'warning' | 'error' | 'critical'
-  message: string
+  message?: string
+  description: string
   timestamp: number
   metrics?: DataDriftMetrics
-}
-
-
-// 模型选择分析辅助类型
-export interface StabilityMetrics {
-  variance: number
-  coefficientOfVariation: number
-  consistencyScore: number
-}
-
-export interface BiasVarianceTradeoff {
-  bias: number
-  variance: number
-  totalError: number
-  recommendation?: string
-}
-
-export interface ResidualAnalysis {
-  mean: number
-  standardDeviation: number
-  autocorrelation?: number[]
-  normallyDistributed: boolean
 }

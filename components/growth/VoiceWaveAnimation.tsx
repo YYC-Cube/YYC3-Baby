@@ -19,7 +19,7 @@ export default function VoiceWaveAnimation({
   className = "",
 }: VoiceWaveAnimationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number>(0)
 
   useEffect(() => {
     const canvas = canvasRef.current

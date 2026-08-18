@@ -103,7 +103,7 @@ export default function CurriculumPage() {
               ).map(({ mode, icon, label }) => (
                 <button
                   key={mode}
-                  onClick={() => setViewMode(mode)}
+                  onClick={() => { setViewMode(mode); }}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-1 ${
                     viewMode === mode ? "bg-blue-500 text-white" : "text-slate-600 hover:bg-slate-100"
                   }`}
@@ -262,7 +262,7 @@ function WeeklyTimetable({
         {WEEKDAYS.map((day, i) => (
           <button
             key={day}
-            onClick={() => onSelectDay(i + 1)}
+            onClick={() => { onSelectDay(i + 1); }}
             className={`p-2 text-center font-medium transition ${
               selectedDay === i + 1 ? "bg-blue-500 text-white" : "bg-slate-50 text-slate-600 hover:bg-slate-100"
             }`}
@@ -284,7 +284,7 @@ function WeeklyTimetable({
                 <div key={i} className="p-1 border-r last:border-r-0">
                   {slot && (
                     <motion.button
-                      onClick={() => onEditCourse(slot.course)}
+                      onClick={() => { onEditCourse(slot.course); }}
                       className="w-full h-full rounded-lg p-1 text-xs text-white font-medium"
                       style={{ backgroundColor: slot.course.color }}
                       whileHover={{ scale: 1.02 }}
@@ -321,7 +321,7 @@ function DailySchedule({
         {WEEKDAYS.map((day, i) => (
           <motion.button
             key={day}
-            onClick={() => onSelectDay(i + 1)}
+            onClick={() => { onSelectDay(i + 1); }}
             className={`px-4 py-2 rounded-xl font-medium whitespace-nowrap transition ${
               selectedDay === i + 1 ? "bg-blue-500 text-white shadow-lg" : "bg-white text-slate-600 hover:bg-slate-100"
             }`}
@@ -349,7 +349,7 @@ function DailySchedule({
               <motion.div
                 key={course.id}
                 className="flex items-center gap-4 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition cursor-pointer"
-                onClick={() => onEditCourse(course)}
+                onClick={() => { onEditCourse(course); }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
@@ -428,13 +428,13 @@ function CourseList({
                   </div>
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => onEditCourse(course)}
+                      onClick={() => { onEditCourse(course); }}
                       className="p-2 rounded-lg hover:bg-slate-200 transition"
                     >
                       <i className="ri-edit-line text-slate-500" />
                     </button>
                     <button
-                      onClick={() => onDeleteCourse(course.id)}
+                      onClick={() => { onDeleteCourse(course.id); }}
                       className="p-2 rounded-lg hover:bg-red-100 transition"
                     >
                       <i className="ri-delete-bin-line text-red-500" />
@@ -466,7 +466,7 @@ function CourseEditor({
     subject: course?.subject || "",
     teacher: course?.teacher || "",
     location: course?.location || "",
-    type: course?.type || ("school" as Course["type"]),
+    type: course?.type || ("school"),
     color: course?.color || "#3b82f6",
     notes: course?.notes || "",
     schedules: course?.schedules || ([] as CourseSchedule[]),
@@ -530,7 +530,7 @@ function CourseEditor({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="sticky top-0 bg-white p-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-bold">{course ? "编辑课程" : "添加课程"}</h2>
@@ -546,7 +546,7 @@ function CourseEditor({
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) => { setFormData((prev) => ({ ...prev, name: e.target.value })); }}
                 className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="如：语文"
               />
@@ -581,7 +581,7 @@ function CourseEditor({
               <input
                 type="text"
                 value={formData.teacher}
-                onChange={(e) => setFormData((prev) => ({ ...prev, teacher: e.target.value }))}
+                onChange={(e) => { setFormData((prev) => ({ ...prev, teacher: e.target.value })); }}
                 className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="如：李老师"
               />
@@ -590,7 +590,7 @@ function CourseEditor({
               <label className="block text-sm font-medium text-slate-700 mb-1">课程类型</label>
               <select
                 value={formData.type}
-                onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value as Course["type"] }))}
+                onChange={(e) => { setFormData((prev) => ({ ...prev, type: e.target.value as Course["type"] })); }}
                 className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
               >
                 {COURSE_TYPES.map((t) => (
@@ -612,7 +612,7 @@ function CourseEditor({
                     {WEEKDAYS[schedule.dayOfWeek - 1]} {schedule.startTime}-{schedule.endTime}
                     {schedule.room && ` (${schedule.room})`}
                   </span>
-                  <button onClick={() => handleRemoveSchedule(schedule.id)} className="p-1 hover:bg-red-100 rounded">
+                  <button onClick={() => { handleRemoveSchedule(schedule.id); }} className="p-1 hover:bg-red-100 rounded">
                     <i className="ri-close-line text-red-500" />
                   </button>
                 </div>
@@ -621,7 +621,7 @@ function CourseEditor({
               <div className="grid grid-cols-5 gap-2 pt-2 border-t">
                 <select
                   value={newSchedule.dayOfWeek}
-                  onChange={(e) => setNewSchedule((prev) => ({ ...prev, dayOfWeek: Number(e.target.value) }))}
+                  onChange={(e) => { setNewSchedule((prev) => ({ ...prev, dayOfWeek: Number(e.target.value) })); }}
                   className="px-2 py-1 border rounded-lg text-sm"
                 >
                   {WEEKDAYS.map((day, i) => (
@@ -632,7 +632,7 @@ function CourseEditor({
                 </select>
                 <select
                   value={newSchedule.startTime}
-                  onChange={(e) => setNewSchedule((prev) => ({ ...prev, startTime: e.target.value }))}
+                  onChange={(e) => { setNewSchedule((prev) => ({ ...prev, startTime: e.target.value })); }}
                   className="px-2 py-1 border rounded-lg text-sm"
                 >
                   {TIME_SLOTS.map((t) => (
@@ -643,7 +643,7 @@ function CourseEditor({
                 </select>
                 <select
                   value={newSchedule.endTime}
-                  onChange={(e) => setNewSchedule((prev) => ({ ...prev, endTime: e.target.value }))}
+                  onChange={(e) => { setNewSchedule((prev) => ({ ...prev, endTime: e.target.value })); }}
                   className="px-2 py-1 border rounded-lg text-sm"
                 >
                   {TIME_SLOTS.map((t) => (
@@ -655,7 +655,7 @@ function CourseEditor({
                 <input
                   type="text"
                   value={newSchedule.room}
-                  onChange={(e) => setNewSchedule((prev) => ({ ...prev, room: e.target.value }))}
+                  onChange={(e) => { setNewSchedule((prev) => ({ ...prev, room: e.target.value })); }}
                   className="px-2 py-1 border rounded-lg text-sm"
                   placeholder="教室"
                 />
@@ -674,7 +674,7 @@ function CourseEditor({
             <label className="block text-sm font-medium text-slate-700 mb-1">备注</label>
             <textarea
               value={formData.notes}
-              onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
+              onChange={(e) => { setFormData((prev) => ({ ...prev, notes: e.target.value })); }}
               className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none"
               rows={2}
               placeholder="选填"

@@ -1,4 +1,4 @@
-import { Pool, PoolClient, QueryResult as PgQueryResult } from 'pg'
+import { PoolClient } from 'pg'
 
 export type UUID = string
 
@@ -10,7 +10,7 @@ export interface JsonObject {
   [key: string]: JsonValue
 }
 
-export interface JsonArray extends Array<JsonValue> {}
+export interface JsonArray extends Array<JsonValue> { }
 
 export type DatabaseType = 'postgresql' | 'redis'
 
@@ -713,8 +713,8 @@ export interface TableConstraint {
 export type DatabaseSchema = Record<string, TableDefinition>
 
 export interface DatabaseClient {
-  from<T = unknown>(table: string): QueryBuilder<T>
-  table<T = unknown>(table: string): QueryBuilder<T>
+  from<T = unknown>(table: string): QueryBuilder
+  table<T = unknown>(table: string): QueryBuilder
   rpc<T>(functionName: string, params?: Record<string, unknown>): Promise<T>
 }
 
@@ -767,5 +767,3 @@ export interface AuthSession {
   expires_at?: number
   user?: AuthUser
 }
-
-export type DatabaseSchema = Record<string, TableDefinition>

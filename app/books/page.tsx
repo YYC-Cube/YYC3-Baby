@@ -93,7 +93,7 @@ export default function BooksPage() {
             return (
               <button
                 key={category}
-                onClick={() => handleCategoryChange(category)}
+                onClick={() => { handleCategoryChange(category); }}
                 className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   isActive
                     ? "bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-md"
@@ -132,7 +132,7 @@ export default function BooksPage() {
                 <h3 className="text-xl font-bold text-white mb-1">{books[0]?.title || ""}</h3>
                 <p className="text-white/80 text-sm mb-3">{books[0]?.author || ""}</p>
                 <button
-                  onClick={() => books[0] && handleBookSelect(books[0].id)}
+                  onClick={() => { books[0] && handleBookSelect(books[0].id); }}
                   className="flex items-center gap-2 px-4 py-2 bg-white/90 rounded-full text-amber-600 font-medium hover:bg-white transition-colors"
                 >
                   <i className="ri-play-circle-line text-lg" />
@@ -153,7 +153,7 @@ export default function BooksPage() {
               transition={{ delay: index * 0.05 }}
               className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
             >
-              <div onClick={() => handleBookSelect(book.id)} className="w-full text-left cursor-pointer">
+              <div onClick={() => { handleBookSelect(book.id); }} className="w-full text-left cursor-pointer">
                 <div className="relative aspect-[3/4]">
                   <img
                     src={book.coverUrl || "/placeholder.svg"}

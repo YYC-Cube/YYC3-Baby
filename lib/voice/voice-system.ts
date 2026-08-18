@@ -183,8 +183,8 @@ export class VoiceInteractionSystem {
         utterance.voice = chineseVoice
       }
 
-      utterance.onend = () => resolve()
-      utterance.onerror = () => resolve() // 语音合成失败时也resolve，避免阻塞
+      utterance.onend = () => { resolve(); }
+      utterance.onerror = () => { resolve(); } // 语音合成失败时也resolve，避免阻塞
 
       this.synthesis!.speak(utterance)
     })
@@ -537,7 +537,7 @@ export class VoiceInteractionSystem {
 
   releaseAudioAnalyser(): void {
     if (this.mediaStream) {
-      this.mediaStream.getTracks().forEach((track) => track.stop())
+      this.mediaStream.getTracks().forEach((track) => { track.stop(); })
       this.mediaStream = null
     }
     if (this.audioContext) {

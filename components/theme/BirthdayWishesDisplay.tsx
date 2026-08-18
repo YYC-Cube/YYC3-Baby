@@ -56,7 +56,7 @@ const BirthdayWishesDisplay: React.FC = () => {
     }
     
     window.addEventListener('storage', handleStorageChange)
-    return () => window.removeEventListener('storage', handleStorageChange)
+    return () => { window.removeEventListener('storage', handleStorageChange); }
   }, [])
 
   // 获取所有关系类型
@@ -149,7 +149,7 @@ const BirthdayWishesDisplay: React.FC = () => {
               <Input
                 placeholder="搜索姓名、祝福内容..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => { setSearchTerm(e.target.value); }}
                 className="pl-10"
               />
             </div>
@@ -166,7 +166,7 @@ const BirthdayWishesDisplay: React.FC = () => {
               </SelectContent>
             </Select>
             
-            <Select value={sortBy} onValueChange={(value: 'newest' | 'oldest' | 'name') => setSortBy(value)}>
+            <Select value={sortBy} onValueChange={(value: 'newest' | 'oldest' | 'name') => { setSortBy(value); }}>
               <SelectTrigger>
                 <SelectValue placeholder="排序方式" />
               </SelectTrigger>

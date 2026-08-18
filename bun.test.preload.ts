@@ -10,13 +10,14 @@
  */
 
 // 设置测试环境
-process.env.NODE_ENV = 'test'
+; (process.env as Record<string, string | undefined>).NODE_ENV = 'test'
 
 // 导入 testing-library/jest-dom 以提供额外的匹配器
 import '@testing-library/jest-dom'
 
 // 导入JSDOM
-import { JSDOM } from 'jsdom'
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { JSDOM } = require('jsdom')
 
 // 设置 jsdom 环境
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
@@ -26,7 +27,7 @@ const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
 })
 
 // 将 jsdom 的全局对象设置为全局
-global.window = dom.window as any
+global.window = dom.window
 global.document = dom.window.document
 global.navigator = dom.window.navigator
 global.HTMLElement = dom.window.HTMLElement
@@ -57,31 +58,31 @@ global.Headers = require('node-fetch').Headers
 global.AbortController = class AbortController {
   signal = {
     aborted: false,
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => {},
+    addEventListener: () => { },
+    removeEventListener: () => { },
+    dispatchEvent: () => { },
   }
-  
+
   abort() {
     this.signal.aborted = true
   }
-}
+} as unknown as typeof AbortController
 
 global.AbortSignal = class AbortSignal {
   static abort() {
     return {
       aborted: true,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      dispatchEvent: () => {},
+      addEventListener: () => { },
+      removeEventListener: () => { },
+      dispatchEvent: () => { },
     }
   }
-  
+
   aborted = false
-  addEventListener() {}
-  removeEventListener() {}
-  dispatchEvent() {}
-}
+  addEventListener() { }
+  removeEventListener() { }
+  dispatchEvent() { }
+} as unknown as typeof AbortSignal
 
 // 导入Bun的mock功能
 import { mock } from 'bun:test'
@@ -89,12 +90,12 @@ import { mock } from 'bun:test'
 // Mock Next.js router
 mock.module('next/navigation', () => ({
   useRouter: () => ({
-    push: () => {},
-    replace: () => {},
-    prefetch: () => {},
-    back: () => {},
-    forward: () => {},
-    refresh: () => {},
+    push: () => { },
+    replace: () => { },
+    prefetch: () => { },
+    back: () => { },
+    forward: () => { },
+    refresh: () => { },
   }),
   useSearchParams: () => new URLSearchParams(),
   usePathname: () => '/',
@@ -132,10 +133,10 @@ mock.module('next/image', () => ({
 }))
 
 // Mock framer-motion
-mock.module('framer-motion', () => import('./__mocks__/framer-motion.ts'))
+mock.module('framer-motion', () => import('./__mocks__/framer-motion'))
 
 // Mock motion-dom
-mock.module('motion-dom', () => import('./__mocks__/motion-dom.ts'))
+mock.module('motion-dom', () => import('./__mocks__/motion-dom'))
 
 // Mock next-intl
 mock.module('next-intl', () => ({
@@ -148,7 +149,7 @@ mock.module('next-intl', () => ({
         current: '当前语言',
       },
     }
-    
+
     return (key: string) => {
       return translations[namespace]?.[key] || key
     }
@@ -165,7 +166,7 @@ mock.module('use-intl', () => ({
         current: '当前语言',
       },
     }
-    
+
     return (key: string) => {
       return translations[namespace]?.[key] || key
     }

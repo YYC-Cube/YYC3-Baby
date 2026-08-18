@@ -3,7 +3,7 @@
 /**
  * @file YYC³ 模块化AI系统
  * @description 支持插拔式AI模块、动态加载、协同工作
- * @module lib/ai
+ * @mod lib/ai
  * @author YYC³
  * @version 1.0.0
  * @created 2025-12-28
@@ -55,7 +55,7 @@ export class ModularAIManager {
   private modules: Map<string, AIModule> = new Map()
   private processingQueue: AIRequest[] = []
   private isProcessing = false
-  private eventListeners: Map<string, Function[]> = new Map()
+  private eventListeners: Map<string, ((...args: unknown[]) => void)[]> = new Map()
 
   constructor() {
     this.loadCoreModules()
@@ -149,30 +149,30 @@ export class ModularAIManager {
   /**
    * 注册AI模块
    */
-  registerModule(module: AIModule): boolean {
+  registerModule(mod: AIModule): boolean {
     try {
       // 检查依赖
-      for (const dependency of module.dependencies) {
+      for (const dependency of mod.dependencies) {
         if (!this.modules.has(dependency)) {
-          logger.error(`模块 ${module.id} 缺少依赖: ${dependency}`, { moduleId: module.id, dependency }, 'ModularAIManager')
+          logger.error(`模块 ${mod.id} 缺少依赖: ${dependency}`, { moduleId: mod.id, dependency }, 'ModularAIManager')
           return false
         }
       }
 
       // 检查版本兼容性
-      this.validateModule(module)
+      this.validateModule(mod)
 
       // 实例化模块
-      module.instance = this.createModuleInstance(module)
+      mod.instance = this.createModuleInstance(mod)
 
-      this.modules.set(module.id, module)
-      this.emit('moduleRegistered', module)
+      this.modules.set(mod.id, mod)
+      this.emit('moduleRegistered', mod)
 
-      logger.info(`模块注册成功: ${module.name} v${module.version}`, { moduleId: module.id, name: module.name, version: module.version }, 'ModularAIManager')
+      logger.info(`模块注册成功: ${mod.name} v${mod.version}`, { moduleId: mod.id, name: mod.name, version: mod.version }, 'ModularAIManager')
       return true
 
     } catch (error) {
-      logger.error(`模块注册失败 ${module.id}`, { moduleId: module.id, error }, 'ModularAIManager')
+      logger.error(`模块注册失败 ${mod.id}`, { moduleId: mod.id, error }, 'ModularAIManager')
       return false
     }
   }
@@ -181,8 +181,8 @@ export class ModularAIManager {
    * 卸载AI模块
    */
   unregisterModule(moduleId: string): boolean {
-    const module = this.modules.get(moduleId)
-    if (!module) return false
+    const mod = this.modules.get(moduleId)
+    if (!mod) return false
 
     // 检查是否有其他模块依赖此模块
     for (const [, mod] of this.modules) {
@@ -193,8 +193,8 @@ export class ModularAIManager {
     }
 
     // 清理模块实例
-    if (module.instance && typeof module.instance.dispose === 'function') {
-      module.instance.dispose()
+    if (mod.instance && typeof mod.instance.dispose === 'function') {
+      mod.instance.dispose()
     }
 
     this.modules.delete(moduleId)
@@ -208,16 +208,16 @@ export class ModularAIManager {
    * 启用/禁用模块
    */
   toggleModule(moduleId: string, enabled?: boolean): boolean {
-    const module = this.modules.get(moduleId)
-    if (!module) return false
+    const mod = this.modules.get(moduleId)
+    if (!mod) return false
 
-    const newState = enabled !== undefined ? enabled : !module.isEnabled
+    const newState = enabled !== undefined ? enabled : !mod.isEnabled
 
     if (newState && !this.checkDependencies(moduleId)) {
       return false
     }
 
-    module.isEnabled = newState
+    mod.isEnabled = newState
     this.emit('moduleToggled', { moduleId, enabled: newState })
 
     logger.info(`模块 ${moduleId} ${newState ? '已启用' : '已禁用'}`, { moduleId, enabled: newState }, 'ModularAIManager')
@@ -242,31 +242,36 @@ export class ModularAIManager {
       const pipeline = this.createPipeline(modulesToUse)
 
       // 执行处理管道
-      let result = {
+      let result: {
+        output: unknown
+        confidence: number
+        modules: string[]
+        metadata: Record<string, unknown>
+      } = {
         output: request.input,
         confidence: 1.0,
-        modules: [],
+        modules: [] as string[],
         metadata: {}
       }
 
-      for (const module of pipeline) {
-        const moduleResult = await this.executeModule(module, {
+      for (const mod of pipeline) {
+        const moduleResult = await this.executeModule(mod, {
           input: result.output,
           context: { ...request.context, previousResults: result },
-          config: module.config
+          config: mod.config
         })
 
         result = {
           ...result,
-          ...moduleResult,
-          modules: [...result.modules, module.id]
+          ...(moduleResult as Record<string, unknown>),
+          modules: [...result.modules, mod.id]
         }
       }
 
       const processingTime = Date.now() - startTime
 
       const response: AIResponse = {
-        output: result.output,
+        output: String(result.output ?? ''),
         confidence: result.confidence,
         modules: result.modules,
         processingTime,
@@ -308,20 +313,20 @@ export class ModularAIManager {
     // 如果指定了特定模块
     if (request.modules && request.modules.length > 0) {
       for (const moduleId of request.modules) {
-        const module = this.modules.get(moduleId)
-        if (module && module.isEnabled) {
-          selectedModules.push(module)
+        const mod = this.modules.get(moduleId)
+        if (mod && mod.isEnabled) {
+          selectedModules.push(mod)
         }
       }
       return selectedModules
     }
 
     // 基于请求内容自动选择模块
-    for (const [, module] of this.modules) {
-      if (!module.isEnabled) continue
+    for (const [, mod] of this.modules) {
+      if (!mod.isEnabled) continue
 
-      if (this.shouldUseModule(module, request)) {
-        selectedModules.push(module)
+      if (this.shouldUseModule(mod, request)) {
+        selectedModules.push(mod)
       }
     }
 
@@ -331,34 +336,34 @@ export class ModularAIManager {
   /**
    * 判断是否应该使用某个模块
    */
-  private shouldUseModule(module: AIModule, request: AIRequest): boolean {
+  private shouldUseModule(mod: AIModule, request: AIRequest): boolean {
     const input = request.input.toLowerCase()
 
     // 情感分析模块
-    if (module.id === 'emotion-analysis') {
+    if (mod.id === 'emotion-analysis') {
       const emotionKeywords = ['心情', '感觉', '情绪', '高兴', '难过', '生气', '害怕']
       return emotionKeywords.some(keyword => input.includes(keyword))
     }
 
     // 学习指导模块
-    if (module.id === 'learning-guidance') {
+    if (mod.id === 'learning-guidance') {
       const learningKeywords = ['学习', '作业', '课程', '考试', '成绩', '教育']
       return learningKeywords.some(keyword => input.includes(keyword))
     }
 
     // 成长追踪模块
-    if (module.id === 'growth-tracking') {
+    if (mod.id === 'growth-tracking') {
       const growthKeywords = ['成长', '发育', '里程碑', '发展', '进步', '能力']
       return growthKeywords.some(keyword => input.includes(keyword))
     }
 
     // 语音交互模块
-    if (module.id === 'voice-interaction') {
+    if (mod.id === 'voice-interaction') {
       return request.metadata?.isVoiceRequest === true
     }
 
     // 对话模块（默认使用）
-    if (module.id === 'conversation') {
+    if (mod.id === 'conversation') {
       return true
     }
 
@@ -376,16 +381,16 @@ export class ModularAIManager {
 
     // 按优先级排序
     for (const moduleId of priorityOrder) {
-      const module = modules.find(m => m.id === moduleId)
-      if (module) {
-        pipeline.push(module)
+      const mod = modules.find(m => m.id === moduleId)
+      if (mod) {
+        pipeline.push(mod)
       }
     }
 
     // 添加其他模块
-    for (const module of modules) {
-      if (!priorityOrder.includes(module.id)) {
-        pipeline.push(module)
+    for (const mod of modules) {
+      if (!priorityOrder.includes(mod.id)) {
+        pipeline.push(mod)
       }
     }
 
@@ -395,15 +400,15 @@ export class ModularAIManager {
   /**
    * 执行模块
    */
-  private async executeModule(module: AIModule, input: unknown): Promise<unknown> {
-    if (!module.instance) {
-      throw new Error(`模块 ${module.id} 未正确初始化`)
+  private async executeModule(mod: AIModule, input: unknown): Promise<unknown> {
+    if (!mod.instance) {
+      throw new Error(`模块 ${mod.id} 未正确初始化`)
     }
 
     try {
-      return await module.instance.process(input)
+      return await mod.instance.process(input)
     } catch (error) {
-      logger.error(`模块执行失败 ${module.id}`, { moduleId: module.id, error }, 'ModularAIManager')
+      logger.error(`模块执行失败 ${mod.id}`, { moduleId: mod.id, error }, 'ModularAIManager')
       throw error
     }
   }
@@ -411,33 +416,33 @@ export class ModularAIManager {
   /**
    * 创建模块实例
    */
-  private createModuleInstance(module: AIModule): AIModuleInstance {
-    switch (module.id) {
+  private createModuleInstance(mod: AIModule): AIModuleInstance {
+    switch (mod.id) {
       case 'conversation':
-        return new ConversationModule(module.config)
+        return new ConversationModule(mod.config) as unknown as AIModuleInstance
       case 'emotion-analysis':
-        return new EmotionAnalysisModule(module.config)
+        return new EmotionAnalysisModule(mod.config) as unknown as AIModuleInstance
       case 'learning-guidance':
-        return new LearningGuidanceModule(module.config)
+        return new LearningGuidanceModule(mod.config) as unknown as AIModuleInstance
       case 'growth-tracking':
-        return new GrowthTrackingModule(module.config)
+        return new GrowthTrackingModule(mod.config) as unknown as AIModuleInstance
       case 'voice-interaction':
-        return new VoiceInteractionModule(module.config)
+        return new VoiceInteractionModule(mod.config) as unknown as AIModuleInstance
       default:
-        return new BaseModule(module.config)
+        return new BaseModule(mod.config) as unknown as AIModuleInstance
     }
   }
 
   /**
    * 验证模块
    */
-  private validateModule(module: AIModule): void {
-    if (!module.id || !module.name || !module.version) {
+  private validateModule(mod: AIModule): void {
+    if (!mod.id || !mod.name || !mod.version) {
       throw new Error('模块缺少必要信息')
     }
 
-    if (this.modules.has(module.id)) {
-      throw new Error(`模块 ${module.id} 已存在`)
+    if (this.modules.has(mod.id)) {
+      throw new Error(`模块 ${mod.id} 已存在`)
     }
   }
 
@@ -445,10 +450,10 @@ export class ModularAIManager {
    * 检查依赖
    */
   private checkDependencies(moduleId: string): boolean {
-    const module = this.modules.get(moduleId)
-    if (!module) return false
+    const mod = this.modules.get(moduleId)
+    if (!mod) return false
 
-    for (const dependency of module.dependencies) {
+    for (const dependency of mod.dependencies) {
       const depModule = this.modules.get(dependency)
       if (!depModule || !depModule.isEnabled) {
         logger.error(`依赖模块 ${dependency} 不可用`, { moduleId, dependency }, 'ModularAIManager')
@@ -512,14 +517,14 @@ export class ModularAIManager {
   /**
    * 事件系统
    */
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: unknown[]) => void): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, [])
     }
     this.eventListeners.get(event)!.push(callback)
   }
 
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: unknown[]) => void): void {
     if (this.eventListeners.has(event)) {
       const callbacks = this.eventListeners.get(event)!
       const index = callbacks.indexOf(callback)
@@ -546,7 +551,7 @@ export class ModularAIManager {
  * 基础模块类
  */
 class BaseModule {
-  constructor(protected config: Record<string, unknown>) {}
+  constructor(protected config: Record<string, unknown>) { }
 
   async process(input: unknown): Promise<unknown> {
     return {
@@ -591,7 +596,7 @@ class ConversationModule extends BaseModule {
  */
 class EmotionAnalysisModule extends BaseModule {
   async process(input: unknown): Promise<unknown> {
-    const text = input.input.toLowerCase()
+    const text = String((input as { input?: unknown })?.input ?? '').toLowerCase()
 
     // 简单的情感分析
     const positiveWords = ['开心', '高兴', '快乐', '好', '棒', '优秀', '喜欢']
@@ -612,7 +617,7 @@ class EmotionAnalysisModule extends BaseModule {
     }
 
     return {
-      output: input.input,
+      output: String((input as { input?: unknown })?.input ?? ''),
       confidence,
       metadata: {
         emotion,

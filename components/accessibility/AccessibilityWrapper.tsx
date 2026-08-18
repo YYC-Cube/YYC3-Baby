@@ -17,7 +17,7 @@ export default function AccessibilityWrapper({ children }: AccessibilityWrapperP
 
   // 监听打开面板事件
   useEffect(() => {
-    const handleOpenPanel = () => setIsPanelOpen(true)
+    const handleOpenPanel = () => { setIsPanelOpen(true); }
 
     document.addEventListener('open-accessibility-panel', handleOpenPanel)
 
@@ -31,7 +31,7 @@ export default function AccessibilityWrapper({ children }: AccessibilityWrapperP
       {children}
       <AccessibilityPanel
         isOpen={isPanelOpen}
-        onClose={() => setIsPanelOpen(false)}
+        onClose={() => { setIsPanelOpen(false); }}
       />
     </>
   )

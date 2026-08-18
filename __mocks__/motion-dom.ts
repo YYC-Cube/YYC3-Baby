@@ -21,7 +21,7 @@ global.AbortController = class AbortController {
   abort() {
     this.signal.aborted = true
   }
-}
+} as unknown as typeof AbortController
 
 // Mock AbortSignal
 global.AbortSignal = class AbortSignal {
@@ -38,7 +38,7 @@ global.AbortSignal = class AbortSignal {
   addEventListener() {}
   removeEventListener() {}
   dispatchEvent() {}
-}
+} as unknown as typeof AbortSignal
 
 // Mock motion-dom gesture functions
 export const hover = () => {}

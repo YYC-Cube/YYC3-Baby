@@ -271,7 +271,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 <span className="text-sm font-medium text-red-900">上传失败</span>
               </div>
               <button
-                onClick={() => setErrors([])}
+                onClick={() => { setErrors([]); }}
                 className="text-red-500 hover:text-red-700"
               >
                 <X className="w-4 h-4" />

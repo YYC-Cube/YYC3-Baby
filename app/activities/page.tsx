@@ -86,7 +86,7 @@ export default function ActivitiesPage() {
               className={`flex-1 py-2 rounded-full text-slate-600 transition-all ${
                 activeTab === "ongoing" ? "bg-white shadow-sm font-bold" : "hover:bg-white/50"
               }`}
-              onClick={() => setActiveTab("ongoing")}
+              onClick={() => { setActiveTab("ongoing"); }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -96,7 +96,7 @@ export default function ActivitiesPage() {
               className={`flex-1 py-2 rounded-full text-slate-600 transition-all ${
                 activeTab === "history" ? "bg-white shadow-sm font-bold" : "hover:bg-white/50"
               }`}
-              onClick={() => setActiveTab("history")}
+              onClick={() => { setActiveTab("history"); }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

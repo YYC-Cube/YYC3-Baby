@@ -587,7 +587,7 @@ export class CharacterManager {
     const preloadPromises: Promise<void>[] = uniquePaths.map(path => {
       return new Promise<void>((resolve) => {
         const img = new Image()
-        img.onload = () => resolve()
+        img.onload = () => { resolve(); }
         img.onerror = () => {
           console.warn(`Failed to preload image: ${path}`)
           resolve() // 继续执行，不阻塞

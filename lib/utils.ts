@@ -112,7 +112,7 @@ export function omit<T extends Record<string, unknown>, K extends keyof T>(
   keys.forEach(key => {
     delete result[key]
   })
-  return result as Omit<T, K>
+  return result
 }
 
 export function deepClone<T>(obj: T): T {
@@ -141,7 +141,7 @@ export function deepClone<T>(obj: T): T {
   return obj
 }
 
-export function deepEqual<T>(a: T, b: T): boolean {
+export function deepEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true
 
   if (a === null || b === null) return false
@@ -150,9 +150,11 @@ export function deepEqual<T>(a: T, b: T): boolean {
 
   if (typeof a !== 'object') return false
 
-  if (Array.isArray(a) !== Array.isArray(b)) return false
+  const aIsArray = Array.isArray(a)
+  const bIsArray = Array.isArray(b)
+  if (aIsArray !== bIsArray) return false
 
-  if (Array.isArray(a)) {
+  if (aIsArray && bIsArray) {
     if (a.length !== b.length) return false
     for (let i = 0; i < a.length; i++) {
       if (!deepEqual(a[i], b[i])) return false
@@ -160,13 +162,15 @@ export function deepEqual<T>(a: T, b: T): boolean {
     return true
   }
 
-  const keysA = Object.keys(a) as Array<keyof T>
-  const keysB = Object.keys(b) as Array<keyof T>
+  const aObj = a as Record<string, unknown>
+  const bObj = b as Record<string, unknown>
+  const keysA = Object.keys(aObj)
+  const keysB = Object.keys(bObj)
 
   if (keysA.length !== keysB.length) return false
 
   for (const key of keysA) {
-    if (!keysB.includes(key) || !deepEqual(a[key], b[key])) {
+    if (!keysB.includes(key) || !deepEqual(aObj[key], bObj[key])) {
       return false
     }
   }

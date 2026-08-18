@@ -3,8 +3,8 @@
  * 专注0-3岁婴幼儿情感识别与分析
  */
 
-import * as tf from '@tensorflow/tfjs'
 import { UniversalSentenceEncoder } from '@tensorflow-models/universal-sentence-encoder'
+import * as tf from '@tensorflow/tfjs'
 
 // 情感类型定义
 export enum InfantEmotionType {
@@ -356,7 +356,7 @@ export class EmotionalIntelligenceEngine {
   private fuseEmotionResults(results: MultiModalEmotionResult[], ageGroup: AgeGroup, context?: MultiModalInput['context']): EmotionResult {
     if (results.length === 0) {
       return {
-        primary: InfantInfantEmotionType.COMFORT,
+        primary: InfantEmotionType.COMFORT,
         confidence: 0.5,
         intensity: 0.5,
         ageGroup: ageGroup,
@@ -563,7 +563,7 @@ export class EmotionalIntelligenceEngine {
   }
 
   // TODO: 实现以下方法
-  private async classifyEmotionFromEmbedding(_embeddings: tf.Tensor2D): Promise<EmotionType | null> {
+  private async classifyEmotionFromEmbedding(_embeddings: tf.Tensor2D): Promise<string | null> {
     // 深度学习情感分类
     return null
   }
@@ -615,7 +615,7 @@ export class EmotionalIntelligenceEngine {
   private getPrimaryEmotion(_weightedEmotions: WeightedEmotion[]): PrimaryEmotionResult {
     // 获取主要情感
     return {
-      emotion: InfantInfantEmotionType.HAPPINESS,
+      emotion: InfantEmotionType.HAPPINESS,
       intensity: 0.8
     }
   }

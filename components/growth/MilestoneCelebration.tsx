@@ -82,7 +82,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
       const timer = setTimeout(() => {
         onClose()
       }, 5000)
-      return () => clearTimeout(timer)
+      return () => { clearTimeout(timer); }
     } else {
       setShowConfetti(false)
     }
@@ -196,9 +196,9 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
                 transition={{ delay: 0.8 }}
               >
                 <p className="text-sm text-slate-600 italic">
-                  "每一个小小的进步，都是成长路上的闪光时刻。
+                  &quot;每一个小小的进步，都是成长路上的闪光时刻。
                   <br />
-                  恭喜宝贝，继续加油!"
+                  恭喜宝贝，继续加油!&quot;
                 </p>
               </motion.div>
 

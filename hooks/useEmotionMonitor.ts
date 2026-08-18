@@ -105,7 +105,7 @@ export function useEmotionMonitor(options: UseEmotionMonitorOptions = {}) {
 
     }, 3000) // 每3秒更新一次
 
-    return () => clearInterval(updateInterval)
+    return () => { clearInterval(updateInterval); }
   }, [isMonitoring, dispatch])
 
   /**
@@ -286,6 +286,7 @@ export function useEmotionMonitor(options: UseEmotionMonitorOptions = {}) {
     // 智能延迟响应，避免过于频繁
     setTimeout(() => {
       dispatch(setAIMessage({
+        id: `emotion-${Date.now()}`,
         role: 'assistant',
         content: randomResponse,
         timestamp: new Date()
@@ -324,6 +325,7 @@ export function useEmotionMonitor(options: UseEmotionMonitorOptions = {}) {
     ]
 
     return {
+      id: `emotion-${Date.now()}`,
       role: 'assistant' as const,
       content: concernResponses[Math.floor(Math.random() * concernResponses.length)],
       timestamp: new Date()

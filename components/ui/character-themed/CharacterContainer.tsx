@@ -1,7 +1,7 @@
 'use client'
 
+import { HTMLMotionProps, motion } from 'framer-motion'
 import React, { ReactNode, useEffect } from 'react'
-import { motion, HTMLMotionProps } from 'framer-motion'
 import { useCharacterTheme } from '../CharacterThemeContext'
 
 export interface CharacterContainerProps {
@@ -15,7 +15,7 @@ export interface CharacterContainerProps {
   hover?: boolean
   className?: string
   onClick?: () => void
-  as?: keyof JSX.IntrinsicElements
+  as?: 'div' | 'span' | 'section' | 'article' | 'main' | 'aside' | 'header' | 'footer'
 }
 
 export const CharacterContainer: React.FC<CharacterContainerProps> = ({
@@ -31,7 +31,7 @@ export const CharacterContainer: React.FC<CharacterContainerProps> = ({
   onClick,
   as: Component = 'div'
 }) => {
-  const { themeColors, selectedTheme } = useCharacterTheme()
+  const { themeColors } = useCharacterTheme()
 
   // Inject CSS styles
   useCharacterContainerStyles()
@@ -86,7 +86,7 @@ export const CharacterContainer: React.FC<CharacterContainerProps> = ({
 
       case 'glass':
         return {
-          background: `linear-gradient(135deg, ${themeColors.primaryColor}20, ${themeColors.secondaryColor}20)`,
+          background: `linear-gradient(135deg, ${themeColors.primary}20, ${themeColors.secondary}20)`,
           backdropFilter: 'blur(10px)',
           border: `1px solid ${themeColors.border}40`,
           boxShadow: `0 8px 32px ${themeColors.glow}`
@@ -102,7 +102,7 @@ export const CharacterContainer: React.FC<CharacterContainerProps> = ({
       case 'outlined':
         return {
           backgroundColor: 'transparent',
-          border: `2px solid ${themeColors.primaryColor}`,
+          border: `2px solid ${themeColors.primary}`,
           boxShadow: 'none'
         }
 
@@ -158,13 +158,14 @@ export const CharacterContainer: React.FC<CharacterContainerProps> = ({
     <div
       className="absolute inset-0 opacity-10"
       style={{
-        background: `radial-gradient(circle at 20% 80%, ${themeColors?.primaryColor}40, transparent 50%)`,
+        background: `radial-gradient(circle at 20% 80%, ${themeColors?.primary}40, transparent 50%)`,
         pointerEvents: 'none'
       }}
     />
   ) : null
 
-  const MotionComponent = motion[Component as keyof typeof motion] as React.ComponentType<React.HTMLAttributes<HTMLElement>>
+  // framer motion 多态组件映射，放宽度限于本行（style/motion props 组合无法静态精确表达）
+  const MotionComponent = motion[Component as keyof typeof motion] as unknown as React.ComponentType<Record<string, unknown>>
 
   return (
     <MotionComponent
@@ -179,7 +180,7 @@ export const CharacterContainer: React.FC<CharacterContainerProps> = ({
       `}
       style={containerStyle}
       onClick={onClick}
-      {...motionProps}
+      {...(motionProps)}
     >
       {/* 背景装饰 */}
       {decorationElement}
@@ -189,7 +190,7 @@ export const CharacterContainer: React.FC<CharacterContainerProps> = ({
         <div
           className="absolute inset-0 rounded-xl pointer-events-none"
           style={{
-            background: `linear-gradient(45deg, ${themeColors?.primaryColor}10, ${themeColors?.secondaryColor}10)`,
+            background: `linear-gradient(45deg, ${themeColors?.primary}10, ${themeColors?.secondary}10)`,
             opacity: hover ? 1 : 0,
             transition: 'opacity 0.3s ease'
           }}
@@ -207,7 +208,7 @@ export const CharacterContainer: React.FC<CharacterContainerProps> = ({
           className="absolute inset-0 rounded-xl pointer-events-none"
           style={{
             padding: '2px',
-            background: `linear-gradient(45deg, ${themeColors?.primaryColor}, ${themeColors?.secondaryColor}, ${themeColors?.primaryColor})`,
+            background: `linear-gradient(45deg, ${themeColors?.primary}, ${themeColors?.secondary}, ${themeColors?.primary})`,
             backgroundSize: '200% 200%',
             animation: 'gradient-border 3s ease infinite',
             mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',

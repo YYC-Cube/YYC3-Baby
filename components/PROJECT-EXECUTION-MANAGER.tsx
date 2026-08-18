@@ -458,7 +458,7 @@ export default function ProjectExecutionManager() {
                   key={task.id}
                   className="bg-white rounded-lg p-4 shadow cursor-pointer hover:shadow-lg transition-shadow"
                   whileHover={{ scale: 1.02 }}
-                  onClick={() => toggleTaskExpansion(task.id)}
+                  onClick={() => { toggleTaskExpansion(task.id); }}
                 >
                   <div className="flex items-start gap-3">
                     {getStatusIcon(task.status)}
@@ -542,7 +542,7 @@ export default function ProjectExecutionManager() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 className="hover:bg-gray-50 cursor-pointer"
-                onClick={() => toggleTaskExpansion(task.id)}
+                onClick={() => { toggleTaskExpansion(task.id); }}
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   {getStatusIcon(task.status)}
@@ -627,7 +627,7 @@ export default function ProjectExecutionManager() {
                     ? 'ring-2 ring-purple-600 scale-105'
                     : 'hover:shadow-xl hover:scale-102'
                 }`}
-                onClick={() => setSelectedPhase(phase.id)}
+                onClick={() => { setSelectedPhase(phase.id); }}
                 whileHover={{ y: -5 }}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -666,7 +666,7 @@ export default function ProjectExecutionManager() {
               {['kanban', 'list', 'metrics'].map((view) => (
                 <button
                   key={view}
-                  onClick={() => setActiveView(view as 'kanban' | 'list' | 'metrics')}
+                  onClick={() => { setActiveView(view as 'kanban' | 'list' | 'metrics'); }}
                   className={`px-4 py-2 text-sm font-medium rounded-l-lg transition-colors ${
                     activeView === view
                       ? 'bg-purple-600 text-white'
@@ -684,7 +684,7 @@ export default function ProjectExecutionManager() {
               <span className="text-sm text-gray-600">筛选:</span>
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
+                onChange={(e) => { setFilterStatus(e.target.value); }}
                 className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
               >
                 <option value="all">全部任务</option>

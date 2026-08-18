@@ -132,7 +132,7 @@ export function useAIXiaoyu() {
     async (content: string, role?: AIRole) => {
       // 使用增强的智能角色选择系统
       const emotionAnalysis = analyzeUserEmotion(content)
-      const optimalRole = role || selectOptimalRole(content, emotionAnalysis)
+      const optimalRole: AIRole = role || selectOptimalRole(content, undefined, undefined, emotionAnalysis).role
 
       // 如果智能选择了不同的角色，更新当前角色
       if (optimalRole !== state.currentRole && !role) {
@@ -228,6 +228,8 @@ export function useAIXiaoyu() {
             setState((prev) => ({ ...prev, emotion: emotionData }))
           }
         }
+
+        return accumulatedResponse
       } catch (error) {
         console.error("[v0] AI响应错误:", error)
         setMessages((prev) => [
@@ -239,6 +241,7 @@ export function useAIXiaoyu() {
             aiRole: optimalRole,
           },
         ])
+        return "抱歉，我遇到了一些问题。请稍后再试。"
       } finally {
         setState((prev) => ({ ...prev, isProcessing: false }))
       }

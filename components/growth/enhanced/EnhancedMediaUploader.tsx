@@ -103,7 +103,7 @@ const createThumbnail = (file: File): Promise<string> => {
   return new Promise((resolve) => {
     if (file.type.startsWith('image/')) {
       const reader = new FileReader()
-      reader.onload = (e) => resolve(e.target?.result as string)
+      reader.onload = (e) => { resolve(e.target?.result as string); }
       reader.readAsDataURL(file)
     } else if (file.type.startsWith('video/')) {
       const video = document.createElement('video')
@@ -485,7 +485,7 @@ export default function EnhancedMediaUploader({
             <div className="flex items-center gap-4">
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'name' | 'date' | 'size')}
+                onChange={(e) => { setSortBy(e.target.value as 'name' | 'date' | 'size'); }}
                 className="px-3 py-1 border border-gray-300 rounded-lg text-sm"
               >
                 <option value="date">按日期排序</option>
@@ -495,13 +495,13 @@ export default function EnhancedMediaUploader({
 
               <div className="flex gap-2">
                 <button
-                  onClick={() => setViewMode('grid')}
+                  onClick={() => { setViewMode('grid'); }}
                   className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-purple-100 text-purple-600' : 'bg-gray-200 text-gray-600'}`}
                 >
                   <Film className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
+                  onClick={() => { setViewMode('list'); }}
                   className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-purple-100 text-purple-600' : 'bg-gray-200 text-gray-600'}`}
                 >
                   <Image className="w-4 h-4" />
@@ -529,8 +529,8 @@ export default function EnhancedMediaUploader({
                     file={file}
                     index={index}
                     isSelected={selectedFiles.has(file.id)}
-                    onToggleSelect={() => toggleFileSelection(file.id)}
-                    onRemove={() => removeFile(file.id)}
+                    onToggleSelect={() => { toggleFileSelection(file.id); }}
+                    onRemove={() => { removeFile(file.id); }}
                     onUpdate={(updatedFile) => {
                       onChange(files.map((f: EnhancedMediaFile) => f.id === file.id ? updatedFile : f))
                     }}
@@ -545,8 +545,8 @@ export default function EnhancedMediaUploader({
                     file={file}
                     index={index}
                     isSelected={selectedFiles.has(file.id)}
-                    onToggleSelect={() => toggleFileSelection(file.id)}
-                    onRemove={() => removeFile(file.id)}
+                    onToggleSelect={() => { toggleFileSelection(file.id); }}
+                    onRemove={() => { removeFile(file.id); }}
                     onUpdate={(updatedFile) => {
                       onChange(files.map((f: EnhancedMediaFile) => f.id === file.id ? updatedFile : f))
                     }}
@@ -608,8 +608,8 @@ function MediaCard({
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ y: -4, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => { setIsHovered(true); }}
+      onMouseLeave={() => { setIsHovered(false); }}
       onClick={onToggleSelect}
     >
       {/* 选择状态指示 */}
@@ -819,14 +819,14 @@ function MediaListItem({
       {/* 操作按钮 */}
       <div className="flex items-center gap-2">
         <button
-          onClick={() => onUpdate({ ...file, isFavorite: !file.isFavorite })}
+          onClick={() => { onUpdate({ ...file, isFavorite: !file.isFavorite }); }}
           className="p-2 hover:bg-pink-50 rounded-lg transition-colors"
         >
           <Heart className={`w-4 h-4 ${file.isFavorite ? 'text-pink-500 fill-pink-500' : 'text-gray-400'}`} />
         </button>
 
         <button
-          onClick={() => onUpdate({ ...file, isFeatured: !file.isFeatured })}
+          onClick={() => { onUpdate({ ...file, isFeatured: !file.isFeatured }); }}
           className="p-2 hover:bg-yellow-50 rounded-lg transition-colors"
         >
           <Star className={`w-4 h-4 ${file.isFeatured ? 'text-yellow-500 fill-yellow-500' : 'text-gray-400'}`} />

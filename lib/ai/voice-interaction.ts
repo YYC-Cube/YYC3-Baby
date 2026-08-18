@@ -3,11 +3,38 @@
  * @description 专注0-3岁婴幼儿语音识别和情感化语音合成
  * @module lib/ai
  * @author YYC³
- * @version 1.0.0
- * @created 2025-12-28
- * @copyright Copyright (c) 2025 YYC³
- * @license MIT
  */
+
+// Web Speech API type declarations
+interface SpeechRecognition extends EventTarget {
+  lang: string
+  continuous: boolean
+  interimResults: boolean
+  maxAlternatives: number
+  start(): void
+  stop(): void
+  abort(): void
+  onresult: ((event: SpeechRecognitionEvent) => void) | null
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null
+  onend: (() => void) | null
+  onstart: (() => void) | null
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList
+  resultIndex: number
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string
+  message: string
+}
+
+interface SpeechRecognitionStatic {
+  new(): SpeechRecognition
+}
+
+declare const SpeechRecognition: SpeechRecognitionStatic | undefined
 
 import logger from '@/lib/logger'
 
@@ -57,8 +84,8 @@ interface VoiceContentAnalysis {
 }
 
 interface ExtendedWindow extends Window {
-  SpeechRecognition?: typeof SpeechRecognition
-  webkitSpeechRecognition?: typeof SpeechRecognition
+  SpeechRecognition?: any
+  webkitSpeechRecognition?: any
   AudioContext?: typeof AudioContext
   webkitAudioContext?: typeof AudioContext
 }
@@ -104,8 +131,8 @@ interface VoiceContentAnalysis {
 }
 
 interface ExtendedWindow extends Window {
-  SpeechRecognition?: typeof SpeechRecognition
-  webkitSpeechRecognition?: typeof SpeechRecognition
+  SpeechRecognition?: any
+  webkitSpeechRecognition?: any
   AudioContext?: typeof AudioContext
   webkitAudioContext?: typeof AudioContext
 }
@@ -178,7 +205,7 @@ export class VoiceInteractionController {
       intonation: 'questioning',
       warmth: 0.8
     }],
-    [EmotionType.CALMNESS, {
+    [EmotionType.COMFORT, {
       pitch: 1.0,
       rate: 0.9,
       volume: 0.7,
@@ -204,16 +231,22 @@ export class VoiceInteractionController {
       // 初始化语音识别
       const extendedWindow = window as ExtendedWindow
       const SpeechRecognition = extendedWindow.SpeechRecognition || extendedWindow.webkitSpeechRecognition
+      if (!SpeechRecognition) {
+        throw new Error('SpeechRecognition not supported')
+      }
       this.recognition = new SpeechRecognition()
 
       // 配置识别参数（针对0-3岁优化）
+      if (!this.recognition) {
+        throw new Error('Recognition initialization failed')
+      }
       this.recognition.continuous = true
       this.recognition.interimResults = true
       this.recognition.maxAlternatives = 3
       this.recognition.lang = config.language
 
       // 初始化音频上下文
-      this.audioContext = new (extendedWindow.AudioContext || extendedWindow.webkitAudioContext)()
+      this.audioContext = new (extendedWindow.AudioContext || extendedWindow.webkitAudioContext || window.AudioContext)()
 
       this.isInitialized = true
       logger.info('语音交互控制系统初始化完成', {}, 'VoiceInteraction')

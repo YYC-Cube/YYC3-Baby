@@ -325,9 +325,9 @@ export function useAccessibility() {
     generateAccessibilityReport,
 
     // 便捷方法
-    toggleHighContrast: () => updateSetting('highContrast', !settings.highContrast),
-    toggleReducedMotion: () => updateSetting('reducedMotion', !settings.reducedMotion),
-    toggleScreenReader: () => updateSetting('screenReaderEnabled', !settings.screenReaderEnabled),
+    toggleHighContrast: () => { updateSetting('highContrast', !settings.highContrast); },
+    toggleReducedMotion: () => { updateSetting('reducedMotion', !settings.reducedMotion); },
+    toggleScreenReader: () => { updateSetting('screenReaderEnabled', !settings.screenReaderEnabled); },
     increaseFontSize: () => {
       const sizes: Array<'small' | 'medium' | 'large' | 'extra-large'> = ['small', 'medium', 'large', 'extra-large']
       const currentIndex = sizes.indexOf(settings.fontSize)

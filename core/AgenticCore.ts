@@ -857,10 +857,9 @@ export class AgenticCore extends EventEmitter {
    * 处理下一个任务
    */
   private async processNextTask(): Promise<void> {
-    if (this.activeTasks.size >= this.config.maxConcurrentTasks) return
+    if (this.activeTasks.size >= (this.config.maxConcurrentTasks ?? 5)) return
 
-    const task = this.taskQueue.shift()!
-    if (!task) return
+    const task = this.taskQueue.shift()
     if (!task) return
 
     this.state = AgentState.EXECUTING
@@ -965,7 +964,7 @@ export class AgenticCore extends EventEmitter {
       case 'optimization':
         return this.executeOptimization(subtask, task)
       default:
-        throw new Error(`Unknown subtask type: ${subtask.type}`)
+        throw new Error(`Unknown subtask type: ${String(subtask.type)}`)
     }
   }
 

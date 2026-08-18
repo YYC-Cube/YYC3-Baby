@@ -2,8 +2,8 @@
 // Enhanced Voice Interaction Service - Real-time Speech Recognition & Closed-loop Feedback
 
 export interface ExtendedWindow extends Window {
-  SpeechRecognition?: typeof SpeechRecognition
-  webkitSpeechRecognition?: typeof SpeechRecognition
+  SpeechRecognition?: SpeechRecognitionConstructor
+  webkitSpeechRecognition?: SpeechRecognitionConstructor
   webkitAudioContext?: typeof AudioContext
 }
 
@@ -83,7 +83,7 @@ export class EnhancedVoiceService {
   private audioContext: AudioContext | null = null
   private analyser: AnalyserNode | null = null
   private config: VoiceInteractionConfig
-  private eventListeners: Map<string, Function[]> = new Map()
+  private eventListeners: Map<string, ((...args: unknown[]) => void)[]> = new Map()
 
   constructor(config: Partial<VoiceInteractionConfig> = {}) {
     this.config = {
@@ -252,7 +252,7 @@ export class EnhancedVoiceService {
       // 停止录音
       if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
         this.mediaRecorder.stop()
-        this.mediaRecorder.stream.getTracks().forEach(track => track.stop())
+        this.mediaRecorder.stream.getTracks().forEach(track => { track.stop(); })
       }
 
       // 停止语音识别
@@ -475,13 +475,14 @@ export class EnhancedVoiceService {
    * 开始参与度监控
    */
   private startEngagementMonitoring(): void {
-    if (!this.analyser) return
+    const analyser = this.analyser
+    if (!analyser) return
 
     const checkEngagement = () => {
       if (!this.isRecording || !this.currentSession) return
 
-      const dataArray = new Uint8Array(this.analyser.frequencyBinCount)
-      this.analyser.getByteFrequencyData(dataArray)
+      const dataArray = new Uint8Array(analyser.frequencyBinCount)
+      analyser.getByteFrequencyData(dataArray)
 
       // 计算音频强度
       const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length
@@ -674,7 +675,7 @@ export class EnhancedVoiceService {
   /**
    * 事件监听
    */
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: unknown[]) => void): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, [])
     }
@@ -684,7 +685,7 @@ export class EnhancedVoiceService {
   /**
    * 移除事件监听
    */
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: unknown[]) => void): void {
     const listeners = this.eventListeners.get(event)
     if (listeners) {
       const index = listeners.indexOf(callback)

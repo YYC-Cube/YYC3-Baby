@@ -187,8 +187,9 @@ export function usePWA() {
 
   // 应用更新
   const applyUpdate = useCallback(() => {
-    if (pwaInfo.swRegistration?.waiting) {
-      pwaInfo.swRegistration.postMessage({ type: 'SKIP_WAITING' })
+    const registration = pwaInfo.swRegistration?.waiting
+    if (registration) {
+      registration.postMessage({ type: 'SKIP_WAITING' })
       setSwUpdateAvailable(false)
       window.location.reload()
     }
@@ -196,8 +197,9 @@ export function usePWA() {
 
   // 清除缓存
   const clearCache = useCallback(() => {
-    if (pwaInfo.swRegistration) {
-      pwaInfo.swRegistration.postMessage({ type: 'CLEAR_CACHE' })
+    const registration = pwaInfo.swRegistration?.waiting || pwaInfo.swRegistration?.active
+    if (registration) {
+      registration.postMessage({ type: 'CLEAR_CACHE' })
     }
   }, [pwaInfo.swRegistration])
 

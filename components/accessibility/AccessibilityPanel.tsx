@@ -18,15 +18,15 @@ interface AccessibilityPanelProps {
 interface AccessibilityReport {
   enabledFeatures: string[]
   totalFeatures: number
+  activeFeatures: number
   fontSize: string
-  timestamp: number
+  timestamp: string | number
 }
 
 export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPanelProps) {
   const { settings, updateSetting, resetSettings, generateAccessibilityReport } = useAccessibility()
   const [report, setReport] = useState<AccessibilityReport | null>(null)
   const [showReport, setShowReport] = useState(false)
-  const _t = useTranslations('accessibility')
 
   // 监听键盘事件
   useEffect(() => {
@@ -122,7 +122,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   <select
                     id="font-size"
                     value={settings.fontSize}
-                    onChange={(e) => updateSetting('fontSize', e.target.value as 'small' | 'medium' | 'large' | 'extra-large')}
+                    onChange={(e) => { updateSetting('fontSize', e.target.value as 'small' | 'medium' | 'large' | 'extra-large'); }}
                     className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="small">小</option>
@@ -154,7 +154,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="high-contrast"
                   role="switch"
                   aria-checked={settings.highContrast}
-                  onClick={() => updateSetting('highContrast', !settings.highContrast)}
+                  onClick={() => { updateSetting('highContrast', !settings.highContrast); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.highContrast ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -176,7 +176,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="increased-spacing"
                   role="switch"
                   aria-checked={settings.increasedSpacing}
-                  onClick={() => updateSetting('increasedSpacing', !settings.increasedSpacing)}
+                  onClick={() => { updateSetting('increasedSpacing', !settings.increasedSpacing); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.increasedSpacing ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -198,7 +198,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="underline-links"
                   role="switch"
                   aria-checked={settings.underlineLinks}
-                  onClick={() => updateSetting('underlineLinks', !settings.underlineLinks)}
+                  onClick={() => { updateSetting('underlineLinks', !settings.underlineLinks); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.underlineLinks ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -220,7 +220,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="reduced-motion"
                   role="switch"
                   aria-checked={settings.reducedMotion}
-                  onClick={() => updateSetting('reducedMotion', !settings.reducedMotion)}
+                  onClick={() => { updateSetting('reducedMotion', !settings.reducedMotion); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.reducedMotion ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -252,7 +252,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="screen-reader"
                   role="switch"
                   aria-checked={settings.screenReaderEnabled}
-                  onClick={() => updateSetting('screenReaderEnabled', !settings.screenReaderEnabled)}
+                  onClick={() => { updateSetting('screenReaderEnabled', !settings.screenReaderEnabled); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.screenReaderEnabled ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -274,7 +274,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="keyboard-nav"
                   role="switch"
                   aria-checked={settings.keyboardNavigation}
-                  onClick={() => updateSetting('keyboardNavigation', !settings.keyboardNavigation)}
+                  onClick={() => { updateSetting('keyboardNavigation', !settings.keyboardNavigation); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.keyboardNavigation ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -296,7 +296,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="skip-links"
                   role="switch"
                   aria-checked={settings.skipLinks}
-                  onClick={() => updateSetting('skipLinks', !settings.skipLinks)}
+                  onClick={() => { updateSetting('skipLinks', !settings.skipLinks); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.skipLinks ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -328,7 +328,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="simple-language"
                   role="switch"
                   aria-checked={settings.simpleLanguage}
-                  onClick={() => updateSetting('simpleLanguage', !settings.simpleLanguage)}
+                  onClick={() => { updateSetting('simpleLanguage', !settings.simpleLanguage); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.simpleLanguage ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -350,7 +350,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                   id="show-descriptions"
                   role="switch"
                   aria-checked={settings.showDescriptions}
-                  onClick={() => updateSetting('showDescriptions', !settings.showDescriptions)}
+                  onClick={() => { updateSetting('showDescriptions', !settings.showDescriptions); }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     settings.showDescriptions ? 'bg-blue-500' : 'bg-gray-300'
                   }`}
@@ -403,7 +403,7 @@ export default function AccessibilityPanel({ isOpen, onClose }: AccessibilityPan
                 <p>📅 生成时间：{new Date(report.timestamp).toLocaleString('zh-CN')}</p>
               </div>
               <button
-                onClick={() => setShowReport(false)}
+                onClick={() => { setShowReport(false); }}
                 className="mt-2 text-sm text-blue-600 hover:text-blue-800"
               >
                 关闭报告

@@ -31,7 +31,7 @@ class AIResponseCache {
   private readonly MAX_CACHE_SIZE = 1000
 
   // 生成缓存键
-  private generateCacheKey(prompt: string, context?: RequestContext): string {
+  private generateCacheKey(prompt: string, context: RequestContext | undefined): string {
     const contextStr = context ? JSON.stringify(context) : ''
     return `${prompt}_${contextStr}`.slice(0, 200)
   }
@@ -53,13 +53,13 @@ class AIResponseCache {
   }
 
   // 设置缓存
-  set(prompt: string, response: AIResponse, context?: RequestContext, ttl?: number): void {
+  set(prompt: string, response: AIResponse, context: RequestContext | undefined, ttl?: number): void {
     const key = this.generateCacheKey(prompt, context)
 
     // LRU清理
     if (this.cache.size >= this.MAX_CACHE_SIZE) {
       const firstKey = this.cache.keys().next().value
-      this.cache.delete(firstKey)
+      if (firstKey) this.cache.delete(firstKey)
     }
 
     this.cache.set(key, {
@@ -134,7 +134,7 @@ class RequestBatcher {
         request.resolve(response)
       })
     } catch (error) {
-      batch.forEach(request => request.reject(error))
+      batch.forEach(request => { request.reject(error instanceof Error ? error : new Error(String(error))); })
     }
   }
 
@@ -348,10 +348,10 @@ class SmartRouter {
       }
 
       // 4. 缓存响应
-      this.responseCache.set(prompt, response, context)
+      this.responseCache.set(prompt, response, context ?? {})
 
       // 5. 记录行为用于预测
-      this.predictiveLoader.recordContext(context, 'ai_request')
+      this.predictiveLoader.recordContext(context ?? {}, 'ai_request')
 
       console.log(`AI响应完成，耗时: ${Date.now() - startTime}ms`)
       return response
@@ -395,8 +395,5 @@ if (typeof window === 'undefined') { // 只在服务端运行
 }
 
 export {
-  AIResponseCache,
-  RequestBatcher,
-  PredictiveLoader,
-  SmartRouter
+  AIResponseCache, PredictiveLoader, RequestBatcher, SmartRouter
 }

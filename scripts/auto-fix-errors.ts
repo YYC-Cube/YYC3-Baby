@@ -84,7 +84,7 @@ function fixImplicitAnyTypes(filePath: string, content: string): { content: stri
   const patterns = [
     // 错误: Parameter '_' implicitly has an 'any' type.
     // 修复: (_, index) => (_, index: any) => 或 (_, index: unknown) =>
-    [/(\w+)\s*:\s*\w+/g, (match, param) => {
+    [/(\w+)\s*:\s*\w+/g, (match: string, param: string) => {
       // 简单的类型推断修复
       return match
     }],

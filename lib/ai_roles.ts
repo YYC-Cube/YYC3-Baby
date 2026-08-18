@@ -378,6 +378,7 @@ export interface CoordinatedResponse {
   supportingInsights?: {
     role: AIRole
     insight: string
+    relevance: number
   }[]
   suggestedActions?: string[]
 }

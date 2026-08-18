@@ -62,7 +62,7 @@ export default function StageIndicator({
     return (
       <motion.div
         className={`bg-linear-to-r ${stageColors[currentStage.color]} rounded-xl p-3 text-white cursor-pointer`}
-        onClick={() => setShowDetails(true)}
+        onClick={() => { setShowDetails(true); }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
@@ -176,7 +176,7 @@ export default function StageIndicator({
         {showRecommendations && (
           <button
             className="w-full mt-4 py-2 bg-white/20 rounded-xl text-sm font-medium hover:bg-white/30 transition"
-            onClick={() => setShowDetails(true)}
+            onClick={() => { setShowDetails(true); }}
           >
             查看发展建议
           </button>
@@ -191,20 +191,20 @@ export default function StageIndicator({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowDetails(false)}
+            onClick={() => { setShowDetails(false); }}
           >
             <motion.div
               className="bg-white rounded-3xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent<HTMLDivElement>) => { e.stopPropagation(); }}
             >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold">{currentStage.name} - 发展建议</h3>
                 <button
                   className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"
-                  onClick={() => setShowDetails(false)}
+                  onClick={() => { setShowDetails(false); }}
                 >
                   <i className="ri-close-line" />
                 </button>

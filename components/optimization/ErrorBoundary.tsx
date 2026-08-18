@@ -79,8 +79,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             name: error.name
           },
           errorInfo: {
-            componentStack: errorInfo.componentStack,
-            errorBoundaryStack: errorInfo.errorBoundaryStack
+            componentStack: errorInfo.componentStack
           },
           userAgent: navigator.userAgent,
           url: window.location.href,
@@ -149,7 +148,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             )}
 
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => { window.location.reload(); }}
               className="ml-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
             >
               <i className="ri-restart-line mr-1" />

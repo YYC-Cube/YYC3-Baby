@@ -100,7 +100,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <div
         className="absolute inset-0 rounded-2xl opacity-20"
         style={{
-          background: `radial-gradient(circle at 30% 30%, ${themeColors.primaryColor}40, transparent 70%)`
+          background: `radial-gradient(circle at 30% 30%, ${themeColors.primary}40, transparent 70%)`
         }}
       />
 
@@ -159,7 +159,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   key={index}
                   className="px-2 py-1 text-xs rounded-full text-white"
                   style={{
-                    backgroundColor: themeColors.primaryColor,
+                    backgroundColor: themeColors.primary,
                     fontSize: '10px'
                   }}
                 >

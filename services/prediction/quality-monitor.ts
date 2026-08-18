@@ -290,7 +290,7 @@ export class PredictionQualityMonitor {
     let totalCount = 0
 
     Object.entries(groups).forEach(([group, indices]) => {
-      const validIndices = (indices as number[]).filter((i: number) => i < predictions.length)
+      const validIndices = (indices).filter((i: number) => i < predictions.length)
       const groupPredictions = validIndices.map((i: number) => predictions[i]).filter((p): p is number => p !== undefined)
       if (groupPredictions.length > 0) {
         groupMeans[group] = groupPredictions.reduce((sum: number, pred: number) => sum + pred, 0) / groupPredictions.length
@@ -316,7 +316,7 @@ export class PredictionQualityMonitor {
 
     const groupPredictions: Record<string, number[]> = {}
     Object.entries(groups).forEach(([group, indices]) => {
-      const validIndices = (indices as number[]).filter((i: number) => i < predictions.length)
+      const validIndices = (indices).filter((i: number) => i < predictions.length)
       groupPredictions[group] = validIndices.map((i: number) => predictions[i]).filter((p): p is number => p !== undefined)
     })
 

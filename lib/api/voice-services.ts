@@ -1,58 +1,6 @@
 // 语音服务：文本转语音(TTS)和语音转文本(STT)
 // 基于文档: https://open.bigmodel.cn/dev/api#tts
 
-// Web Speech API 类型定义
-interface SpeechRecognitionResult {
-  [index: number]: SpeechRecognitionAlternative;
-  length: number;
-}
-
-interface SpeechRecognitionAlternative {
-  transcript: string;
-  confidence: number;
-}
-
-interface SpeechRecognitionResultList {
-  [index: number]: SpeechRecognitionResult;
-  length: number;
-}
-
-interface SpeechRecognitionEvent {
-  results: SpeechRecognitionResultList;
-  resultIndex: number;
-  error?: string;
-}
-
-interface SpeechRecognitionErrorEvent {
-  error: string;
-  message: string;
-}
-
-interface SpeechRecognitionConstructor {
-  new(): SpeechRecognition;
-}
-
-interface SpeechRecognition {
-  lang: string;
-  continuous: boolean;
-  interimResults: boolean;
-  onresult: (event: SpeechRecognitionEvent) => void;
-  onerror: (event: SpeechRecognitionErrorEvent) => void;
-  onend: () => void;
-  start(): void;
-  stop(): void;
-  abort(): void;
-  result?: SpeechRecognitionResultList;
-}
-
-// 扩展Window接口以包含SpeechRecognition
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  }
-}
-
 interface TTSRequest {
   model: "cogtts"
   input: string
@@ -178,7 +126,10 @@ export class VoiceService {
       recognition.continuous = false
       recognition.interimResults = false
 
+      let receivedResult = false
+
       recognition.onresult = (event: SpeechRecognitionEvent) => {
+        receivedResult = true
         const transcript = event.results[0][0].transcript
         resolve(transcript)
       }
@@ -188,7 +139,7 @@ export class VoiceService {
       }
 
       recognition.onend = () => {
-        if (!recognition.result) {
+        if (!receivedResult) {
           reject(new Error("语音识别未返回结果"))
         }
       }

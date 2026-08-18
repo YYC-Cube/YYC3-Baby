@@ -106,7 +106,7 @@ export default function EmailNotification({
           <input
             type="email"
             value={recipientEmail}
-            onChange={(e) => setRecipientEmail(e.target.value)}
+            onChange={(e) => { setRecipientEmail(e.target.value); }}
             placeholder="请输入邮箱地址"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={isSending}
@@ -122,7 +122,7 @@ export default function EmailNotification({
             {notificationTypes.map((type) => (
               <button
                 key={type.id}
-                onClick={() => setNotificationType(type.id)}
+                onClick={() => { setNotificationType(type.id); }}
                 className={`p-3 rounded-lg border transition-colors text-left ${
                   notificationType === type.id
                     ? "border-blue-500 bg-blue-50"
@@ -150,7 +150,7 @@ export default function EmailNotification({
             </label>
             <textarea
               value={customMessage}
-              onChange={(e) => setCustomMessage(e.target.value)}
+              onChange={(e) => { setCustomMessage(e.target.value); }}
               placeholder="请输入您想要发送的消息内容..."
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

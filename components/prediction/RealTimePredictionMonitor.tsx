@@ -226,7 +226,7 @@ const RealTimePredictionMonitor: React.FC<RealTimePredictionMonitorProps> = ({
       }
     }, refreshInterval * 10) // 每10秒刷新一次
 
-    return () => clearInterval(interval)
+    return () => { clearInterval(interval); }
   }, [autoRefresh, isActive, refreshInterval, onModelUpdate])
 
   // 处理警报操作
@@ -324,7 +324,7 @@ const RealTimePredictionMonitor: React.FC<RealTimePredictionMonitorProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsPaused(!isPaused)}
+            onClick={() => { setIsPaused(!isPaused); }}
           >
             {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
           </Button>
@@ -352,7 +352,7 @@ const RealTimePredictionMonitor: React.FC<RealTimePredictionMonitorProps> = ({
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleAlertAction(alert.id, 'acknowledge')}
+                    onClick={() => { handleAlertAction(alert.id, 'acknowledge'); }}
                   >
                     确认
                   </Button>
@@ -454,7 +454,7 @@ const RealTimePredictionMonitor: React.FC<RealTimePredictionMonitorProps> = ({
                     监控实时预测值和置信度变化
                   </CardDescription>
                 </div>
-                <Select value={selectedTimeRange} onValueChange={(value: '1m' | '5m' | '15m' | '1h') => setSelectedTimeRange(value)}>
+                <Select value={selectedTimeRange} onValueChange={(value: '1m' | '5m' | '15m' | '1h') => { setSelectedTimeRange(value); }}>
                   <SelectTrigger className="w-32">
                     <SelectValue />
                   </SelectTrigger>
@@ -511,7 +511,7 @@ const RealTimePredictionMonitor: React.FC<RealTimePredictionMonitorProps> = ({
                     实时追踪模型性能指标变化
                   </CardDescription>
                 </div>
-                <Select value={selectedMetric} onValueChange={(value: 'confidence' | 'accuracy' | 'latency' | 'error') => setSelectedMetric(value)}>
+                <Select value={selectedMetric} onValueChange={(value: 'confidence' | 'accuracy' | 'latency' | 'error') => { setSelectedMetric(value); }}>
                   <SelectTrigger className="w-40">
                     <SelectValue />
                   </SelectTrigger>
@@ -581,9 +581,9 @@ const RealTimePredictionMonitor: React.FC<RealTimePredictionMonitorProps> = ({
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label>准确性</Label>
-                        <span>{(dataQuality.accuracy * 100).toFixed(1)}%</span>
+                        <span>{((dataQuality.accuracy ?? 0) * 100).toFixed(1)}%</span>
                       </div>
-                      <Progress value={dataQuality.accuracy * 100} />
+                      <Progress value={(dataQuality.accuracy ?? 0) * 100} />
                     </div>
                   </div>
 
@@ -655,7 +655,7 @@ const RealTimePredictionMonitor: React.FC<RealTimePredictionMonitorProps> = ({
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleAlertAction(alert.id, 'acknowledge')}
+                            onClick={() => { handleAlertAction(alert.id, 'acknowledge'); }}
                           >
                             确认
                           </Button>

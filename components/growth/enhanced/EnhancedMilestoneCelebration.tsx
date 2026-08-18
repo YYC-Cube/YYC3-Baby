@@ -264,7 +264,7 @@ export default function EnhancedMilestoneCelebration({
         }
       }
 
-      return () => clearInterval(stepTimer)
+      return () => { clearInterval(stepTimer); }
     } else {
       setShowEffects(false)
       setCurrentStep(0)
@@ -306,7 +306,7 @@ export default function EnhancedMilestoneCelebration({
       oscillator.stop(audioContext.currentTime + 2)
 
       setIsPlaying(true)
-      setTimeout(() => setIsPlaying(false), 2000)
+      setTimeout(() => { setIsPlaying(false); }, 2000)
     } catch (error) {
       console.log('音频播放失败:', error)
     }
@@ -593,7 +593,7 @@ export default function EnhancedMilestoneCelebration({
                   transition={{ delay: 1 }}
                 >
                   <p className="text-sm text-gray-600 italic text-center">
-                    "{milestone.personalizedMessage}"
+                    &quot;{milestone.personalizedMessage}&quot;
                   </p>
                 </motion.div>
               )}

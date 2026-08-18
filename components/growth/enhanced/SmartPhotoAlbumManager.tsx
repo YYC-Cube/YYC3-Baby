@@ -9,20 +9,20 @@
 
 'use client'
 
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Grid, List, Upload, Plus } from 'lucide-react'
+import { Grid, List, Plus, Upload } from 'lucide-react'
+import React, { useState } from 'react'
 
 // 导入自定义钩子
 import { useMediaFiles } from './smart-photo-album/useMediaFiles'
 
 // 导入类型
-import { MediaFile, ViewMode, SortBy, FilterParams } from './smart-photo-album/types'
+import { FilterParams, MediaFile, SortBy, ViewMode } from './smart-photo-album/types'
 
 // 导入子组件
-import { MediaFilters } from './smart-photo-album/MediaFilters'
-import { MediaFileList } from './smart-photo-album/MediaFileList'
 import { MediaFileDetail } from './smart-photo-album/MediaFileDetail'
+import { MediaFileList } from './smart-photo-album/MediaFileList'
+import { MediaFilters } from './smart-photo-album/MediaFilters'
 import { MediaUploader } from './smart-photo-album/MediaUploader'
 
 interface SmartPhotoAlbumManagerProps {
@@ -45,23 +45,26 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [showUploader, setShowUploader] = useState(false)
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null)
-  const [filterParams, setFilterParams] = useState<FilterParams>({ query: '', selectedTags: [], dateRange: null })
-  const [sortBy, setSortBy] = useState<SortBy>('dateDesc')
 
   // 使用自定义钩子管理媒体文件
   const {
     mediaFiles,
     filteredFiles,
+    filterParams,
+    sortBy,
+    allTags,
+    autoTagging,
     isLoading,
     uploadMediaFiles,
     toggleFavorite,
     deleteMediaFile,
-    updateMediaFile
-  } = useMediaFiles({
-    initialFiles,
-    filterParams,
-    sortBy
-  })
+    updateMediaFile,
+    setSearchQuery,
+    setSelectedTags,
+    setDateRange,
+    setSortBy,
+    setAutoTagging
+  } = useMediaFiles({ initialFiles })
 
   // 处理文件上传
   const handleUpload = async (files: File[]) => {
@@ -117,7 +120,7 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
                 )}
               </button>
               <button
-                onClick={() => setShowUploader(true)}
+                onClick={() => { setShowUploader(true); }}
                 className="flex items-center gap-2 px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 text-white transition-colors font-medium"
               >
                 <Plus className="w-4 h-4" />
@@ -130,8 +133,13 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
           <MediaFilters
             filterParams={filterParams}
             sortBy={sortBy}
-            onFilterChange={setFilterParams}
-            onSortChange={setSortBy}
+            allTags={allTags}
+            autoTagging={autoTagging}
+            onSearchChange={setSearchQuery}
+            onTagsChange={setSelectedTags}
+            onDateRangeChange={setDateRange}
+            onSortByChange={setSortBy}
+            onAutoTaggingChange={setAutoTagging}
           />
         </div>
 
@@ -148,7 +156,7 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
                 <MediaUploader onUpload={handleUpload} />
                 <div className="mt-6 flex justify-end">
                   <button
-                    onClick={() => setShowUploader(false)}
+                    onClick={() => { setShowUploader(false); }}
                     className="px-6 py-2 rounded-md border border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors"
                   >
                     关闭
@@ -169,8 +177,8 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
               isLoading={isLoading}
               selectedFile={selectedFile}
               onFileSelect={handleFileSelect}
-              onToggleFavorite={(fileId: string) => toggleFavorite(fileId)}
-              onDelete={(fileId: string) => deleteMediaFile(fileId)}
+              onToggleFavorite={(fileId: string) => { toggleFavorite(fileId); }}
+              onDelete={(fileId: string) => { deleteMediaFile(fileId); }}
             />
           </div>
 
@@ -198,7 +206,7 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
                   点击左侧的媒体文件查看详情，或上传新的照片和视频
                 </p>
                 <button
-                  onClick={() => setShowUploader(true)}
+                  onClick={() => { setShowUploader(true); }}
                   className="px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 text-white transition-colors text-sm font-medium"
                 >
                   上传媒体

@@ -473,7 +473,7 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
     }
 
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    return () => { window.removeEventListener('resize', handleResize); }
   }, [])
 
   // 渲染主组件
@@ -538,7 +538,7 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => switchView('chat')}
+                  onClick={() => { switchView('chat'); }}
                   className={state.currentView === 'chat' ? 'active' : ''}
                 >
                   <MessageCircle size={16} />
@@ -547,7 +547,7 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => switchView('dashboard')}
+                  onClick={() => { switchView('dashboard'); }}
                   className={state.currentView === 'dashboard' ? 'active' : ''}
                 >
                   <BarChart3 size={16} />
@@ -556,7 +556,7 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => switchView('tools')}
+                  onClick={() => { switchView('tools'); }}
                   className={state.currentView === 'tools' ? 'active' : ''}
                 >
                   <Settings2 size={16} />
@@ -708,7 +708,7 @@ const ChatView: React.FC<{
       <div className="input-area">
         <Textarea
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={(e) => { setInputValue(e.target.value); }}
           onKeyDown={handleKeyPress}
           placeholder="输入您的问题..."
           disabled={isProcessing}
@@ -716,7 +716,7 @@ const ChatView: React.FC<{
           className="flex-1 mr-2"
         />
         <Button
-          onClick={() => onSendMessage(inputValue)}
+          onClick={() => { onSendMessage(inputValue); }}
           disabled={!inputValue.trim() || isProcessing}
           className="send-button"
         >
@@ -820,7 +820,7 @@ const ToolsView: React.FC<{
           <Card
             key={tool.id}
             className="tool-card"
-            onClick={() => onToolSelected(tool.name)}
+            onClick={() => { onToolSelected(tool.name); }}
           >
             <CardContent className="tool-content">
               <div className="tool-icon">{tool.icon}</div>
@@ -898,21 +898,21 @@ const SettingsView: React.FC<{
             <Button
               variant={theme === 'light' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => onThemeChange()}
+              onClick={() => { onThemeChange(); }}
             >
               浅色
             </Button>
             <Button
               variant={theme === 'dark' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => onThemeChange()}
+              onClick={() => { onThemeChange(); }}
             >
               深色
             </Button>
             <Button
               variant={theme === 'auto' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => onThemeChange()}
+              onClick={() => { onThemeChange(); }}
             >
               自动
             </Button>
@@ -990,14 +990,14 @@ const ResizeHandles: React.FC<{
 
   return (
     <>
-      <div className="resize-handle resize-se" onMouseDown={(e) => handleMouseDown('se', e)} />
-      <div className="resize-handle resize-sw" onMouseDown={(e) => handleMouseDown('sw', e)} />
-      <div className="resize-handle resize-ne" onMouseDown={(e) => handleMouseDown('ne', e)} />
-      <div className="resize-handle resize-nw" onMouseDown={(e) => handleMouseDown('nw', e)} />
-      <div className="resize-handle resize-e" onMouseDown={(e) => handleMouseDown('e', e)} />
-      <div className="resize-handle resize-w" onMouseDown={(e) => handleMouseDown('w', e)} />
-      <div className="resize-handle resize-s" onMouseDown={(e) => handleMouseDown('s', e)} />
-      <div className="resize-handle resize-n" onMouseDown={(e) => handleMouseDown('n', e)} />
+      <div className="resize-handle resize-se" onMouseDown={(e) => { handleMouseDown('se', e); }} />
+      <div className="resize-handle resize-sw" onMouseDown={(e) => { handleMouseDown('sw', e); }} />
+      <div className="resize-handle resize-ne" onMouseDown={(e) => { handleMouseDown('ne', e); }} />
+      <div className="resize-handle resize-nw" onMouseDown={(e) => { handleMouseDown('nw', e); }} />
+      <div className="resize-handle resize-e" onMouseDown={(e) => { handleMouseDown('e', e); }} />
+      <div className="resize-handle resize-w" onMouseDown={(e) => { handleMouseDown('w', e); }} />
+      <div className="resize-handle resize-s" onMouseDown={(e) => { handleMouseDown('s', e); }} />
+      <div className="resize-handle resize-n" onMouseDown={(e) => { handleMouseDown('n', e); }} />
     </>
   )
 }

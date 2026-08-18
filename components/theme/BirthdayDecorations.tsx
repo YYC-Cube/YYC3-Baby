@@ -35,7 +35,7 @@ function Balloon({ delay, x, y, color, swayAmount }: {
         x: { duration: 3, repeat: Infinity, ease: "easeInOut" },
         rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" }
       }}
-      onClick={() => setIsPopped(true)}
+      onClick={() => { setIsPopped(true); }}
     >
       <svg width="60" height="80" viewBox="0 0 60 80">
         {/* 气球主体 */}
@@ -187,7 +187,7 @@ function Ribbon({ delay, x, color }: {
         rotate: [-45, -40, -50, -45]
       }}
       transition={{
-        y: { duration: 2, delay, ease: "bounce" },
+        y: { duration: 2, delay, ease: "backOut" },
         rotate: { duration: 3, delay, repeat: Infinity, ease: "easeInOut" }
       }}
     >

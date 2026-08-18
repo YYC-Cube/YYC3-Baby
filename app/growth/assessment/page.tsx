@@ -142,7 +142,7 @@ export default function AssessmentPage() {
                     question={question}
                     index={index}
                     answer={answers[question.id]}
-                    onAnswer={(value) => handleAnswer(question.id, value)}
+                    onAnswer={(value) => { handleAnswer(question.id, value); }}
                     color={currentDimension.color}
                   />
                 ))}
@@ -231,7 +231,7 @@ function QuestionCard({
                 {[1, 2, 3, 4, 5].map((value) => (
                   <motion.button
                     key={value}
-                    onClick={() => onAnswer(value)}
+                    onClick={() => { onAnswer(value); }}
                     className={`flex-1 py-2.5 rounded-lg font-bold text-sm ${
                       answer === value ? `${currentColor?.bg || 'bg-blue-500'} text-white` : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
@@ -249,7 +249,7 @@ function QuestionCard({
           {question.type === "yesno" && (
             <div className="flex gap-2">
               <motion.button
-                onClick={() => onAnswer(5)}
+                onClick={() => { onAnswer(5); }}
                 className={`flex-1 py-2.5 rounded-lg font-bold text-sm ${
                   answer === 5 ? "bg-green-500 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
@@ -259,7 +259,7 @@ function QuestionCard({
                 是
               </motion.button>
               <motion.button
-                onClick={() => onAnswer(1)}
+                onClick={() => { onAnswer(1); }}
                 className={`flex-1 py-2.5 rounded-lg font-bold text-sm ${
                   answer === 1 ? "bg-red-500 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
@@ -276,7 +276,7 @@ function QuestionCard({
               {["从不", "偶尔", "有时", "经常", "总是"].map((label, i) => (
                 <motion.button
                   key={i}
-                  onClick={() => onAnswer(i + 1)}
+                  onClick={() => { onAnswer(i + 1); }}
                   className={`flex-1 py-2 rounded-lg text-xs font-medium ${
                     answer === i + 1 ? `${currentColor?.bg || 'bg-blue-500'} text-white` : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}

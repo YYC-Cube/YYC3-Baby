@@ -90,11 +90,11 @@ export class ResponsiveSystem {
     window.addEventListener('orientationchange', this.handleResize)
   }
 
-  // 处理尺寸变化
-  private handleResize = useCallback(() => {
+  // 处理尺寸变化（类字段箭头函数，自动绑定 this）
+  private handleResize = () => {
     this.updateScreenSize()
     this.notifyListeners()
-  }, [])
+  }
 
   // 更新屏幕尺寸
   private updateScreenSize() {
@@ -109,7 +109,7 @@ export class ResponsiveSystem {
   // 通知监听器
   private notifyListeners() {
     if (this.currentScreenSize) {
-      this.listeners.forEach(listener => listener(this.currentScreenSize!))
+      this.listeners.forEach(listener => { listener(this.currentScreenSize!); })
     }
   }
 

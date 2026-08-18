@@ -1,15 +1,14 @@
 'use client'
 
-import React, { ReactNode, useRef, useEffect, useState } from 'react'
-import { motion, useInView, useAnimation, MotionProps } from 'framer-motion'
-import { useResponsiveValue } from '@/lib/responsive-system'
 import {
-  createVariants,
   COMMON_VARIANTS,
-  MICRO_INTERACTIONS,
   DURATIONS,
-  EASINGS
+  EASINGS,
+  MICRO_INTERACTIONS
 } from '@/lib/animation-system'
+import { useResponsiveValue, type ResponsiveValue } from '@/lib/responsive-system'
+import { motion, MotionProps, useAnimation, useInView } from 'framer-motion'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 
 export interface AnimatedContainerProps {
   children: ReactNode
@@ -51,7 +50,7 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
   isPlaying = true
 }) => {
   const ref = useRef(null)
-  const isInView = useInView(ref, viewport)
+  const isInView = useInView(ref, viewport as Parameters<typeof useInView>[1])
   const controls = useAnimation()
   const [hasAnimated, setHasAnimated] = useState(false)
 
@@ -111,9 +110,9 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
     // 重复动画
     if (repeat === true || (typeof repeat === 'number' && repeat > 1)) {
       baseOptions.animate = {
-        ...baseOptions.animate,
+        ...(typeof baseOptions.animate === 'object' && baseOptions.animate ? baseOptions.animate : {}),
         transition: {
-          ...baseOptions.transition,
+          ...(baseOptions.transition as object),
           repeat: repeat === true ? Infinity : repeat - 1,
           repeatType: 'reverse' as const
         }
@@ -268,12 +267,12 @@ export const StaggerContainer: React.FC<{
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 30
       }
     }
-  }
+  } as const
 
   return (
     <motion.div

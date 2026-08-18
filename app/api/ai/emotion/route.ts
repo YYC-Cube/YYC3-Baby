@@ -97,7 +97,7 @@ export async function POST(request: Request) {
         neutral: "今天的状态还不错。可以尝试做一些喜欢的事情，让心情更愉悦一些。",
       }
       const adviceValue = adviceMap[detectedEmotion]
-      advice = adviceValue ?? adviceMap['neutral']!
+      advice = adviceValue ?? adviceMap['neutral']
     }
 
     const response: EmotionAnalysisResponse = includeAdvice ? {

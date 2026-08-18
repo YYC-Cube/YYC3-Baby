@@ -160,7 +160,7 @@ export default function DevelopmentCurveChart({
             <input
               type="checkbox"
               checked={showPercentiles}
-              onChange={(e) => setShowPercentiles(e.target.checked)}
+              onChange={(e) => { setShowPercentiles(e.target.checked); }}
               className="rounded border-slate-300"
             />
             显示参考区间
@@ -286,8 +286,8 @@ export default function DevelopmentCurveChart({
                 stroke="white"
                 strokeWidth={2}
                 className="cursor-pointer transition-all"
-                onMouseEnter={() => setHoveredPoint(point)}
-                onMouseLeave={() => setHoveredPoint(null)}
+                onMouseEnter={() => { setHoveredPoint(point); }}
+                onMouseLeave={() => { setHoveredPoint(null); }}
               />
             </motion.g>
           ))}

@@ -207,7 +207,7 @@ class AutonomousAIEngine {
 
   // 批量插件管理
   async installMultiplePlugins(pluginIds: string[]): Promise<{ success: string[], failed: string[] }> {
-    const result = { success: [], failed: [] }
+    const result: { success: string[], failed: string[] } = { success: [], failed: [] }
 
     for (const pluginId of pluginIds) {
       try {
@@ -510,7 +510,7 @@ class AutonomousAIEngine {
         }
 
         return {
-          message: supportMessages[params.emotion] || supportMessages.neutral,
+          message: supportMessages[params.emotion as keyof typeof supportMessages] || supportMessages.neutral,
           suggestions: ['听听音乐放松一下', '做几个深呼吸', '想想开心的事情']
         }
       }
@@ -578,13 +578,13 @@ class AutonomousAIEngine {
     const recentActions = this.learningContext.behaviorHistory.slice(-10)
 
     // 分析最近的工具使用模式
-    const toolUsage = recentActions.reduce((acc, action) => {
-      const toolId = action.context?.toolId
+    const toolUsage = recentActions.reduce<Record<string, number>>((acc, action) => {
+      const toolId = String(action.context?.toolId ?? '')
       if (toolId) {
         acc[toolId] = (acc[toolId] || 0) + 1
       }
       return acc
-    }, {} as Record<string, number>)
+    }, {})
 
     // 为每个工具生成优化建议
     for (const [toolId, usage] of Object.entries(toolUsage)) {

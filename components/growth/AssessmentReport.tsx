@@ -14,7 +14,7 @@ interface PDFGeneratorInstance {
 // 动态导入PDFGenerator以避免SSR错误
 let PDFGeneratorClass: PDFGeneratorClass | null = null
 import("@/lib/pdf_generator").then(mod => {
-  PDFGeneratorClass = mod.PDFGenerator as PDFGeneratorClass
+  PDFGeneratorClass = mod.PDFGenerator
 })
 
 interface ReportData {
@@ -98,7 +98,7 @@ export default function AssessmentReport({ result, report, onClose }: Assessment
       if (!PDFGeneratorClass) {
         // 如果PDFGenerator尚未加载完成，则动态加载
         const mod = await import("@/lib/pdf_generator")
-        PDFGeneratorClass = mod.PDFGenerator as PDFGeneratorClass
+        PDFGeneratorClass = mod.PDFGenerator
       }
 
       const pdfGenerator = new PDFGeneratorClass()
@@ -140,7 +140,7 @@ export default function AssessmentReport({ result, report, onClose }: Assessment
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
-        onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => { e.stopPropagation(); }}
       >
         {/* 头部 */}
         <div className="bg-linear-to-r from-blue-500 to-purple-500 text-white p-6">
@@ -182,7 +182,7 @@ export default function AssessmentReport({ result, report, onClose }: Assessment
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as "overview" | "dimensions" | "suggestions")}
+              onClick={() => { setActiveTab(tab.id as "overview" | "dimensions" | "suggestions"); }}
               className={`flex-1 py-3 flex items-center justify-center gap-2 text-sm font-medium transition-colors
                 ${
                   activeTab === tab.id

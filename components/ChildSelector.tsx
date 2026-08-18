@@ -42,7 +42,7 @@ const ChildSelector: React.FC<ChildSelectorProps> = ({ onSelect, className = "" 
   return (
     <div className={`relative ${className}`}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => { setIsOpen(!isOpen); }}
         className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-sm border border-slate-100 hover:border-blue-200 transition"
       >
         {currentChild ? (
@@ -69,7 +69,7 @@ const ChildSelector: React.FC<ChildSelectorProps> = ({ onSelect, className = "" 
             {children.map((child) => (
               <button
                 key={child.id}
-                onClick={() => handleChildSelect(child)}
+                onClick={() => { handleChildSelect(child); }}
                 className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-50 transition ${currentChild?.id === child.id ? "bg-blue-50" : ""}`}
               >
                 <div className="w-6 h-6 rounded-full bg-linear-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white text-xs font-bold">

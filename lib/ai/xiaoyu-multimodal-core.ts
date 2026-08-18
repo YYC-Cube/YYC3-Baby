@@ -340,9 +340,9 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         characteristics: ['感知觉醒', '情感依恋', '运动发展', '语言萌芽'],
         developmentalFocus: ['感官发展', '安全依恋', '基础运动', '早期语言'],
         learningPreferences: ['多感官刺激', '重复性活动', '温暖互动'],
-        cognitiveLevel: { 
-          id: 'sensorimotor', 
-          name: '感觉运动期', 
+        cognitiveLevel: {
+          id: 'sensorimotor',
+          name: '感觉运动期',
           description: '通过感官和动作学习世界',
           capabilities: ['感官感知', '动作协调'],
           limitations: ['抽象思维缺乏'],
@@ -357,9 +357,9 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         characteristics: ['语言爆发', '独立意识', '好奇心强', '社交启蒙'],
         developmentalFocus: ['语言表达', '社交技能', '习惯养成', '认知探索'],
         learningPreferences: ['游戏化学习', '故事引导', '动手操作'],
-        cognitiveLevel: { 
-          id: 'preoperational', 
-          name: '前运算期', 
+        cognitiveLevel: {
+          id: 'preoperational',
+          name: '前运算期',
           description: '通过象征性思维学习',
           capabilities: ['象征性思维', '语言发展'],
           limitations: ['逻辑思维不完整'],
@@ -374,9 +374,9 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         characteristics: ['规则理解', '逻辑思维', '社交扩展', '学习准备'],
         developmentalFocus: ['入学准备', '学习习惯', '团队协作', '文化认知'],
         learningPreferences: ['结构化学习', '项目活动', '合作游戏'],
-        cognitiveLevel: { 
-          id: 'transitional', 
-          name: '过渡期', 
+        cognitiveLevel: {
+          id: 'transitional',
+          name: '过渡期',
           description: '从具体思维向抽象思维过渡',
           capabilities: ['具体逻辑', '问题解决'],
           limitations: ['抽象推理有限'],
@@ -391,9 +391,9 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         characteristics: ['抽象思维', '学科学习', '兴趣分化', '自我认知'],
         developmentalFocus: ['学科知识', '学习方法', '价值观形成', '技能培养'],
         learningPreferences: ['探究式学习', '项目合作', '技术应用'],
-        cognitiveLevel: { 
-          id: 'concrete_operational', 
-          name: '具体运算期', 
+        cognitiveLevel: {
+          id: 'concrete_operational',
+          name: '具体运算期',
           description: '能够进行逻辑推理和分类',
           capabilities: ['逻辑推理', '分类思维'],
           limitations: ['抽象概念困难'],
@@ -408,9 +408,9 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         characteristics: ['青春期', '抽象思维', '自我认同', '社交重构'],
         developmentalFocus: ['青春期适应', '学科深入', '人际关系', '价值观塑造'],
         learningPreferences: ['自主探究', '同伴学习', '技能专精'],
-        cognitiveLevel: { 
-          id: 'formal_operational', 
-          name: '形式运算期', 
+        cognitiveLevel: {
+          id: 'formal_operational',
+          name: '形式运算期',
           description: '能够进行抽象和假设思维',
           capabilities: ['抽象思维', '假设推理'],
           limitations: ['缺乏实践经验'],
@@ -425,9 +425,9 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         characteristics: ['独立人格', '批判思维', '人生规划', '社会责任'],
         developmentalFocus: ['高等教育', '职业规划', '社会参与', '文化传承'],
         learningPreferences: ['专业深入', '实践应用', '创新创造'],
-        cognitiveLevel: { 
-          id: 'abstract_reasoning', 
-          name: '抽象推理期', 
+        cognitiveLevel: {
+          id: 'abstract_reasoning',
+          name: '抽象推理期',
           description: '高级抽象思维和综合分析',
           capabilities: ['高级抽象', '综合分析'],
           limitations: ['过于理论化'],
@@ -442,9 +442,9 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         characteristics: ['成熟人格', '专业发展', '社会贡献', '文化创新'],
         developmentalFocus: ['职业发展', '专业深造', '社会责任', '文化创新'],
         learningPreferences: ['专业深造', '实践应用', '创新研究'],
-        cognitiveLevel: { 
-          id: 'expert', 
-          name: '专家级', 
+        cognitiveLevel: {
+          id: 'expert',
+          name: '专家级',
           description: '专业领域的深度认知和创新',
           capabilities: ['专业深度', '创新创造'],
           limitations: ['领域局限性'],
@@ -469,7 +469,7 @@ export class XiaoyuMultimodalCore extends EventEmitter {
         id: 'cognitive_sensing',
         name: '感知运动期',
         ageGroup: 'infant_0_2',
-        domain: 'cognitive' as DevelopmentalDomain,
+        domain: 'cognitive',
         level: 1,
         milestones: [
           { id: 'vision_development', name: '视觉发展', description: '能够追踪移动物体', expectedAge: 2, criteria: ['目光跟随'], assessment: '临床观察' },
@@ -537,15 +537,23 @@ export class XiaoyuMultimodalCore extends EventEmitter {
     content: MultimodalContent,
     userId: string
   ): Promise<{
-      processedContent: MultimodalContent
-      predictions: AIPrediction[]
-      suggestedActions: SuggestedAction[]
+    processedContent: MultimodalContent
+    predictions: AIPrediction[]
+    suggestedActions: SuggestedAction[]
   }> {
     // 1. 分析内容
     const analysis = await this.multimodalAnalyzer.analyze(content)
 
     // 2. 更新内容AI分析
-    content.aiAnalysis = analysis
+    content.aiAnalysis = {
+      summary: analysis.summary,
+      sentiment: analysis.sentiment,
+      keywords: analysis.keywords,
+      entities: analysis.entities,
+      visualDescription: analysis.visualDescription,
+      audioFeatures: analysis.audioFeatures ?? undefined,
+      actionItems: analysis.actionItems,
+    }
 
     // 3. 生成预测
     const predictions = await this.predictionEngine.generatePredictions(content, userId)
@@ -705,7 +713,7 @@ export class XiaoyuMultimodalCore extends EventEmitter {
   private shouldRecordGrowth(content: MultimodalContent, userId: string): boolean {
     // 基于内容类型和用户互动模式判断
     return content.type === 'interactive' ||
-           !!(content.context?.previousContext && content.context.previousContext.length > 0)
+      !!(content.context?.previousContext && content.context.previousContext.length > 0)
   }
 
   /**
@@ -959,7 +967,15 @@ class IntelligentGrowthRecorder {
       userId,
       ageGroup: ageGroup!,
       stage: {} as DevelopmentalStage,
-      domain: 'cognitive',
+      domain: {
+        id: 'cognitive',
+        name: '认知发展',
+        categories: ['认知'],
+        skills: [],
+        assessmentMethods: [],
+        interventionStrategies: [],
+        technologyApplications: [],
+      },
       activityType: {
         id: 'interactive_ai',
         name: 'AI交互',
@@ -1016,13 +1032,14 @@ class IntelligentGrowthRecorder {
     }
 
     if (filters.domain) {
-      filteredRecords = filteredRecords.filter(r => r.domain === filters.domain)
+      filteredRecords = filteredRecords.filter(r => r.domain.id === filters.domain)
     }
 
-    if (filters.dateRange) {
+    const dateRange = filters.dateRange
+    if (dateRange) {
       filteredRecords = filteredRecords.filter(r =>
-        r.timestamp >= filters.dateRange.start &&
-        r.timestamp <= filters.dateRange.end
+        r.timestamp >= dateRange.start &&
+        r.timestamp <= dateRange.end
       )
     }
 
@@ -1067,7 +1084,7 @@ class MultimodalAnalyzer {
   async analyze(content: MultimodalContent): Promise<MultimodalAnalysis> {
     const analysis: MultimodalAnalysis = {
       summary: '',
-      sentiment: 'neutral' as 'positive' | 'negative' | 'neutral',
+      sentiment: 'neutral',
       keywords: [],
       entities: [],
       visualDescription: '',
@@ -1126,7 +1143,6 @@ class MultimodalAnalyzer {
   private analyzeAudio(content: MultimodalContent): AudioFeatures {
     return {
       duration: content.metadata.duration || 0,
-      format: content.metadata.mimeType,
       confidence: 0.85
     }
   }

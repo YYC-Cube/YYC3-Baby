@@ -562,7 +562,7 @@ export interface RealtimeMetrics {
   newUsers: number
   aiConversations: number
   averageSatisfaction: number
-  systemHealth: 'healthy' | 'warning' | 'critical' | string
+  systemHealth: number
   errorRate: number
   responseTime: number
   lastUpdated: Date | string | number
@@ -573,8 +573,16 @@ export interface RealtimeActivity {
   type: "user_action" | "system_event" | "ai_interaction" | "business_event"
   label?: string
   description?: string
-  timestamp: number
+  timestamp: number | string
   userId?: string
   childId?: string
+  impact?: 'low' | 'medium' | 'high'
+  details?: {
+    duration?: number
+    success?: boolean
+    userId?: string
+    sessionId?: string
+    [key: string]: unknown
+  }
   metadata?: Record<string, unknown>
 }

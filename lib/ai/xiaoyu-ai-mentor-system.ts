@@ -6,8 +6,6 @@
 
 import { EventEmitter } from 'events'
 
-import { ZhishuAICore } from './zhishu-ai-core'
-
 // 知识库项接口
 export interface KnowledgeBaseItem {
   id: string
@@ -27,6 +25,7 @@ export interface AIModel {
   name: string
   capabilities: string[]
   version?: string
+  specialization?: string
   parameters?: Record<string, unknown>
   performance?: {
     accuracy?: number
@@ -204,7 +203,7 @@ export class XiaoyuAIMentorSystem extends EventEmitter {
   private guidance: Map<string, MentorGuidance[]> = new Map()
   private learningPaths: Map<string, LearningPath[]> = new Map()
   private resources: Resource[] = []
-  private knowledgeBase: Map<string, KnowledgeBaseItem> = new Map()
+  private knowledgeBase: Map<string, Record<string, unknown>> = new Map()
   private aiModels: Map<string, AIModel> = new Map()
 
   constructor() {
@@ -624,8 +623,8 @@ export class XiaoyuAIMentorSystem extends EventEmitter {
       intermediate: 2,
       advanced: 3,
       expert: 4
-    }
-    return mapping[skillLevel as keyof typeof mapping] || 1
+    } as const
+    return mapping[skillLevel as keyof typeof mapping]
   }
 
   /**
@@ -891,17 +890,17 @@ export class XiaoyuAIMentorSystem extends EventEmitter {
     const users = Array.from(this.users.values())
     const allGuidance = Array.from(this.guidance.values()).flat()
 
-    const skillDistribution = users.reduce((acc, user) => {
+    const skillDistribution = users.reduce<Record<string, number>>((acc, user) => {
       acc[user.skillLevel] = (acc[user.skillLevel] || 0) + 1
       return acc
-    }, {} as Record<string, number>)
+    }, {})
 
-    const interestDistribution = users.reduce((acc, user) => {
+    const interestDistribution = users.reduce<Record<string, number>>((acc, user) => {
       user.interests.forEach(interest => {
         acc[interest] = (acc[interest] || 0) + 1
       })
       return acc
-    }, {} as Record<string, number>)
+    }, {})
 
     return {
       totalUsers: users.length,

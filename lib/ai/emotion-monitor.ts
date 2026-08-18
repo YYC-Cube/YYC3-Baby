@@ -225,7 +225,11 @@ class EmotionMonitor {
     const summary = this.generateSummary(recentEvents, dominantEmotion)
     const trends = this.analyzeTrends(recentEvents)
     const alerts = this.generateAlerts(recentEvents)
-    const recommendations = this.generateRecommendations(recentEvents, dominantEmotion?.[0])
+    const dominantEmotionKey = dominantEmotion?.[0]
+    const recommendations = this.generateRecommendations(
+      recentEvents,
+      dominantEmotionKey ? (dominantEmotionKey as EmotionType) : undefined
+    )
 
     return {
       summary,
@@ -332,7 +336,7 @@ class EmotionMonitor {
   private inferEmotionFromBehavior(action: string, page: string): EmotionType | null {
     const behaviorEmotions: { [key: string]: EmotionType } = {
       '长时间停留': EmotionType.CURIOSITY,
-      '快速点击': EmotionType.EXCITEMENT,
+      '快速点击': EmotionType.SURPRISE,
       '重复操作': EmotionType.ATTENTION,
       '放弃操作': EmotionType.DISCOMFORT,
       '寻求帮助': EmotionType.ATTENTION,
@@ -423,7 +427,7 @@ class EmotionMonitor {
       acknowledged: false
     }
 
-    this.alertHandlers.forEach(handler => handler(alert))
+    this.alertHandlers.forEach(handler => { handler(alert); })
   }
 
   private generateSuggestionsForPattern(pattern: EmotionPattern): string[] {
@@ -463,7 +467,7 @@ class EmotionMonitor {
       acknowledged: false
     }
 
-    this.alertHandlers.forEach(handler => handler(alert))
+    this.alertHandlers.forEach(handler => { handler(alert); })
   }
 
   private generateSummary(events: EmotionEvent[], dominantEmotion?: [string, number]): string {

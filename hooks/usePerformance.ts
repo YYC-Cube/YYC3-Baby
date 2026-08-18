@@ -37,7 +37,7 @@ export function useCachedData<T>(
     return data
   }, [key, ttl, revalidate])
 
-  return { getData, invalidate: () => cacheManager.set(key, null, 0) }
+  return { getData, invalidate: () => { cacheManager.set(key, null, 0); } }
 }
 
 // 页面预加载Hook
@@ -46,14 +46,14 @@ export function usePagePrefetch(paths: string[]) {
     // 等待主线程空闲时预加载
     if ("requestIdleCallback" in window) {
       const handle = requestIdleCallback(() => {
-        paths.forEach((path) => preloader.prefetch(path))
+        paths.forEach((path) => { preloader.prefetch(path); })
       })
-      return () => cancelIdleCallback(handle)
+      return () => { cancelIdleCallback(handle); }
     } else {
       const timer = setTimeout(() => {
-        paths.forEach((path) => preloader.prefetch(path))
+        paths.forEach((path) => { preloader.prefetch(path); })
       }, 2000)
-      return () => clearTimeout(timer)
+      return () => { clearTimeout(timer); }
     }
   }, [paths])
 }
@@ -82,13 +82,13 @@ export function useVisibility(callback: (isVisible: boolean) => void, options: I
     const element = elementRef.current
     if (!element) return
 
-    const observer = new IntersectionObserver(([entry]) => callback(entry.isIntersecting), {
+    const observer = new IntersectionObserver(([entry]) => { callback(entry.isIntersecting); }, {
       threshold: 0.1,
       ...options,
     })
 
     observer.observe(element)
-    return () => observer.disconnect()
+    return () => { observer.disconnect(); }
   }, [callback, options])
 
   return elementRef
@@ -99,8 +99,8 @@ export function useDeferredRender(delay = 100) {
   const [shouldRender, setShouldRender] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setShouldRender(true), delay)
-    return () => clearTimeout(timer)
+    const timer = setTimeout(() => { setShouldRender(true); }, delay)
+    return () => { clearTimeout(timer); }
   }, [delay])
 
   return shouldRender

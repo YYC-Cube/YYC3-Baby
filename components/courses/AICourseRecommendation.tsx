@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { useAIXiaoyu } from "@/hooks/useAIXiaoyu"
 import { useChildren } from "@/hooks/useChildren"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 interface Course {
   id: string
@@ -69,15 +69,7 @@ export default function AICourseRecommendation({
 
       请以JSON格式返回，包含课程名称、描述、类别、难度、时长和标签。`
 
-      const response = await sendMessage(prompt, {
-        role: "教育规划师",
-        context: "儿童课程推荐",
-        childProfile: {
-          name: childName,
-          age: childAge,
-          stage: getChildDevelopmentStage(childAge)
-        }
-      })
+      const response = await sendMessage(prompt, "advisor")
 
       // 模拟解析推荐结果
       const mockRecommendations = {
@@ -162,15 +154,7 @@ export default function AICourseRecommendation({
 
       请提供阶段性学习计划，每个阶段包含目标、推荐课程和时长。`
 
-      const response = await sendMessage(prompt, {
-        role: "学习规划师",
-        context: "个性化学习路径制定",
-        childProfile: {
-          name: childName,
-          age: childAge,
-          stage: getChildDevelopmentStage(childAge)
-        }
-      })
+      const response = await sendMessage(prompt, "advisor")
 
       // 模拟学习路径数据
       const mockLearningPath: LearningPath[] = [
@@ -267,17 +251,9 @@ export default function AICourseRecommendation({
 
       请作为专业的教育顾问，提供个性化的建议和指导。考虑孩子的年龄特点、发展需求和个体差异。`
 
-      const response = await sendMessage(prompt, {
-        role: "教育顾问",
-        context: "课程学习咨询",
-        childProfile: {
-          name: childName,
-          age: childAge,
-          stage: getChildDevelopmentStage(childAge)
-        }
-      })
+      const response = await sendMessage(prompt, "advisor")
 
-      setChatMessages(prev => [...prev, { role: "assistant", content: response.content }])
+      setChatMessages(prev => [...prev, { role: "assistant", content: response }])
     } catch (error) {
       setChatMessages(prev => [...prev, {
         role: "assistant",
@@ -308,7 +284,7 @@ export default function AICourseRecommendation({
       developmental: "ri-brain-line",
       interest: "ri-star-line"
     }
-    return icons[type] || "ri-book-line"
+    return icons[type as keyof typeof icons] || "ri-book-line"
   }
 
   const getRecommendationColor = (type: string) => {
@@ -317,7 +293,7 @@ export default function AICourseRecommendation({
       developmental: "text-blue-500 bg-blue-50",
       interest: "text-purple-500 bg-purple-50"
     }
-    return colors[type] || "text-green-500 bg-green-50"
+    return colors[type as keyof typeof colors] || "text-green-500 bg-green-50"
   }
 
   const tabs = [
@@ -361,12 +337,11 @@ export default function AICourseRecommendation({
               {tabs.map(tab => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as "recommendations" | "learning-path" | "consultation")}
-                  className={`flex-1 px-4 py-3 font-medium transition-colors relative ${
-                    activeTab === tab.id
+                  onClick={() => { setActiveTab(tab.id as "recommendations" | "learning-path" | "consultation"); }}
+                  className={`flex-1 px-4 py-3 font-medium transition-colors relative ${activeTab === tab.id
                       ? "text-blue-600 bg-blue-50"
                       : "text-gray-500 hover:text-gray-700"
-                  }`}
+                    }`}
                 >
                   <i className={`${tab.icon} mr-2`} />
                   {tab.label}
@@ -405,7 +380,7 @@ export default function AICourseRecommendation({
                           </div>
                           <h4 className="font-bold text-gray-800">
                             {type === 'personality' ? '性格发展' :
-                             type === 'developmental' ? '能力提升' : '兴趣探索'}
+                              type === 'developmental' ? '能力提升' : '兴趣探索'}
                           </h4>
                         </div>
 
@@ -527,11 +502,10 @@ export default function AICourseRecommendation({
                         animate={{ opacity: 1, y: 0 }}
                         className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}
                       >
-                        <div className={`inline-block max-w-[80%] rounded-2xl px-4 py-3 ${
-                          message.role === 'user'
+                        <div className={`inline-block max-w-[80%] rounded-2xl px-4 py-3 ${message.role === 'user'
                             ? 'bg-blue-500 text-white'
                             : 'bg-white border border-gray-200 text-gray-800'
-                        }`}>
+                          }`}>
                           {message.content}
                         </div>
                       </motion.div>
@@ -563,7 +537,7 @@ export default function AICourseRecommendation({
                     {quickQuestions.map((question, index) => (
                       <button
                         key={index}
-                        onClick={() => setCurrentMessage(question)}
+                        onClick={() => { setCurrentMessage(question); }}
                         className="text-sm bg-blue-50 text-blue-700 px-3 py-2 rounded-xl hover:bg-blue-100 transition"
                       >
                         {question}
@@ -576,7 +550,7 @@ export default function AICourseRecommendation({
                     <input
                       type="text"
                       value={currentMessage}
-                      onChange={(e) => setCurrentMessage(e.target.value)}
+                      onChange={(e) => { setCurrentMessage(e.target.value); }}
                       onKeyPress={(e) => e.key === 'Enter' && handleChatMessage()}
                       placeholder="请输入您的问题..."
                       className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"

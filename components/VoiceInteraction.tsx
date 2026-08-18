@@ -18,26 +18,12 @@ interface VoiceInteractionProps {
 }
 
 interface WindowWithSpeechRecognition extends Window {
-  SpeechRecognition?: typeof SpeechRecognition
-  webkitSpeechRecognition?: typeof SpeechRecognition
+  SpeechRecognition?: SpeechRecognitionConstructor
+  webkitSpeechRecognition?: SpeechRecognitionConstructor
 }
 
 interface WindowWithAudioContext extends Window {
   webkitAudioContext?: typeof AudioContext
-}
-
-interface SpeechRecognitionResult {
-  isFinal: boolean
-  transcript: string
-}
-
-interface SpeechRecognitionEvent {
-  resultIndex: number
-  results: SpeechRecognitionResultList
-}
-
-interface SpeechRecognitionErrorEvent {
-  error: string
 }
 
 export default function VoiceInteraction({
@@ -56,7 +42,8 @@ export default function VoiceInteraction({
 
   // 检查浏览器支持
   const isSupported = () => {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.SpeechRecognition || (window as WindowWithSpeechRecognition).webkitSpeechRecognition)
+    const w = window as WindowWithSpeechRecognition
+    return !!((w.SpeechRecognition || w.webkitSpeechRecognition) && navigator.mediaDevices?.getUserMedia)
   }
 
   // 语音识别

@@ -21,12 +21,12 @@ type MusicStyle = "happy" | "gentle" | "energetic" | "calm"
 
 // 配置常量
 const VIDEO_STYLE_CONFIG: Record<VideoStyle, { name: string; description: string; thumbnail: string; icon: string; color: string }> = {
-  cartoon: { name: "卡通", description: "可爱卡通效果", thumbnail: "/placeholder.svg", icon: "🎨", color: "text-pink-500" },
-  realistic: { name: "写实", description: "真实质感风格", thumbnail: "/placeholder.svg", icon: "📷", color: "text-blue-500" },
-  anime: { name: "动漫", description: "动漫风格效果", thumbnail: "/placeholder.svg", icon: "⭐", color: "text-purple-500" },
-  watercolor: { name: "水彩", description: "水彩画风效果", thumbnail: "/placeholder.svg", icon: "🎭", color: "text-cyan-500" },
-  '3d-animation': { name: "3D动画", description: "三维立体动画", thumbnail: "/placeholder.svg", icon: "🎬", color: "text-orange-500" },
-  'clay-animation': { name: "黏土动画", description: "黏土动画风格", thumbnail: "/placeholder.svg", icon: "🧱", color: "text-yellow-500" },
+  warm: { name: "温馨", description: "温馨可爱风格", thumbnail: "/placeholder.svg", icon: "🎨", color: "text-pink-500" },
+  playful: { name: "活泼", description: "活泼有趣风格", thumbnail: "/placeholder.svg", icon: "📷", color: "text-blue-500" },
+  elegant: { name: "优雅", description: "优雅精致风格", thumbnail: "/placeholder.svg", icon: "⭐", color: "text-purple-500" },
+  adventure: { name: "冒险", description: "冒险探索风格", thumbnail: "/placeholder.svg", icon: "🎭", color: "text-cyan-500" },
+  dreamy: { name: "梦幻", description: "梦幻唯美风格", thumbnail: "/placeholder.svg", icon: "🎬", color: "text-orange-500" },
+  nature: { name: "自然", description: "自然清新风格", thumbnail: "/placeholder.svg", icon: "🧱", color: "text-yellow-500" },
 }
 
 const MUSIC_STYLE_CONFIG: Record<MusicStyle, { name: string; description: string; icon: string }> = {
@@ -63,7 +63,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
   const [title, setTitle] = useState("")
   const [selectedImages, setSelectedImages] = useState<string[]>([])
   const [storyText, setStoryText] = useState("")
-  const [selectedStyle, setSelectedStyle] = useState<VideoStyle>("cartoon")
+  const [selectedStyle, setSelectedStyle] = useState<VideoStyle>("warm")
   const [selectedTemplate, setSelectedTemplate] = useState<VideoTemplate | null>(null)
   const [duration, setDuration] = useState(30)
   const [enableVoiceover, setEnableVoiceover] = useState(true)
@@ -182,7 +182,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
               <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => { setTitle(e.target.value); }}
                 placeholder="给视频起个名字..."
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none"
               />
@@ -194,7 +194,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                 <label className="block text-sm font-medium text-slate-700 mb-2">故事内容</label>
                 <textarea
                   value={storyText}
-                  onChange={(e) => setStoryText(e.target.value)}
+                  onChange={(e) => { setStoryText(e.target.value); }}
                   placeholder="输入你想变成动画的故事..."
                   rows={4}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none resize-none"
@@ -213,7 +213,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                     key={idx}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => toggleImage(img)}
+                    onClick={() => { toggleImage(img); }}
                     className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImages.includes(img) ? "border-pink-400 ring-2 ring-pink-200" : "border-transparent"
                     }`}
@@ -234,13 +234,13 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
 
             <div className="flex gap-3">
               <button
-                onClick={() => setStep("type")}
+                onClick={() => { setStep("type"); }}
                 className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50"
               >
                 上一步
               </button>
               <button
-                onClick={() => setStep("style")}
+                onClick={() => { setStep("style"); }}
                 disabled={selectedImages.length === 0}
                 className="flex-1 py-3 rounded-xl bg-pink-500 text-white hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -264,7 +264,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                     key={key}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => setSelectedStyle(key as VideoStyle)}
+                    onClick={() => { setSelectedStyle(key as VideoStyle); }}
                     className={`p-3 rounded-xl border-2 text-center transition-all ${
                       selectedStyle === key ? "border-pink-400 bg-pink-50" : "border-slate-200 hover:border-pink-200"
                     }`}
@@ -284,7 +284,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                   <motion.button
                     key={template.id}
                     whileHover={{ scale: 1.02 }}
-                    onClick={() => setSelectedTemplate(selectedTemplate?.id === template.id ? null : template)}
+                    onClick={() => { setSelectedTemplate(selectedTemplate?.id === template.id ? null : template); }}
                     className={`p-2 rounded-xl border-2 text-left transition-all ${
                       selectedTemplate?.id === template.id
                         ? "border-pink-400 bg-pink-50"
@@ -312,7 +312,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                 max={120}
                 step={5}
                 value={duration}
-                onChange={(e) => setDuration(Number(e.target.value))}
+                onChange={(e) => { setDuration(Number(e.target.value)); }}
                 className="w-full accent-pink-500"
               />
               <div className="flex justify-between text-xs text-slate-400">
@@ -323,13 +323,13 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
 
             <div className="flex gap-3">
               <button
-                onClick={() => setStep("content")}
+                onClick={() => { setStep("content"); }}
                 className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50"
               >
                 上一步
               </button>
               <button
-                onClick={() => setStep("options")}
+                onClick={() => { setStep("options"); }}
                 className="flex-1 py-3 rounded-xl bg-pink-500 text-white hover:bg-pink-600"
               >
                 下一步
@@ -348,7 +348,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
               <div className="flex items-center justify-between mb-3">
                 <span className="font-medium text-slate-700">AI配音</span>
                 <button
-                  onClick={() => setEnableVoiceover(!enableVoiceover)}
+                  onClick={() => { setEnableVoiceover(!enableVoiceover); }}
                   className={`w-12 h-6 rounded-full transition-colors ${
                     enableVoiceover ? "bg-pink-500" : "bg-slate-300"
                   }`}
@@ -366,7 +366,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                   {Object.entries(VOICE_CONFIG).map(([key, config]) => (
                     <button
                       key={key}
-                      onClick={() => setVoiceType(key as typeof voiceType)}
+                      onClick={() => { setVoiceType(key as typeof voiceType); }}
                       className={`p-2 rounded-lg text-sm text-left transition-all ${
                         voiceType === key ? "bg-pink-100 border-pink-300 border" : "bg-white border border-slate-200"
                       }`}
@@ -384,7 +384,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
               <div className="flex items-center justify-between mb-3">
                 <span className="font-medium text-slate-700">背景音乐</span>
                 <button
-                  onClick={() => setEnableMusic(!enableMusic)}
+                  onClick={() => { setEnableMusic(!enableMusic); }}
                   className={`w-12 h-6 rounded-full transition-colors ${enableMusic ? "bg-pink-500" : "bg-slate-300"}`}
                 >
                   <div
@@ -401,7 +401,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                     {Object.entries(MUSIC_STYLE_CONFIG).map(([key, config]) => (
                       <button
                         key={key}
-                        onClick={() => setMusicStyle(key as MusicStyle)}
+                        onClick={() => { setMusicStyle(key as MusicStyle); }}
                         className={`p-2 rounded-lg text-center transition-all ${
                           musicStyle === key ? "bg-pink-100 border-pink-300 border" : "bg-white border border-slate-200"
                         }`}
@@ -418,7 +418,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
                       min={0}
                       max={100}
                       value={musicVolume}
-                      onChange={(e) => setMusicVolume(Number(e.target.value))}
+                      onChange={(e) => { setMusicVolume(Number(e.target.value)); }}
                       className="w-full accent-pink-500"
                     />
                   </div>
@@ -428,7 +428,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
 
             <div className="flex gap-3">
               <button
-                onClick={() => setStep("style")}
+                onClick={() => { setStep("style"); }}
                 className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50"
               >
                 上一步
@@ -483,7 +483,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         className="w-full max-w-lg bg-white rounded-2xl p-6 max-h-[85vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); }}
       >
         {/* 头部 */}
         <div className="flex items-center justify-between mb-6">

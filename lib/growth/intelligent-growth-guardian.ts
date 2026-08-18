@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
 
 /**
  * 成长里程碑定义
@@ -17,7 +16,7 @@ export interface DevelopmentalMilestone {
   indicators: string[]
   assessmentCriteria: string[]
   resources: Array<{
-    type: 'article' | 'video' | 'exercise' | 'activity'
+    type: 'article' | 'video' | 'exercise' | 'activity' | 'specialist'
     title: string
     url?: string
     description: string
@@ -103,7 +102,7 @@ export interface GrowthInsight {
   actionable: boolean
   suggestedActions: string[]
   resources: Array<{
-    type: 'article' | 'video' | 'exercise' | 'specialist'
+    type: 'article' | 'video' | 'exercise' | 'specialist' | 'activity'
     title: string
     description: string
   }>
@@ -349,8 +348,8 @@ export class IntelligentGrowthGuardian {
   ): DevelopmentalAssessment['categories'][keyof DevelopmentalAssessment['categories']] {
     const relevantMilestones = Array.from(this.milestones.values()).filter(
       milestone => milestone.category === category &&
-      age >= milestone.ageRange.min - 1 &&
-      age <= milestone.ageRange.max + 1
+        age >= milestone.ageRange.min - 1 &&
+        age <= milestone.ageRange.max + 1
     )
 
     const milestoneResults = relevantMilestones.map(milestone => {
@@ -396,7 +395,7 @@ export class IntelligentGrowthGuardian {
 
     // 如果有足够的正面证据，认为达成
     const positiveEvidence = relevantObservations.filter(obs => obs.positive).length +
-                            relevantParentReports.filter(report => report.positive).length
+      relevantParentReports.filter(report => report.positive).length
 
     const totalEvidence = relevantObservations.length + relevantParentReports.length
 
@@ -661,7 +660,12 @@ export class IntelligentGrowthGuardian {
   private analyzeDevelopmentTrends(assessments: DevelopmentalAssessment[]): any[] {
     if (assessments.length < 2) return []
 
-    const trends = []
+    const trends: Array<{
+      category: string
+      direction: string
+      change: number
+      currentScore: number
+    }> = []
     const categories = ['physical', 'cognitive', 'emotional', 'social', 'language']
 
     categories.forEach(category => {

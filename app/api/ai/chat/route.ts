@@ -66,49 +66,49 @@ function generateLocalResponse(message: string, role?: string): string {
   if (cleanMessage.includes('你好') || cleanMessage.includes('嗨') || cleanMessage.includes('hi') || cleanMessage.includes('在吗')) {
     const responses = CLEAN_RESPONSES.greetings
     const randomIndex = Math.floor(Math.random() * responses.length)
-    return responses[randomIndex]!
+    return responses[randomIndex]
   }
 
   if (cleanMessage.includes('音乐') || cleanMessage.includes('儿歌') || cleanMessage.includes('唱歌') || cleanMessage.includes('听歌')) {
     const responses = CLEAN_RESPONSES.music
     const randomIndex = Math.floor(Math.random() * responses.length)
-    return responses[randomIndex]!
+    return responses[randomIndex]
   }
 
   if (cleanMessage.includes('学习') || cleanMessage.includes('教育') || cleanMessage.includes('教') || cleanMessage.includes('学')) {
     const responses = CLEAN_RESPONSES.learning
     const randomIndex = Math.floor(Math.random() * responses.length)
-    return responses[randomIndex]!
+    return responses[randomIndex]
   }
 
   if (cleanMessage.includes('安全') || cleanMessage.includes('危险') || cleanMessage.includes('防护')) {
     const responses = CLEAN_RESPONSES.safety
     const randomIndex = Math.floor(Math.random() * responses.length)
-    return responses[randomIndex]!
+    return responses[randomIndex]
   }
 
   if (cleanMessage.includes('睡觉') || cleanMessage.includes('睡眠') || cleanMessage.includes('作息') || cleanMessage.includes('晚上')) {
     const responses = CLEAN_RESPONSES.sleep
     const randomIndex = Math.floor(Math.random() * responses.length)
-    return responses[randomIndex]!
+    return responses[randomIndex]
   }
 
   if (cleanMessage.includes('吃饭') || cleanMessage.includes('辅食') || cleanMessage.includes('食物') || cleanMessage.includes('喂养')) {
     const responses = CLEAN_RESPONSES.eating
     const randomIndex = Math.floor(Math.random() * responses.length)
-    return responses[randomIndex]!
+    return responses[randomIndex]
   }
 
   // 角色特定回复
   if (role && role in CLEAN_RESPONSES.role) {
     const roleResponse = CLEAN_RESPONSES.role[role as keyof typeof CLEAN_RESPONSES.role]
-    return roleResponse!
+    return roleResponse
   }
 
   // 默认回复
   const defaultResponses = CLEAN_RESPONSES.default
   const randomIndex = Math.floor(Math.random() * defaultResponses.length)
-  return defaultResponses[randomIndex]!
+  return defaultResponses[randomIndex]
 }
 
 export async function POST(request: Request) {

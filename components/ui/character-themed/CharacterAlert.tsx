@@ -1,7 +1,7 @@
 'use client'
 
-import React, { ReactNode, useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
 import { useCharacterTheme } from '../CharacterThemeContext'
 
 export type AlertType = 'info' | 'success' | 'warning' | 'error'
@@ -49,7 +49,7 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
         handleDismiss()
       }, autoDismissDelay)
 
-      return () => clearTimeout(timer)
+      return () => { clearTimeout(timer); }
     }
   }, [autoDismiss, autoDismissDelay])
 
@@ -175,7 +175,7 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
       y: 0,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 25
       }
@@ -185,7 +185,7 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
       scale: 0.95,
       transition: {
         duration: 0.2,
-        ease: "easeIn"
+        ease: "easeIn" as const
       }
     }
   }
@@ -219,7 +219,7 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{
-                  type: "spring",
+                  type: "spring" as const,
                   stiffness: 300,
                   damping: 20,
                   delay: 0.1
@@ -283,7 +283,6 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
                   style={{
                     backgroundColor: typeConfig.borderColor,
                     color: 'white',
-                    focusRingColor: typeConfig.borderColor
                   }}
                   onClick={action.onClick}
                   initial={{ opacity: 0, y: 10 }}
@@ -321,20 +320,22 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
           </div>
 
           {/* 进度条（自动关闭时显示） */}
-          {autoDismiss && (
-            <motion.div
-              className="absolute bottom-0 left-0 h-1 rounded-b-xl"
-              style={{ backgroundColor: typeConfig.borderColor }}
-              initial={{ width: '100%' }}
-              animate={{ width: '0%' }}
-              transition={{
-                duration: autoDismissDelay / 1000,
-                ease: "linear"
-              }}
-            />
-          )}
-        </motion.div>
+          {
+            autoDismiss && (
+              <motion.div
+                className="absolute bottom-0 left-0 h-1 rounded-b-xl"
+                style={{ backgroundColor: typeConfig.borderColor }}
+                initial={{ width: '100%' }}
+                animate={{ width: '0%' }}
+                transition={{
+                  duration: autoDismissDelay / 1000,
+                  ease: "linear"
+                }}
+              />
+            )
+          }
+        </motion.div >
       )}
-    </AnimatePresence>
+    </AnimatePresence >
   )
 }

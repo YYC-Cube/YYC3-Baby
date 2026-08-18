@@ -38,9 +38,9 @@ export default function LanguageSwitcher() {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => { setIsOpen(!isOpen); }}
         className="flex items-center gap-2 px-3 py-2 bg-white/90 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200/50"
-        title={t.switch}
+        title={t('switch')}
       >
         <div className="w-5 h-5 flex items-center justify-center">
           <i className="ri-translate-2 text-gray-600" />
@@ -67,14 +67,14 @@ export default function LanguageSwitcher() {
           >
             <div className="p-2">
               <div className="px-3 py-2 text-xs font-medium text-gray-500 mb-1">
-                {t.current}
+                {t('current')}
               </div>
               {locales.map((loc) => (
                 <motion.button
                   key={loc}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => switchLanguage(loc)}
+                  onClick={() => { switchLanguage(loc); }}
                   className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
                     loc === locale
                       ? 'bg-blue-100 text-blue-700'
@@ -105,7 +105,7 @@ export default function LanguageSwitcher() {
       {isOpen && (
         <div
           className="fixed inset-0 z-40"
-          onClick={() => setIsOpen(false)}
+          onClick={() => { setIsOpen(false); }}
         />
       )}
     </div>

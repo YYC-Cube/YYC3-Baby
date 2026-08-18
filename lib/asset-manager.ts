@@ -264,8 +264,8 @@ export class AssetManager {
     return new Promise((resolve) => {
       const img = new Image()
 
-      img.onload = () => resolve(true)
-      img.onerror = () => resolve(false)
+      img.onload = () => { resolve(true); }
+      img.onerror = () => { resolve(false); }
 
       img.src = path
     })
@@ -289,12 +289,12 @@ export class AssetManager {
     )
 
     const valid = results.filter(r =>
-      r.status === 'fulfilled' && r.value === true
+      r.status === 'fulfilled' && r.value
     ).length
 
     const invalid = uniquePaths.filter((_, index) =>
       results[index].status === 'fulfilled' &&
-      results[index].value === false
+      !results[index].value
     )
 
     return {

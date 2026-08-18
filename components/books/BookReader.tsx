@@ -50,7 +50,7 @@ export default function BookReader({
     }
 
     window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
+    return () => { window.removeEventListener("keydown", handleKeyDown); }
   }, [book.pages.length, currentPage, isPlaying, onClose, onPageChange, onPause, onPlay])
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function BookReader({
           setHighlightedWord(-1)
         }
       }, 150)
-      return () => clearInterval(interval)
+      return () => { clearInterval(interval); }
     } else {
       setHighlightedWord(-1)
     }
@@ -203,7 +203,7 @@ export default function BookReader({
             <div className="flex items-center justify-center gap-6 px-6 py-4">
               {/* 上一页 */}
               <button
-                onClick={() => onPageChange(currentPage - 1)}
+                onClick={() => { onPageChange(currentPage - 1); }}
                 disabled={currentPage <= 1}
                 className={`p-3 rounded-full transition-all ${
                   currentPage <= 1
@@ -216,7 +216,7 @@ export default function BookReader({
 
               {/* 后退10秒 */}
               <button
-                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+                onClick={() => { onPageChange(Math.max(1, currentPage - 1)); }}
                 className="p-3 rounded-full text-slate-600 hover:bg-amber-100 hover:text-amber-600 transition-all"
               >
                 <i className="ri-replay-10-line text-2xl" />
@@ -224,7 +224,7 @@ export default function BookReader({
 
               {/* 播放/暂停 */}
               <button
-                onClick={() => (isPlaying ? onPause() : onPlay())}
+                onClick={() => { isPlaying ? onPause() : onPlay(); }}
                 className="p-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
               >
                 <i className={`${isPlaying ? "ri-pause-line" : "ri-play-line"} text-3xl`} />
@@ -232,7 +232,7 @@ export default function BookReader({
 
               {/* 前进10秒 */}
               <button
-                onClick={() => onPageChange(Math.min(book.pages.length, currentPage + 1))}
+                onClick={() => { onPageChange(Math.min(book.pages.length, currentPage + 1)); }}
                 className="p-3 rounded-full text-slate-600 hover:bg-amber-100 hover:text-amber-600 transition-all"
               >
                 <i className="ri-forward-10-line text-2xl" />
@@ -240,7 +240,7 @@ export default function BookReader({
 
               {/* 下一页 */}
               <button
-                onClick={() => onPageChange(currentPage + 1)}
+                onClick={() => { onPageChange(currentPage + 1); }}
                 disabled={currentPage >= book.pages.length}
                 className={`p-3 rounded-full transition-all ${
                   currentPage >= book.pages.length
@@ -257,7 +257,7 @@ export default function BookReader({
               {book.pages.map((p) => (
                 <button
                   key={p.pageNumber}
-                  onClick={() => onPageChange(p.pageNumber)}
+                  onClick={() => { onPageChange(p.pageNumber); }}
                   className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
                     p.pageNumber === currentPage
                       ? "border-amber-400 shadow-md"

@@ -11,7 +11,6 @@
  */
 
 import { ReactNode } from 'react'
-import { config } from '../config'
 
 /**
  * 全局UI配置接口
@@ -119,53 +118,8 @@ export const defaultGlobalUIConfig: GlobalUIConfig = {
  * 从统一配置获取UI配置
  */
 const getUIConfigFromGlobal = (): GlobalUIConfig => {
-  try {
-    const uiConfig = config.getUIConfig();
-    
-    // 将统一配置转换为全局UI配置格式
-    return {
-      buttons: {
-        functionButtonsDisabled: false, // 可以从配置中获取
-        disabledButtonClassName: 'opacity-50 cursor-not-allowed',
-        sizes: {
-          sm: 'h-8 px-3 text-xs',
-          md: 'h-10 px-4 py-2',
-          lg: 'h-12 px-6 text-lg'
-        },
-        variants: {
-          default: `bg-[${uiConfig.primaryColor}] text-primary-foreground hover:bg-primary/90`,
-          outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-          ghost: 'hover:bg-accent hover:text-accent-foreground',
-          destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
-        }
-      },
-      
-      switches: {
-        functionSwitchesDisabled: false,
-        disabledSwitchClassName: 'opacity-50 cursor-not-allowed'
-      },
-      
-      forms: {
-        inputsDisabled: false,
-        disabledInputClassName: 'opacity-50 cursor-not-allowed bg-muted'
-      },
-      
-      cards: {
-        className: `bg-white rounded-3xl shadow-soft`,
-        shadow: 'shadow-soft'
-      },
-      
-      animations: {
-        pageTransition: uiConfig.animation.transitionDuration,
-        componentEntrance: 'duration-500 ease-out',
-        buttonHover: 'duration-200 ease-in-out'
-      }
-    };
-  } catch (error) {
-    // 如果获取配置失败，返回默认配置
-    console.warn('Failed to get UI config from global config, using default:', error);
-    return defaultGlobalUIConfig;
-  }
+  // 使用默认配置
+  return defaultGlobalUIConfig;
 };
 
 /**
@@ -325,7 +279,7 @@ export const areFunctionSwitchesDisabled = () =>
   globalUIManager.areFunctionSwitchesDisabled()
 
 export const setFunctionButtonsDisabled = (disabled: boolean) => 
-  globalUIManager.setFunctionButtonsDisabled(disabled)
+  { globalUIManager.setFunctionButtonsDisabled(disabled); }
 
 export const setFunctionSwitchesDisabled = (disabled: boolean) => 
-  globalUIManager.setFunctionSwitchesDisabled(disabled)
+  { globalUIManager.setFunctionSwitchesDisabled(disabled); }

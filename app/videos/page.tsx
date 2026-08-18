@@ -59,7 +59,7 @@ export default function VideosPage() {
             {filters.map((filter) => (
               <button
                 key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
+                onClick={() => { setActiveFilter(filter.id); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-all ${
                   activeFilter === filter.id ? "bg-pink-500 text-white" : "bg-white text-slate-600 hover:bg-pink-50"
                 }`}
@@ -72,7 +72,7 @@ export default function VideosPage() {
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
+              onClick={() => { setViewMode(viewMode === "grid" ? "list" : "grid"); }}
               className="p-2 rounded-lg bg-white text-slate-600 hover:bg-slate-50"
             >
               <i className={viewMode === "grid" ? "ri-list-check" : "ri-grid-line"} />
@@ -84,7 +84,7 @@ export default function VideosPage() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => setShowGenerator(true)}
+          onClick={() => { setShowGenerator(true); }}
           className="w-full p-4 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white flex items-center justify-center gap-3"
         >
           <i className="ri-video-add-line text-2xl" />
@@ -105,7 +105,7 @@ export default function VideosPage() {
                   <motion.div key={video.id} whileHover={{ scale: 1.02 }} className="flex-shrink-0 w-40">
                     <div
                       className="relative aspect-video rounded-xl overflow-hidden cursor-pointer"
-                      onClick={() => setSelectedVideo(video)}
+                      onClick={() => { setSelectedVideo(video); }}
                     >
                       <img
                         src={video.thumbnailUrl || "/placeholder.svg"}
@@ -138,7 +138,7 @@ export default function VideosPage() {
               <i className="ri-video-line text-5xl text-slate-300 mb-4 block" />
               <p className="text-slate-500">还没有视频</p>
               <button
-                onClick={() => setShowGenerator(true)}
+                onClick={() => { setShowGenerator(true); }}
                 className="mt-4 px-4 py-2 bg-pink-500 text-white rounded-lg text-sm"
               >
                 创建第一个视频
@@ -154,7 +154,7 @@ export default function VideosPage() {
                   transition={{ delay: index * 0.05 }}
                   className="bg-white rounded-2xl overflow-hidden shadow-sm"
                 >
-                  <div className="relative aspect-video cursor-pointer group" onClick={() => setSelectedVideo(video)}>
+                  <div className="relative aspect-video cursor-pointer group" onClick={() => { setSelectedVideo(video); }}>
                     <img
                       src={video.thumbnailUrl || "/placeholder.svg"}
                       alt={video.title}
@@ -220,7 +220,7 @@ export default function VideosPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                   className="bg-white rounded-xl p-3 flex gap-3 cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => setSelectedVideo(video)}
+                  onClick={() => { setSelectedVideo(video); }}
                 >
                   <div className="relative w-32 aspect-video rounded-lg overflow-hidden flex-shrink-0">
                     <img
@@ -291,7 +291,7 @@ export default function VideosPage() {
               setShowGenerator(false)
               loadVideos()
             }}
-            onCancel={() => setShowGenerator(false)}
+            onCancel={() => { setShowGenerator(false); }}
           />
         )}
       </AnimatePresence>
@@ -301,8 +301,8 @@ export default function VideosPage() {
         {selectedVideo && (
           <VideoPlayer
             video={selectedVideo}
-            onClose={() => setSelectedVideo(null)}
-            onViewCountUpdate={() => incrementViewCount(selectedVideo.id)}
+            onClose={() => { setSelectedVideo(null); }}
+            onViewCountUpdate={() => { incrementViewCount(selectedVideo.id); }}
           />
         )}
       </AnimatePresence>

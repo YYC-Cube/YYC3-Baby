@@ -39,7 +39,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <h2 className="text-2xl font-bold text-gray-800 mb-2">出错了</h2>
             <p className="text-gray-600 mb-6">抱歉，小语遇到了一些问题。请刷新页面重试。</p>
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => { window.location.reload(); }}
               className="px-6 py-3 bg-gradient-to-r from-pink-400 to-purple-400 text-white rounded-full hover:shadow-lg transition-shadow"
             >
               刷新页面

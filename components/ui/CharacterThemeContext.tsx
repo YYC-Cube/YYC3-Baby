@@ -164,19 +164,20 @@ export const CharacterThemeProvider: React.FC<CharacterThemeProviderProps> = ({
 
   // 生成 CSS 变量
   const getCSSVariables = (): Record<string, string> => {
-    if (!state.themeColors) return {}
+    const colors = state.themeColors
+    if (!colors) return {}
 
     const { brightness, saturation, contrast } = state.customizations
 
     return {
-      '--character-primary': state.themeColors.primary,
-      '--character-secondary': state.themeColors.secondary,
-      '--character-accent': state.themeColors.accent,
-      '--character-background': state.themeColors.background,
-      '--character-text': state.themeColors.text,
-      '--character-border': state.themeColors.border,
-      '--character-glow': state.themeColors.glow,
-      '--character-gradient': state.themeColors.gradient,
+      '--character-primary': colors.primary ?? '',
+      '--character-secondary': colors.secondary ?? '',
+      '--character-accent': colors.accent ?? '',
+      '--character-background': colors.background ?? '',
+      '--character-text': colors.text ?? '',
+      '--character-border': colors.border ?? '',
+      '--character-glow': colors.glow ?? '',
+      '--character-gradient': colors.gradient ?? '',
       '--character-brightness': `${brightness}%`,
       '--character-saturation': `${saturation}%`,
       '--character-contrast': `${contrast}%`

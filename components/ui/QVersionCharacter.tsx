@@ -159,7 +159,7 @@ export default function QVersionCharacter({
             className="w-full h-full rounded-full overflow-hidden"
           >
             <img
-              src={getCharacterImage(targetChild, mood)}
+              src={getCharacterImage(targetChild ?? null, mood)}
               alt={characterName}
               className="w-full h-full object-cover"
               onError={(e) => {
@@ -302,7 +302,7 @@ export function GenderSelector({
       {/* 其他性别选项 */}
       <div className="flex justify-center">
         <button
-          onClick={() => onChange('other')}
+          onClick={() => { onChange('other'); }}
           className={`px-4 py-2 rounded-lg border-2 transition-all ${
             value === 'other'
               ? 'border-slate-400 bg-slate-50 text-slate-700'

@@ -23,7 +23,7 @@ export default function HomeHeader() {
 
     updateTime()
     const timer = setInterval(updateTime, 1000)
-    return () => clearInterval(timer)
+    return () => { clearInterval(timer); }
   }, [])
 
   return (

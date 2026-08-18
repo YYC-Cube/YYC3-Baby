@@ -184,7 +184,7 @@ export class EnhancedEmotionFusion {
   // 文本情感分析（增强版）
   private async analyzeTextEmotion(text: string): Promise<Partial<EmotionFeatures>> {
     // 基础情感词典
-    const emotionKeywords = new Map([
+    const emotionKeywords: Map<string, Partial<EmotionFeatures>> = new Map([
       // 积极情感
       ['开心', { primary: 'joy', intensity: 0.8, valence: 0.8, arousal: 0.6 }],
       ['高兴', { primary: 'joy', intensity: 0.7, valence: 0.7, arousal: 0.5 }],
@@ -210,9 +210,9 @@ export class EnhancedEmotionFusion {
     let maxIntensity = 0
 
     for (const [keyword, emotion] of emotionKeywords) {
-      if (text.includes(keyword) && emotion.intensity > maxIntensity) {
+      if (text.includes(keyword) && (emotion.intensity ?? 0) > maxIntensity) {
         detectedEmotion = emotion
-        maxIntensity = emotion.intensity
+        maxIntensity = emotion.intensity ?? 0
       }
     }
 

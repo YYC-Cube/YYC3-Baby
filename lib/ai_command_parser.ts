@@ -299,8 +299,9 @@ export class AICommandParser {
       return `今天没有${type}哦~`
     }
 
-    const itemDescriptions = items.slice(0, 5).map((item: Record<string, unknown>, index: number) => {
-      const title = (item.title || item.name || item.content || `第${index + 1}项`) as string
+    const itemDescriptions = items.slice(0, 5).map((item, index) => {
+      const record = item as Record<string, unknown>
+      const title = (record.title || record.name || record.content || `第${index + 1}项`) as string
       return `${index + 1}. ${title}`
     })
 

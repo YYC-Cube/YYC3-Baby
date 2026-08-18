@@ -377,7 +377,7 @@ class LocalStorageDB {
       "milestones",
       "stage_transitions",
     ]
-    keys.forEach((key) => localStorage.removeItem(`yyc3_${key}`))
+    keys.forEach((key) => { localStorage.removeItem(`yyc3_${key}`); })
     localStorage.removeItem("yyc3_initialized")
   }
 

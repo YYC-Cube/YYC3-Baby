@@ -10,11 +10,14 @@
  */
 
 import type {
+  BiasVarianceTradeoff,
+  ModelConstraints,
+  ModelFitAssessment,
+  ModelSelection,
   PredictionData,
   PredictionTask,
-  ModelConstraints,
-  ModelSelection,
-  ModelFitAssessment
+  ResidualAnalysis,
+  StabilityMetrics
 } from '@/types/prediction/common'
 
 /**
@@ -407,11 +410,12 @@ export class DynamicModelSelector {
   }
 
   private assessLinearity(data: PredictionData): number {
-    if (data.features?.length === 0) return 0
+    const features = data.features
+    if (!features || features.length === 0) return 0
 
     // 简化的线性度评估
     const targetValues = data.data.map(p => p.value)
-    const firstFeature = data.data.map(p => p.features?.[data.features[0]] || 0)
+    const firstFeature: number[] = data.data.map(p => Number(p.features?.[features[0]] || 0))
 
     return Math.abs(this.calculateCorrelation(firstFeature, targetValues))
   }

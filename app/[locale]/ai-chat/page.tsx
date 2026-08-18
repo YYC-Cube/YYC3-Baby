@@ -321,7 +321,7 @@ export default function AIChatPage() {
                 {aiRoles.map((role) => (
                   <div
                     key={role.id}
-                    onClick={() => setSelectedRole(role.id)}
+                    onClick={() => { setSelectedRole(role.id); }}
                     className={`p-3 rounded-lg cursor-pointer transition-colors ${
                       selectedRole === role.id
                         ? role.color
@@ -452,7 +452,7 @@ export default function AIChatPage() {
                   <input
                     type="text"
                     value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
+                    onChange={(e) => { setInputMessage(e.target.value); }}
                     onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                     placeholder="请输入您想了解的内容...（或使用语音输入）"
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -522,7 +522,7 @@ export default function AIChatPage() {
                 key={index}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setInputMessage(suggestion)}
+                onClick={() => { setInputMessage(suggestion); }}
                 className="p-3 bg-sky-50 hover:bg-sky-100 rounded-lg text-left transition-colors"
               >
                 <p className="text-sm text-gray-700">{suggestion}</p>

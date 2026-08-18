@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from 'react';
 import { apiClient } from '@/lib/api/client';
+import { useCallback, useEffect, useState } from 'react';
 
 // Types
 interface AIMessage {
@@ -150,10 +150,14 @@ export function useAIChat(childId?: string): UseAIChatReturn {
       });
 
       if (result.success && result.data) {
+        const mapped = result.data.conversations.map(c => ({
+          ...c,
+          aiRole: c.aiRole as AIMessage['aiRole'],
+        }));
         if (page === 1) {
-          setMessages(result.data.conversations);
+          setMessages(mapped);
         } else {
-          setMessages(prev => [...prev, ...result.data.conversations]);
+          setMessages(prev => [...prev, ...mapped]);
         }
         setCurrentPage(page);
       }
@@ -211,7 +215,7 @@ export function useAIChat(childId?: string): UseAIChatReturn {
           sessionId: result.data.sessionId,
           userMessage: result.data.message,
           aiResponse: result.data.aiResponse,
-          aiRole: result.data.aiRole,
+          aiRole: result.data.aiRole as AIMessage['aiRole'],
           aiRoleName: result.data.aiRoleName,
           emotion: result.data.emotion,
           createdAt: new Date().toISOString(),

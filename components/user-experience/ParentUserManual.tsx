@@ -655,12 +655,12 @@ export default function ParentUserManual() {
                 type="text"
                 placeholder="搜索手册内容..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => { setSearchQuery(e.target.value); }}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               />
               {searchQuery && (
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => { setSearchQuery(''); }}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
@@ -737,7 +737,7 @@ export default function ParentUserManual() {
                 {/* 章节头部 */}
                 <div
                   className="p-6 cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() => toggleChapter(chapter.id)}
+                  onClick={() => { toggleChapter(chapter.id); }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">

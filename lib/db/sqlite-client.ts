@@ -1,10 +1,10 @@
 // SQLite数据库客户端 - 真正的数据库解决方案
 // 使用 Node.js 内置的 node:sqlite（Node >= 22.13），文件级持久化
 
-import { DatabaseSync } from "node:sqlite"
 import { existsSync, mkdirSync } from "node:fs"
 import { dirname } from "node:path"
-import type { Child, GrowthRecord, Assessment, Milestone } from "./client"
+import { DatabaseSync, type SQLInputValue } from "node:sqlite"
+import type { Assessment, Child, GrowthRecord, Milestone } from "./client"
 
 // 数据库表创建SQL
 const CREATE_TABLES_SQL = `
@@ -198,14 +198,14 @@ export class SQLiteDatabase {
   async findMany<T>(table: string, conditions: Record<string, unknown> = {}): Promise<T[]> {
     try {
       let query = `SELECT * FROM ${table}`
-      const params: unknown[] = []
+      const params: SQLInputValue[] = []
 
       if (Object.keys(conditions).length > 0) {
         const whereClause = Object.keys(conditions)
           .map((key, index) => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
-        params.push(...Object.values(conditions))
+        params.push(...(Object.values(conditions) as SQLInputValue[]))
       }
 
       const stmt = this.db.prepare(query)
@@ -244,13 +244,13 @@ export class SQLiteDatabase {
     try {
       const id = crypto.randomUUID()
       const created_at = new Date().toISOString()
-      const item = { ...data, id, created_at } as T
+      const item = { ...data, id, created_at } as unknown as T
 
       const columns = Object.keys(item).join(", ")
       const placeholders = Object.keys(item)
         .map(() => `?`)
         .join(", ")
-      const values = Object.values(item)
+      const values = Object.values(item) as SQLInputValue[]
 
       const query = `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`
       const stmt = this.db.prepare(query)
@@ -272,7 +272,7 @@ export class SQLiteDatabase {
         ...data,
         id: crypto.randomUUID(),
         created_at: new Date().toISOString(),
-      })) as T[]
+      })) as unknown as T[]
 
       for (const item of items) {
         await this.create(table, item)
@@ -297,7 +297,7 @@ export class SQLiteDatabase {
       const columns = Object.keys(updateData)
         .map((key, index) => `${key} = ?`)
         .join(", ")
-      const values = [...Object.values(updateData), id]
+      const values: SQLInputValue[] = [...(Object.values(updateData) as SQLInputValue[]), id]
 
       const query = `UPDATE ${table} SET ${columns} WHERE id = ?`
       const stmt = this.db.prepare(query)
@@ -318,9 +318,9 @@ export class SQLiteDatabase {
     try {
       const existing = await this.findOne<T>(table, id)
       if (existing) {
-        return (await this.update<T>(table, id, data as Partial<Omit<T, "id">>)) as T
+        return (await this.update<T>(table, id, data as unknown as Partial<Omit<T, "id" | "created_at">>)) as T
       }
-      return this.create<T>(table, { ...data, id } as Omit<T, "id" | "created_at">)
+      return this.create<T>(table, { ...data, id } as unknown as Omit<T, "id" | "created_at">)
     } catch (error) {
       console.error(`upsert记录失败 ${table}:`, error)
       throw error
@@ -346,7 +346,7 @@ export class SQLiteDatabase {
       const query = `DELETE FROM ${table} WHERE id IN (${placeholders})`
       const stmt = this.db.prepare(query)
       const result = stmt.run(...ids)
-      return result.changes
+      return Number(result.changes)
     } catch (error) {
       console.error(`批量删除记录失败 ${table}:`, error)
       return 0
@@ -356,14 +356,14 @@ export class SQLiteDatabase {
   async count(table: string, conditions: Record<string, unknown> = {}): Promise<number> {
     try {
       let query = `SELECT COUNT(*) as count FROM ${table}`
-      const params: unknown[] = []
+      const params: SQLInputValue[] = []
 
       if (Object.keys(conditions).length > 0) {
         const whereClause = Object.keys(conditions)
           .map((key, index) => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
-        params.push(...Object.values(conditions))
+        params.push(...(Object.values(conditions) as SQLInputValue[]))
       }
 
       const stmt = this.db.prepare(query)
@@ -395,14 +395,14 @@ export class SQLiteDatabase {
 
       // 查询分页数据
       let query = `SELECT * FROM ${table}`
-      const params: unknown[] = []
+      const params: SQLInputValue[] = []
 
       if (Object.keys(filter).length > 0) {
         const whereClause = Object.keys(filter)
           .map((key, index) => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
-        params.push(...Object.values(filter))
+        params.push(...(Object.values(filter) as SQLInputValue[]))
       }
 
       query += ` ORDER BY ${sort} ${order}`
@@ -615,4 +615,4 @@ export function getDatabase(): SQLiteDatabase {
 // 一律通过 getDatabase() 懒加载获取实例。
 
 // 类型导出
-export type { Child, GrowthRecord, Assessment, Milestone }
+export type { Assessment, Child, GrowthRecord, Milestone }

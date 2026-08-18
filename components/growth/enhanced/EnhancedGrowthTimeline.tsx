@@ -222,12 +222,12 @@ export default function EnhancedGrowthTimeline({
     : events.filter(e => e.type === selectedType)
 
   // 按月份分组
-  const groupedByMonth = filteredEvents.reduce((acc, event) => {
+  const groupedByMonth = filteredEvents.reduce<Record<string, EnhancedTimelineEvent[]>>((acc, event) => {
     const month = event.date.substring(0, 7)
     if (!acc[month]) acc[month] = []
     acc[month].push(event)
     return acc
-  }, {} as Record<string, EnhancedTimelineEvent[]>)
+  }, {})
 
   // 滚动进度监听
   useEffect(() => {
@@ -242,7 +242,7 @@ export default function EnhancedGrowthTimeline({
     const element = timelineRef.current
     if (element) {
       element.addEventListener('scroll', handleScroll)
-      return () => element.removeEventListener('scroll', handleScroll)
+      return () => { element.removeEventListener('scroll', handleScroll); }
     }
   }, [])
 
@@ -270,7 +270,7 @@ export default function EnhancedGrowthTimeline({
           ease: "easeOut"
         }}
         className={`relative bg-gradient-to-r ${config.bgGradient} rounded-2xl p-5 border-l-4 ${config.borderColor} cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg`}
-        onClick={() => setExpandedId(isExpanded ? null : event.id)}
+        onClick={() => { setExpandedId(isExpanded ? null : event.id); }}
       >
         {/* 重要性标记 */}
         {event.importance && event.importance >= 8 && (
@@ -456,7 +456,7 @@ export default function EnhancedGrowthTimeline({
               ? "bg-gradient-to-r from-slate-800 to-slate-900 text-white shadow-lg"
               : "bg-white text-slate-600 hover:bg-slate-50 shadow"
           }`}
-          onClick={() => setSelectedType("all")}
+          onClick={() => { setSelectedType("all"); }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -472,7 +472,7 @@ export default function EnhancedGrowthTimeline({
                   ? `bg-gradient-to-r ${config.bgGradient} ${config.textColor} shadow-lg`
                   : "bg-white text-slate-600 hover:bg-slate-50 shadow"
               }`}
-              onClick={() => setSelectedType(type)}
+              onClick={() => { setSelectedType(type); }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -497,7 +497,7 @@ export default function EnhancedGrowthTimeline({
                 ? 'bg-blue-100 text-blue-600 shadow-md'
                 : 'bg-white text-slate-400 hover:text-slate-600'
             }`}
-            onClick={() => setViewMode(mode as "timeline" | "grid" | "carousel")}
+            onClick={() => { setViewMode(mode as "timeline" | "grid" | "carousel"); }}
           >
             <Icon className="w-4 h-4" />
             {label}
@@ -577,7 +577,7 @@ export default function EnhancedGrowthTimeline({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`bg-gradient-to-br ${config.bgGradient} rounded-2xl p-5 border-2 ${config.borderColor} hover:shadow-xl transition-all duration-300 cursor-pointer`}
-                onClick={() => setSelectedEvent(event)}
+                onClick={() => { setSelectedEvent(event); }}
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className={`w-12 h-12 bg-gradient-to-r ${event.color} rounded-xl flex items-center justify-center text-white shadow-lg`}>
@@ -692,7 +692,7 @@ export default function EnhancedGrowthTimeline({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedEvent(null)}
+            onClick={() => { setSelectedEvent(null); }}
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
             <motion.div
@@ -700,10 +700,10 @@ export default function EnhancedGrowthTimeline({
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              onClick={e => e.stopPropagation()}
+              onClick={e => { e.stopPropagation(); }}
             >
               <button
-                onClick={() => setSelectedEvent(null)}
+                onClick={() => { setSelectedEvent(null); }}
                 className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center"
               >
                 ×

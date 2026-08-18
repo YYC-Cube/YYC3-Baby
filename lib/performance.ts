@@ -203,12 +203,12 @@ export class CacheManager {
             }
           }
         } catch {
-          keysToRemove.push(key!)
+          keysToRemove.push(key)
         }
       }
     }
 
-    keysToRemove.forEach((key) => localStorage.removeItem(key))
+    keysToRemove.forEach((key) => { localStorage.removeItem(key); })
   }
 
   // 清除所有缓存
@@ -222,7 +222,7 @@ export class CacheManager {
         keysToRemove.push(key)
       }
     }
-    keysToRemove.forEach((key) => localStorage.removeItem(key))
+    keysToRemove.forEach((key) => { localStorage.removeItem(key); })
   }
 }
 

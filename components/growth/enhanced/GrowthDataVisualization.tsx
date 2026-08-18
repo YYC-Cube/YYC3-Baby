@@ -347,7 +347,7 @@ export default function GrowthDataVisualization() {
     const timer = setTimeout(() => {
       setAnimatedData(filteredData)
     }, 500)
-    return () => clearTimeout(timer)
+    return () => { clearTimeout(timer); }
   }, [filteredData])
 
   // 导出数据
@@ -428,7 +428,7 @@ export default function GrowthDataVisualization() {
               ].map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
-                  onClick={() => setSelectedChart(id as 'growth' | 'skills' | 'activities' | 'milestones')}
+                  onClick={() => { setSelectedChart(id as 'growth' | 'skills' | 'activities' | 'milestones'); }}
                   className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
                     selectedChart === id
                       ? 'bg-blue-600 text-white'
@@ -451,7 +451,7 @@ export default function GrowthDataVisualization() {
               ].map(({ id, label }) => (
                 <button
                   key={id}
-                  onClick={() => setTimeRange(id as 'all' | '3m' | '6m' | '1y')}
+                  onClick={() => { setTimeRange(id as 'all' | '3m' | '6m' | '1y'); }}
                   className={`px-3 py-1 rounded-lg text-sm transition-all ${
                     timeRange === id
                       ? 'bg-purple-600 text-white'
@@ -575,10 +575,10 @@ export default function GrowthDataVisualization() {
                       <input
                         type="checkbox"
                         checked={selectedMetrics[key as keyof typeof selectedMetrics]}
-                        onChange={(e) => setSelectedMetrics(prev => ({
+                        onChange={(e) => { setSelectedMetrics(prev => ({
                           ...prev,
                           [key]: e.target.checked
-                        }))}
+                        })); }}
                         className="w-4 h-4 text-blue-600 rounded"
                       />
                       <span className="text-gray-700">{label}</span>
@@ -839,7 +839,7 @@ export default function GrowthDataVisualization() {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={(entry: { name: string; value: number }) => `${entry.name}: ${entry.value}%`}
+                          label={(entry) => `${entry.name ?? ''}: ${entry.value ?? 0}%`}
                           outerRadius={100}
                           fill="#8884d8"
                           dataKey="value"

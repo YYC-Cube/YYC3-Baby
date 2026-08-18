@@ -178,7 +178,7 @@ export default function XiaoyuMemorialAlbum() {
           {/* 控制按钮 */}
           <div className="flex justify-center gap-4 mt-6">
             <button
-              onClick={() => setViewMode('slideshow')}
+              onClick={() => { setViewMode('slideshow'); }}
               className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
                 viewMode === 'slideshow'
                   ? 'bg-purple-600 text-white'
@@ -189,7 +189,7 @@ export default function XiaoyuMemorialAlbum() {
               幻灯片
             </button>
             <button
-              onClick={() => setViewMode('grid')}
+              onClick={() => { setViewMode('grid'); }}
               className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
                 viewMode === 'grid'
                   ? 'bg-purple-600 text-white'
@@ -200,7 +200,7 @@ export default function XiaoyuMemorialAlbum() {
               网格
             </button>
             <button
-              onClick={() => setViewMode('timeline')}
+              onClick={() => { setViewMode('timeline'); }}
               className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
                 viewMode === 'timeline'
                   ? 'bg-purple-600 text-white'
@@ -272,7 +272,7 @@ export default function XiaoyuMemorialAlbum() {
 
                 {/* 自动播放控制 */}
                 <button
-                  onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                  onClick={() => { setIsAutoPlaying(!isAutoPlaying); }}
                   className="absolute bottom-4 right-4 w-12 h-12 bg-white bg-opacity-80 rounded-full flex items-center justify-center hover:bg-opacity-100 transition-all"
                 >
                   {isAutoPlaying ? (
@@ -366,7 +366,7 @@ export default function XiaoyuMemorialAlbum() {
                   {xiaoyuPhotos.map((photo, index) => (
                     <button
                       key={photo.id}
-                      onClick={() => goToPhoto(index)}
+                      onClick={() => { goToPhoto(index); }}
                       className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all ${
                         index === currentPhotoIndex
                           ? 'ring-4 ring-purple-500 scale-110'

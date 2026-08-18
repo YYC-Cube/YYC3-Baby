@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
-import { characterManager, type CharacterConfig, type ThemeColors } from '@/lib/character-manager'
 import type { Child } from '@/lib/character-manager'
+import { characterManager } from '@/lib/character-manager'
+import { motion } from 'framer-motion'
+import React from 'react'
 
 interface CharacterButtonProps {
   child?: Child | null
@@ -68,13 +68,13 @@ export const CharacterButton: React.FC<CharacterButtonProps> = ({
       case 'outline':
         return {
           background: 'transparent',
-          color: themeColors.primaryColor,
-          border: `2px solid ${themeColors.primaryColor}`
+          color: themeColors.primary,
+          border: `2px solid ${themeColors.primary}`
         }
       case 'ghost':
         return {
-          background: `${themeColors.primaryColor}20`,
-          color: themeColors.primaryColor,
+          background: `${themeColors.primary}20`,
+          color: themeColors.primary,
           border: 'none'
         }
       default:
@@ -103,10 +103,10 @@ export const CharacterButton: React.FC<CharacterButtonProps> = ({
       transition: {
         duration: 1,
         repeat: Infinity,
-        ease: "linear"
+        ease: "linear" as const
       }
     }
-  }
+  } as const
 
   const loadingVariants = {
     rest: { rotate: 0 },
@@ -115,10 +115,10 @@ export const CharacterButton: React.FC<CharacterButtonProps> = ({
       transition: {
         duration: 1,
         repeat: Infinity,
-        ease: "linear"
+        ease: "linear" as const
       }
     }
-  }
+  } as const
 
   return (
     <motion.button
@@ -146,7 +146,7 @@ export const CharacterButton: React.FC<CharacterButtonProps> = ({
       {showIcon && (
         <motion.div
           className={`${currentSize.icon} rounded-full overflow-hidden border-2 mr-2`}
-          style={{ borderColor: variant === 'outline' ? themeColors.primaryColor : 'white' }}
+          style={{ borderColor: variant === 'outline' ? themeColors.primary : 'white' }}
           variants={loading ? loadingVariants : {}}
           animate={loading ? "loading" : "rest"}
         >
@@ -189,7 +189,7 @@ export const CharacterButton: React.FC<CharacterButtonProps> = ({
           <div
             className="w-6 h-6 border-2 border-t-2 border-t-transparent rounded-full"
             style={{
-              borderColor: themeColors.primaryColor,
+              borderColor: themeColors.primary,
               borderTopColor: 'transparent'
             }}
           />

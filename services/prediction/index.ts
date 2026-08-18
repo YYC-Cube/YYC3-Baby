@@ -10,30 +10,30 @@
  */
 
 import { EnsembleEngine } from '@/lib/prediction/adaptive-ensemble'
-import { TimeSeriesEngine, AnomalyDetectionEngine, CausalInferenceEngine } from '@/lib/prediction/specialized-engines'
-import { DynamicModelSelector } from './model-selector'
-import { PredictionQualityMonitor } from './quality-monitor'
+import { AnomalyDetectionEngine, CausalInferenceEngine, TimeSeriesEngine } from '@/lib/prediction/specialized-engines'
 import type {
-  PredictionData,
-  PredictionConfig,
-  PredictionTask,
-  PredictionResult,
-  PredictionInsights,
-  StreamingPrediction,
-  DataStream,
-  QualityMetrics,
   BiasReport,
   CalibrationResult,
-  ModelSelection,
-  TaskInfo,
-  Predictor,
-  PerformanceMetrics,
   DataQualityMetrics,
+  DataStream,
   DriftAlert,
+  KeyInsight,
+  ModelSelection,
+  PerformanceMetrics,
+  PredictionConfig,
+  PredictionData,
+  PredictionInsights,
+  PredictionResult,
+  PredictionTask,
+  Predictor,
+  QualityMetrics,
   Recommendation,
   RiskAssessment,
-  KeyInsight
+  StreamingPrediction,
+  TaskInfo
 } from '@/types/prediction/common'
+import { DynamicModelSelector } from './model-selector'
+import { PredictionQualityMonitor } from './quality-monitor'
 
 /**
  * 智能预测服务主类
@@ -328,7 +328,7 @@ export class IntelligentPredictionService {
   async deleteTask(taskId: string): Promise<void> {
     this.activePredictors.delete(taskId)
     // 清理相关的预测历史
-    this.predictionHistory = this.predictionHistory.filter(r => !r.modelId.includes(taskId))
+    this.predictionHistory = this.predictionHistory.filter(r => !(r.modelId && r.modelId.includes(taskId)))
   }
 
   // 私有辅助方法
@@ -440,7 +440,8 @@ export class IntelligentPredictionService {
         alerts.push({
           id: `alert_${Date.now()}_${alerts.length}`,
           type: 'performance',
-          severity: 'medium',
+          severity: 'warning',
+          message: '预测置信度下降',
           description: '预测置信度下降',
           timestamp: Date.now()
         })
@@ -563,7 +564,7 @@ export class IntelligentPredictionService {
     // 根据警报调整置信度
     if (alerts.length > 0) {
       const penalty = alerts.reduce((sum, alert) => {
-        return sum + (alert.severity === 'high' ? 0.2 : alert.severity === 'medium' ? 0.1 : 0.05)
+        return sum + (alert.severity === 'critical' ? 0.2 : alert.severity === 'warning' ? 0.1 : 0.05)
       }, 0)
       confidence = Math.max(0, confidence - penalty)
     }

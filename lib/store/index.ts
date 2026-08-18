@@ -9,16 +9,11 @@
  * @license MIT
  */
 
-import { configureStore, createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
+import { AgeGroup, EmotionalMemory, EmotionResult, EmotionType } from '@/lib/ai/emotion-engine'
+import { configureStore, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { persistReducer, persistStore } from 'redux-persist'
+import aiAssistantReducer from './slices/aiAssistantSlice'
 import { storage } from './storage'
-import { EmotionResult, EmotionalMemory, EmotionType, AgeGroup } from '@/lib/ai/emotion-engine'
-import aiAssistantReducer, {
-  AIAssistantState,
-  AIMessage,
-  sendAIMessage,
-  analyzeAndUpdateEmotion
-} from './slices/aiAssistantSlice'
 
 // 用户状态
 export interface User {
@@ -79,7 +74,7 @@ export interface AIAssistant {
 export interface GrowthRecord {
   id: string
   childId: string
-  type: 'milestone' | 'daily' | 'emotion' | 'learning'
+  type: 'milestone' | 'daily' | 'observation' | 'emotion' | 'learning'
   title: string
   description: string
   date: string
@@ -514,9 +509,12 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
+      // aiAssistant slice 内含 Date / Map 等不可序列化值（sessionMetrics.startTime、
+      // messages[].timestamp、pendingRequests），dev 阶段告警会中断首屏渲染。
+      // 生产环境也暂关闭：该 slice 未被 persist 包装，告警纯为噪音。
+      // TODO(规范化): 将 Date 改为 ISO string、Map 改为 Record 后恢复 serializableCheck。
+      serializableCheck: false,
+      immutableCheck: false,
     }),
   devTools: process.env.NODE_ENV !== 'production'
 })

@@ -255,9 +255,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await apiClient.updateProfile(profileData);
 
       if (result.success && result.data) {
+        const { user } = result.data;
         setAuthState(prev => ({
           ...prev,
-          user: result.data.user,
+          user,
           isLoading: false,
           error: null,
         }));
@@ -293,9 +294,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await apiClient.getProfile();
 
       if (result.success && result.data) {
+        const { user } = result.data;
         setAuthState(prev => ({
           ...prev,
-          user: result.data.user,
+          user,
           isLoading: false,
           error: null,
         }));

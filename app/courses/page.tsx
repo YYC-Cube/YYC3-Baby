@@ -86,7 +86,7 @@ export default function CoursesPage() {
                 className={`font-bold px-5 py-2 rounded-full shadow-md transition-all whitespace-nowrap ${
                   selectedCategory === cat.id ? "bg-blue-400 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
                 }`}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => { setSelectedCategory(cat.id); }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}

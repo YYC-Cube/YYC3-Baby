@@ -156,6 +156,7 @@ export interface GeneratedArtwork {
   id: string
   prompt: string
   imageUrl: string
+  thumbnailUrl?: string
   style: ArtStyle
   aspectRatio: string
   createdAt: string
@@ -175,10 +176,11 @@ export interface StorySession {
   title: string
   style: StoryStyle
   segments: StorySegment[]
-  status: "in_progress" | "completed"
+  status: "in_progress" | "completed" | "draft"
   createdAt: string
   updatedAt: string
   childId?: string
+  keywords?: string[]
 }
 
 export interface StorySegment {
@@ -187,6 +189,7 @@ export interface StorySegment {
   type: "user" | "ai"
   author: "child" | "ai"
   createdAt: string
+  timestamp?: string
 }
 
 export interface ContinuationOption {

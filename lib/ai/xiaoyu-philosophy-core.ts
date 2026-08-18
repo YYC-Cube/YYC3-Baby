@@ -123,11 +123,11 @@ export interface CreatorSpiritUpdate {
 }
 
 export class XiaoyuPhilosophyCore extends EventEmitter {
-  private creatorSpirit: CreatorSpirit;
-  private philosophyValues: Map<PhilosophyStage, PhilosophyValue>;
-  private legacyConnections: LegacyConnection[];
-  private insights: PhilosophyInsight[];
-  private soundMappings: Map<string, SoundEmotionMapping>;
+  private creatorSpirit!: CreatorSpirit;
+  private philosophyValues!: Map<PhilosophyStage, PhilosophyValue>;
+  private legacyConnections!: LegacyConnection[];
+  private insights!: PhilosophyInsight[];
+  private soundMappings!: Map<string, SoundEmotionMapping>;
 
   constructor() {
     super();
@@ -681,7 +681,7 @@ ${quote}
       const updateKey = key as keyof CreatorSpiritUpdate;
       const spiritKey = updateKey as keyof CreatorSpirit;
       if (updateKey in this.creatorSpirit && updates[updateKey] !== undefined) {
-        this.creatorSpirit[spiritKey] = Math.min(100, (this.creatorSpirit[spiritKey] || 0) + updates[updateKey]!);
+        this.creatorSpirit[spiritKey] = Math.min(100, (this.creatorSpirit[spiritKey] || 0) + updates[updateKey]);
       }
     });
 

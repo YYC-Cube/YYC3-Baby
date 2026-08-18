@@ -65,11 +65,6 @@ export function getEmotionLabel(emotion: InfantEmotionType | InteractionEmotion)
     [InfantEmotionType.NEUTRAL]: '中性',
     happy: '开心',
     sad: '难过',
-    angry: '生气',
-    fear: '害怕',
-    surprise: '惊讶',
-    disgust: '厌恶',
-    neutral: '平静',
     excited: '兴奋',
     calm: '平静',
     anxious: '焦虑'

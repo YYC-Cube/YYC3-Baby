@@ -42,7 +42,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
     try {
       const prompt = `请为${homework.subject}作业"${homework.title}"提供详细的辅导建议。作业描述：${homework.description}。请用简单易懂的语言，分步骤说明解题方法，适合小学生理解。`
       const response = await sendMessage(prompt)
-      setAiSuggestion(response.content)
+      setAiSuggestion(response)
     } catch (error) {
       console.error('生成AI辅导失败:', error)
       setAiSuggestion('抱歉，小语暂时无法提供辅导建议，请稍后再试。')
@@ -59,7 +59,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
     try {
       const prompt = `请分析这道${homework.subject}题目：${currentProblem}。请提供：1. 题目类型分析 2. 解题思路 3. 关键知识点 4. 可能的易错点。请用简单语言解释。`
       const response = await sendMessage(prompt)
-      setAiSuggestion(response.content)
+      setAiSuggestion(response)
     } catch (error) {
       console.error('分析题目失败:', error)
       setAiSuggestion('分析失败，请检查题目输入是否正确。')
@@ -95,7 +95,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
           initial={{ scale: 0.9, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); }}
         >
           {/* 头部 */}
           <div className="bg-gradient-to-r from-blue-400 to-purple-500 text-white p-6">
@@ -144,7 +144,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
                     ? 'text-blue-500 border-b-2 border-blue-500 bg-white'
                     : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
                 }`}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => { setActiveTab(tab.id); }}
               >
                 <i className={`${tab.icon} text-lg mb-1`} />
                 <span>{tab.label}</span>
@@ -210,7 +210,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
                     </h5>
                     <textarea
                       value={currentProblem}
-                      onChange={(e) => setCurrentProblem(e.target.value)}
+                      onChange={(e) => { setCurrentProblem(e.target.value); }}
                       placeholder="请输入你遇到的题目，小语会帮你分析..."
                       className="w-full h-24 p-3 border border-yellow-200 rounded-xl resize-none focus:outline-none focus:border-yellow-400 text-sm"
                     />
@@ -300,7 +300,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
               </button>
               <button
                 className="flex-1 py-3 bg-green-400 text-white rounded-xl font-bold hover:bg-green-500 transition"
-                onClick={() => handleCompleteHomework(100)}
+                onClick={() => { handleCompleteHomework(100); }}
               >
                 完成作业
               </button>

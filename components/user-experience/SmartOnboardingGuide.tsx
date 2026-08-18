@@ -456,7 +456,7 @@ export default function SmartOnboardingGuide() {
               {/* 关闭按钮 */}
               {currentStep.skippable && (
                 <button
-                  onClick={() => setShowSkipConfirm(true)}
+                  onClick={() => { setShowSkipConfirm(true); }}
                   className="absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors z-20"
                 >
                   <X className="w-4 h-4 text-gray-600" />
@@ -527,7 +527,7 @@ export default function SmartOnboardingGuide() {
                       <span>请跟着操作</span>
                     </div>
                     <p className="text-sm text-blue-600">
-                      点击"下一步"按钮，系统将自动演示操作
+                      点击&quot;下一步&quot;按钮，系统将自动演示操作
                     </p>
                   </div>
                 )}
@@ -574,7 +574,7 @@ export default function SmartOnboardingGuide() {
                 {/* 暂停/继续按钮 */}
                 <div className="mt-4 flex justify-center">
                   <button
-                    onClick={() => setIsPaused(!isPaused)}
+                    onClick={() => { setIsPaused(!isPaused); }}
                     className="flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
                   >
                     {isPaused ? (
@@ -617,7 +617,7 @@ export default function SmartOnboardingGuide() {
               </p>
               <div className="flex gap-3">
                 <button
-                  onClick={() => setShowSkipConfirm(false)}
+                  onClick={() => { setShowSkipConfirm(false); }}
                   className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all"
                 >
                   继续引导

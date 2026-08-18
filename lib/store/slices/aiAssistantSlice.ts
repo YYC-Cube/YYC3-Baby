@@ -9,8 +9,8 @@
  * @license MIT
  */
 
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { EmotionType } from '@/lib/ai/emotion-engine'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type ExtendedEmotionType = EmotionType | 'confusion' | 'excitement'
 
@@ -105,7 +105,7 @@ export interface AIAssistantState {
 
   // 响应状态
   isProcessing: boolean
-  pendingRequests: Map<string, Date>
+  pendingRequests: string[]
 
   // 个性化设置
   personality: 'gentle' | 'energetic' | 'educational' | 'playful'
@@ -153,7 +153,7 @@ const initialState: AIAssistantState = {
 
   // 响应状态
   isProcessing: false,
-  pendingRequests: new Map(),
+  pendingRequests: [],
 
   // 个性化设置
   personality: 'gentle',
@@ -407,24 +407,24 @@ const aiAssistantSlice = createSlice({
       // 发送消息
       .addCase(sendAIMessage.pending, (state, action) => {
         state.isProcessing = true
-        state.addPendingRequest(action.meta.requestId)
+        state.pendingRequests.push(action.meta.requestId)
       })
       .addCase(sendAIMessage.fulfilled, (state, action) => {
         state.isProcessing = false
-        state.removePendingRequest(action.meta.requestId)
-        state.addAIMessage(action.payload)
+        state.pendingRequests = state.pendingRequests.filter(req => req !== action.meta.requestId)
+        state.messages.push(action.payload)
         state.currentEmotion = action.payload.emotion || EmotionType.HAPPINESS
       })
       .addCase(sendAIMessage.rejected, (state, action) => {
         state.isProcessing = false
-        state.removePendingRequest(action.meta.requestId)
+        state.pendingRequests = state.pendingRequests.filter(req => req !== action.meta.requestId)
         // 添加错误消息
-        state.addAIMessage({
+        state.messages.push({
           id: Date.now().toString(),
           role: 'assistant',
           content: '抱歉，我现在有点困惑，能再试一次吗？',
           timestamp: new Date(),
-          emotion: EmotionTypeExtended.CONFUSION
+          emotion: 'confusion'
         })
       })
 
@@ -474,6 +474,8 @@ function generateSuggestedActions(userMessage: string, emotion: ExtendedEmotionT
     [EmotionType.DISCOMFORT]: ['检查身体状态', '调整环境', '寻求医疗建议'],
     [EmotionType.ATTENTION]: ['给予关注', '互动游戏', '倾听需求'],
     [EmotionType.NEUTRAL]: ['继续对话', '观察状态', '主动引导'],
+    [EmotionType.DISGUST]: ['了解原因', '调整环境', '提供替代选择'],
+    [EmotionType.PAIN]: ['检查伤处', '寻求医疗建议', '安抚情绪'],
     'confusion': ['简化表达', '提供更多上下文', '耐心解释'],
     'excitement': ['一起庆祝', '记录精彩瞬间', '分享喜悦']
   }
@@ -510,6 +512,12 @@ function analyzeTextEmotion(text: string): { emotion: ExtendedEmotionType; inten
     [EmotionType.CURIOSITY]: ['好奇', '为什么', '想知道'],
     [EmotionType.ATTENTION]: ['注意', '看', '听'],
     [EmotionType.COMFORT]: ['舒服', '安心', '温暖'],
+    [EmotionType.SURPRISE]: ['惊讶', '意外', '没想到'],
+    [EmotionType.DISGUST]: ['讨厌', '恶心', '不喜欢'],
+    [EmotionType.HUNGER]: ['饿', '想吃', '肚子叫'],
+    [EmotionType.DISCOMFORT]: ['不舒服', '难受', '别扭'],
+    [EmotionType.PAIN]: ['疼', '痛', '受伤'],
+    [EmotionType.NEUTRAL]: ['好的', '嗯', '可以'],
     'confusion': ['困惑', '不懂', '迷茫'],
     'excitement': ['兴奋', '激动', '太棒了']
   }

@@ -1,14 +1,16 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from '@/hooks/useAuth'
+import { AnimatePresence, motion } from "framer-motion"
+import { useState } from "react"
 import LoginModal from "./LoginModal"
 
 export default function UserCenter() {
   const { user, isLoading, logout } = useAuth()
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
+  const displayName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email.split('@')[0] : ''
+  const initial = displayName.charAt(0) || user?.email.charAt(0) || "U"
 
   if (isLoading) {
     return (
@@ -23,7 +25,7 @@ export default function UserCenter() {
     return (
       <>
         <motion.button
-          onClick={() => setShowLoginModal(true)}
+          onClick={() => { setShowLoginModal(true); }}
           className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -33,8 +35,8 @@ export default function UserCenter() {
         </motion.button>
         <LoginModal
           isOpen={showLoginModal}
-          onClose={() => setShowLoginModal(false)}
-          onSuccess={() => setShowLoginModal(false)}
+          onClose={() => { setShowLoginModal(false); }}
+          onSuccess={() => { setShowLoginModal(false); }}
         />
       </>
     )
@@ -43,15 +45,15 @@ export default function UserCenter() {
   return (
     <div className="relative">
       <motion.button
-        onClick={() => setShowDropdown(!showDropdown)}
+        onClick={() => { setShowDropdown(!showDropdown); }}
         className="flex items-center gap-2 px-3 py-1.5 bg-white/80 rounded-full hover:bg-white transition"
         whileHover={{ scale: 1.02 }}
       >
         <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
-          {user.name?.charAt(0) || user.email?.charAt(0) || "U"}
+          {initial}
         </div>
         <span className="text-sm font-medium text-slate-700 max-w-[100px] truncate">
-          {user.name || user.email?.split("@")[0]}
+          {displayName}
         </span>
         <i className={`ri-arrow-down-s-line transition-transform ${showDropdown ? "rotate-180" : ""}`} />
       </motion.button>
@@ -64,7 +66,7 @@ export default function UserCenter() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-40"
-              onClick={() => setShowDropdown(false)}
+              onClick={() => { setShowDropdown(false); }}
             />
             <motion.div
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -73,7 +75,7 @@ export default function UserCenter() {
               className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden z-50"
             >
               <div className="p-4 border-b border-slate-100 bg-slate-50">
-                <p className="font-medium text-slate-800">{user.name || "用户"}</p>
+                <p className="font-medium text-slate-800">{displayName || "用户"}</p>
                 <p className="text-xs text-slate-500 truncate">{user.email}</p>
               </div>
 
@@ -87,7 +89,7 @@ export default function UserCenter() {
               <div className="p-2 border-t border-slate-100">
                 <button
                   onClick={async () => {
-                    await signOut()
+                    await logout()
                     setShowDropdown(false)
                   }}
                   className="w-full flex items-center gap-3 px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg transition text-sm"

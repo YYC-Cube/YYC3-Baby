@@ -399,7 +399,7 @@ export default function DeploymentManager() {
               )}
 
               <button
-                onClick={() => setShowAdvanced(!showAdvanced)}
+                onClick={() => { setShowAdvanced(!showAdvanced); }}
                 className="flex items-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
               >
                 <Settings className="w-5 h-5" />

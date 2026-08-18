@@ -48,7 +48,8 @@ export const MediaFileList: React.FC<MediaFileListProps> = ({
   // 根据视图模式确定网格类名
   const gridClassName = {
     grid: 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4',
-    list: 'space-y-2'
+    list: 'space-y-2',
+    timeline: 'space-y-3'
   }[viewMode];
 
   // 获取媒体类型图标
@@ -97,7 +98,7 @@ export const MediaFileList: React.FC<MediaFileListProps> = ({
               : viewMode === 'grid' ? 'rounded-lg overflow-hidden bg-white shadow-sm'
               : 'flex items-center p-3 bg-white rounded-lg shadow-sm'
           }`}
-          onClick={() => onFileSelect(file)}
+          onClick={() => { onFileSelect(file); }}
         >
           {/* 网格视图 */}
           {viewMode === 'grid' && (

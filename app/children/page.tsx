@@ -72,7 +72,7 @@ export default function ChildrenPage() {
         <div className="max-w-4xl mx-auto">
           {/* 添加按钮 */}
           <motion.button
-            onClick={() => setShowAddModal(true)}
+            onClick={() => { setShowAddModal(true); }}
             className="w-full mb-6 p-4 border-2 border-dashed border-blue-300 rounded-2xl text-blue-500 hover:bg-blue-50 transition flex items-center justify-center gap-2"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -143,7 +143,7 @@ export default function ChildrenPage() {
                     {/* 操作按钮 */}
                     <div className="flex gap-2">
                       <button
-                        onClick={() => setEditingChild(child)}
+                        onClick={() => { setEditingChild(child); }}
                         className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-blue-500 transition"
                       >
                         <i className="ri-edit-line text-xl" />
@@ -238,7 +238,7 @@ function ChildFormModal({
     name: child?.name || "",
     nickname: child?.nickname || "",
     birth_date: child?.birth_date || "",
-    gender: child?.gender || ("male" as "male" | "female" | "other"),
+    gender: child?.gender || ("male"),
   })
   const [isSaving, setIsSaving] = useState(false)
 
@@ -265,7 +265,7 @@ function ChildFormModal({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); }}
       >
         <h2 className="text-xl font-bold text-slate-800 mb-4">{child ? "编辑档案" : "添加孩子档案"}</h2>
 
@@ -277,7 +277,7 @@ function ChildFormModal({
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) => { setFormData({ ...formData, name: e.target.value }); }}
               className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -288,7 +288,7 @@ function ChildFormModal({
             <input
               type="text"
               value={formData.nickname}
-              onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
+              onChange={(e) => { setFormData({ ...formData, nickname: e.target.value }); }}
               className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="可选"
             />
@@ -301,7 +301,7 @@ function ChildFormModal({
             <input
               type="date"
               value={formData.birth_date}
-              onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+              onChange={(e) => { setFormData({ ...formData, birth_date: e.target.value }); }}
               className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -313,7 +313,7 @@ function ChildFormModal({
             </label>
             <GenderSelector
               value={formData.gender}
-              onChange={(gender) => setFormData({ ...formData, gender })}
+              onChange={(gender) => { setFormData({ ...formData, gender }); }}
               size="md"
             />
           </div>

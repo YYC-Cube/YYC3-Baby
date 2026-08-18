@@ -110,14 +110,14 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "å°
 
   const filteredEvents = selectedType === "all" ? events : events.filter((e) => e.type === selectedType)
 
-  const groupedByMonth = filteredEvents.reduce(
+  const groupedByMonth = filteredEvents.reduce<Record<string, TimelineEvent[]>>(
     (acc, event) => {
       const month = event.date.substring(0, 7)
       if (!acc[month]) acc[month] = []
       acc[month].push(event)
       return acc
     },
-    {} as Record<string, TimelineEvent[]>,
+    {},
   )
 
   return (
@@ -147,7 +147,7 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "å°
           className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
             selectedType === "all" ? "bg-slate-800 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
           }`}
-          onClick={() => setSelectedType("all")}
+          onClick={() => { setSelectedType("all"); }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -161,7 +161,7 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "å°
                 ? `${config.bgColor} ${config.textColor}`
                 : "bg-white text-slate-600 hover:bg-slate-100"
             }`}
-            onClick={() => setSelectedType(type)}
+            onClick={() => { setSelectedType(type); }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -174,13 +174,13 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "å°
       <div className="flex justify-end gap-2">
         <button
           className={`p-2 rounded-lg ${viewMode === "timeline" ? "bg-blue-100 text-blue-600" : "bg-white text-slate-400"}`}
-          onClick={() => setViewMode("timeline")}
+          onClick={() => { setViewMode("timeline"); }}
         >
           <i className="ri-time-line text-xl" />
         </button>
         <button
           className={`p-2 rounded-lg ${viewMode === "grid" ? "bg-blue-100 text-blue-600" : "bg-white text-slate-400"}`}
-          onClick={() => setViewMode("grid")}
+          onClick={() => { setViewMode("grid"); }}
         >
           <i className="ri-grid-line text-xl" />
         </button>
@@ -219,7 +219,7 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "å°
                         exit={{ opacity: 0, x: 20 }}
                         transition={{ delay: index * 0.1 }}
                         className={`relative ${config.bgColor} rounded-2xl p-4 border-l-4 ${config.borderColor} cursor-pointer`}
-                        onClick={() => setExpandedId(isExpanded ? null : event.id)}
+                        onClick={() => { setExpandedId(isExpanded ? null : event.id); }}
                       >
                         {/* è¿žæŽ¥ç‚¹ */}
                         <div

@@ -49,12 +49,12 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
   const [newTag, setNewTag] = useState('');
   const [descriptionText, setDescriptionText] = useState('');
 
-  if (!file) return null;
-
-  // 初始化描述文本
+  // 初始化描述文本（Hook 必须无条件调用，故置于早退判断之前）
   React.useEffect(() => {
-    setDescriptionText(file.description || '');
-  }, [file.description]);
+    setDescriptionText(file?.description || '');
+  }, [file?.description]);
+
+  if (!file) return null;
 
   // 添加新标签
   const handleAddTag = (e: React.KeyboardEvent) => {
@@ -128,7 +128,7 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
                 {/* 收藏按钮 */}
                 {onToggleFavorite && (
                   <button
-                    onClick={() => onToggleFavorite(file.id)}
+                    onClick={() => { onToggleFavorite(file.id); }}
                     className={`p-2 rounded-full transition-colors ${
                       file.isFavorite
                         ? 'bg-red-100 text-red-600 hover:bg-red-200'
@@ -143,7 +143,7 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
                 {/* 分享按钮 */}
                 {onShareFile && (
                   <button
-                    onClick={() => onShareFile(file)}
+                    onClick={() => { onShareFile(file); }}
                     className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200"
                     title="分享"
                   >
@@ -154,7 +154,7 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
                 {/* 下载按钮 */}
                 {onDownloadFile && (
                   <button
-                    onClick={() => onDownloadFile(file)}
+                    onClick={() => { onDownloadFile(file); }}
                     className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200"
                     title="下载"
                   >
@@ -247,14 +247,14 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
                   <div className="flex gap-2">
                     <textarea
                       value={descriptionText}
-                      onChange={(e) => setDescriptionText(e.target.value)}
+                      onChange={(e) => { setDescriptionText(e.target.value); }}
                       className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       rows={3}
                       placeholder="添加描述..."
                     />
                     <div className="flex gap-1">
                       <button
-                        onClick={() => setIsEditingDescription(false)}
+                        onClick={() => { setIsEditingDescription(false); }}
                         className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
                       >
                         取消
@@ -273,7 +273,7 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
                       {descriptionText || <span className="text-gray-400 italic">暂无描述</span>}
                     </p>
                     <button
-                      onClick={() => setIsEditingDescription(true)}
+                      onClick={() => { setIsEditingDescription(true); }}
                       className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
                       title="编辑描述"
                     >
@@ -297,7 +297,7 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
                     >
                       <span>#{tag}</span>
                       <button
-                        onClick={() => handleRemoveTag(tag)}
+                        onClick={() => { handleRemoveTag(tag); }}
                         className="text-purple-600 hover:text-purple-800 hover:bg-purple-200 rounded-full p-0.5"
                       >
                         <X className="w-3 h-3" />
@@ -310,7 +310,7 @@ export const MediaFileDetail: React.FC<MediaFileDetailProps> = ({
                     type="text"
                     placeholder="添加新标签..."
                     value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
+                    onChange={(e) => { setNewTag(e.target.value); }}
                     onKeyPress={handleAddTag}
                     className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />

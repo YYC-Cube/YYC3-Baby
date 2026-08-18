@@ -119,7 +119,7 @@ export default function AICreativePage() {
             {tabs.map((tab) => (
               <motion.button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as CreativeTab)}
+                onClick={() => { setActiveTab(tab.id as CreativeTab); }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
                   activeTab === tab.id
                     ? "bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-lg"
@@ -152,7 +152,7 @@ export default function AICreativePage() {
                   </h3>
                   <textarea
                     value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
+                    onChange={(e) => { setPrompt(e.target.value); }}
                     placeholder="例如：一只可爱的小猫咪在花园里玩耍，旁边有蝴蝶飞舞..."
                     className="w-full h-32 p-4 border-2 border-purple-100 rounded-2xl resize-none focus:border-purple-300 focus:outline-none transition-colors"
                     maxLength={200}
@@ -160,7 +160,7 @@ export default function AICreativePage() {
                   <div className="flex justify-between items-center mt-2">
                     <span className="text-sm text-slate-400">{prompt.length}/200</span>
                     <button
-                      onClick={() => setPrompt("一只穿着红色斗篷的小兔子在森林里冒险")}
+                      onClick={() => { setPrompt("一只穿着红色斗篷的小兔子在森林里冒险"); }}
                       className="text-sm text-purple-500 hover:text-purple-600"
                     >
                       试试这个
@@ -179,7 +179,7 @@ export default function AICreativePage() {
                       ([key, config]) => (
                         <motion.button
                           key={key}
-                          onClick={() => setSelectedStyle(key)}
+                          onClick={() => { setSelectedStyle(key); }}
                           className={`p-4 rounded-2xl border-2 transition-all ${
                             selectedStyle === key
                               ? "border-purple-400 bg-purple-50 shadow-md"
@@ -216,7 +216,7 @@ export default function AICreativePage() {
                     ].map((item) => (
                       <motion.button
                         key={item.ratio}
-                        onClick={() => setAspectRatio(item.ratio)}
+                        onClick={() => { setAspectRatio(item.ratio); }}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all ${
                           aspectRatio === item.ratio
                             ? "border-blue-400 bg-blue-50"
@@ -276,7 +276,7 @@ export default function AICreativePage() {
                     <i className="ri-image-line text-6xl text-slate-300 mb-4" />
                     <p className="text-slate-500 mb-4">还没有作品，快去创作吧！</p>
                     <button
-                      onClick={() => setActiveTab("generate")}
+                      onClick={() => { setActiveTab("generate"); }}
                       className="px-6 py-2 bg-purple-500 text-white rounded-full font-medium"
                     >
                       开始创作
@@ -308,13 +308,13 @@ export default function AICreativePage() {
                               </span>
                               <div className="flex gap-2">
                                 <button
-                                  onClick={() => toggleFavorite(artwork.id)}
+                                  onClick={() => { toggleFavorite(artwork.id); }}
                                   className={`p-2 rounded-full ${artwork.isFavorite ? "bg-red-500 text-white" : "bg-white/20 text-white"}`}
                                 >
                                   <i className={artwork.isFavorite ? "ri-heart-fill" : "ri-heart-line"} />
                                 </button>
                                 <button
-                                  onClick={() => deleteArtwork(artwork.id)}
+                                  onClick={() => { deleteArtwork(artwork.id); }}
                                   className="p-2 rounded-full bg-white/20 text-white hover:bg-red-500"
                                 >
                                   <i className="ri-delete-bin-line" />
@@ -354,7 +354,7 @@ export default function AICreativePage() {
                           <input
                             type="text"
                             value={storyTitle}
-                            onChange={(e) => setStoryTitle(e.target.value)}
+                            onChange={(e) => { setStoryTitle(e.target.value); }}
                             placeholder="给你的故事起个名字..."
                             className="w-full px-4 py-3 border-2 border-purple-100 rounded-xl focus:border-purple-300 focus:outline-none"
                           />
@@ -365,7 +365,7 @@ export default function AICreativePage() {
                           <input
                             type="text"
                             value={storyKeywords}
-                            onChange={(e) => setStoryKeywords(e.target.value)}
+                            onChange={(e) => { setStoryKeywords(e.target.value); }}
                             placeholder="例如：小兔子, 森林, 冒险..."
                             className="w-full px-4 py-3 border-2 border-purple-100 rounded-xl focus:border-purple-300 focus:outline-none"
                           />
@@ -382,7 +382,7 @@ export default function AICreativePage() {
                             ).map(([key, config]) => (
                               <button
                                 key={key}
-                                onClick={() => setStoryStyle(key)}
+                                onClick={() => { setStoryStyle(key); }}
                                 className={`p-3 rounded-xl border-2 transition-all ${
                                   storyStyle === key
                                     ? "border-purple-400 bg-purple-50"
@@ -461,7 +461,7 @@ export default function AICreativePage() {
                           {continuationOptions.map((option) => (
                             <motion.button
                               key={option.id}
-                              onClick={() => handleSelectOption(activeStory.id, option)}
+                              onClick={() => { handleSelectOption(activeStory.id, option); }}
                               className="w-full p-4 rounded-2xl border-2 border-purple-100 hover:border-purple-300 bg-white text-left transition-all"
                               whileHover={{ scale: 1.01 }}
                             >
@@ -479,7 +479,7 @@ export default function AICreativePage() {
                         <div className="space-y-3">
                           <textarea
                             value={userStoryInput}
-                            onChange={(e) => setUserStoryInput(e.target.value)}
+                            onChange={(e) => { setUserStoryInput(e.target.value); }}
                             placeholder="写下你想添加的内容，或者让AI继续..."
                             className="w-full h-24 p-4 border-2 border-purple-100 rounded-2xl resize-none focus:border-purple-300 focus:outline-none"
                           />
@@ -513,7 +513,7 @@ export default function AICreativePage() {
                     <i className="ri-book-line text-6xl text-slate-300 mb-4" />
                     <p className="text-slate-500 mb-4">还没有故事，开始创作吧！</p>
                     <button
-                      onClick={() => setActiveTab("write")}
+                      onClick={() => { setActiveTab("write"); }}
                       className="px-6 py-2 bg-purple-500 text-white rounded-full font-medium"
                     >
                       开始创作
@@ -554,7 +554,7 @@ export default function AICreativePage() {
                             </div>
                           </div>
                           <button
-                            onClick={() => deleteStory(story.id)}
+                            onClick={() => { deleteStory(story.id); }}
                             className="p-2 text-slate-400 hover:text-red-500 transition-colors"
                           >
                             <i className="ri-delete-bin-line" />

@@ -71,13 +71,13 @@ export interface RoleConfig {
   identified: string[] // 标识系统
 
   // 五化架构适配
-  phased: string[] // 阶段化适配
+  phased: Record<string, string> // 阶段化适配
   modular: string[] // 模块化设计
   scenarioBased: string[] // 场景化应用
   toolBased: string[] // 工具化支持
   storytelling: string[] // 故事化表达
 
-  voiceStyle: "cheerful" | "calm" | "gentle" | "professional" | "warm" | "enthusiastic" | "cultural" | "wise"
+  voiceStyle: "cheerful" | "calm" | "gentle" | "professional" | "warm" | "enthusiastic" | "cultural" | "wise" | "authoritative"
   specialties: string[]
   triggerKeywords: string[]
 
@@ -89,7 +89,7 @@ export interface RoleConfig {
   capabilities: Capabilities
 
   // 7个成长阶段适配
-  ageGroups: {
+  ageGroups?: {
     "0-3": string
     "3-6": string
     "6-9": string
@@ -888,7 +888,7 @@ export function selectOptimalRole(
 
       // 生成选择理由
       const roleConfig = COMPLETE_AI_ROLES[roleId as AIRole]
-      reasoning = `基于情感"${emotion.primary.type}"（权重${emotionWeight[roleId as AIRole]?.toFixed(1) || '1.0'}）和关键词匹配度${score.toFixed(1)}，选择${roleConfig.name}角色，因其${roleConfig.description}最符合当前需求。`
+      reasoning = `基于情感"${emotion.primary.type}"（权重${emotionWeights[emotion.primary.type]?.[roleId as AIRole]?.toFixed(1) || '1.0'}）和关键词匹配度${score.toFixed(1)}，选择${roleConfig.name}角色，因其${roleConfig.description}最符合当前需求。`
     }
   }
 
@@ -1055,7 +1055,7 @@ export function generatePersonalizedResponse(
 
   // 添加情感回应
   if (emotion.primary.intensity > 0.7) {
-    const emotionResponses = {
+    const emotionResponses: Record<string, string> = {
       happy: "能感受到你内心的喜悦，这种积极的情绪是成长的宝贵财富！",
       excited: "你的兴奋感染了我，让我们把这份能量投入到有意义的活动中！",
       protective: "我理解你的担忧，让我们一起面对并解决这个问题。",
@@ -1099,7 +1099,7 @@ export function generatePersonalizedResponse(
 
   // 个性化基于用户背景
   if (userContext?.age) {
-    const ageSpecificQuestions = {
+    const ageSpecificQuestions: Record<string, string> = {
       "0-3": "宝宝今天过得开心吗？",
       "3-6": "今天在幼儿园有什么好玩的事情吗？",
       "6-9": "学习上遇到什么有趣的问题了吗？",
@@ -1143,4 +1143,4 @@ export function generatePersonalizedResponse(
 
 // 导出增强版角色系统
 export { COMPLETE_AI_ROLES as AI_ROLES }
-export type { RoleConfig as EnhancedRoleConfig, EmotionState, EmotionAnalysis, PersonalityProfile, InteractionPattern, Capabilities }
+export type { RoleConfig as EnhancedRoleConfig }

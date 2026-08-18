@@ -438,7 +438,7 @@ export default function SystemTestingSuite() {
             <div className="flex gap-2">
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => { setSelectedCategory(e.target.value); }}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">所有测试</option>
@@ -450,7 +450,7 @@ export default function SystemTestingSuite() {
               </select>
 
               <button
-                onClick={() => setShowDetails(!showDetails)}
+                onClick={() => { setShowDetails(!showDetails); }}
                 className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all"
               >
                 <Info className="w-4 h-4" />

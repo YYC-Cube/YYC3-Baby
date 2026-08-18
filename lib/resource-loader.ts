@@ -315,8 +315,8 @@ export class ResourceLoader {
     return new Promise((resolve) => {
       const img = new Image()
 
-      img.onload = () => resolve(true)
-      img.onerror = () => resolve(false)
+      img.onload = () => { resolve(true); }
+      img.onerror = () => { resolve(false); }
 
       img.src = path
     })

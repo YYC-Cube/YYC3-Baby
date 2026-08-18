@@ -218,7 +218,7 @@ export default function GrowthDashboard({ child }: GrowthDashboardProps) {
         {['overview', 'milestones', 'emotions', 'recommendations'].map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab as 'overview' | 'milestones' | 'emotions' | 'recommendations')}
+            onClick={() => { setActiveTab(tab as 'overview' | 'milestones' | 'emotions' | 'recommendations'); }}
             className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
               activeTab === tab
                 ? 'bg-white text-blue-600 shadow-sm'
@@ -362,7 +362,7 @@ function MilestonesTab({ child, onMilestoneAchievement }: { child: Child; onMile
                 </div>
               </div>
               <button
-                onClick={() => onMilestoneAchievement(milestone.id, true)}
+                onClick={() => { onMilestoneAchievement(milestone.id, true); }}
                 className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
               >
                 标记达成

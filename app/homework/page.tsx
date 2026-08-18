@@ -107,7 +107,7 @@ export default function HomeworkPage() {
                 className={`flex-1 py-2 rounded-full text-slate-600 transition-all ${
                   filter === tab.id ? "bg-white shadow-sm font-bold" : "hover:bg-white/50"
                 }`}
-                onClick={() => setFilter(tab.id as HomeworkStatus)}
+                onClick={() => { setFilter(tab.id as HomeworkStatus); }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -138,19 +138,19 @@ export default function HomeworkPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveHomeworkId(null)}
+            onClick={() => { setActiveHomeworkId(null); }}
           >
             <motion.div
               className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => { e.stopPropagation(); }}
             >
               <div className="sticky top-0 bg-white border-b border-slate-200 p-4 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-slate-800">AI智能作业助手</h2>
                 <button
-                  onClick={() => setActiveHomeworkId(null)}
+                  onClick={() => { setActiveHomeworkId(null); }}
                   className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition"
                 >
                   <i className="ri-close-line text-slate-600" />
@@ -162,7 +162,7 @@ export default function HomeworkPage() {
                   homeworkId={activeHomeworkId}
                   subject={homeworkData.find(hw => hw.id === activeHomeworkId)?.subject || ""}
                   title={homeworkData.find(hw => hw.id === activeHomeworkId)?.title || ""}
-                  onHomeworkComplete={(results) => handleHomeworkComplete(activeHomeworkId, results)}
+                  onHomeworkComplete={(results) => { handleHomeworkComplete(activeHomeworkId, results); }}
                 />
               </div>
             </motion.div>
@@ -235,7 +235,7 @@ function HomeworkCard({
         }`}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        onClick={() => onStartHomework(homework.id)}
+        onClick={() => { onStartHomework(homework.id); }}
         disabled={homework.status === "done"}
       >
         {homework.status === "done" ? (

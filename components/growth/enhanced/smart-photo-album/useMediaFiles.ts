@@ -7,9 +7,9 @@
  * @created 2025-01-30
  */
 
-import { useState, useMemo, useCallback, RefObject } from 'react';
-import { MediaFile, FilterParams, SortBy } from './types';
-import { calculateAge, generateSmartTags, formatFileSize } from './utils';
+import { useCallback, useMemo, useState } from 'react';
+import { FilterParams, MediaFile, SortBy } from './types';
+import { calculateAge, formatFileSize, generateSmartTags } from './utils';
 
 // 模拟媒体数据
 const mockMediaFiles: MediaFile[] = [
@@ -96,7 +96,7 @@ const mockMediaFiles: MediaFile[] = [
     tags: ['说话', '第一次', '成长', '家庭'],
     emotions: [
       { emotion: 'happy', confidence: 0.9, person: '小语' },
-      { emotion: 'excited', confidence: 0.95, person: '妈妈' }
+      { emotion: 'happy', confidence: 0.95, person: '妈妈' }
     ],
     description: '小语第一次清晰地说出"妈妈"，这是最珍贵的时刻！',
     isFavorite: true,
@@ -154,8 +154,13 @@ const mockMediaFiles: MediaFile[] = [
  * 媒体文件管理Hook
  * @returns 媒体文件管理相关的状态和方法
  */
-export const useMediaFiles = () => {
-  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>(mockMediaFiles);
+export const useMediaFiles = (options?: {
+  initialFiles?: MediaFile[]
+  filterParams?: FilterParams
+  sortBy?: SortBy
+}) => {
+  const { initialFiles = mockMediaFiles } = options ?? {}
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>(initialFiles);
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -241,9 +246,8 @@ export const useMediaFiles = () => {
     });
   }, []);
 
-  // 处理文件上传
-  const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+  // 处理文件上传（File[]）
+  const uploadMediaFiles = useCallback(async (files: File[]) => {
     if (!files || files.length === 0) return;
 
     setIsProcessing(true);
@@ -288,25 +292,49 @@ export const useMediaFiles = () => {
     }
 
     setIsProcessing(false);
+  }, [autoTagging]);
+
+  // 处理文件上传（input event）
+  const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    await uploadMediaFiles(Array.from(files));
+
     // 清空文件输入
     event.target.value = '';
-  }, [autoTagging]);
+  }, [uploadMediaFiles]);
+
+  // 删除单个媒体文件
+  const deleteMediaFile = useCallback((fileId: string) => {
+    setMediaFiles(prev => prev.filter(file => file.id !== fileId));
+    setSelectedFiles(prev => {
+      const next = new Set(prev);
+      next.delete(fileId);
+      return next;
+    });
+  }, []);
+
+  // 更新媒体文件
+  const updateMediaFile = useCallback((file: MediaFile) => {
+    setMediaFiles(prev => prev.map(f => (f.id === file.id ? file : f)));
+  }, []);
 
   // 批量删除文件
   const deleteSelectedFiles = useCallback(() => {
     if (selectedFiles.size === 0) return;
-    
+
     setMediaFiles(prev => {
       return prev.filter(file => !selectedFiles.has(file.id));
     });
-    
+
     setSelectedFiles(new Set());
   }, [selectedFiles]);
 
   // 批量添加/移除收藏
   const toggleSelectedFavorites = useCallback((isFavorite: boolean) => {
     if (selectedFiles.size === 0) return;
-    
+
     setMediaFiles(prev => {
       return prev.map(file => {
         if (selectedFiles.has(file.id)) {
@@ -339,10 +367,11 @@ export const useMediaFiles = () => {
     dateRange,
     sortBy,
     isProcessing,
+    isLoading: isProcessing,
     autoTagging,
     allTags,
     filterParams,
-    
+
     // 方法
     setSearchQuery,
     setSelectedTags,
@@ -352,6 +381,9 @@ export const useMediaFiles = () => {
     toggleFileSelection,
     toggleFavorite,
     handleFileUpload,
+    uploadMediaFiles,
+    deleteMediaFile,
+    updateMediaFile,
     deleteSelectedFiles,
     toggleSelectedFavorites,
     selectAllFiles

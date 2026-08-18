@@ -129,7 +129,7 @@ export default function InteractionsPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex gap-2 overflow-x-auto pb-2">
               <button
-                onClick={() => setFilterType("all")}
+                onClick={() => { setFilterType("all"); }}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${
                   filterType === "all" ? "bg-purple-500 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
                 }`}
@@ -141,7 +141,7 @@ export default function InteractionsPage() {
                 return (
                   <button
                     key={type}
-                    onClick={() => setFilterType(type)}
+                    onClick={() => { setFilterType(type); }}
                     className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition flex items-center gap-1 ${
                       filterType === type ? "bg-purple-500 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
                     }`}
@@ -169,7 +169,7 @@ export default function InteractionsPage() {
               <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
                 <i className="ri-heart-add-line text-5xl text-slate-300 mb-3" />
                 <p className="text-slate-500">还没有互动记录</p>
-                <p className="text-sm text-slate-400">点击"记录互动"开始记录</p>
+                <p className="text-sm text-slate-400">点击&quot;记录互动&quot;开始记录</p>
               </div>
             ) : (
               filteredInteractions.map((record, i) => (
@@ -177,8 +177,8 @@ export default function InteractionsPage() {
                   key={record.id}
                   record={record}
                   index={i}
-                  onEdit={() => handleEditRecord(record)}
-                  onDelete={() => deleteInteraction(record.id)}
+                  onEdit={() => { handleEditRecord(record); }}
+                  onDelete={() => { deleteInteraction(record.id); }}
                 />
               ))
             )}
@@ -278,7 +278,7 @@ function InteractionCard({
 
         {record.aiAnalysis && (
           <button
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => { setExpanded(!expanded); }}
             className="text-sm text-purple-500 font-medium flex items-center gap-1"
           >
             <i className="ri-robot-line" />
@@ -365,13 +365,13 @@ function InteractionEditor({
   childId: string
 }) {
   const [formData, setFormData] = useState({
-    type: record?.type || ("play" as InteractionType),
+    type: record?.type || ("play"),
     title: record?.title || "",
     content: record?.content || "",
     duration: record?.duration || 30,
     participants: record?.participants || ["妈妈"],
     location: record?.location || "",
-    mood: record?.mood || ("good" as MoodType),
+    mood: record?.mood || ("good"),
     tags: record?.tags || ([] as string[]),
     mediaUrls: record?.mediaUrls || ([] as string[]),
   })
@@ -411,7 +411,7 @@ function InteractionEditor({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="sticky top-0 bg-white p-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-bold">{record ? "编辑记录" : "记录互动"}</h2>
@@ -429,7 +429,7 @@ function InteractionEditor({
                 return (
                   <button
                     key={type}
-                    onClick={() => setFormData((prev) => ({ ...prev, type }))}
+                    onClick={() => { setFormData((prev) => ({ ...prev, type })); }}
                     className={`p-2 rounded-xl text-center transition ${
                       formData.type === type
                         ? `${config.color} ring-2 ring-offset-2 ring-purple-300`
@@ -449,7 +449,7 @@ function InteractionEditor({
             <input
               type="text"
               value={formData.title}
-              onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
+              onChange={(e) => { setFormData((prev) => ({ ...prev, title: e.target.value })); }}
               className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
               placeholder="给这次互动起个名字"
             />
@@ -459,7 +459,7 @@ function InteractionEditor({
             <label className="block text-sm font-medium text-slate-700 mb-1">详细描述</label>
             <textarea
               value={formData.content}
-              onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
+              onChange={(e) => { setFormData((prev) => ({ ...prev, content: e.target.value })); }}
               className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none resize-none"
               rows={3}
               placeholder="记录这次互动的过程和感受..."
@@ -472,7 +472,7 @@ function InteractionEditor({
               <input
                 type="number"
                 value={formData.duration}
-                onChange={(e) => setFormData((prev) => ({ ...prev, duration: Number(e.target.value) }))}
+                onChange={(e) => { setFormData((prev) => ({ ...prev, duration: Number(e.target.value) })); }}
                 className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
                 min={1}
               />
@@ -482,7 +482,7 @@ function InteractionEditor({
               <input
                 type="text"
                 value={formData.location}
-                onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
+                onChange={(e) => { setFormData((prev) => ({ ...prev, location: e.target.value })); }}
                 className="w-full px-3 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
                 placeholder="如：家里客厅"
               />
@@ -497,7 +497,7 @@ function InteractionEditor({
                 return (
                   <button
                     key={mood}
-                    onClick={() => setFormData((prev) => ({ ...prev, mood }))}
+                    onClick={() => { setFormData((prev) => ({ ...prev, mood })); }}
                     className={`flex-1 p-2 rounded-xl text-center transition ${
                       formData.mood === mood ? "bg-purple-100 ring-2 ring-purple-300" : "bg-slate-50 hover:bg-slate-100"
                     }`}
@@ -516,7 +516,7 @@ function InteractionEditor({
               <input
                 type="text"
                 value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
+                onChange={(e) => { setTagInput(e.target.value); }}
                 onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
                 className="flex-1 px-3 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
                 placeholder="输入标签按回车添加"
@@ -535,10 +535,10 @@ function InteractionEditor({
                     #{tag}
                     <button
                       onClick={() =>
-                        setFormData((prev) => ({
+                        { setFormData((prev) => ({
                           ...prev,
                           tags: prev.tags.filter((t) => t !== tag),
-                        }))
+                        })); }
                       }
                     >
                       <i className="ri-close-line" />

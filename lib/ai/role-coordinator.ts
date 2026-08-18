@@ -63,7 +63,7 @@ interface RoleWeightConfig {
  */
 export class RoleCoordinator {
   private state: RoleCoordinationState
-  private roleWeights: Map<AIRole, RoleWeightConfig>
+  private roleWeights!: Map<AIRole, RoleWeightConfig>
   private coordinationHistory: Array<{
     timestamp: number
     query: string

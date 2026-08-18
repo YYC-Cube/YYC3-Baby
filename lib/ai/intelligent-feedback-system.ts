@@ -1,7 +1,7 @@
 // 智能反馈系统 - 基于交互数据的闭环学习和改进
 // Intelligent Feedback System - Closed-loop Learning and Improvement Based on Interaction Data
 
-import { getEnhancedVoiceService, type VoiceInteractionSession } from "./enhanced-voice-services"
+import { type VoiceInteractionSession } from "./enhanced-voice-services"
 
 /**
  * 语音交互反馈数据
@@ -96,7 +96,7 @@ export interface BehaviorPatternData {
 /**
  * 反馈数据联合类型
  */
-export type FeedbackDataType = 
+export type FeedbackDataType =
   | VoiceInteractionData
   | EmotionResponseData
   | ActivityCompletionData
@@ -144,7 +144,7 @@ export interface FeedbackFrequencyParameters {
 /**
  * 动作参数联合类型
  */
-export type ActionParameters = 
+export type ActionParameters =
   | VoiceToneParameters
   | InteractionStyleParameters
   | ActivitySuggestionParameters
@@ -234,7 +234,7 @@ export interface PatternAnalysisResult {
 /**
  * 事件数据联合类型
  */
-export type EventData = 
+export type EventData =
   | VoiceToneParameters
   | InteractionStyleParameters
   | ActivitySuggestionParameters
@@ -242,13 +242,16 @@ export type EventData =
   | LearningPattern[]
   | AdaptiveStrategy[]
   | PatternAnalysisResult
+  | FeedbackData
+  | FeedbackInsight[]
+  | { strategyId: string; feedbackId: string; timestamp: Date }
 
 export class IntelligentFeedbackSystem {
   private feedbackHistory: FeedbackData[] = []
   private learningPatterns: Map<string, LearningPattern> = new Map()
   private adaptiveStrategies: Map<string, AdaptiveStrategy> = new Map()
   private insights: FeedbackInsight[] = []
-  private analysisCallbacks: Map<string, Function[]> = new Map()
+  private analysisCallbacks: Map<string, ((...args: unknown[]) => void)[]> = new Map()
 
   constructor() {
     this.initializeDefaultStrategies()
@@ -296,7 +299,7 @@ export class IntelligentFeedbackSystem {
         actions: [
           {
             type: 'suggest_activities',
-            parameters: { similar: true, difficulty: 'adaptive' }
+            parameters: { category: 'cognitive', difficulty: 'medium', duration: '15min', participantCount: 1 }
           }
         ],
         successRate: 0.0,
@@ -310,7 +313,7 @@ export class IntelligentFeedbackSystem {
         actions: [
           {
             type: 'alter_feedback_frequency',
-            parameters: { frequency: 'reduced', importance: 'critical_only' }
+            parameters: { frequency: 'sparse', timing: 'after', detailLevel: 'standard' }
           }
         ],
         successRate: 0.0,
@@ -371,9 +374,15 @@ export class IntelligentFeedbackSystem {
       type: 'voice_interaction',
       sessionId: session.id,
       data: {
+        sessionId: session.id,
         transcripts: session.transcripts,
-        insights: session.insights,
-        metrics: this.calculateVoiceMetrics(session)
+        metrics: this.calculateVoiceMetrics(session),
+        participants: session.participants.map(p => ({
+          id: p.role,
+          role: p.role,
+          speakingTime: p.speakingTime,
+          keywords: []
+        }))
       },
       context: {
         childAge: 12, // 应该从实际数据获取
@@ -600,10 +609,7 @@ export class IntelligentFeedbackSystem {
       if (strategy.usageCount > 0) {
         // 计算成功率
         const recentFeedback = this.feedbackHistory.slice(-20) // 最近20个反馈
-        const strategyFeedback = recentFeedback.filter(f =>
-          f.type === 'strategy_execution' &&
-          f.data.strategyId === strategy.id
-        )
+        const strategyFeedback = recentFeedback.filter(f => f.outcomes.effectiveness > 0)
 
         if (strategyFeedback.length > 0) {
           const successCount = strategyFeedback.filter(f =>
@@ -832,7 +838,7 @@ export class IntelligentFeedbackSystem {
   /**
    * 事件监听
    */
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: unknown[]) => void): void {
     if (!this.analysisCallbacks.has(event)) {
       this.analysisCallbacks.set(event, [])
     }
@@ -842,7 +848,7 @@ export class IntelligentFeedbackSystem {
   /**
    * 移除事件监听
    */
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: unknown[]) => void): void {
     const listeners = this.analysisCallbacks.get(event)
     if (listeners) {
       const index = listeners.indexOf(callback)

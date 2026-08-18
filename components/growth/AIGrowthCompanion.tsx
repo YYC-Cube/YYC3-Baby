@@ -11,11 +11,11 @@
 
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { useAIXiaoyu } from "@/hooks/useAIXiaoyu"
 import { useChildren } from "@/hooks/useChildren"
 import { useGrowthStage } from "@/hooks/useGrowthStage"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 interface AIGrowthCompanionProps {
   isOpen: boolean
@@ -36,7 +36,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
   const [activeSection, setActiveSection] = useState<'insights' | 'chat' | 'planning'>('insights')
   const [insights, setInsights] = useState<GrowthInsight[]>([])
   const [chatMessage, setChatMessage] = useState("")
-  const [chatHistory, setChatHistory] = useState<Array<{role: string; content: string; timestamp: Date }>>([])
+  const [chatHistory, setChatHistory] = useState<Array<{ role: string; content: string; timestamp: Date }>>([])
   const [isProcessing, setIsProcessing] = useState(false)
 
   const { currentChild } = useChildren()
@@ -44,9 +44,11 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
 
   const childBirthDate = currentChild?.birth_date ? new Date(currentChild.birth_date) : new Date()
   const childName = currentChild?.name || "小朋友"
-  const childAge = currentChild?.age_months || 0
+  const childAge = currentChild
+    ? Math.max(0, Math.floor((Date.now() - childBirthDate.getTime()) / (30 * 24 * 60 * 60 * 1000)))
+    : 0
 
-  const { stage } = useGrowthStage(childBirthDate)
+  const { currentStage } = useGrowthStage(childBirthDate)
 
   // 生成AI成长洞察
   const generateGrowthInsights = async () => {
@@ -54,10 +56,10 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
     try {
       const prompt = `
         请为${childAge}个月的${childName}生成个性化的成长发展建议。
-        当前阶段：${stage?.name || "成长中"}。
+        当前阶段：${currentStage?.name || "成长中"}。
 
         请提供以下4个方面的建议：
-        1. 发展建议：基于${stage?.name || "当前年龄段"}的发展重点
+        1. 发展建议：基于${currentStage?.name || "当前年龄段"}的发展重点
         2. 情感支持：如何进行情感陪伴和心理支持
         3. 学习活动：适合当前年龄段的益智活动建议
         4. 家长指导：给家长的实用育儿建议
@@ -142,7 +144,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
 
       const aiMessage = {
         role: "assistant" as const,
-        content: response.content,
+        content: response,
         timestamp: new Date()
       }
 
@@ -166,13 +168,13 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
         4. 能力培养重点
         5. 预期成果
 
-        请基于${stage?.name || "当前发展阶段"}的特点，制定具体、可执行的计划。
+        请基于${currentStage?.name || "当前发展阶段"}的特点，制定具体、可执行的计划。
       `
 
       const response = await sendMessage(prompt)
 
       // 可以将响应保存为成长计划
-      console.log('成长计划:', response.content)
+      console.log('成长计划:', response)
     } catch (error) {
       console.error('生成成长计划失败:', error)
     } finally {
@@ -221,7 +223,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
           initial={{ scale: 0.9, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); }}
         >
           {/* 头部 */}
           <div className="bg-gradient-to-r from-purple-400 to-pink-400 text-white p-6">
@@ -252,7 +254,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
                 <div className="flex-1">
                   <h4 className="font-bold text-lg">{childName}</h4>
                   <p className="text-sm text-white/90">
-                    {childAge}个月 · {stage?.name || "成长中"}
+                    {childAge}个月 · {currentStage?.name || "成长中"}
                   </p>
                 </div>
               </div>
@@ -268,12 +270,11 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
             ].map((tab) => (
               <button
                 key={tab.id}
-                className={`flex-1 flex flex-col items-center py-3 text-xs transition-all ${
-                  activeSection === tab.id
-                    ? 'text-purple-500 border-b-2 border-purple-500 bg-white'
-                    : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
-                }`}
-                onClick={() => setActiveSection(tab.id)}
+                className={`flex-1 flex flex-col items-center py-3 text-xs transition-all ${activeSection === tab.id
+                  ? 'text-purple-500 border-b-2 border-purple-500 bg-white'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
+                  }`}
+                onClick={() => { setActiveSection(tab.id); }}
               >
                 <i className={`${tab.icon} text-lg mb-1`} />
                 <span>{tab.label}</span>
@@ -318,11 +319,10 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
                         <div className="flex-1">
                           <h4 className="font-bold text-slate-800 mb-1 flex items-center gap-2">
                             {insight.title}
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                              insight.priority === 'high' ? 'bg-red-100 text-red-600' :
+                            <span className={`px-2 py-1 rounded-full text-xs ${insight.priority === 'high' ? 'bg-red-100 text-red-600' :
                               insight.priority === 'medium' ? 'bg-blue-100 text-blue-600' :
-                              'bg-green-100 text-green-600'
-                            }`}>
+                                'bg-green-100 text-green-600'
+                              }`}>
                               {insight.priority === 'high' ? '重要' : insight.priority === 'medium' ? '关注' : '建议'}
                             </span>
                           </h4>
@@ -372,11 +372,10 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                           >
                             <div
-                              className={`max-w-[80%] p-3 rounded-xl ${
-                                msg.role === 'user'
-                                  ? 'bg-purple-500 text-white rounded-br-none'
-                                  : 'bg-white text-slate-800 rounded-bl-none'
-                              }`}
+                              className={`max-w-[80%] p-3 rounded-xl ${msg.role === 'user'
+                                ? 'bg-purple-500 text-white rounded-br-none'
+                                : 'bg-white text-slate-800 rounded-bl-none'
+                                }`}
                             >
                               <p className="text-sm">{msg.content}</p>
                               <p className="text-xs opacity-70 mt-1">
@@ -394,7 +393,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
                     <input
                       type="text"
                       value={chatMessage}
-                      onChange={(e) => setChatMessage(e.target.value)}
+                      onChange={(e) => { setChatMessage(e.target.value); }}
                       placeholder="输入您想咨询的成长问题..."
                       className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-purple-400"
                       onKeyDown={(e) => {

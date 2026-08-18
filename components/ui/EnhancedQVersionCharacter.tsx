@@ -7,9 +7,9 @@
 
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { characterManager, type CharacterConfig, type CharacterExpression } from '@/lib/character-manager'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { useEffect, useRef, useState } from 'react'
 
 // Mock Child type to avoid database dependency
 interface MockChild {
@@ -107,7 +107,7 @@ export default function EnhancedQVersionCharacter({
     setCurrentExpression(newExpression)
     onExpressionChange?.(newExpression)
 
-    setTimeout(() => setIsAnimating(false), 400)
+    setTimeout(() => { setIsAnimating(false); }, 400)
   }
 
   // 主题切换动画
@@ -118,7 +118,7 @@ export default function EnhancedQVersionCharacter({
     setCurrentTheme(newTheme)
     onThemeChange?.(newTheme)
 
-    setTimeout(() => setIsAnimating(false), 400)
+    setTimeout(() => { setIsAnimating(false); }, 400)
   }
 
   // 交互式点击处理
@@ -145,8 +145,8 @@ export default function EnhancedQVersionCharacter({
   }
 
   // 悬停效果
-  const handleMouseEnter = () => setHovered(true)
-  const handleMouseLeave = () => setHovered(false)
+  const handleMouseEnter = () => { setHovered(true); }
+  const handleMouseLeave = () => { setHovered(false); }
 
   // 加载状态
   const [imageLoading, setImageLoading] = useState(true)
@@ -176,7 +176,7 @@ export default function EnhancedQVersionCharacter({
         loving: ['好可爱！', '好暖心！', '超有爱心！']
       }
 
-      const texts = actionTexts[currentExpression.name] || ['点击互动']
+      const texts = actionTexts[currentExpression as keyof typeof actionTexts] || ['点击互动']
       return texts[Math.floor(Math.random() * texts.length)]
     }
 
@@ -473,8 +473,10 @@ export function GenderSelector({
     onChange(gender)
   }
 
-  const femaleCharacter = characterManager.getCharacterByGender('female')
-  const maleCharacter = characterManager.getCharacterByGender('male')
+  const handleThemeChange = (theme: string) => {
+    if (theme === 'pink') onChange('female')
+    else if (theme === 'blue') onChange('male')
+  }
 
   return (
     <div className="space-y-6 p-4">
@@ -488,14 +490,14 @@ export function GenderSelector({
         <div className="text-center">
           <div className="mb-3">
             <EnhancedQVersionCharacter
-              character={femaleCharacter}
+              child={undefined}
               size={size}
               theme={theme || 'pink'}
               expression="happy"
               interactive={true}
               mode="interactive"
-              onThemeChange={handleCharacterClick}
-              onClick={() => handleCharacterClick('female')}
+              onThemeChange={handleThemeChange}
+              onClick={() => { handleCharacterClick('female'); }}
             />
           </div>
           <div className={`
@@ -525,14 +527,14 @@ export function GenderSelector({
         <div className="text-center">
           <div className="mb-3">
             <EnhancedQVersionCharacter
-              character={maleCharacter}
+              child={undefined}
               size={size}
               theme={theme || 'blue'}
               expression="cool"
               interactive={true}
               mode="interactive"
-              onThemeChange={handleCharacterClick}
-              onClick={() => handleCharacterClick('male')}
+              onThemeChange={handleThemeChange}
+              onClick={() => { handleCharacterClick('male'); }}
             />
           </div>
           <div className={`
@@ -562,7 +564,7 @@ export function GenderSelector({
       {/* 其他选项 */}
       <div className="flex justify-center">
         <button
-          onClick={() => onChange('other')}
+          onClick={() => { onChange('other'); }}
           className={`
             px-4 py-2 rounded-lg border-2 transition-all duration-200
             ${value === 'other'
@@ -592,7 +594,7 @@ export function CharacterInteractionPanel({
   isOpen,
   onClose
 }: {
-  child?: Child | null | null
+  child?: MockChild | null
   isOpen: boolean
   onClose: () => void
 }) {
@@ -615,7 +617,7 @@ export function CharacterInteractionPanel({
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         exit={{ y: 100 }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-gray-800">角色互动</h3>
@@ -649,11 +651,11 @@ export function CharacterInteractionPanel({
             {character.expressions.map((expression) => (
               <button
                 key={expression.id}
-                onClick={() => setSelectedExpression(expression.name)}
+                onClick={() => { setSelectedExpression(expression.name); }}
                 className={`
                   p-3 rounded-lg border-2 transition-all duration-200
                   ${selectedExpression === expression.name
-                    ? `${character.gender === 'female' ? 'border-pink-400 bg-pink-100 text-pink-700' : 'border-blue-400 bg-blue-100 text-blue-700'}`
+                    ? (character.gender === 'female' ? 'border-pink-400 bg-pink-100 text-pink-700' : 'border-blue-400 bg-blue-100 text-blue-700')
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   }
                 `}
@@ -672,7 +674,7 @@ export function CharacterInteractionPanel({
             {character.themes.map((theme) => (
               <button
                 key={theme.id}
-                onClick={() => setSelectedTheme(theme.name)}
+                onClick={() => { setSelectedTheme(theme.name); }}
                 className={`
                   p-3 rounded-lg border-2 transition-all duration-200
                   ${selectedTheme === theme.name
@@ -696,7 +698,7 @@ export function CharacterInteractionPanel({
           <h4 className="text-md font-semibold text-gray-700 mb-3">经典用语</h4>
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-center text-gray-700 italic">
-              "{characterManager.getCatchphrase(character)}"
+              &quot;{characterManager.getCatchphrase(character)}&quot;
             </p>
           </div>
         </div>

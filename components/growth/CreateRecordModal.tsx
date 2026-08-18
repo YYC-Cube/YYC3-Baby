@@ -15,7 +15,6 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { MediaUploader } from "./MediaUploader"
 import { TagSelector } from "./TagSelector"
-import { GrowthRecord } from "@/lib/store"
 
 interface AIAnalysisResult {
   analysis: string
@@ -24,10 +23,23 @@ interface AIAnalysisResult {
   isMilestone?: boolean
 }
 
+export interface CreateRecordPayload {
+  type: 'milestone' | 'observation' | 'emotion' | 'learning'
+  title: string
+  description: string
+  content: string
+  mediaUrls: string[]
+  tags: string[]
+  emotion: string
+  aiAnalysis?: string
+  isMilestone?: boolean
+  createdAt: string
+}
+
 interface CreateRecordModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (record: Omit<GrowthRecord, 'id' | 'childId' | 'date' | 'isImportant'>) => void
+  onSubmit: (record: CreateRecordPayload) => void
 }
 
 export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateRecordModalProps) {
@@ -76,6 +88,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
     const record = {
       type: recordType,
       title: title || content.slice(0, 30),
+      description: content,
       content,
       mediaUrls,
       tags,
@@ -141,7 +154,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
                           ? `border-${type.color}-400 bg-${type.color}-50`
                           : "border-slate-200 bg-white hover:bg-slate-50"
                       }`}
-                      onClick={() => setRecordType(type.id as "milestone" | "observation" | "emotion" | "learning")}
+                      onClick={() => { setRecordType(type.id as "milestone" | "observation" | "emotion" | "learning"); }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -157,7 +170,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
                 <input
                   type="text"
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => { setTitle(e.target.value); }}
                   placeholder="AI会根据内容自动生成标题"
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
@@ -167,7 +180,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
                 <label className="block text-sm font-bold text-slate-700 mb-2">记录内容</label>
                 <textarea
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                  onChange={(e) => { setContent(e.target.value); }}
                   onBlur={analyzeContent}
                   placeholder="记录下这个特别的瞬间..."
                   rows={5}
@@ -221,7 +234,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
                         className={`px-4 py-2 rounded-full ${
                           emotion === em ? "bg-pink-400 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                         }`}
-                        onClick={() => setEmotion(em)}
+                        onClick={() => { setEmotion(em); }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >

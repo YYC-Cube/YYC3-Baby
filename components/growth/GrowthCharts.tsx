@@ -83,7 +83,7 @@ export default function GrowthCharts({ data, childName = "宝宝" }: GrowthChart
         ].map((type) => (
           <button
             key={type.id}
-            onClick={() => setChartType(type.id as typeof chartType)}
+            onClick={() => { setChartType(type.id as typeof chartType); }}
             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all ${
               chartType === type.id ? "bg-white text-blue-600 shadow-sm" : "text-slate-600 hover:text-slate-800"
             }`}
@@ -442,7 +442,7 @@ function DimensionLegend({
   return (
     <div className="flex flex-wrap gap-2 mt-4">
       <button
-        onClick={() => onSelect(null)}
+        onClick={() => { onSelect(null); }}
         className={`px-3 py-1 rounded-full text-xs font-medium ${
           selected === null ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600"
         }`}
@@ -452,7 +452,7 @@ function DimensionLegend({
       {Object.entries(DIMENSION_NAMES).map(([dim, name]) => (
         <button
           key={dim}
-          onClick={() => onSelect(selected === dim ? null : dim)}
+          onClick={() => { onSelect(selected === dim ? null : dim); }}
           className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${
             selected === dim ? "text-white" : "bg-slate-100 text-slate-600"
           }`}

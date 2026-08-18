@@ -494,7 +494,7 @@ export default function ProjectManagement() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -5 }}
-        onClick={() => setActiveTab(tab.id as any)}
+        onClick={() => { setActiveTab(tab.id as any); }}
       >
         <div className="flex items-center gap-4">
           <div className={`w-16 h-16 ${isActive ? 'bg-white bg-opacity-20' : 'bg-gradient-to-br ' + tab.color + ' bg-opacity-10'} rounded-2xl flex items-center justify-center flex-shrink-0`}>
@@ -607,7 +607,7 @@ export default function ProjectManagement() {
             >
               <div className="mb-6">
                 <button
-                  onClick={() => setActiveTab('dashboard')}
+                  onClick={() => { setActiveTab('dashboard'); }}
                   className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mb-4"
                 >
                   <ArrowLeft className="w-4 h-4" />

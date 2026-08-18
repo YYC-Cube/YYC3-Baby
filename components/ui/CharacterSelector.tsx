@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { characterManager, type CharacterConfig, type ThemeColors } from '@/lib/character-manager'
 import type { Child } from '@/lib/character-manager'
+import { characterManager, type CharacterConfig, type ThemeColors } from '@/lib/character-manager'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
 
 interface CharacterSelectorProps {
   child?: Child | null
@@ -155,7 +155,7 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
             style={{ backgroundColor: themeColors.accent }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={() => { setIsExpanded(!isExpanded); }}
           >
             <svg
               className="w-4 h-4"
@@ -189,11 +189,10 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
               </label>
               <div className="flex space-x-2">
                 <motion.button
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                    currentCharacter.gender === 'female'
-                      ? 'text-white shadow-lg'
-                      : 'opacity-60 hover:opacity-80'
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${currentCharacter.gender === 'female'
+                    ? 'text-white shadow-lg'
+                    : 'opacity-60 hover:opacity-80'
+                    }`}
                   style={{
                     backgroundColor: currentCharacter.gender === 'female'
                       ? '#ec4899'
@@ -201,17 +200,16 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                   }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => handleGenderSwitch('female')}
+                  onClick={() => { handleGenderSwitch('female'); }}
                 >
                   小语 (女孩)
                 </motion.button>
 
                 <motion.button
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                    currentCharacter.gender === 'male'
-                      ? 'text-white shadow-lg'
-                      : 'opacity-60 hover:opacity-80'
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${currentCharacter.gender === 'male'
+                    ? 'text-white shadow-lg'
+                    : 'opacity-60 hover:opacity-80'
+                    }`}
                   style={{
                     backgroundColor: currentCharacter.gender === 'male'
                       ? '#3b82f6'
@@ -219,7 +217,7 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                   }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => handleGenderSwitch('male')}
+                  onClick={() => { handleGenderSwitch('male'); }}
                 >
                   小言 (男孩)
                 </motion.button>
@@ -236,11 +234,10 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                   {currentCharacter.themes.map((theme) => (
                     <motion.button
                       key={theme.id}
-                      className={`p-3 rounded-lg border-2 transition-all ${
-                        selectedTheme === theme.name
-                          ? 'border-white shadow-lg scale-105'
-                          : 'border-transparent opacity-70 hover:opacity-100'
-                      }`}
+                      className={`p-3 rounded-lg border-2 transition-all ${selectedTheme === theme.name
+                        ? 'border-white shadow-lg scale-105'
+                        : 'border-transparent opacity-70 hover:opacity-100'
+                        }`}
                       style={{
                         backgroundColor: selectedTheme === theme.name
                           ? theme.primaryColor
@@ -251,7 +248,7 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                       }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => handleThemeSelect(theme.name)}
+                      onClick={() => { handleThemeSelect(theme.name); }}
                     >
                       <div className="text-xs font-medium text-white">
                         {theme.displayName}
@@ -276,11 +273,10 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                   {currentCharacter.expressions.map((expression) => (
                     <motion.button
                       key={expression.id}
-                      className={`p-2 rounded-lg transition-all ${
-                        selectedExpression === expression.name
-                          ? 'ring-2 ring-white shadow-lg'
-                          : 'opacity-70 hover:opacity-100'
-                      }`}
+                      className={`p-2 rounded-lg transition-all ${selectedExpression === expression.name
+                        ? 'ring-2 ring-white shadow-lg'
+                        : 'opacity-70 hover:opacity-100'
+                        }`}
                       style={{
                         backgroundColor: themeColors.accent,
                         border: selectedExpression === expression.name
@@ -289,7 +285,7 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                       }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => handleExpressionSelect(expression.name)}
+                      onClick={() => { handleExpressionSelect(expression.name); }}
                     >
                       <div className="text-xs font-medium" style={{ color: themeColors.text }}>
                         {expression.displayName}
@@ -316,7 +312,7 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                         key={index}
                         className="px-2 py-1 text-xs rounded-full"
                         style={{
-                          backgroundColor: themeColors.primaryColor,
+                          backgroundColor: themeColors.primary,
                           color: 'white'
                         }}
                       >
@@ -328,7 +324,7 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
 
                 <motion.div
                   className="w-12 h-12 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: themeColors.primaryColor }}
+                  style={{ backgroundColor: themeColors.primary }}
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
                 >
@@ -343,13 +339,13 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
             <motion.div
               className="p-3 rounded-lg text-center"
               style={{
-                backgroundColor: `${themeColors.primaryColor}20`,
-                border: `1px solid ${themeColors.primaryColor}40`
+                backgroundColor: `${themeColors.primary}20`,
+                border: `1px solid ${themeColors.primary}40`
               }}
               whileHover={{ scale: 1.02 }}
             >
               <p className="text-sm font-medium" style={{ color: themeColors.text }}>
-                "{characterManager.getCatchphrase(currentCharacter)}"
+                &quot;{characterManager.getCatchphrase(currentCharacter)}&quot;
               </p>
             </motion.div>
           </motion.div>

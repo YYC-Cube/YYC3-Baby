@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import PageHeader from "@/components/headers/PageHeader"
 import Navigation from "@/components/Navigation"
-import CreateRecordModal from "@/components/growth/CreateRecordModal"
+import CreateRecordModal, { type CreateRecordPayload } from "@/components/growth/CreateRecordModal"
 import GrowthTimeline from "@/components/growth/GrowthTimeline"
 import StageIndicator from "@/components/growth/StageIndicator"
 import DevelopmentCurveChart from "@/components/growth/DevelopmentCurveChart"
@@ -80,8 +80,25 @@ export default function GrowthPage() {
     { id: "assessment" as const, label: "智能评估", icon: "ri-bar-chart-box-line" },
   ]
 
-  const handleCreateRecord = (_record: Record<string, unknown>) => {
+  const handleCreateRecord = async (record: CreateRecordPayload) => {
     setIsCreateModalOpen(false)
+    try {
+      await fetch("/api/growth-records", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          child_id: currentChild?.id ?? "default",
+          type: record.type,
+          title: record.title,
+          content: record.content,
+          media_urls: record.mediaUrls,
+          tags: record.tags,
+          recorded_at: record.createdAt,
+        }),
+      })
+    } catch (error) {
+      console.error("保存成长记录失败:", error)
+    }
   }
 
   return (
@@ -119,7 +136,7 @@ export default function GrowthPage() {
               className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap ${
                 activeTab === tab.id ? "bg-blue-500 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
               }`}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => { setActiveTab(tab.id); }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -152,7 +169,7 @@ export default function GrowthPage() {
               <GrowthTimeline childName={childName} />
             </motion.div>
           )}
-          {activeTab === "records" && <RecordsTab key="records" onOpenCreateModal={() => setIsCreateModalOpen(true)} />}
+          {activeTab === "records" && <RecordsTab key="records" onOpenCreateModal={() => { setIsCreateModalOpen(true); }} />}
           {activeTab === "assessment" && <AssessmentTab key="assessment" childName={childName} />}
         </AnimatePresence>
       </main>
@@ -161,7 +178,7 @@ export default function GrowthPage() {
 
       <CreateRecordModal
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        onClose={() => { setIsCreateModalOpen(false); }}
         onSubmit={handleCreateRecord}
       />
     </div>
@@ -373,7 +390,7 @@ function RecordsTab({ onOpenCreateModal }: RecordsTabProps) {
             className={`px-4 py-2 rounded-full flex items-center gap-2 ${
               recordType === filter.id ? "bg-blue-500 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
             }`}
-            onClick={() => setRecordType(filter.id)}
+            onClick={() => { setRecordType(filter.id); }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -512,7 +529,7 @@ function AssessmentTab({ childName }: { childName: string }) {
       {/* 查看完整报告按钮 */}
       <motion.button
         className="w-full bg-white border-2 border-blue-500 text-blue-500 rounded-2xl p-4 font-bold flex items-center justify-center gap-2"
-        onClick={() => setShowFullReport(!showFullReport)}
+        onClick={() => { setShowFullReport(!showFullReport); }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >

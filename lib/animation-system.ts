@@ -414,7 +414,7 @@ export class AnimationSystem {
     delay?: number
   }>) {
     return items.map((item, index) => ({
-      ...item.animation(),
+      ...(typeof item.animation === 'function' ? Object(item.animation()) : {}),
       transition: {
         delay: item.delay || index * 0.1,
         ...SPRINGS.gentle
@@ -434,4 +434,4 @@ export const createResponsiveAnimation = (breakpoints: any) =>
   animationSystem.createResponsiveAnimation(breakpoints)
 
 export const queueAnimation = (animationFn: () => void) =>
-  animationSystem.queueAnimation(animationFn)
+  { animationSystem.queueAnimation(animationFn); }

@@ -65,7 +65,7 @@ export function TagSelector({ tags, onChange }: TagSelectorProps) {
             >
               <span className="text-sm font-medium">#{tag}</span>
               <button
-                onClick={() => removeTag(tag)}
+                onClick={() => { removeTag(tag); }}
                 className="w-4 h-4 bg-blue-200 hover:bg-blue-300 rounded-full flex items-center justify-center"
               >
                 <i className="ri-close-line text-xs" />
@@ -80,7 +80,7 @@ export function TagSelector({ tags, onChange }: TagSelectorProps) {
         <input
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={(e) => { setInputValue(e.target.value); }}
           onKeyDown={handleKeyDown}
           placeholder="输入自定义标签，按回车添加"
           className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -104,7 +104,7 @@ export function TagSelector({ tags, onChange }: TagSelectorProps) {
           {PRESET_TAGS.filter((tag) => !tags.includes(tag)).map((tag) => (
             <motion.button
               key={tag}
-              onClick={() => addTag(tag)}
+              onClick={() => { addTag(tag); }}
               className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full text-xs"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

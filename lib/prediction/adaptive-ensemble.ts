@@ -224,7 +224,7 @@ export class EnsembleEngine extends BasePredictor {
 
     // 检查是否为多步预测
     if (Array.isArray(predictions[0])) {
-      const horizon = (predictions[0] as number[]).length
+      const horizon = (predictions[0]).length
       const result = new Array(horizon).fill(0)
 
       for (let i = 0; i < horizon; i++) {
@@ -248,7 +248,7 @@ export class EnsembleEngine extends BasePredictor {
 
     // 检查是否为多步预测
     if (Array.isArray(predictions[0])) {
-      const horizon = (predictions[0] as number[]).length
+      const horizon = (predictions[0]).length
       const result = new Array(horizon).fill(0)
 
       for (let i = 0; i < horizon; i++) {
@@ -288,23 +288,19 @@ export class EnsembleEngine extends BasePredictor {
   private calculateEnsembleConfidenceInterval(
     predictions: (number | number[])[],
     finalPrediction: number | number[]
-  ): { lower: number | number[]; upper: number | number[] } | undefined {
+  ): Array<{ lower: number; upper: number }> | undefined {
     // 简化的集成置信区间计算
     if (Array.isArray(finalPrediction)) {
-      const lower = finalPrediction.map(p => p * 0.95)
-      const upper = finalPrediction.map(p => p * 1.05)
-      return { lower, upper }
+      return finalPrediction.map(p => ({ lower: p * 0.95, upper: p * 1.05 }))
     } else {
-      const lower = finalPrediction * 0.95
-      const upper = finalPrediction * 1.05
-      return { lower, upper }
+      return [{ lower: finalPrediction * 0.95, upper: finalPrediction * 1.05 }]
     }
   }
 
   private calculateEnsembleFeatureImportance(trainingResults: TrainingResult[]): Record<string, number> {
     const importanceMaps = trainingResults
       .map(r => r.featureImportance)
-      .filter(Boolean)
+      .filter((m): m is Record<string, number> => m !== undefined && m !== null)
 
     if (importanceMaps.length === 0) return {}
 
@@ -314,7 +310,7 @@ export class EnsembleEngine extends BasePredictor {
     importanceMaps.forEach(importance => {
       Object.keys(importance).forEach(feature => {
         if (!ensembleImportance[feature]) ensembleImportance[feature] = 0
-        ensembleImportance[feature] += importance[feature]
+        ensembleImportance[feature] += importance[feature] ?? 0
       })
     })
 

@@ -249,7 +249,7 @@ function ToggleSwitch({ value, onChange }: { value: boolean; onChange: (value: b
       className={`relative w-12 h-6 rounded-full cursor-pointer transition-colors ${
         value ? "bg-blue-400" : "bg-slate-300"
       }`}
-      onClick={() => onChange(!value)}
+      onClick={() => { onChange(!value); }}
       whileTap={{ scale: 0.95 }}
     >
       <motion.div

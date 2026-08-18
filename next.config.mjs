@@ -11,13 +11,8 @@ const nextConfig = {
   },
   compress: true,
   poweredByHeader: false,
-  // 遗留类型债：基线含 ~1900 个 tsc 错误（详见 TYPECHECK_BASELINE.md），
-  // 按路线图分阶段清理；构建先保证可产物化，不做类型门禁。
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   async headers() {
-    return [
+    const commonRoutes = [
       {
         source: "/(.*)",
         headers: [
@@ -27,29 +22,36 @@ const nextConfig = {
           { key: "Permissions-Policy", value: "camera=(), geolocation=(), microphone=(self)" },
         ],
       },
-      {
-        // 开发环境需要 eval/inline；生产收紧脚本来源
-        source: "/((?!_next/static).*)",
-        headers: process.env.NODE_ENV === "production"
-          ? [
-              {
-                key: "Content-Security-Policy",
-                value: [
-                  "default-src 'self'",
-                  "script-src 'self' 'unsafe-inline'",
-                  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-                  "font-src 'self' https://fonts.gstatic.com data:",
-                  "img-src 'self' data: blob: https:",
-                  "media-src 'self' blob: data:",
-                  "connect-src 'self' https://api.0379.love https://open.bigmodel.cn",
-                  "worker-src 'self' blob:",
-                  "frame-ancestors 'self'",
-                ].join("; "),
-              },
-            ]
-          : [],
-      },
     ]
+
+    // 开发环境需要 eval/inline；生产收紧脚本来源
+    // Next.js 16 拒绝空 headers 数组，故仅在生产环境注入 CSP 路由
+    const cspRoutes =
+      process.env.NODE_ENV === "production"
+        ? [
+            {
+              source: "/((?!_next/static).*)",
+              headers: [
+                {
+                  key: "Content-Security-Policy",
+                  value: [
+                    "default-src 'self'",
+                    "script-src 'self' 'unsafe-inline'",
+                    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+                    "font-src 'self' https://fonts.gstatic.com data:",
+                    "img-src 'self' data: blob: https:",
+                    "media-src 'self' blob: data:",
+                    "connect-src 'self' https://api.0379.love https://open.bigmodel.cn",
+                    "worker-src 'self' blob:",
+                    "frame-ancestors 'self'",
+                  ].join("; "),
+                },
+              ],
+            },
+          ]
+        : []
+
+    return [...commonRoutes, ...cspRoutes]
   },
 }
 

@@ -78,7 +78,7 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setDismissedUpdate(true)}
+                  onClick={() => { setDismissedUpdate(true); }}
                   className="px-3 py-1.5 bg-white text-gray-600 text-xs font-medium rounded-md border border-gray-300 hover:bg-gray-50 transition-colors"
                 >
                   稍后更新

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
-import type { InteractionRecord, InteractionType, InteractionAnalysis } from "@/types/interaction"
+import type { InteractionAnalysis, InteractionRecord, InteractionType } from "@/types/interaction"
+import { useCallback, useEffect, useState } from "react"
 
 const STORAGE_KEY = "yyc3_interactions"
 
@@ -68,7 +68,7 @@ async function analyzeInteraction(record: Partial<InteractionRecord>): Promise<I
 
   return {
     keywords,
-    sentiment: record.mood === "excellent" || record.mood === "good" ? "积极" : "一般",
+    sentiment: record.mood === "excellent" || record.mood === "good" ? "positive" : "neutral",
     themes,
     qualityScore: Math.min(100, qualityScore),
     suggestions,
@@ -78,9 +78,9 @@ async function analyzeInteraction(record: Partial<InteractionRecord>): Promise<I
 
 // 默认互动记录
 function getDefaultInteractions(childId: string): InteractionRecord[] {
-  const now = new Date()
-  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)
+  const now = Date.now()
+  const yesterday = now - 24 * 60 * 60 * 1000
+  const twoDaysAgo = now - 2 * 24 * 60 * 60 * 1000
 
   return [
     {
@@ -97,7 +97,7 @@ function getDefaultInteractions(childId: string): InteractionRecord[] {
       mood: "excellent",
       aiAnalysis: {
         keywords: ["阅读", "绘本", "好奇心"],
-        sentiment: "积极",
+        sentiment: "positive",
         themes: ["语言发展", "想象力"],
         qualityScore: 92,
         suggestions: ["可以尝试让孩子复述故事", "画出印象最深的场景"],
@@ -121,7 +121,7 @@ function getDefaultInteractions(childId: string): InteractionRecord[] {
       mood: "excellent",
       aiAnalysis: {
         keywords: ["户外", "骑行", "成就感"],
-        sentiment: "积极",
+        sentiment: "positive",
         themes: ["运动能力", "自信心"],
         qualityScore: 95,
         suggestions: ["继续鼓励户外运动", "可以尝试更长距离骑行"],
@@ -145,7 +145,7 @@ function getDefaultInteractions(childId: string): InteractionRecord[] {
       mood: "good",
       aiAnalysis: {
         keywords: ["手工", "创作", "感恩"],
-        sentiment: "积极",
+        sentiment: "positive",
         themes: ["创造力", "情感表达"],
         qualityScore: 88,
         suggestions: ["可以收藏孩子的作品", "鼓励更多手工创作"],
@@ -173,8 +173,8 @@ export function useInteractions() {
           setInteractions(
             parsed.map((r: InteractionRecord) => ({
               ...r,
-              createdAt: new Date(r.createdAt),
-              updatedAt: new Date(r.updatedAt),
+              createdAt: new Date(r.createdAt).getTime(),
+              updatedAt: new Date(r.updatedAt).getTime(),
             })),
           )
         } else {
@@ -206,8 +206,8 @@ export function useInteractions() {
         ...data,
         id: generateId(),
         aiAnalysis,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
       }
 
       setInteractions((prev) => {
@@ -227,7 +227,7 @@ export function useInteractions() {
       const aiAnalysis = await analyzeInteraction(data)
 
       setInteractions((prev) => {
-        const updated = prev.map((r) => (r.id === id ? { ...r, ...data, aiAnalysis, updatedAt: new Date() } : r))
+        const updated = prev.map((r) => (r.id === id ? { ...r, ...data, aiAnalysis, updatedAt: Date.now() } : r))
         saveData(updated)
         return updated
       })
@@ -273,9 +273,9 @@ export function useInteractions() {
     averageQuality:
       interactions.length > 0
         ? Math.round(
-            interactions.filter((r) => r.aiAnalysis).reduce((sum, r) => sum + (r.aiAnalysis?.qualityScore || 0), 0) /
-              interactions.filter((r) => r.aiAnalysis).length,
-          )
+          interactions.filter((r) => r.aiAnalysis).reduce((sum, r) => sum + (r.aiAnalysis?.qualityScore || 0), 0) /
+          interactions.filter((r) => r.aiAnalysis).length,
+        )
         : 0,
     typeDistribution: Object.fromEntries(
       (

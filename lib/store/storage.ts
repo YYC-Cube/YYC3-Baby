@@ -7,7 +7,7 @@ interface StorageError extends Error {
 
 const createNoopStorage = (): WebStorage => ({
   getItem: (_key: string) => Promise.resolve(null),
-  setItem: (_key: string, value: string) => Promise.resolve(value),
+  setItem: (_key: string, value: string) => Promise.resolve(),
   removeItem: (_key: string) => Promise.resolve(),
 });
 
@@ -26,16 +26,16 @@ const createSSRCompatibleStorage = (): WebStorage => {
           return Promise.resolve(null);
         }
       },
-      setItem: (key: string, value: string): Promise<string> => {
+      setItem: (key: string, value: string): Promise<void> => {
         try {
           window.localStorage.setItem(key, value);
-          return Promise.resolve(value);
+          return Promise.resolve();
         } catch (error) {
           const storageError: StorageError = error instanceof Error ? error : new Error(String(error));
           storageError.code = 'QUOTA_EXCEEDED';
           storageError.key = key;
           console.warn('Error writing to localStorage:', storageError);
-          return Promise.resolve(value);
+          return Promise.resolve();
         }
       },
       removeItem: (key: string): Promise<void> => {

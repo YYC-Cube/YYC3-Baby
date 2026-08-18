@@ -12,7 +12,17 @@
  */
 
 import * as React from 'react'
-import { ButtonProps } from '../src/foundation/types/components'
+
+// 按钮组件类型定义
+type ButtonVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'outline' | 'text'
+type ButtonSize = 'sm' | 'md' | 'lg'
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant
+  size?: ButtonSize
+  loading?: boolean
+  icon?: React.ReactNode
+}
 
 /**
  * YYC³ 标准按钮组件

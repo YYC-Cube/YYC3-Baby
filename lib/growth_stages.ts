@@ -366,7 +366,7 @@ export class GrowthStageManager {
   }
 
   private notifyStageChange(stage: string) {
-    this.onStageChangeCallbacks.forEach((callback) => callback(stage))
+    this.onStageChangeCallbacks.forEach((callback) => { callback(stage); })
   }
 }
 

@@ -287,6 +287,7 @@ export function LazyComponent<T extends React.ComponentType<Record<string, unkno
     )
   }
 
-  const Component = component
+  // 泛型组件与 rest props 的静态组合无法精确表达，收敛为动态组件渲染
+  const Component = component as React.ComponentType<Record<string, never>> & React.ComponentType<Record<string, unknown>>
   return <Component {...props} />
 }

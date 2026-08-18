@@ -76,7 +76,7 @@ export function MediaUploader({ files, onChange, maxFiles = 9, accept = "image/*
 
               {/* 删除按钮 */}
               <button
-                onClick={() => removeFile(index)}
+                onClick={() => { removeFile(index); }}
                 className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white"
               >
                 <i className="ri-close-line text-sm" />

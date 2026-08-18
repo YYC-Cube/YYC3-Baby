@@ -257,7 +257,7 @@ class APIClient {
     if (options.page) params.append('page', options.page.toString());
     if (options.limit) params.append('limit', options.limit.toString());
     if (options.category) params.append('category', options.category);
-    if (options.tags) options.tags.forEach(tag => params.append('tags', tag));
+    if (options.tags) options.tags.forEach(tag => { params.append('tags', tag); });
     if (options.startDate) params.append('startDate', options.startDate);
     if (options.endDate) params.append('endDate', options.endDate);
     if (options.sortBy) params.append('sortBy', options.sortBy);

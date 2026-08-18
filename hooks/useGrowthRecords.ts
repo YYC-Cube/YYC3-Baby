@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from 'react';
 import { apiClient } from '@/lib/api/client';
+import { useCallback, useEffect, useState } from 'react';
 
 // Types
 interface GrowthRecord {
@@ -177,8 +177,14 @@ export function useGrowthRecords(childId?: string): UseGrowthRecordsReturn {
       const result = await apiClient.getGrowthRecords(targetChildId, options);
 
       if (result.success && result.data) {
-        setRecords(result.data.growthRecords);
-        setPagination(result.data.pagination);
+        const { growthRecords, child, pagination } = result.data;
+        setRecords(growthRecords.map(r => ({
+          ...r,
+          childId: targetChildId,
+          childName: child.name,
+          category: r.category as GrowthRecord['category'],
+        })));
+        setPagination(pagination);
         setFiltersState({
           category: options.category,
           tags: options.tags,
@@ -207,7 +213,10 @@ export function useGrowthRecords(childId?: string): UseGrowthRecordsReturn {
       const result = await apiClient.getGrowthRecord(recordId);
 
       if (result.success && result.data) {
-        return result.data.growthRecord;
+        return {
+          ...result.data.growthRecord,
+          category: result.data.growthRecord.category as GrowthRecord['category'],
+        };
       }
       return null;
     } catch (err) {
@@ -284,9 +293,14 @@ export function useGrowthRecords(childId?: string): UseGrowthRecordsReturn {
       if (result.success) {
         // Update the record in the local state
         if (result.data) {
+          const updated = result.data.growthRecord;
           setRecords(prev => prev.map(record =>
             record.id === recordId
-              ? { ...record, ...result.data.growthRecord }
+              ? {
+                ...record,
+                ...updated,
+                category: (updated.category as GrowthRecord['category']) || record.category,
+              }
               : record
           ));
         }
@@ -350,7 +364,12 @@ export function useGrowthRecords(childId?: string): UseGrowthRecordsReturn {
       const result = await apiClient.searchGrowthRecords(targetChildId, query.trim(), options);
 
       if (result.success && result.data) {
-        setRecords(result.data.growthRecords);
+        setRecords(result.data.growthRecords.map(r => ({
+          ...r,
+          childId: targetChildId,
+          childName: '',
+          category: r.category as GrowthRecord['category'],
+        })));
         setPagination(result.data.pagination);
       }
     } catch (err) {

@@ -1,16 +1,16 @@
 "use client"
 
-import { useState, useCallback } from "react"
 import {
+  type ArtStyle,
+  type ContinuationOption,
   type GeneratedArtwork,
   type ImageGenerationRequest,
-  type ArtStyle,
-  type StorySession,
   type StorySegment,
-  type ContinuationOption,
+  type StorySession,
   type StoryStyle,
   ART_STYLE_CONFIG,
 } from "@/types/ai-creative"
+import { useCallback, useState } from "react"
 
 const ARTWORK_KEY = "yyc3_artworks"
 const STORY_KEY = "yyc3_stories"
@@ -108,10 +108,11 @@ export function useAICreative() {
           childId: request.childId,
           prompt: request.prompt,
           style: request.style,
+          aspectRatio: request.aspectRatio,
           imageUrl: data.imageUrl,
           thumbnailUrl: data.imageUrl,
           isFavorite: false,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
         }
 
         saveArtwork(artwork)
@@ -124,10 +125,11 @@ export function useAICreative() {
           childId: request.childId,
           prompt: request.prompt,
           style: request.style,
+          aspectRatio: request.aspectRatio,
           imageUrl: `/placeholder.svg?height=512&width=512&query=${encodeURIComponent(request.prompt + " " + request.style)}`,
           thumbnailUrl: `/placeholder.svg?height=256&width=256&query=${encodeURIComponent(request.prompt)}`,
           isFavorite: false,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
         }
         saveArtwork(mockArtwork)
         return mockArtwork
@@ -167,10 +169,10 @@ export function useAICreative() {
           parsed.map((s: StorySession) => ({
             ...s,
             createdAt: new Date(s.createdAt),
-            updatedAt: new Date(s.updatedAt),
+            updatedAt: new Date(s.updatedAt ?? Date.now()).toISOString(),
             segments: s.segments.map((seg) => ({
               ...seg,
-              timestamp: new Date(seg.timestamp),
+              timestamp: seg.timestamp ? new Date(seg.timestamp).toISOString() : undefined,
             })),
           })),
         )
@@ -191,8 +193,8 @@ export function useAICreative() {
         style,
         segments: [],
         status: "draft",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       }
 
       setStories((prev) => {
@@ -217,13 +219,15 @@ export function useAICreative() {
         const userSegment: StorySegment = {
           id: generateId("seg"),
           content: userInput,
+          type: "user",
           author: "child",
-          timestamp: new Date(),
+          createdAt: new Date().toISOString(),
+          timestamp: new Date().toISOString(),
         }
 
         setStories((prev) => {
           const updated = prev.map((s) =>
-            s.id === storyId ? { ...s, segments: [...s.segments, userSegment], updatedAt: new Date() } : s,
+            s.id === storyId ? { ...s, segments: [...s.segments, userSegment], updatedAt: new Date().toISOString() } : s,
           )
           localStorage.setItem(STORY_KEY, JSON.stringify(updated))
           return updated
@@ -257,16 +261,19 @@ export function useAICreative() {
           {
             id: "1",
             content: `突然，小主人公发现了一个闪闪发光的神秘宝盒，宝盒上刻着奇怪的符号...`,
+            style: story.style,
             direction: "发现宝藏",
           },
           {
             id: "2",
             content: `这时，一只会说话的小松鼠从树上跳了下来，说："你好，我等你很久了！"`,
+            style: story.style,
             direction: "遇见朋友",
           },
           {
             id: "3",
             content: `天空中飘来一朵彩色的云，云上坐着一位笑眯眯的老爷爷，他招手让主人公上去...`,
+            style: story.style,
             direction: "奇幻旅程",
           },
         ]
@@ -280,13 +287,15 @@ export function useAICreative() {
     const aiSegment: StorySegment = {
       id: generateId("seg"),
       content: option.content,
+      type: "ai",
       author: "ai",
-      timestamp: new Date(),
+      createdAt: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
     }
 
     setStories((prev) => {
       const updated = prev.map((s) =>
-        s.id === storyId ? { ...s, segments: [...s.segments, aiSegment], updatedAt: new Date() } : s,
+        s.id === storyId ? { ...s, segments: [...s.segments, aiSegment], updatedAt: new Date().toISOString() } : s,
       )
       localStorage.setItem(STORY_KEY, JSON.stringify(updated))
       return updated
@@ -297,7 +306,7 @@ export function useAICreative() {
   const completeStory = useCallback((storyId: string) => {
     setStories((prev) => {
       const updated = prev.map((s) =>
-        s.id === storyId ? { ...s, status: "completed" as const, updatedAt: new Date() } : s,
+        s.id === storyId ? { ...s, status: "completed" as const, updatedAt: new Date().toISOString() } : s,
       )
       localStorage.setItem(STORY_KEY, JSON.stringify(updated))
       return updated

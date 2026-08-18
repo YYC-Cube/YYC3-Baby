@@ -48,7 +48,7 @@ export default function OptimizedImage({
     )
 
     observer.observe(imgRef.current)
-    return () => observer.disconnect()
+    return () => { observer.disconnect(); }
   }, [priority])
 
   const handleLoad = () => {

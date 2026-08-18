@@ -126,7 +126,7 @@ export default function SchedulePage() {
           <div className="flex items-center gap-2">
             <motion.button
               className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50"
-              onClick={() => navigateDate(-1)}
+              onClick={() => { navigateDate(-1); }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -135,7 +135,7 @@ export default function SchedulePage() {
             <span className="font-bold text-slate-800 min-w-[140px] text-center">{formatDate(selectedDate)}</span>
             <motion.button
               className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50"
-              onClick={() => navigateDate(1)}
+              onClick={() => { navigateDate(1); }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -154,7 +154,7 @@ export default function SchedulePage() {
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
                   viewMode === mode.id ? "bg-blue-500 text-white" : "text-slate-600 hover:bg-slate-100"
                 }`}
-                onClick={() => setViewMode(mode.id)}
+                onClick={() => { setViewMode(mode.id); }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -176,7 +176,7 @@ export default function SchedulePage() {
           </motion.button>
           <motion.button
             className="px-4 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl font-bold flex items-center justify-center gap-2"
-            onClick={() => setShowAIGenerator(true)}
+            onClick={() => { setShowAIGenerator(true); }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -221,7 +221,7 @@ export default function SchedulePage() {
         )}
 
         {showAIGenerator && (
-          <AIScheduleGeneratorModal onGenerate={handleGenerateAI} onClose={() => setShowAIGenerator(false)} />
+          <AIScheduleGeneratorModal onGenerate={handleGenerateAI} onClose={() => { setShowAIGenerator(false); }} />
         )}
       </AnimatePresence>
 
@@ -271,7 +271,7 @@ function DayView({
               className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
                 schedule.completed ? "bg-green-500 border-green-500 text-white" : "border-slate-300"
               }`}
-              onClick={() => onToggleComplete(schedule.id)}
+              onClick={() => { onToggleComplete(schedule.id); }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -309,7 +309,7 @@ function DayView({
             <div className="flex gap-1">
               <motion.button
                 className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200"
-                onClick={() => onEdit(schedule)}
+                onClick={() => { onEdit(schedule); }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -317,7 +317,7 @@ function DayView({
               </motion.button>
               <motion.button
                 className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100"
-                onClick={() => onDelete(schedule.id)}
+                onClick={() => { onDelete(schedule.id); }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -361,7 +361,7 @@ function TimelineView({
                       backgroundColor: schedule.color,
                       opacity: schedule.completed ? 0.6 : 1,
                     }}
-                    onClick={() => onEdit(schedule)}
+                    onClick={() => { onEdit(schedule); }}
                     whileHover={{ scale: 1.02 }}
                   >
                     <div className="flex items-center gap-1">
@@ -395,8 +395,8 @@ function ScheduleEditorModal({
       title: schedule?.title || "",
       description: schedule?.description || "",
       type: schedule?.type || "other",
-      startTime: schedule ? new Date(schedule.startTime).toISOString().slice(0, 16) as string : "",
-      endTime: schedule ? new Date(schedule.endTime).toISOString().slice(0, 16) as string : "",
+      startTime: schedule ? new Date(schedule.startTime).toISOString().slice(0, 16) : "",
+      endTime: schedule ? new Date(schedule.endTime).toISOString().slice(0, 16) : "",
       color: schedule?.color || getScheduleColor("other"),
     }
     
@@ -430,7 +430,7 @@ function ScheduleEditorModal({
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 25 }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold">{schedule ? "编辑日程" : "添加日程"}</h2>
@@ -450,7 +450,7 @@ function ScheduleEditorModal({
             <input
               type="text"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) => { setFormData({ ...formData, title: e.target.value }); }}
               className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-blue-400"
               placeholder="输入日程标题"
               required
@@ -461,7 +461,7 @@ function ScheduleEditorModal({
             <label className="block text-sm font-medium text-slate-700 mb-1">类型</label>
             <div className="grid grid-cols-4 gap-2">
               {Object.entries(SCHEDULE_TYPE_CONFIG).map(([type, config]) => {
-                const typedConfig = config as { icon: string; label: string; color: string }
+                const typedConfig = config
                 return (
                   <motion.button
                     key={type}
@@ -472,7 +472,7 @@ function ScheduleEditorModal({
                     style={{
                       backgroundColor: formData.type === type ? `${typedConfig.color}20` : undefined,
                     }}
-                    onClick={() => setFormData({ ...formData, type: type as ScheduleType, color: typedConfig.color })}
+                    onClick={() => { setFormData({ ...formData, type: type as ScheduleType, color: typedConfig.color }); }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -490,7 +490,7 @@ function ScheduleEditorModal({
               <input
                 type="datetime-local"
                 value={typeof formData.startTime === 'string' ? formData.startTime : new Date(formData.startTime).toISOString().slice(0, 16)}
-                onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                onChange={(e) => { setFormData({ ...formData, startTime: e.target.value }); }}
                 className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-blue-400"
                 required
               />
@@ -500,7 +500,7 @@ function ScheduleEditorModal({
               <input
                 type="datetime-local"
                 value={typeof formData.endTime === 'string' ? formData.endTime : new Date(formData.endTime).toISOString().slice(0, 16)}
-                onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                onChange={(e) => { setFormData({ ...formData, endTime: e.target.value }); }}
                 className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-blue-400"
                 required
               />
@@ -511,7 +511,7 @@ function ScheduleEditorModal({
             <label className="block text-sm font-medium text-slate-700 mb-1">描述 (可选)</label>
             <textarea
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) => { setFormData({ ...formData, description: e.target.value }); }}
               className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-blue-400 resize-none"
               rows={2}
               placeholder="添加描述..."
@@ -560,7 +560,7 @@ function AIScheduleGeneratorModal({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="text-center mb-6">
           <motion.div

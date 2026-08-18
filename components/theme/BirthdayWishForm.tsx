@@ -33,7 +33,8 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
     message: '',
     relationship: '',
     templateId: '',
-    isCustomMessage: false
+    isCustomMessage: false,
+    customTitle: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showTemplates, setShowTemplates] = useState(false)
@@ -41,7 +42,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
   // 生日祝福语模板
   const birthdayTemplates = [
     {
-      id: 1,
+      id: '1',
       title: '温馨祝福',
       message: '亲爱的小语，生日快乐！愿你的每一天都充满阳光和欢笑，愿你的未来像星星一样璀璨夺目。在新的一岁里，愿你健康快乐，心想事成！'
     },
@@ -51,7 +52,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
       message: '小语，生日快乐！时光荏苒，又一年过去了。愿你在新的一岁里，继续保持那份纯真与善良，勇敢追逐梦想，收获满满的幸福与成功。'
     },
     {
-      id: 3,
+      id: '3',
       title: '诗意祝福',
       message: '小语，生日快乐！愿你如春花般绚烂，如夏星般闪耀，如秋叶般静美，如冬雪般纯洁。愿你的生命之树常青，幸福之花常开。'
     },
@@ -61,12 +62,12 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
       message: '小语，生日快乐！简单的一句话，包含最真挚的祝福：愿你健康、快乐、平安、幸福！'
     },
     {
-      id: 5,
+      id: '5',
       title: '活力祝福',
       message: '小语，生日快乐！愿你的生活充满活力与激情，每一天都像生日一样精彩！愿你在新的一岁里，创造更多美好回忆！'
     },
     {
-      id: 6,
+      id: '6',
       title: '感恩祝福',
       message: '小语，生日快乐！感谢你出现在我们的生命中，带来那么多美好时光。愿你的生日充满爱与温暖，新的一年里收获更多幸福与感动。'
     }
@@ -111,10 +112,10 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
     try {
       // 这里可以添加实际的提交逻辑，比如发送到服务器
       console.log('生日祝福表单提交:', formData)
-      
+
       // 模拟提交延迟
       await new Promise(resolve => setTimeout(resolve, 1000))
-      
+
       // 保存到本地存储
       const wishes = JSON.parse(localStorage.getItem('birthdayWishes') || '[]')
       wishes.push({
@@ -123,7 +124,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
         timestamp: new Date().toISOString()
       })
       localStorage.setItem('birthdayWishes', JSON.stringify(wishes))
-      
+
       // 重置表单
       setFormData({
         name: '',
@@ -133,7 +134,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
         isCustomMessage: false,
         customTitle: ''
       })
-      
+
       // 显示成功消息
       alert('生日祝福已成功提交！感谢您的祝福！')
     } catch (error) {
@@ -159,7 +160,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); }}
           >
             {/* 头部 */}
             <div className="flex items-center justify-between mb-6">
@@ -221,14 +222,14 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
                   </label>
                   <button
                     type="button"
-                    onClick={() => setShowTemplates(!showTemplates)}
+                    onClick={() => { setShowTemplates(!showTemplates); }}
                     className="text-sm text-purple-600 hover:text-purple-700 flex items-center gap-1"
                   >
                     <Sparkles className="w-4 h-4" />
                     {showTemplates ? '隐藏模板' : '使用模板'}
                   </button>
                 </div>
-                
+
                 {/* 模板选择区域 */}
                 {showTemplates && (
                   <div className="mb-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
@@ -242,7 +243,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
                         {formData.isCustomMessage ? '使用模板' : '自定义'}
                       </button>
                     </div>
-                    
+
                     {formData.isCustomMessage ? (
                       <div className="space-y-2">
                         <input
@@ -250,7 +251,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
                           placeholder="祝福语标题（可选）"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                           value={formData.customTitle || ''}
-                          onChange={(e) => setFormData(prev => ({ ...prev, customTitle: e.target.value }))}
+                          onChange={(e) => { setFormData(prev => ({ ...prev, customTitle: e.target.value })); }}
                         />
                       </div>
                     ) : (
@@ -259,7 +260,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
                           <button
                             key={template.id}
                             type="button"
-                            onClick={() => handleTemplateSelect(template.id)}
+                            onClick={() => { handleTemplateSelect(String(template.id)); }}
                             className={`text-left p-2 bg-white rounded border border-purple-200 hover:bg-purple-100 transition-colors ${
                               formData.templateId === template.id ? 'ring-2 ring-purple-500' : ''
                             }`}
@@ -272,7 +273,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
                     )}
                   </div>
                 )}
-                
+
                 <textarea
                   id="message"
                   name="message"

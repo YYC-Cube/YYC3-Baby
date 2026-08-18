@@ -249,7 +249,7 @@ function DailyPlanCard() {
           <motion.div
             key={plan.id}
             className="flex items-center gap-3 bg-white/60 p-3 rounded-xl cursor-pointer hover:bg-white transition"
-            onClick={() => togglePlan(plan.id)}
+            onClick={() => { togglePlan(plan.id); }}
             whileTap={{ scale: 0.95 }}
           >
             <div

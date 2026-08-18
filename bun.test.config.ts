@@ -1,6 +1,4 @@
-import { defineConfig } from 'bun'
-
-export default defineConfig({
+const config = {
   test: {
     environment: 'jsdom',
     setupFiles: ['./__tests__/setup.ts'],
@@ -19,4 +17,6 @@ export default defineConfig({
       ]
     }
   }
-})
+}
+
+export default config

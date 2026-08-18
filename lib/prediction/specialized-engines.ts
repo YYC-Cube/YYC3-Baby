@@ -3,22 +3,21 @@
  * 包含时间序列、异常检测、因果推断等专用预测引擎
  */
 
-import { BasePredictor } from './base-predictor'
 import type {
-  PredictionData,
-  TrainingResult,
-  PredictionResult,
-  PredictorConfig,
-  SeasonalityAnalysis,
-  ProbabilisticForecast,
-  AnomalyReport,
   Anomaly,
   AnomalyExplanation,
+  AnomalyReport,
   CausalGraph,
   CounterfactualResult,
   Intervention,
-  DataPoint
+  PredictionData,
+  PredictionResult,
+  PredictorConfig,
+  ProbabilisticForecast,
+  SeasonalityAnalysis,
+  TrainingResult
 } from '@/types/prediction/common'
+import { BasePredictor } from './base-predictor'
 
 /**
  * 时间序列预测引擎
@@ -27,6 +26,7 @@ export class TimeSeriesEngine extends BasePredictor {
   private seasonality: SeasonalityAnalysis | null = null
   private trend: number[] = []
   private seasonalityPeriod: number = 0
+  private lastTrainingError: number = 0
 
   constructor(config: PredictorConfig) {
     super(config)
@@ -63,16 +63,17 @@ export class TimeSeriesEngine extends BasePredictor {
 
     // 训练模型（简化版指数平滑）
     const params = this.config.parameters
-    const windowSize = params.windowSize || 12
-    const alpha = params.alpha || 0.3
-    const beta = params.beta || 0.1
-    const gamma = params.gamma || 0.1
+    const windowSize = Number(params.windowSize) || 12
+    const alpha = Number(params.alpha) || 0.3
+    const beta = Number(params.beta) || 0.1
+    const gamma = Number(params.gamma) || 0.1
 
     // 计算训练误差
     const predictions = await this.generateTrainingPredictions(processedData, windowSize, alpha, beta, gamma)
     const actuals = processedData.data.slice(windowSize).map(p => p.value)
     const errors = predictions.map((pred, i) => Math.abs(pred - actuals[i]))
-    const mae = errors.reduce((a, b) => a + b, 0) / errors.length
+    const mae = errors.reduce((a, b) => a + Number(b), 0) / errors.length
+    this.lastTrainingError = mae
     const rmse = Math.sqrt(errors.reduce((a, b) => a + b * b, 0) / errors.length)
 
     const trainingResult: TrainingResult = {
@@ -108,9 +109,9 @@ export class TimeSeriesEngine extends BasePredictor {
 
     // 简化版预测逻辑
     const windowSize = params.windowSize || 12
-    const alpha = params.alpha || 0.3
-    const beta = params.beta || 0.1
-    const gamma = params.gamma || 0.1
+    const alpha = Number(params.alpha) || 0.3
+    const beta = Number(params.beta) || 0.1
+    const gamma = Number(params.gamma) || 0.1
 
     const predictions: number[] = []
     let lastValue = processedData.data[processedData.data.length - 1].value
@@ -133,13 +134,20 @@ export class TimeSeriesEngine extends BasePredictor {
       horizon,
       modelId: this.modelId,
       methodology: 'time_series_exponential_smoothing',
-      confidenceInterval: horizon === 1 ? this.calculateConfidenceInterval(predictions[0]) : {
-        lower: predictions.map(p => this.calculateConfidenceInterval(p).lower),
-        upper: predictions.map(p => this.calculateConfidenceInterval(p).upper)
-      }
+      confidenceInterval: horizon === 1
+        ? [this.calculateConfidenceInterval(predictions[0])]
+        : predictions.map(p => this.calculateConfidenceInterval(p))
     }
 
     return result
+  }
+
+  private calculateConfidenceInterval(prediction: number): { lower: number; upper: number } {
+    const margin = (this.lastTrainingError || 0) * 1.96
+    return {
+      lower: prediction - margin,
+      upper: prediction + margin,
+    }
   }
 
   async evaluate(testData: PredictionData): Promise<Record<string, number>> {
@@ -339,7 +347,7 @@ export class AnomalyDetectionEngine extends BasePredictor {
 
   constructor(config: PredictorConfig) {
     super(config)
-    this.threshold = config.parameters.threshold || 2.5
+    this.threshold = Number(config.parameters.threshold) || 2.5
   }
 
   protected createInstance(config: PredictorConfig): BasePredictor {
@@ -416,7 +424,7 @@ export class AnomalyDetectionEngine extends BasePredictor {
     const values = processedData.data.map(p => p.value)
     const anomalies: Anomaly[] = []
 
-    const method = this.config.parameters.method || 'zscore'
+    const method = String(this.config.parameters.method) || 'zscore'
 
     for (let i = 0; i < values.length; i++) {
       const value = values[i]
@@ -537,15 +545,15 @@ export class AnomalyDetectionEngine extends BasePredictor {
   private calculateAnomalySeverity(anomalies: Anomaly[]): number {
     if (anomalies.length === 0) return 0
 
-    const severityWeights = { low: 1, medium: 2, high: 3 }
+    const severityWeights: Record<string, number> = { low: 1, medium: 2, high: 3 }
     const totalSeverity = anomalies.reduce((sum, anomaly) =>
-      sum + severityWeights[anomaly.severity], 0)
+      sum + (severityWeights[anomaly.severity] ?? 0), 0)
 
     return totalSeverity / anomalies.length
   }
 
   private generateAnomalyExplanation(anomaly: Anomaly): string {
-    const severityText = {
+    const severityText: Record<string, string> = {
       low: '轻微',
       medium: '中等',
       high: '严重'
@@ -556,9 +564,9 @@ export class AnomalyDetectionEngine extends BasePredictor {
       dip: '突降',
       trend_break: '趋势突变',
       seasonal_anomaly: '季节性异常'
-    }
+    } as Record<string, string>
 
-    return `在时间点 ${new Date(anomaly.timestamp).toLocaleString()} 检测到${severityText[anomaly.severity]}程度的${typeText[anomaly.type]}异常，值为 ${anomaly.value.toFixed(2)}，异常分数为 ${anomaly.score.toFixed(2)}`
+    return `在时间点 ${new Date(anomaly.timestamp).toLocaleString()} 检测到${severityText[anomaly.severity] ?? ''}程度的${typeText[anomaly.type] ?? ''}异常，值为 ${anomaly.value.toFixed(2)}，异常分数为 ${anomaly.score.toFixed(2)}`
   }
 
   private identifyContributingFactors(anomaly: Anomaly): string[] {
@@ -709,7 +717,7 @@ export class CausalInferenceEngine extends BasePredictor {
   }
 
   private calculateFeatureTargetCorrelation(data: PredictionData, feature: string): number {
-    const featureValues = data.data.map(p => p.features?.[feature] || 0)
+    const featureValues: number[] = data.data.map(p => Number(p.features?.[feature] || 0))
     const targetValues = data.data.map(p => p.value)
 
     return this.calculateCorrelation(featureValues, targetValues)

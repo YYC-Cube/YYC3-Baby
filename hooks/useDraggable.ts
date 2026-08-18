@@ -62,7 +62,7 @@ interface UseDraggableReturn {
   size: Size
   isDragging: boolean
   isResizing: boolean
-  dragRef: React.RefObject<HTMLDivElement>
+  dragRef: React.RefObject<HTMLDivElement | null>
   handleMouseDown: (e: React.MouseEvent) => void
   handleTouchStart: (e: React.TouchEvent) => void
   resetPosition: () => void

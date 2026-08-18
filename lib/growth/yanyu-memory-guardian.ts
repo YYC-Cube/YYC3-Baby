@@ -448,6 +448,8 @@ export class YanyuMemoryGuardian {
 
     return {
       ...currentTheme,
+      culturalBackground: currentTheme.background,
+      modernIntegration: currentTheme.integration,
       activities: ageAdjustedActivities
     }
   }

@@ -67,7 +67,7 @@ export default function BirthdayCountdown() {
     calculateTimeLeft()
     const timer = setInterval(calculateTimeLeft, 1000)
 
-    return () => clearInterval(timer)
+    return () => { clearInterval(timer); }
   }, [])
 
   const handleWishSubmit = (wish: BirthdayWish) => {
@@ -239,7 +239,7 @@ export default function BirthdayCountdown() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setShowWishForm(true)}
+                onClick={() => { setShowWishForm(true); }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full font-semibold shadow-lg"
               >
                 <MessageCircle className="w-5 h-5" />
@@ -324,7 +324,7 @@ export default function BirthdayCountdown() {
       {/* 生日祝福表单 */}
       <BirthdayWishForm
         isOpen={showWishForm}
-        onClose={() => setShowWishForm(false)}
+        onClose={() => { setShowWishForm(false); }}
         onSubmit={handleWishSubmit}
       />
     </div>

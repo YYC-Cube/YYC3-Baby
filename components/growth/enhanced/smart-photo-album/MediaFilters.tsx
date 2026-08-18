@@ -68,7 +68,7 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
           type="text"
           placeholder="搜索文件名、标签或描述..."
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={(e) => { onSearchChange(e.target.value); }}
           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
         />
       </div>
@@ -83,7 +83,7 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
               标签
             </label>
             <button
-              onClick={() => onTagsChange([])}
+              onClick={() => { onTagsChange([]); }}
               className="text-xs text-purple-600 hover:underline"
               disabled={selectedTags.length === 0}
             >
@@ -94,7 +94,7 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
             {allTags.map((tag) => (
               <button
                 key={tag}
-                onClick={() => handleTagToggle(tag)}
+                onClick={() => { handleTagToggle(tag); }}
                 className={`px-3 py-1 rounded-full text-xs transition-all ${
                   selectedTags.includes(tag)
                     ? 'bg-purple-600 text-white'
@@ -115,7 +115,7 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
               日期范围
             </label>
             <button
-              onClick={() => onDateRangeChange({ start: '', end: '' })}
+              onClick={() => { onDateRangeChange({ start: '', end: '' }); }}
               className="text-xs text-blue-600 hover:underline"
               disabled={!dateRange.start && !dateRange.end}
             >
@@ -126,13 +126,13 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
             <input
               type="date"
               value={dateRange.start}
-              onChange={(e) => onDateRangeChange({ ...dateRange, start: e.target.value })}
+              onChange={(e) => { onDateRangeChange({ ...dateRange, start: e.target.value }); }}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <input
               type="date"
               value={dateRange.end}
-              onChange={(e) => onDateRangeChange({ ...dateRange, end: e.target.value })}
+              onChange={(e) => { onDateRangeChange({ ...dateRange, end: e.target.value }); }}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
@@ -145,7 +145,7 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-1">排序方式</label>
             <select
               value={sortBy}
-              onChange={(e) => onSortByChange(e.target.value as SortBy)}
+              onChange={(e) => { onSortByChange(e.target.value as SortBy); }}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
             >
               <option value="date">按日期排序</option>
@@ -161,7 +161,7 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
               <input
                 type="checkbox"
                 checked={autoTagging}
-                onChange={(e) => onAutoTaggingChange(e.target.checked)}
+                onChange={(e) => { onAutoTaggingChange(e.target.checked); }}
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>

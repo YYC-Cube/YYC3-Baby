@@ -1,6 +1,6 @@
 "use client"
 
-import { getVoiceService } from "./voice-services"
+import { getEnhancedVoiceService } from "./enhanced-voice-services"
 
 /**
  * YYC³ 增强语音系统
@@ -8,8 +8,8 @@ import { getVoiceService } from "./voice-services"
  */
 
 export interface ExtendedWindow extends Window {
-  SpeechRecognition?: typeof SpeechRecognition
-  webkitSpeechRecognition?: typeof SpeechRecognition
+  SpeechRecognition?: SpeechRecognitionConstructor
+  webkitSpeechRecognition?: SpeechRecognitionConstructor
   webkitAudioContext?: typeof AudioContext
 }
 
@@ -37,7 +37,7 @@ export class EnhancedVoiceSystem {
   private emotionAnalyzer: EmotionAnalyzer
 
   // 事件监听器
-  private listeners: Map<string, Function[]> = new Map()
+  private listeners: Map<string, ((...args: unknown[]) => void)[]> = new Map()
 
   constructor() {
     this.emotionAnalyzer = new EmotionAnalyzer()
@@ -126,7 +126,7 @@ export class EnhancedVoiceSystem {
   }> {
     try {
       // 1. 语音转文字
-      const voiceService = getVoiceService()
+      const voiceService = getEnhancedVoiceService() as unknown as { speechToText: (blob: Blob) => Promise<string> }
       const text = await voiceService.speechToText(audioBlob)
 
       // 2. 情感分析
@@ -208,7 +208,7 @@ export class EnhancedVoiceSystem {
         this.emit('speakingStart')
       }
 
-      this.synthesis.speak(utterance)
+      this.synthesis?.speak(utterance)
     })
   }
 
@@ -304,7 +304,7 @@ export class EnhancedVoiceSystem {
   /**
    * 事件监听
    */
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: unknown[]) => void): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, [])
     }
@@ -314,7 +314,7 @@ export class EnhancedVoiceSystem {
   /**
    * 移除事件监听
    */
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: unknown[]) => void): void {
     if (this.listeners.has(event)) {
       const callbacks = this.listeners.get(event)!
       const index = callbacks.indexOf(callback)
@@ -401,7 +401,7 @@ class WakeWordDetector {
       this.mediaRecorder.start(100) // 每100ms检测一次
 
     } catch (error) {
-      throw new Error(`唤醒词检测启动失败: ${error}`)
+      throw new Error(`唤醒词检测启动失败: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
@@ -410,7 +410,7 @@ class WakeWordDetector {
       this.mediaRecorder.stop()
     }
     if (this.audioStream) {
-      this.audioStream.getTracks().forEach(track => track.stop())
+      this.audioStream.getTracks().forEach(track => { track.stop(); })
     }
     this.isListening = false
   }

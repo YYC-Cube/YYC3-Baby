@@ -25,8 +25,8 @@ export interface ReportData {
 }
 
 export class PDFGenerator {
-  private canvas: HTMLCanvasElement
-  private ctx: CanvasRenderingContext2D
+  private canvas!: HTMLCanvasElement
+  private ctx!: CanvasRenderingContext2D
   private width = 595 // A4 宽度 (pt)
   private height = 842 // A4 高度 (pt)
   private margin = 40

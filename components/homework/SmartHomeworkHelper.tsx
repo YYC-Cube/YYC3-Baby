@@ -65,7 +65,7 @@ export default function SmartHomeworkHelper({
       // 图片转 base64 后交由服务端 API 代理调用 BigModel，密钥不出服务端
       const image = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
-        reader.onload = () => resolve(reader.result as string)
+        reader.onload = () => { resolve(reader.result as string); }
         reader.onerror = reject
         reader.readAsDataURL(file)
       })
@@ -153,7 +153,7 @@ export default function SmartHomeworkHelper({
           duration: 5, // Mock duration
           transcript,
         })
-        stream.getTracks().forEach(track => track.stop())
+        stream.getTracks().forEach(track => { track.stop(); })
       }
 
       mediaRecorder.start()
@@ -258,7 +258,7 @@ export default function SmartHomeworkHelper({
                 ? "bg-blue-500 text-white shadow-lg"
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
-            onClick={() => setActiveTab(tab.id as "upload" | "voice" | "write")}
+            onClick={() => { setActiveTab(tab.id as "upload" | "voice" | "write"); }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -416,7 +416,7 @@ export default function SmartHomeworkHelper({
               </label>
               <textarea
                 value={writtenAnswer}
-                onChange={(e) => setWrittenAnswer(e.target.value)}
+                onChange={(e) => { setWrittenAnswer(e.target.value); }}
                 placeholder="在这里输入你的作业答案..."
                 className="w-full h-32 px-4 py-3 border border-slate-300 rounded-xl resize-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
               />
@@ -425,7 +425,7 @@ export default function SmartHomeworkHelper({
                   {writtenAnswer.length} 个字符
                 </span>
                 <button
-                  onClick={() => setIsListening(!isListening)}
+                  onClick={() => { setIsListening(!isListening); }}
                   className={`px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 ${
                     isListening
                       ? "bg-red-100 text-red-600"

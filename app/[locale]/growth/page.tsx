@@ -201,7 +201,7 @@ export default function GrowthPage() {
                 {recordTypes.map((type) => (
                   <button
                     key={type.id}
-                    onClick={() => setSelectedTab(type.id)}
+                    onClick={() => { setSelectedTab(type.id); }}
                     className={`w-full text-left p-3 rounded-lg transition-colors ${
                       selectedTab === type.id
                         ? type.color
