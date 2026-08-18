@@ -3,7 +3,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { characterManager, type CharacterConfig, type ThemeColors } from '@/lib/character-manager'
-import { Child } from '@prisma/client'
+import type { Child } from '@/lib/character-manager'
 
 interface CharacterButtonProps {
   child?: Child | null

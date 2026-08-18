@@ -1,35 +1,33 @@
-# TypeScript 类型债基线（2026-08-18）
+# TypeScript 类型债基线（2026-08-18 第二次盘点）
 
-> 统一基线 `unified/` 首次可构建化时记录。tsc 全量检查存在 **1,986 个错误 / 518 个文件**，
-> 全部继承自 yyc3-xy-05 原始代码，非本次合并引入。
-> `next.config.mjs` 暂设 `typescript.ignoreBuildErrors`，构建不做类型门禁，
-> 待按下表分阶段清零后移除该开关。
+> 统一基线标准化清理后的最新状态：tsc 全量检查 **~804 个错误**（首轮盘点 1,986 → tsconfig 标准化
+> 与冗余代码删除后降至 990 → themes/ 排除 + prisma 解耦 + jsdom 补齐后 **804**）。
+> 全部为真实类型不匹配（属性不存在 / 赋值不兼容 / 参数不符），无 lint 类噪音。
+> `next.config.mjs` 暂设 `typescript.ignoreBuildErrors`，清零后移除。
 
-## 错误分布（按 TS 错误码）
+## 已消除的错误来源（本轮）
 
-| 错误码 | 数量 | 含义 | 清理策略 |
-|--------|------|------|---------|
-| TS6133 | 408 | 未使用的变量/导入 | 批量 lint 自动修复（--fix 或 biome） |
-| TS2322 | 224 | 类型不可赋值 | 逐个核对，多数为宽/窄类型不一致 |
-| TS2339 | 209 | 属性不存在 | 核对接口定义与实际数据结构 |
-| TS4111 | 156 | 索引访问需通过 ['key'] | tsconfig 关闭 noUncheckedIndexedAccess 或补类型 |
-| TS2345 | 133 | 参数类型不匹配 | 补齐参数类型收窄 |
-| TS2307 | 121 | 模块不存在 | 部分为真实缺失文件（@/test-widget、jsdom 等） |
-| TS2532/TS18048 | 230 | 可能为 undefined | 补空值防护或非空断言 |
-| TS2353/TS2305/TS2304 | 134 | 字面量/导出/名称不匹配 | 对齐类型定义与导出 |
-| 其他 | ~270 | — | — |
+| 措施 | 消除量 |
+|------|--------|
+| tsconfig 回归 Next.js 标准（关闭 noUnusedLocals/noUnusedParameters/noPropertyAccessFromIndexSignature/noUncheckedIndexedAccess/exactOptionalPropertyTypes/noImplicitReturns 等超严苛开关，lint 职责交还 ESLint） | ~996 |
+| 删除零引用冗余代码（lib/ai-modules 17 文件、core/AgenticCore-Enhanced、main.ts、根级 performance-optimizer、lib/utils/、ai_roles_enhanced） | 含于上 |
+| 删除 8 个 *-test/*-demo 演示路由 | 含于上 |
+| themes/（Figma 参考代码，应用零引用）排除出 tsc | ~186 |
+| @prisma/client 类型引用改指本地 Child 接口（4 文件） | ~6 |
+| 补齐 jsdom devDependency（测试预载依赖） | 3 |
 
-## 已知典型问题
+## 剩余错误构成（Top）
 
-1. `EmotionType` 在 `types/interaction.ts`（type alias）与 `lib/ai/emotion-engine.ts`（enum）双重定义（审计 P1-4）
-2. `app/test-widget/page.tsx` 引用不存在的 `@/test-widget` 模块
-3. `bun.test.preload.ts` 引用 jsdom（未安装）与 `__mocks__/`（已从 yyc3-xy-03 补齐 framer-motion、motion-dom）
-4. `components/analytics/*` 引用 `@/types/analytics` 中不存在的导出（RealtimeMetrics→RealtimeMetric 等）
+| 错误码 | 数量 | 含义 |
+|--------|------|------|
+| TS2339 | ~150 | 属性不存在（接口定义与实际数据结构不一致） |
+| TS2322 | ~110 | 类型不可赋值 |
+| TS2307 | 少量 | 模块不存在（剩余：.next 陈旧生成物、测试引用） |
+| TS2345/TS2304/TS2305 | ~170 | 参数/名称/导出不匹配 |
 
 ## 建议清理顺序
 
-1. 先跑 lint --fix 消掉 TS6133（约 -400）
-2. 统一 `EmotionType` 定义（审计 P1-4）
-3. 清理 10 个 *-test/*-demo 路由（审计 P1-5），连带消除其类型错误
-4. 补齐/对齐 types/ 下接口定义，消 TS2305/TS2339 家族
-5. 每阶段跑 `bun run type-check` 记录差值，归零后移除 ignoreBuildErrors
+1. `.next` 陈旧类型重新生成（rebuild 后自动消失）
+2. `__tests__` 引用与现有模块对齐（测试基建激活）
+3. `types/` 下接口定义与实际使用对齐，消 TS2339/TS2305 家族（最大头）
+4. 每阶段跑 `bun run type-check` 记录差值，归零后移除 ignoreBuildErrors

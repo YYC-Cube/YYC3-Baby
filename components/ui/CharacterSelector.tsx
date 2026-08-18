@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { characterManager, type CharacterConfig, type ThemeColors } from '@/lib/character-manager'
-import { Child } from '@prisma/client'
+import type { Child } from '@/lib/character-manager'
 
 interface CharacterSelectorProps {
   child?: Child | null

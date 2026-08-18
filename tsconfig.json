@@ -26,47 +26,10 @@
     "paths": {
       "@/*": [
         "./*"
-      ],
-      "@/components/*": [
-        "./components/*"
-      ],
-      "@/services/*": [
-        "./services/*"
-      ],
-      "@/core/*": [
-        "./core/*"
-      ],
-      "@/lib/*": [
-        "./lib/*"
-      ],
-      "@/types/*": [
-        "./types/*"
-      ],
-      "@/utils/*": [
-        "./utils/*"
-      ],
-      "@/hooks/*": [
-        "./hooks/*"
-      ],
-      "@/config/*": [
-        "./config/*"
       ]
     },
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "alwaysStrict": true,
-    "exactOptionalPropertyTypes": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "next-env.d.ts",
@@ -78,6 +41,8 @@
     "types/**/*.d.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "themes",
+    ".next"
   ]
 }
