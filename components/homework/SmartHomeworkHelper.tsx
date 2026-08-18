@@ -3,8 +3,7 @@
 import { useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useDropzone } from "react-dropzone"
-import { getHomeworkCorrectionService, type HomeworkResult } from "@/lib/api/homework-correction"
-import { getVoiceService } from "@/lib/api/voice-services"
+import type { HomeworkResult } from "@/lib/api/homework-correction"
 
 
 interface VoiceRecording {
@@ -63,13 +62,33 @@ export default function SmartHomeworkHelper({
   const analyzeHomeworkImage = async (file: File) => {
     setIsProcessing(true)
     try {
-      const service = getHomeworkCorrectionService()
+      // 图片转 base64 后交由服务端 API 代理调用 BigModel，密钥不出服务端
+      const image = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
 
-      // Upload image and get URL
-      const imageUrl = await service.uploadImage(file)
-
-      // Perform full correction flow
-      const correctionResult = await service.fullCorrectionFlow(imageUrl)
+      const response = await fetch("/api/ai/homework-correction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image }),
+      })
+      if (!response.ok) {
+        throw new Error(`作业批改接口错误: ${response.status}`)
+      }
+      const correctionResult = (await response.json()) as {
+        results: Array<{
+          uuid: string
+          question: string
+          correct_answer: string
+          user_answer: string
+          is_correct: boolean
+          explanation: string
+          score?: number
+        }>
+      }
 
       // Convert API results to our component format
       const formattedResults: HomeworkResult[] = correctionResult.results.map((result, index) => ({
@@ -154,9 +173,18 @@ export default function SmartHomeworkHelper({
   // Real speech-to-text API integration
   const transcribeAudio = async (audioBlob: Blob): Promise<string> => {
     try {
-      const voiceService = getVoiceService()
-      const audioFile = new File([audioBlob], "recording.webm", { type: "audio/webm" })
-      return await voiceService.speechToText(audioFile)
+      const formData = new FormData()
+      formData.append("audio", new File([audioBlob], "recording.webm", { type: "audio/webm" }))
+
+      const response = await fetch("/api/ai/speech-to-text", {
+        method: "POST",
+        body: formData,
+      })
+      if (!response.ok) {
+        throw new Error(`语音转写接口错误: ${response.status}`)
+      }
+      const { text } = (await response.json()) as { text: string }
+      return text
     } catch (error) {
       console.error("语音转文字失败:", error)
       // Fallback to mock text

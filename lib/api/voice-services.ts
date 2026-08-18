@@ -200,7 +200,7 @@ export class VoiceService {
   /**
    * 上传音频文件进行转写
    */
-  private async uploadAndTranscribe(audioFile: File): Promise<string> {
+  async uploadAndTranscribe(audioFile: File): Promise<string> {
     const formData = new FormData()
     formData.append("audio", audioFile)
 
@@ -364,7 +364,7 @@ let voiceService: VoiceService | null = null
 
 export function getVoiceService(): VoiceService {
   if (!voiceService) {
-    const apiKey = process.env.NEXT_PUBLIC_BIGMODEL_API_KEY || ""
+    const apiKey = process.env.BIGMODEL_API_KEY || ""
     voiceService = new VoiceService(apiKey)
   }
   return voiceService

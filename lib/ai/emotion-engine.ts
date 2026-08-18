@@ -24,6 +24,8 @@ export enum InfantEmotionType {
 }
 
 // 年龄段定义
+export { InfantEmotionType as EmotionType }
+
 export enum AgeGroup {
   INFANT = 'infant',           // 0-1岁
   TODDLER = 'toddler',         // 1-2岁

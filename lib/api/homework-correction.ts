@@ -75,6 +75,17 @@ interface FullCorrectionFlowResponse {
   explanations: ResultAnalysisResponse[]
 }
 
+// 前端展示用的批改结果（字段已转为 camelCase）
+export interface HomeworkResult {
+  id: string
+  question: string
+  correctAnswer: string
+  userAnswer: string
+  isCorrect: boolean
+  explanation: string
+  score?: number
+}
+
 export class HomeworkCorrectionService {
   private readonly baseURL = "https://open.bigmodel.cn/api/v1"
   private readonly agentId = "intelligent_education_correction_agent"
@@ -328,7 +339,7 @@ let homeworkCorrectionService: HomeworkCorrectionService | null = null
 
 export function getHomeworkCorrectionService(): HomeworkCorrectionService {
   if (!homeworkCorrectionService) {
-    const apiKey = process.env.NEXT_PUBLIC_BIGMODEL_API_KEY || ""
+    const apiKey = process.env.BIGMODEL_API_KEY || ""
     if (!apiKey) {
       console.warn("未配置BigModel API密钥，将使用模拟数据")
     }
