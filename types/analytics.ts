@@ -551,3 +551,30 @@ export interface AnalyticsQuery {
   executionCount: number
   avgExecutionTime: number
 }
+
+
+// ===== 实时组件使用的别名 =====
+
+// 实时运营指标快照（MetricsOverview 仪表盘用）
+export interface RealtimeMetrics {
+  totalUsers: number
+  activeUsers: number
+  newUsers: number
+  aiConversations: number
+  averageSatisfaction: number
+  systemHealth: 'healthy' | 'warning' | 'critical' | string
+  errorRate: number
+  responseTime: number
+  lastUpdated: Date | string | number
+}
+
+export interface RealtimeActivity {
+  id: string
+  type: "user_action" | "system_event" | "ai_interaction" | "business_event"
+  label?: string
+  description?: string
+  timestamp: number
+  userId?: string
+  childId?: string
+  metadata?: Record<string, unknown>
+}

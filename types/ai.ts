@@ -413,3 +413,65 @@ export interface AIAuditLog {
   userAgent?: string
   timestamp: Timestamp
 }
+
+
+// ===== Chat 会话管理类型（供 types/index 转发与测试使用） =====
+
+export type ChatRole = MessageRole
+
+export interface ChatContext {
+  childId?: string
+  sessionId?: string
+  locale?: string
+  metadata?: Record<string, unknown>
+}
+
+export interface ChatStreamOptions {
+  temperature?: number
+  maxTokens?: number
+  signal?: AbortSignal
+  onToken?: (token: string) => void
+}
+
+export interface ChatError extends Error {
+  code?: string
+  statusCode?: number
+  retryable?: boolean
+}
+
+export interface ChatHistory {
+  messages: ChatMessage[]
+  total: number
+  hasMore: boolean
+}
+
+export interface ChatStats {
+  totalMessages: number
+  totalSessions: number
+  averageResponseTime: number
+  period: string
+  topTopics?: string[]
+}
+
+export interface ChatFilter {
+  childId?: string
+  sessionId?: string
+  role?: ChatRole
+  startDate?: string
+  endDate?: string
+  limit?: number
+  offset?: number
+}
+
+export interface ChatCreateInput {
+  role: ChatRole
+  content: string
+  childId?: string
+  sessionId?: string
+  metadata?: Record<string, unknown>
+}
+
+export interface ChatUpdateInput {
+  content?: string
+  metadata?: Record<string, unknown>
+}

@@ -40,6 +40,17 @@
 | YYC3-XY-SAIBO/ | 主题已提取，源目录可删除 | Figma 导出 |
 | YYC3-Y/ | 主题已提取，源目录可删除 | Figma 导出 |
 
+## 死代码移除（2026-08-18 完整化清理）
+
+| 文件 | 理由 |
+|------|------|
+| lib/db/supabase-client.ts | 零引用，supabase 未在依赖中 |
+| lib/ai/zhishu-ai-core.ts | 零引用半成品，引用未实现的 SmartRouter API |
+| lib/ai/intelligent-recommendation-system.ts | 同上 |
+| lib/ai/enhanced-response-generator.ts | 同上 |
+
+> 以上文件均保留在 git 历史（init 提交）中，需要时可找回。
+
 ## Git 提交记录
 
 - `init` - 从 yyc3-xy-05 派生统一基线，整合多版本资产 (2026-08-11)

@@ -28,13 +28,23 @@ import type {
   DataDriftMetrics
 } from '@/types/prediction/common'
 
+interface DriftAlert {
+  id: string
+  type: string
+  severity: 'info' | 'warning' | 'error' | 'critical'
+  message: string
+  timestamp: number
+}
+
 interface DataQualityMetrics {
   overallScore: number
   completeness: number
-  consistency: number
-  accuracy: number
   validity: number
-  uniqueness: number
+  consistency: number
+  timeliness: number
+  accuracy?: number
+  anomalyCount?: number
+  missingPatterns?: Record<string, number>
 }
 
 interface ChartDataPoint {

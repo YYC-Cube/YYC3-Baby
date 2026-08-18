@@ -67,6 +67,8 @@ function generateDefaultSchedules(): Schedule[] {
     childId: "default",
     title: s.title!,
     type: s.type as ScheduleType,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     startTime: s.startTime!,
     endTime: s.endTime!,
     aiGenerated: true,

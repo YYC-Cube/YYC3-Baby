@@ -1,38 +1,32 @@
 /**
- * YYC³ AI小语智能成长守护系统 - 国际化布局 (超简化版)
- * 修复服务端渲染错误
+ * YYC³ AI小语智能成长守护系统 - 国际化布局
+ * next-intl v4：locale 路由参数 + 客户端 Provider
  */
 
 import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "../globals.css"
+import { notFound } from "next/navigation"
+import { hasLocale, NextIntlClientProvider } from "next-intl"
+import { setRequestLocale } from "next-intl/server"
+import { routing } from "@/i18n/routing"
 
-const inter = Inter({ subsets: ["latin"], display: "swap" })
-
-export const metadata: Metadata = {
-  title: {
-    default: "YYC³ AI小语 - 智能成长守护系统",
-    template: "%s | YYC³ AI小语",
-  },
-  description: "0-22岁全周期AI智能成长守护平台",
+// 注意：根 app/layout.tsx 已渲染 <html>/<body>；
+// 此布局只做 locale 校验 + Provider 注入，避免嵌套 <html>
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
 }
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params: Promise<{ locale: string }>
 }) {
-  return (
-    <html lang="zh-CN">
-      <head>
-        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
-      </head>
-      <body className={`${inter.className} antialiased`}>
-        <div className="min-h-screen bg-sky-50">
-          {children}
-        </div>
-      </body>
-    </html>
-  )
+  const { locale } = await params
+  if (!hasLocale(routing.locales, locale)) {
+    notFound()
+  }
+  setRequestLocale(locale)
+
+  return <NextIntlClientProvider locale={locale}>{children}</NextIntlClientProvider>
 }

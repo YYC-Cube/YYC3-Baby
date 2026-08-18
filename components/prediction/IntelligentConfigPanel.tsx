@@ -53,7 +53,11 @@ const IntelligentConfigPanel: React.FC<IntelligentConfigPanelProps> = ({
   currentConfig,
   isProcessing = false
 }) => {
-  const [config, setConfig] = useState<PredictionConfig>({
+  type PanelConfig = PredictionConfig & {
+    requirements: NonNullable<PredictionConfig['requirements']>
+    constraints: NonNullable<PredictionConfig['constraints']>
+  }
+  const [config, setConfig] = useState<PanelConfig>({
     name: '',
     algorithm: 'adaptive_ensemble',
     parameters: {},

@@ -1,7 +1,9 @@
 // SQLite数据库客户端 - 真正的数据库解决方案
-// 使用Bun内置的SQLite支持，提供高性能的数据持久化
+// 使用 Node.js 内置的 node:sqlite（Node >= 22.13），文件级持久化
 
-import { Database } from "bun:sqlite"
+import { DatabaseSync } from "node:sqlite"
+import { existsSync, mkdirSync } from "node:fs"
+import { dirname } from "node:path"
 import type { Child, GrowthRecord, Assessment, Milestone } from "./client"
 
 // 数据库表创建SQL
@@ -147,23 +149,43 @@ CREATE INDEX IF NOT EXISTS idx_stage_transitions_child_id ON stage_transitions(c
 `
 
 export class SQLiteDatabase {
-  private db: Database
+  private db: DatabaseSync
 
-  constructor(dbPath: string = "./yyc3_database.db") {
-    this.db = new Database(dbPath, { create: true, strict: true })
+  constructor(dbPath: string = ":memory:") {
+    // 确保父目录存在（文件型数据库）
+    const dir = dirname(dbPath)
+    if (dbPath !== ":memory:" && dir && dir !== "." && !existsSync(dir)) {
+      mkdirSync(dir, { recursive: true })
+    }
+    this.db = new DatabaseSync(dbPath)
     this.initializeDatabase()
   }
 
   private initializeDatabase() {
     try {
-      // 创建所有表
-      this.db.exec(CREATE_TABLES_SQL)
+      // 并发防护前置：等待锁 + WAL 模式
+      this.db.exec("PRAGMA busy_timeout = 8000")
+      this.db.exec("PRAGMA journal_mode = WAL")
+
+      // 创建所有表（并发初始化时短暂锁库则重试）
+      let attempts = 0
+      while (true) {
+        try {
+          this.db.exec(CREATE_TABLES_SQL)
+          break
+        } catch (err) {
+          if (++attempts >= 5) throw err
+          const msg = String(err)
+          if (msg.includes("locked") || msg.includes("busy")) {
+            Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200)
+            continue
+          }
+          throw err
+        }
+      }
 
       // 启用外键约束
       this.db.exec("PRAGMA foreign_keys = ON")
-
-      // 设置WAL模式以提高并发性能
-      this.db.exec("PRAGMA journal_mode = WAL")
 
       console.log("✅ SQLite数据库初始化成功")
     } catch (error) {
@@ -180,13 +202,13 @@ export class SQLiteDatabase {
 
       if (Object.keys(conditions).length > 0) {
         const whereClause = Object.keys(conditions)
-          .map((key, index) => `${key} = $${index + 1}`)
+          .map((key, index) => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
         params.push(...Object.values(conditions))
       }
 
-      const stmt = this.db.query(query)
+      const stmt = this.db.prepare(query)
       return stmt.all(...params) as T[]
     } catch (error) {
       console.error(`查询失败 ${table}:`, error)
@@ -196,7 +218,7 @@ export class SQLiteDatabase {
 
   async findOne<T>(table: string, id: string): Promise<T | null> {
     try {
-      const stmt = this.db.query(`SELECT * FROM ${table} WHERE id = $1`)
+      const stmt = this.db.prepare(`SELECT * FROM ${table} WHERE id = ?`)
       const result = stmt.get(id) as T | undefined
       return result || null
     } catch (error) {
@@ -226,12 +248,12 @@ export class SQLiteDatabase {
 
       const columns = Object.keys(item).join(", ")
       const placeholders = Object.keys(item)
-        .map((_, index) => `$${index + 1}`)
+        .map(() => `?`)
         .join(", ")
       const values = Object.values(item)
 
       const query = `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`
-      const stmt = this.db.query(query)
+      const stmt = this.db.prepare(query)
       stmt.run(...values)
 
       return item
@@ -273,12 +295,12 @@ export class SQLiteDatabase {
       const updateData = { ...data, updated_at }
 
       const columns = Object.keys(updateData)
-        .map((key, index) => `${key} = $${index + 1}`)
+        .map((key, index) => `${key} = ?`)
         .join(", ")
       const values = [...Object.values(updateData), id]
 
-      const query = `UPDATE ${table} SET ${columns} WHERE id = $${columns.length + 1}`
-      const stmt = this.db.query(query)
+      const query = `UPDATE ${table} SET ${columns} WHERE id = ?`
+      const stmt = this.db.prepare(query)
       stmt.run(...values)
 
       return this.findOne<T>(table, id)
@@ -307,7 +329,7 @@ export class SQLiteDatabase {
 
   async delete(table: string, id: string): Promise<boolean> {
     try {
-      const stmt = this.db.query(`DELETE FROM ${table} WHERE id = $1`)
+      const stmt = this.db.prepare(`DELETE FROM ${table} WHERE id = ?`)
       const result = stmt.run(id)
       return result.changes > 0
     } catch (error) {
@@ -320,9 +342,9 @@ export class SQLiteDatabase {
     try {
       if (ids.length === 0) return 0
 
-      const placeholders = ids.map((_, index) => `$${index + 1}`).join(", ")
+      const placeholders = ids.map(() => `?`).join(", ")
       const query = `DELETE FROM ${table} WHERE id IN (${placeholders})`
-      const stmt = this.db.query(query)
+      const stmt = this.db.prepare(query)
       const result = stmt.run(...ids)
       return result.changes
     } catch (error) {
@@ -338,13 +360,13 @@ export class SQLiteDatabase {
 
       if (Object.keys(conditions).length > 0) {
         const whereClause = Object.keys(conditions)
-          .map((key, index) => `${key} = $${index + 1}`)
+          .map((key, index) => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
         params.push(...Object.values(conditions))
       }
 
-      const stmt = this.db.query(query)
+      const stmt = this.db.prepare(query)
       const result = stmt.get(...params) as { count: number }
       return result.count
     } catch (error) {
@@ -377,7 +399,7 @@ export class SQLiteDatabase {
 
       if (Object.keys(filter).length > 0) {
         const whereClause = Object.keys(filter)
-          .map((key, index) => `${key} = $${index + 1}`)
+          .map((key, index) => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
         params.push(...Object.values(filter))
@@ -387,7 +409,7 @@ export class SQLiteDatabase {
       query += ` LIMIT $${params.length + 1} OFFSET $${params.length + 2}`
       params.push(pageSize, offset)
 
-      const stmt = this.db.query(query)
+      const stmt = this.db.prepare(query)
       const data = stmt.all(...params) as T[]
 
       const totalPages = Math.ceil(total / pageSize)
@@ -400,14 +422,26 @@ export class SQLiteDatabase {
   }
 
   // 原子性事务支持
-  transaction<T>(callback: () => Promise<T>): Promise<T> {
-    return this.db.transaction(callback) as Promise<T>
+  async transaction<T>(callback: () => Promise<T>): Promise<T> {
+    this.db.exec("BEGIN")
+    try {
+      const result = await callback()
+      this.db.exec("COMMIT")
+      return result
+    } catch (error) {
+      this.db.exec("ROLLBACK")
+      throw error
+    }
   }
 
   // 数据库备份
   backup(backupPath: string): boolean {
     try {
-      this.db.backup(backupPath)
+      const dir = dirname(backupPath)
+      if (dir && dir !== "." && !existsSync(dir)) {
+        mkdirSync(dir, { recursive: true })
+      }
+      this.db.exec(`VACUUM INTO '${backupPath.replace(/'/g, "''")}'`)
       console.log(`✅ 数据库备份成功: ${backupPath}`)
       return true
     } catch (error) {
@@ -571,14 +605,14 @@ let dbInstance: SQLiteDatabase | null = null
 
 export function getDatabase(): SQLiteDatabase {
   if (!dbInstance) {
-    const dbPath = process.env.DATABASE_URL || "./yyc3_database.db"
+    const dbPath = process.env.DATABASE_URL || `${process.cwd()}/data/yyc3.db`
     dbInstance = new SQLiteDatabase(dbPath)
   }
   return dbInstance
 }
 
-// 兼容性导出，保持与现有代码的接口一致性
-export const db = getDatabase()
+// 注意：不再提供模块级饿汉式导出（构建期多 worker 并发求值会锁库），
+// 一律通过 getDatabase() 懒加载获取实例。
 
 // 类型导出
 export type { Child, GrowthRecord, Assessment, Milestone }

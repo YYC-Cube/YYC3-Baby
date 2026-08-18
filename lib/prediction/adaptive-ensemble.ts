@@ -28,7 +28,7 @@ export class EnsembleEngine extends BasePredictor {
 
   constructor(config: PredictorConfig) {
     super(config)
-    this.ensembleMethod = config.parameters.method || 'weighted'
+    this.ensembleMethod = (config.parameters.method as typeof this.ensembleMethod) || 'weighted'
   }
 
   protected createInstance(config: PredictorConfig): BasePredictor {
@@ -237,7 +237,7 @@ export class EnsembleEngine extends BasePredictor {
 
       return result
     } else {
-      return predictions.reduce((sum, pred) => sum + (pred as number), 0) / predictions.length
+      return predictions.reduce<number>((sum, pred) => sum + (pred as number), 0) / predictions.length
     }
   }
 
@@ -261,7 +261,7 @@ export class EnsembleEngine extends BasePredictor {
 
       return result
     } else {
-      return predictions.reduce((sum, pred, i) => sum + (pred as number) * normalizedWeights[i], 0)
+      return predictions.reduce<number>((sum, pred, i) => sum + (pred as number) * (normalizedWeights[i] ?? 0), 0)
     }
   }
 
@@ -390,7 +390,7 @@ export class AdaptiveEnsemble extends EnsembleEngine {
 
   constructor(config: PredictorConfig) {
     super(config)
-    this.adaptationThreshold = config.parameters.adaptationThreshold || 0.1
+    this.adaptationThreshold = Number(config.parameters.adaptationThreshold) || 0.1
   }
 
   /**

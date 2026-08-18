@@ -59,11 +59,11 @@ export class DynamicModelSelector {
     const bestModel = this.selectBestModel(modelAssessments, task, constraints)
 
     const selection: ModelSelection = {
-      selectedModel: bestModel.modelId,
+      selectedModel: bestModel.modelId ?? 'unknown',
       alternativeModels: modelAssessments
-        .filter(a => a.modelId !== bestModel.modelId)
+        .filter(a => a.modelId && a.modelId !== bestModel.modelId)
         .slice(0, 3)
-        .map(a => a.modelId),
+        .map(a => a.modelId ?? 'unknown'),
       selectionReason: this.generateSelectionReason(bestModel, dataCharacteristics, task),
       expectedPerformance: bestModel.goodnessOfFit,
       confidence: this.calculateSelectionConfidence(bestModel),
@@ -255,7 +255,7 @@ export class DynamicModelSelector {
       score += assessment.stabilityMetrics.predictionStability * 0.2 // 预测稳定性权重
 
       // 根据任务优先级调整
-      if (task.priority === 'urgent') {
+      if (task.priority === ('urgent' as string)) {
         score += assessment.stabilityMetrics.sensitivity.complexity * 0.1 // 复杂度权重
       }
 
@@ -328,7 +328,7 @@ export class DynamicModelSelector {
       totalValues++
       if (point.features) {
         totalValues += Object.keys(point.features).length
-        missingValues += Object.values(point.features).filter(v => v === null || isNaN(v)).length
+        missingValues += Object.values(point.features).filter(v => v === null || Number.isNaN(Number(v))).length
       }
     }
 

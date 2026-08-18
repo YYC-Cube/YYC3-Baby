@@ -28,6 +28,7 @@ import type {
   TaskInfo,
   Predictor,
   PerformanceMetrics,
+  DataQualityMetrics,
   DriftAlert,
   Recommendation,
   RiskAssessment,
@@ -74,8 +75,8 @@ export class IntelligentPredictionService {
     // 智能选择最佳模型组合
     const modelSelection = await this.modelSelector.selectOptimalModel(
       data,
-      { id: taskId, type: taskType, description: '', priority: 'medium', constraints: config.constraints, requirements: config.requirements },
-      config.constraints
+      { id: taskId, type: taskType, description: '', priority: 'medium', constraints: config.constraints ?? {}, requirements: config.requirements },
+      config.constraints ?? {}
     )
 
     // 创建集成预测器
@@ -89,8 +90,8 @@ export class IntelligentPredictionService {
       name: config.name || `智能预测任务_${taskId}`,
       type: taskType,
       description: `基于${modelSelection.selectedModel}的智能预测`,
-      priority: config.priority || 'medium',
-      constraints: config.constraints,
+      priority: (config.priority as 'low' | 'medium' | 'high') || 'medium',
+      constraints: config.constraints ?? {},
       requirements: config.requirements
     }
 
@@ -120,7 +121,13 @@ export class IntelligentPredictionService {
     }
 
     const { ensemble } = taskInfo
+    if (!ensemble) {
+      throw new Error(`任务 ${taskId} 没有可用的预测引擎`)
+    }
     const predictionData = data || taskInfo.data
+    if (!predictionData) {
+      throw new Error(`任务 ${taskId} 缺少预测数据`)
+    }
 
     // 执行预测
     const result = await ensemble.predict(predictionData, horizon)
@@ -143,10 +150,11 @@ export class IntelligentPredictionService {
   ): Promise<StreamingPrediction> {
     const startTime = Date.now()
 
-    // 获取或创建适合流式预测的模型
-    let predictor = modelId ? this.activePredictors.get(modelId) : null
+    // 获取或创建适合流式预测的模型（统一持有引擎句柄）
+    let taskInfo = modelId ? this.activePredictors.get(modelId) : undefined
+    let engine: TimeSeriesEngine | undefined = taskInfo?.predictor as TimeSeriesEngine | undefined
 
-    if (!predictor) {
+    if (!engine) {
       // 创建适合实时预测的时间序列模型
       const timeSeriesConfig = {
         name: 'realtime_timeseries',
@@ -158,15 +166,18 @@ export class IntelligentPredictionService {
         }
       }
 
-      predictor = new TimeSeriesEngine(timeSeriesConfig)
-      await predictor.train(stream)
+      engine = new TimeSeriesEngine(timeSeriesConfig)
+      await engine.train(stream as unknown as PredictionData)
 
       const predictorId = `realtime_${Date.now()}`
-      this.activePredictors.set(predictorId, { predictor, config: timeSeriesConfig })
+      this.activePredictors.set(predictorId, { predictor: engine, config: timeSeriesConfig, createdAt: Date.now() })
     }
 
     // 执行预测
-    const prediction = await predictor.predictor.predict(stream, 1)
+    const prediction = await engine.predict(stream as unknown as PredictionData, 1)
+    if (!prediction) {
+      throw new Error('实时预测失败')
+    }
 
     // 计算处理时间
     const processingTime = Date.now() - startTime
@@ -176,8 +187,8 @@ export class IntelligentPredictionService {
       prediction: Array.isArray(prediction.prediction) ? prediction.prediction[0] : prediction.prediction,
       confidence: prediction.confidence,
       processingTime,
-      dataQuality: stream.qualityMetrics,
-      modelVersion: predictor.predictor.getModelInfo().modelId
+      dataQuality: stream.qualityMetrics as DataQualityMetrics | undefined,
+      modelVersion: engine.getModelInfo().modelId
     }
 
     return streamingPrediction
@@ -259,6 +270,9 @@ export class IntelligentPredictionService {
     }
 
     const { ensemble } = taskInfo
+    if (!ensemble) {
+      throw new Error(`预测任务 ${taskId} 没有可用的预测引擎`)
+    }
 
     // 检测概念漂移
     const driftDetection = await ensemble.detectConceptDrift?.(newData)
@@ -293,11 +307,11 @@ export class IntelligentPredictionService {
 
     return {
       taskId,
-      modelInfo: taskInfo.ensemble.getModelInfo(),
-      config: taskInfo.config,
+      modelInfo: (taskInfo.ensemble ?? taskInfo.predictor)!.getModelInfo(),
+      config: taskInfo.config as Record<string, unknown>,
       createdAt: taskInfo.createdAt,
       lastUpdated: taskInfo.lastUpdated,
-      predictionCount: this.predictionHistory.filter(r => r.modelId.includes(taskId)).length
+      predictionCount: this.predictionHistory.filter(r => (r.modelId ?? '').includes(taskId)).length
     }
   }
 
@@ -350,7 +364,7 @@ export class IntelligentPredictionService {
     // 根据选择的模型创建基础预测器
     for (const algorithm of [modelSelection.selectedModel, ...modelSelection.alternativeModels]) {
       try {
-        const predictor = this.createPredictor(algorithm, config)
+        const predictor = this.createPredictor(algorithm, config) as unknown as import('@/lib/prediction/base-predictor').BasePredictor
         ensemble.addPredictor(predictor)
       } catch (error) {
         console.warn(`创建预测器失败: ${algorithm}`, error)
@@ -424,6 +438,7 @@ export class IntelligentPredictionService {
 
       if (recentAvgConfidence < olderAvgConfidence * 0.8) {
         alerts.push({
+          id: `alert_${Date.now()}_${alerts.length}`,
           type: 'performance',
           severity: 'medium',
           description: '预测置信度下降',

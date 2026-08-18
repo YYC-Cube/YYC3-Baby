@@ -7,6 +7,17 @@
  */
 
 // 基础类型定义
+// 角色主题：一个可展示的 AI 角色（与 CharacterThemeContext 的 CharacterConfig 对齐）
+export interface CharacterTheme {
+  id: string
+  name: string
+  gender?: string
+  personality?: string
+  defaultImage?: string
+  expressions?: Record<string, string>
+  themes?: Record<string, { primaryColor?: string; secondaryColor?: string; accent?: string; background?: string; border?: string; glow?: string; gradient?: string }>
+}
+
 export type CharacterSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 export type CharacterVariant = 'default' | 'primary' | 'secondary' | 'outline' | 'ghost' | 'filled'
 export type CharacterColorScheme = 'light' | 'dark' | 'auto'

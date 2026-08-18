@@ -1,6 +1,11 @@
+import createNextIntlPlugin from "next-intl/plugin"
+
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingRoot: import.meta.dirname,
   images: {
     unoptimized: true,
   },
@@ -10,9 +15,6 @@ const nextConfig = {
   // 按路线图分阶段清理；构建先保证可产物化，不做类型门禁。
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   async headers() {
     return [
@@ -51,4 +53,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default withNextIntl(nextConfig)

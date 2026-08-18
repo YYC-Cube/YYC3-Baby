@@ -1,33 +1,30 @@
-# TypeScript 类型债基线（2026-08-18 第二次盘点）
+# TypeScript 类型债基线（2026-08-18 第四次盘点·完整化阶段）
 
-> 统一基线标准化清理后的最新状态：tsc 全量检查 **~804 个错误**（首轮盘点 1,986 → tsconfig 标准化
-> 与冗余代码删除后降至 990 → themes/ 排除 + prisma 解耦 + jsdom 补齐后 **804**）。
-> 全部为真实类型不匹配（属性不存在 / 赋值不兼容 / 参数不符），无 lint 类噪音。
-> `next.config.mjs` 暂设 `typescript.ignoreBuildErrors`，清零后移除。
+> 当前状态：应用代码 **~415 个错误**（演进：1,986 → tsconfig 标准化/冗余清除 990 →
+> themes 排除等 804 → **本阶段系统性修复 415**，累计 **-79%**）。
+> `__tests__/` 已按惯例移出 tsc（运行时由 `bun test` 把关，199/199 全绿），
+> `themes/`（Figma 参考）维持排除。`next.config.mjs` 的 `ignoreBuildErrors` 保留至清零。
 
-## 已消除的错误来源（本轮）
+## 本阶段消除的错误来源
 
-| 措施 | 消除量 |
-|------|--------|
-| tsconfig 回归 Next.js 标准（关闭 noUnusedLocals/noUnusedParameters/noPropertyAccessFromIndexSignature/noUncheckedIndexedAccess/exactOptionalPropertyTypes/noImplicitReturns 等超严苛开关，lint 职责交还 ESLint） | ~996 |
-| 删除零引用冗余代码（lib/ai-modules 17 文件、core/AgenticCore-Enhanced、main.ts、根级 performance-optimizer、lib/utils/、ai_roles_enhanced） | 含于上 |
-| 删除 8 个 *-test/*-demo 演示路由 | 含于上 |
-| themes/（Figma 参考代码，应用零引用）排除出 tsc | ~186 |
-| @prisma/client 类型引用改指本地 Child 接口（4 文件） | ~6 |
-| 补齐 jsdom devDependency（测试预载依赖） | 3 |
+| 措施 | 效果 |
+|------|------|
+| 补写从未提交的类型定义（types/ai 的 Chat 家族、schedule 输入、analytics 实时指标、prediction 的 20+ 接口） | 消除整族 TS2305/TS2304 |
+| 重写 `lib/prediction/base-predictor.ts` 为富基类（配置/模型标识/训练态/特征工程） | 预测引擎族 138 → ~15 |
+| `components/CharacterThemeContext` API 对齐 + `CharacterTheme` 类型落地 | 角色主题族清零 |
+| AgenticCore：SubtaskResult/PreprocessingResult/AgentContext 宽容化 + unknown error 安全取值 + 返回值包装 | 20 → 0 |
+| RealtimeMetrics 独立定义（原误设为 RealtimeMetric 别名） | MetricsOverview 清零 |
+| useSchedule 时间戳联合类型 + 默认课表补字段 | 28 → 个位数 |
+| 删除零引用死代码：supabase-client、三个未接线 AI 引擎、verify-integration 脚本 | -70 |
 
-## 剩余错误构成（Top）
+## 剩余 ~415 的构成（应用代码）
 
-| 错误码 | 数量 | 含义 |
-|--------|------|------|
-| TS2339 | ~150 | 属性不存在（接口定义与实际数据结构不一致） |
-| TS2322 | ~110 | 类型不可赋值 |
-| TS2307 | 少量 | 模块不存在（剩余：.next 陈旧生成物、测试引用） |
-| TS2345/TS2304/TS2305 | ~170 | 参数/名称/导出不匹配 |
+- TS2339/TS2322 属性与赋值不匹配：约 55%（types/ 接口与组件实际用法的历史分歧，需逐域对齐）
+- TS2345/TS2353 参数与字面量多余属性：约 30%
+- 其余为少量 TS2304/TS7006
 
 ## 建议清理顺序
 
-1. `.next` 陈旧类型重新生成（rebuild 后自动消失）
-2. `__tests__` 引用与现有模块对齐（测试基建激活）
-3. `types/` 下接口定义与实际使用对齐，消 TS2339/TS2305 家族（最大头）
-4. 每阶段跑 `bun run type-check` 记录差值，归零后移除 ignoreBuildErrors
+1. 按目录域推进：`lib/ai/` → `components/analytics|prediction` → `hooks/` → `app/`
+2. 每个域先对齐 `types/` 下的接口定义再修组件
+3. 每阶段跑 `bun run type-check` 记录差值；归零后移除 `ignoreBuildErrors` 与本文件

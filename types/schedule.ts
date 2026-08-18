@@ -41,9 +41,9 @@ export interface Schedule {
   attachments?: string[]
   recurrenceRule?: RecurrenceRule
   reminderTime?: number
-  completedAt?: Timestamp
-  createdAt: Timestamp
-  updatedAt: Timestamp
+  completedAt?: Timestamp | Date
+  createdAt: Timestamp | Date
+  updatedAt: Timestamp | Date
 }
 
 export interface ScheduleFormData {
@@ -326,4 +326,35 @@ export interface ScheduleShare {
   permission: 'view' | 'edit' | 'admin'
   expiresAt?: Timestamp
   createdAt: Timestamp
+}
+
+
+// ===== API 输入类型 =====
+
+export interface ScheduleCreateInput {
+  title: string
+  type: ScheduleType
+  date: string
+  startTime: string
+  endTime?: string
+  location?: string
+  notes?: string
+  priority?: SchedulePriority
+  reminder?: ReminderType
+  repeatPattern?: RepeatPattern
+  childId?: string
+}
+
+export interface ScheduleUpdateInput {
+  title?: string
+  type?: ScheduleType
+  date?: string
+  startTime?: string
+  endTime?: string
+  location?: string
+  notes?: string
+  priority?: SchedulePriority
+  status?: ScheduleStatus
+  reminder?: ReminderType
+  repeatPattern?: RepeatPattern
 }

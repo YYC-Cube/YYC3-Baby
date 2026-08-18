@@ -18,12 +18,18 @@ export interface PredictionResult {
   confidence: number
   timestamp: number
   metadata?: Record<string, unknown>
+  horizon?: number
+  modelId?: string
+  methodology?: string
+  explanation?: string
+  confidenceInterval?: Array<{ lower: number; upper: number }>
 }
 
 /**
  * 质量指标
  */
 export interface QualityMetrics {
+  timestamp?: number
   timestamp: number
   accuracy: number
   precision: number
@@ -106,6 +112,7 @@ export interface PredictionData {
   dataType: 'timeseries' | 'tabular' | 'sequential'
   features?: string[]
   target?: string
+  frequency?: string
 }
 
 /**
@@ -115,28 +122,25 @@ export interface PredictionConfig {
   name: string
   algorithm: string
   parameters: Record<string, unknown>
-  preprocessing: {
+  priority?: 'low' | 'medium' | 'high' | string
+  requirements?: Partial<PredictionTask['requirements']>
+  preprocessing?: {
     normalize: boolean
     handleMissing: 'interpolate' | 'mean' | 'median' | 'drop'
     featureEngineering: boolean
     outlierRemoval: boolean
   }
-  validation: {
+  validation?: {
     method: string
     folds: number
     testSize: number
   }
-  constraints: {
-    maxTrainingTime: number
-    memoryLimit: number
-    accuracyThreshold: number
-    realTimeCapability: boolean
-  }
-  requirements: {
-    accuracy: 'high' | 'medium' | 'low'
-    speed: 'high' | 'medium' | 'low'
-    interpretability: 'high' | 'medium' | 'low'
-    scalability: 'high' | 'medium' | 'low'
+  constraints?: {
+    maxTrainingTime?: number
+    memoryLimit?: number
+    accuracyThreshold?: number
+    realTimeCapability?: boolean
+    maxModels?: number
   }
 }
 
@@ -145,21 +149,22 @@ export interface PredictionConfig {
  */
 export interface PredictionTask {
   id: string
-  name: string
+  name?: string
   type: 'regression' | 'classification' | 'forecasting' | 'anomaly_detection'
-  description: string
-  priority: 'low' | 'medium' | 'high'
-  constraints: {
-    maxTrainingTime: number
-    memoryLimit: number
-    accuracyThreshold: number
-    realTimeCapability: boolean
+  description?: string
+  priority?: 'low' | 'medium' | 'high'
+  constraints?: {
+    maxTrainingTime?: number
+    memoryLimit?: number
+    accuracyThreshold?: number
+    realTimeCapability?: boolean
+    maxModels?: number
   }
-  requirements: {
-    accuracy: 'high' | 'medium' | 'low'
-    speed: 'high' | 'medium' | 'low'
-    interpretability: 'high' | 'medium' | 'low'
-    scalability: 'high' | 'medium' | 'low'
+  requirements?: {
+    accuracy?: 'high' | 'medium' | 'low'
+    speed?: 'high' | 'medium' | 'low'
+    interpretability?: 'high' | 'medium' | 'low'
+    scalability?: 'high' | 'medium' | 'low'
   }
 }
 
@@ -217,7 +222,7 @@ export interface StreamingPrediction {
   prediction: number
   confidence: number
   processingTime: number
-  dataQuality?: Record<string, unknown>
+  dataQuality?: DataQualityMetrics
   modelVersion: string
 }
 
@@ -234,6 +239,7 @@ export interface DataStream {
  * 模型选择
  */
 export interface ModelSelection {
+  reasoning?: string
   selectedModel: string
   alternativeModels: string[]
   confidence: number
@@ -244,15 +250,20 @@ export interface ModelSelection {
  * 任务信息
  */
 export interface TaskInfo {
-  ensemble: {
+  ensemble?: {
     predict: (data: PredictionData, horizon?: number) => Promise<PredictionResult>
-    train: (data: PredictionData) => Promise<void>
+    train: (data: PredictionData) => Promise<unknown>
     getModelInfo: () => { modelId: string }
     detectConceptDrift?: (data: PredictionData) => Promise<{ detected: boolean; driftType: string } | undefined>
   }
-  config: Record<string, unknown>
-  data: PredictionData
-  modelSelection: ModelSelection
+  predictor?: {
+    predict: (data: PredictionData, horizon?: number) => Promise<PredictionResult>
+    train: (data: PredictionData) => Promise<unknown>
+    getModelInfo: () => { modelId: string }
+  }
+  config: PredictionConfig | Record<string, unknown>
+  data?: PredictionData
+  modelSelection?: ModelSelection
   createdAt: number
   lastUpdated?: number
 }
@@ -262,8 +273,8 @@ export interface TaskInfo {
  */
 export interface Predictor {
   predict: (data: PredictionData, horizon?: number) => Promise<PredictionResult>
-  train: (data: PredictionData) => Promise<void>
-  getModelInfo: () => { modelId: string }
+  train: (data: PredictionData) => Promise<unknown>
+  getModelInfo: () => { modelId: string; algorithm?: string; isTrained?: boolean }
 }
 
 /**
@@ -328,6 +339,7 @@ export interface KeyInsight {
  * 模型拟合评估
  */
 export interface ModelFitAssessment {
+  modelId?: string
   goodnessOfFit: number
   residualAnalysis: ResidualAnalysis
   stabilityMetrics: StabilityMetrics
@@ -394,4 +406,189 @@ export interface ModelSelection {
   expectedPerformance: number
   confidence: number
   fittingTime: number
+}
+
+
+// ===== 专项预测引擎所需类型（按 specialized-engines/adaptive-ensemble 用法推导） =====
+
+export type DataPoint = PredictionDataPoint
+export type PredictorConfig = PredictionConfig
+
+// 训练结果
+export interface TrainingResult {
+  modelId: string
+  algorithm: string
+  parameters: Record<string, unknown>
+  trainingTime: number
+  trainingScore: number
+  validationScore: number
+  featureImportance?: Record<string, number>
+  trainingMetrics: Record<string, number>
+  timestamp: number
+}
+
+// 季节性分析
+export interface SeasonalityAnalysis {
+  detected: boolean
+  period: number
+  strength: number
+  type: string
+  confidence: number
+}
+
+// 概率预测（含不确定性）
+export interface ProbabilisticForecast {
+  pointForecast: number[]
+  uncertainty: number[]
+  predictionIntervals: Array<{ lower: number; upper: number }>
+  distribution: string
+  confidence: number
+}
+
+// 异常点
+export interface Anomaly {
+  index: number
+  timestamp: number
+  value: number
+  score: number
+  type: string
+  severity: string | number
+}
+
+// 异常检测报告
+export interface AnomalyReport {
+  anomalies: Anomaly[]
+  totalCount: number
+  severity: number
+  detectionMethod: string
+  confidence: number
+  timestamp: number
+}
+
+// 异常解释
+export interface AnomalyExplanation {
+  anomalyIndex: number
+  explanation: string
+  contributingFactors: string[]
+  recommendedAction: string
+  context: Record<string, unknown>
+}
+
+// 因果图
+export interface CausalGraphEdge {
+  from: string
+  to: string
+  weight: number
+  direction: string
+  confidence: number
+}
+
+export interface CausalGraph {
+  nodes: string[]
+  edges: CausalGraphEdge[]
+  directionality: string
+  confidence: number
+  methodology: string
+  timestamp: number
+}
+
+// 干预模拟
+export interface Intervention {
+  type: string
+  baselineValue?: number
+  magnitude?: number
+  targetFeature?: string
+}
+
+export interface CounterfactualResult {
+  intervention: string
+  baseline: number
+  counterfactual: number
+  effectSize: number
+  confidence: number
+  methodology: string
+  assumptions: string[]
+}
+
+// 自适应集成相关
+export interface PerformanceHistory {
+  timestamp: number
+  accuracy?: number
+  latency?: number
+  score?: number
+  errorRate?: number
+  [key: string]: unknown
+}
+
+export interface DataDriftMetrics {
+  isDrifted: boolean
+  driftScore: number
+  severity?: string
+  featureDrift?: Record<string, number>
+  detectionMethod?: string
+  timestamp?: number
+}
+
+export interface DriftDetection {
+  detected: boolean
+  driftType: string
+  driftMagnitude: number
+  pValue?: number
+  detectionMethod?: string
+  confidenceInterval?: number[]
+  severity?: string
+  metrics?: DataDriftMetrics
+  timestamp?: number
+}
+
+// 集成权重自适应结果
+export interface UpdatedWeights {
+  weights: number[]
+  adaptationReason: string
+  performanceGain: number
+  timestamp: number
+}
+
+
+// 数据质量指标（监控面板用）
+export interface DataQualityMetrics {
+  overallScore: number
+  completeness: number
+  validity: number
+  consistency: number
+  timeliness: number
+  anomalyCount?: number
+  missingPatterns?: Record<string, number>
+}
+
+// 漂移告警
+export interface DriftAlert {
+  id: string
+  type: string
+  severity: 'info' | 'warning' | 'error' | 'critical'
+  message: string
+  timestamp: number
+  metrics?: DataDriftMetrics
+}
+
+
+// 模型选择分析辅助类型
+export interface StabilityMetrics {
+  variance: number
+  coefficientOfVariation: number
+  consistencyScore: number
+}
+
+export interface BiasVarianceTradeoff {
+  bias: number
+  variance: number
+  totalError: number
+  recommendation?: string
+}
+
+export interface ResidualAnalysis {
+  mean: number
+  standardDeviation: number
+  autocorrelation?: number[]
+  normallyDistributed: boolean
 }

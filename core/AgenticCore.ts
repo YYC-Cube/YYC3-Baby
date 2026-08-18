@@ -81,12 +81,13 @@ export interface Subtask {
 }
 
 export interface SubtaskResult {
-  success: boolean
+  success?: boolean
   data?: unknown
   predictions?: PredictionResult[]
   modelSelection?: ModelSelection
   evaluation?: EvaluationResult
   preprocessing?: PreprocessingResult
+  optimization?: { performanceGain?: number; [key: string]: unknown }
   error?: Error
   metadata?: Record<string, unknown>
 }
@@ -101,19 +102,19 @@ export interface EvaluationResult {
 }
 
 export interface PreprocessingResult {
-  processedDataCount: number
-  featuresExtracted: number
-  missingValuesHandled: number
-  outliersDetected: number
-  transformationsApplied: string[]
+  processedDataCount?: number
+  featuresExtracted?: number
+  missingValuesHandled?: number
+  outliersDetected?: number
+  transformationsApplied?: string[]
 }
 
 export interface AgentContext {
   sessionId: string
   userId: string
   workspaceId?: string
-  environment: 'web' | 'mobile' | 'desktop' | 'api'
-  permissions: string[]
+  environment?: 'web' | 'mobile' | 'desktop' | 'api'
+  permissions?: string[]
   conversationHistory: ConversationMessage[]
   workingMemory: Record<string, WorkingMemoryItem>
   userPreferences: UserPreferences
@@ -147,6 +148,7 @@ export interface TaskMetrics {
   resourceUsage: ResourceUsage
   qualityScore?: number
   userSatisfaction?: number
+  error?: unknown
 }
 
 export interface ResourceUsage {
@@ -445,10 +447,10 @@ export class AgenticCore extends EventEmitter {
     // 初始化子系统
     this.contextManager = new ContextManager()
     this.goalManager = new GoalManager()
-    this.learningSystem = new LearningSystem({ enabled: this.config.learningEnabled })
+    this.learningSystem = new LearningSystem({ enabled: this.config.learningEnabled ?? true })
     this.orchestrator = new TaskOrchestrator({
-      maxConcurrency: this.config.maxConcurrentTasks,
-      defaultTimeout: this.config.defaultTimeout
+      maxConcurrency: this.config.maxConcurrentTasks ?? 5,
+      defaultTimeout: this.config.defaultTimeout ?? 60000
     })
 
     // 设置事件监听
@@ -513,13 +515,13 @@ export class AgenticCore extends EventEmitter {
       }
 
     } catch (error) {
-      this.log('error', 'Failed to process input', { error: error.message, input: input.text })
+      this.log('error', 'Failed to process input', { error: error instanceof Error ? error.message : String(error), input: input.text })
       this.emit('error', error)
 
       return {
         taskId: '',
         status: 'rejected',
-        message: `处理失败: ${error.message}`
+        message: `处理失败: ${error instanceof Error ? error.message : String(error)}`
       }
     }
   }
@@ -857,7 +859,8 @@ export class AgenticCore extends EventEmitter {
   private async processNextTask(): Promise<void> {
     if (this.activeTasks.size >= this.config.maxConcurrentTasks) return
 
-    const task = this.taskQueue.shift()
+    const task = this.taskQueue.shift()!
+    if (!task) return
     if (!task) return
 
     this.state = AgentState.EXECUTING
@@ -866,10 +869,10 @@ export class AgenticCore extends EventEmitter {
     try {
       await this.executeTask(task)
     } catch (error) {
-      this.log('error', 'Task execution failed', { taskId: task.id, error: error.message })
+      this.log('error', 'Task execution failed', { taskId: task.id, error: error instanceof Error ? error.message : String(error) })
       task.status = 'failed'
       task.metrics.endTime = Date.now()
-      task.metrics.error = error.message
+      task.metrics.error = error instanceof Error ? error.message : String(error)
       this.emit('taskFailed', { task, error })
     } finally {
       this.state = AgentState.IDLE
@@ -905,13 +908,13 @@ export class AgenticCore extends EventEmitter {
 
       } catch (error) {
         subtask.status = 'failed'
-        subtask.error = error.message
+        subtask.error = error instanceof Error ? error.message : String(error)
         subtask.actualTime = Date.now() - subtaskStartTime
 
         this.log('error', 'Subtask failed', {
           taskId: task.id,
           subtaskId: subtask.id,
-          error: error.message
+          error: error instanceof Error ? error.message : String(error)
         })
 
         // 决定是否继续执行其他子任务
@@ -954,9 +957,9 @@ export class AgenticCore extends EventEmitter {
       case 'data_preprocessing':
         return this.executeDataPreprocessing(subtask, task)
       case 'model_selection':
-        return this.executeModelSelection(subtask, task)
+        return { success: true, modelSelection: await this.executeModelSelection(subtask, task) }
       case 'prediction':
-        return this.executePrediction(subtask, task)
+        return { success: true, predictions: await this.executePrediction(subtask, task) }
       case 'evaluation':
         return this.executeEvaluation(subtask, task)
       case 'optimization':
@@ -1057,7 +1060,7 @@ export class AgenticCore extends EventEmitter {
 
     return {
       success: true,
-      optimization: optimizationResult
+      optimization: optimizationResult as unknown as SubtaskResult['optimization']
     }
   }
 
@@ -1136,12 +1139,9 @@ export class AgenticCore extends EventEmitter {
       failedTasks: this.completedTasks.filter(t => t.status === 'failed').length,
       averageExecutionTime: this.calculateAverageExecutionTime(),
       successRate: totalTasks > 0 ? successfulTasks / totalTasks : 0,
-      memoryUsage: typeof process !== 'undefined' && process.memoryUsage ? process.memoryUsage() : { 
-        rss: 0, 
-        heapTotal: 0, 
-        heapUsed: 0, 
-        external: 0 
-      },
+      memoryUsage: (typeof process !== 'undefined' && process.memoryUsage
+        ? process.memoryUsage()
+        : ({ rss: 0, heapTotal: 0, heapUsed: 0, external: 0 } as NodeJS.MemoryUsage)),
       performanceMetrics: this.collectPerformanceMetrics(),
       learningProgress: this.learningSystem.getProgress()
     }
@@ -1194,7 +1194,7 @@ export class AgenticCore extends EventEmitter {
    */
   private setupEventListeners(): void {
     this.on('error', (error) => {
-      this.log('error', 'Agent error', { error: error.message })
+      this.log('error', 'Agent error', { error: error instanceof Error ? error.message : String(error) })
     })
 
     this.on('taskCompleted', (task) => {
