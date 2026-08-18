@@ -620,3 +620,5 @@ backup/
 # "Words Initiate Quadrants, Language Serves as Core for the Future"
 # "All things converge in the cloud pivot; Deep stacks ignite a new era of intelligence"
 data/
+.secrets-backup/
+# 密钥备份目录严禁入库
