@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
-import { type Schedule, type ScheduleType, type ScheduleFormData, getScheduleColor } from "@/types/schedule"
+import { type Schedule, type ScheduleFormData, type ScheduleType, getScheduleColor } from "@/types/schedule"
+import { useCallback, useEffect, useState } from "react"
 
 interface UseScheduleReturn {
   schedules: Schedule[]
@@ -99,6 +99,8 @@ export function useSchedule(): UseScheduleReturn {
     setIsLoading(false)
   }, [])
 
+  // 异步契约：保持 async 签名供调用方统一 await（内部同步持久化）
+  // eslint-disable-next-line @typescript-eslint/require-await
   const addSchedule = useCallback(async (data: ScheduleFormData, childId: string): Promise<Schedule> => {
     const newSchedule: Schedule = {
       id: `schedule-${Date.now()}`,
@@ -126,6 +128,8 @@ export function useSchedule(): UseScheduleReturn {
     return newSchedule
   }, [])
 
+  // 异步契约：保持 async 签名供调用方统一 await（内部同步持久化）
+  // eslint-disable-next-line @typescript-eslint/require-await
   const updateSchedule = useCallback(async (id: string, data: Partial<ScheduleFormData>): Promise<Schedule> => {
     let updatedSchedule: Schedule | null = null
 
@@ -155,6 +159,8 @@ export function useSchedule(): UseScheduleReturn {
     return updatedSchedule
   }, [])
 
+  // 异步契约：保持 async 签名供调用方统一 await（内部同步持久化）
+  // eslint-disable-next-line @typescript-eslint/require-await
   const deleteSchedule = useCallback(async (id: string): Promise<void> => {
     setSchedules((prev) => {
       const updated = prev.filter((s) => s.id !== id)
@@ -163,6 +169,8 @@ export function useSchedule(): UseScheduleReturn {
     })
   }, [])
 
+  // 异步契约：保持 async 签名供调用方统一 await（内部同步持久化）
+  // eslint-disable-next-line @typescript-eslint/require-await
   const toggleComplete = useCallback(async (id: string): Promise<void> => {
     setSchedules((prev) => {
       const updated = prev.map((s) => (s.id === id ? { ...s, completed: !s.completed, updatedAt: new Date() } : s))
@@ -198,6 +206,8 @@ export function useSchedule(): UseScheduleReturn {
     [schedules],
   )
 
+  // 异步契约：保持 async 签名供调用方统一 await（内部同步生成日程）
+  // eslint-disable-next-line @typescript-eslint/require-await
   const generateAISchedule = useCallback(
     async (childId: string, preferences: AISchedulePreferences): Promise<Schedule[]> => {
       setIsLoading(true)

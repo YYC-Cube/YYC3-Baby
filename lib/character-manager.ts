@@ -13,7 +13,7 @@
 export interface Child {
   id: string
   name?: string
-  gender?: 'male' | 'female' | string
+  gender?: string
   birthday?: Date
   // 移除了 any 类型的索引签名，使用更具体的可选属性
   avatarUrl?: string

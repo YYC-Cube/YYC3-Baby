@@ -10,8 +10,7 @@
  */
 
 import type { NextRequest } from 'next/server'
-import type { Child, GrowthRecord, AIConversation } from './database'
-import type { ApiResponse } from './common'
+import type { Child, GrowthRecord } from './database'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 
@@ -115,7 +114,7 @@ export type ApiMiddleware = (
   context: ApiMiddlewareContext
 ) => Promise<NextRequest | Response>
 
-export interface ApiRouteHandler<T = unknown> {
+export interface ApiRouteHandler {
   GET?: (request: NextRequest, context: ApiMiddlewareContext) => Promise<Response>
   POST?: (request: NextRequest, context: ApiMiddlewareContext) => Promise<Response>
   PUT?: (request: NextRequest, context: ApiMiddlewareContext) => Promise<Response>

@@ -132,7 +132,11 @@ export default function BooksPage() {
                 <h3 className="text-xl font-bold text-white mb-1">{books[0]?.title || ""}</h3>
                 <p className="text-white/80 text-sm mb-3">{books[0]?.author || ""}</p>
                 <button
-                  onClick={() => { books[0] && handleBookSelect(books[0].id); }}
+                  onClick={() => {
+                    if (books[0]) {
+                      handleBookSelect(books[0].id);
+                    }
+                  }}
                   className="flex items-center gap-2 px-4 py-2 bg-white/90 rounded-full text-amber-600 font-medium hover:bg-white transition-colors"
                 >
                   <i className="ri-play-circle-line text-lg" />

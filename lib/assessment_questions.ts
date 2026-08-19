@@ -2342,7 +2342,7 @@ export function calculateDimensionScore(answers: Record<string, number>, questio
 }
 
 // 生成评估建议
-export function generateRecommendations(dimensionScores: Record<string, number>, stageId: string): string[] {
+export function generateRecommendations(dimensionScores: Record<string, number>, _stageId: string): string[] {
   const recommendations: string[] = []
   const threshold = { excellent: 85, good: 70, concern: 50 }
 

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useGrowthStage } from "@/hooks/useGrowthStage"
 import { AGE_STAGES } from "@/lib/growth_stages"
-import type { AgeStageConfig } from "@/types/growth"
 
 interface StageIndicatorProps {
   birthDate?: Date
@@ -16,14 +15,14 @@ interface StageIndicatorProps {
 
 export default function StageIndicator({
   birthDate,
-  childName,
+  childName: _childName,
   compact = false,
-  showMilestones = false,
+  showMilestones: _showMilestones = false,
   showRecommendations = false,
 }: StageIndicatorProps) {
   const {
     currentStage,
-    exactAge,
+    exactAge: _exactAge,
     formatAge,
     milestoneProgress,
     approachingNextStage,

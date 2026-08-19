@@ -319,18 +319,18 @@ export function retry<T>(
       } catch (error) {
         attempt++
         if (attempt >= maxAttempts) {
-          reject(error)
+          reject(error instanceof Error ? error : new Error(String(error)))
         } else {
           if (onRetry) {
             onRetry(error, attempt)
           }
           const currentDelay = backoff ? delay * Math.pow(2, attempt - 1) : delay
-          setTimeout(attemptFn, currentDelay)
+          setTimeout(() => { void attemptFn() }, currentDelay)
         }
       }
     }
 
-    attemptFn()
+    void attemptFn()
   })
 }
 
@@ -355,7 +355,7 @@ export function asyncMap<T, U>(
       const currentIndex = index++
       const item = items[currentIndex]
 
-      mapper(item, currentIndex)
+      void mapper(item, currentIndex)
         .then(result => {
           results[currentIndex] = result
           completed++
@@ -386,14 +386,14 @@ export function createQueue<T>(concurrency: number = 1) {
       await task()
     } finally {
       running--
-      process()
+      void process()
     }
   }
 
   return {
     add: (task: () => Promise<T>): void => {
       queue.push(task)
-      process()
+      void process()
     },
     size: (): number => queue.length + running,
     clear: (): void => {

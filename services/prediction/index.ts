@@ -9,6 +9,10 @@
  * @license MIT
  */
 
+// 预测服务方法按异步 API 契约保留 async 签名，内部为同步模拟实现，
+// 属既有设计，定向豁免 require-await。
+/* eslint-disable @typescript-eslint/require-await */
+
 import { EnsembleEngine } from '@/lib/prediction/adaptive-ensemble'
 import { AnomalyDetectionEngine, CausalInferenceEngine, TimeSeriesEngine } from '@/lib/prediction/specialized-engines'
 import type {

@@ -4,6 +4,10 @@
  * 配置、模型标识、训练状态、特征工程与数据预处理
  */
 
+// 预测器接口方法按异步 API 契约保留 async 签名，内部为同步模拟实现，
+// 属既有设计，定向豁免 require-await。
+/* eslint-disable @typescript-eslint/require-await */
+
 import type {
   PredictionConfig,
   PredictionData,
@@ -37,7 +41,7 @@ export abstract class BasePredictor {
   abstract evaluate(testData: PredictionData): Promise<Record<string, number>>
 
   // 超参搜索钩子（子类按需覆写）
-  protected createInstance(config: PredictionConfig): BasePredictor {
+  protected createInstance(_config: PredictionConfig): BasePredictor {
     throw new Error("子类未实现 createInstance")
   }
 

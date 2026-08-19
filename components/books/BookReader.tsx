@@ -45,7 +45,11 @@ export default function BookReader({
       } else if (e.key === "Escape") {
         onClose()
       } else if (e.key === "p") {
-        isPlaying ? onPause() : onPlay()
+        if (isPlaying) {
+          onPause()
+        } else {
+          onPlay()
+        }
       }
     }
 
@@ -222,7 +226,13 @@ export default function BookReader({
 
               {/* 播放/暂停 */}
               <button
-                onClick={() => { isPlaying ? onPause() : onPlay(); }}
+                onClick={() => {
+                  if (isPlaying) {
+                    onPause()
+                  } else {
+                    onPlay()
+                  }
+                }}
                 className="p-4 rounded-full bg-linear-to-r from-amber-400 to-orange-400 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
               >
                 <i className={`${isPlaying ? "ri-pause-line" : "ri-play-line"} text-3xl`} />
@@ -274,7 +284,11 @@ export default function BookReader({
 
       {/* 左右翻页热区 */}
       <button
-        onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
+        onClick={() => {
+          if (currentPage > 1) {
+            onPageChange(currentPage - 1)
+          }
+        }}
         className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-64 flex items-center justify-start pl-2 opacity-0 hover:opacity-100 transition-opacity"
       >
         <div className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg">
@@ -283,7 +297,11 @@ export default function BookReader({
       </button>
 
       <button
-        onClick={() => currentPage < book.pages.length && onPageChange(currentPage + 1)}
+        onClick={() => {
+          if (currentPage < book.pages.length) {
+            onPageChange(currentPage + 1)
+          }
+        }}
         className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-64 flex items-center justify-end pr-2 opacity-0 hover:opacity-100 transition-opacity"
       >
         <div className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg">

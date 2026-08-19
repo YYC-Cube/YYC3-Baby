@@ -29,7 +29,7 @@ interface DevelopmentCurveChartProps {
 export default function DevelopmentCurveChart({
   dataPoints,
   metricName = "身高",
-  childName = "宝宝",
+  childName: _childName = "宝宝",
   childData,
   standardData,
   dimension,
@@ -40,7 +40,7 @@ export default function DevelopmentCurveChart({
   const actualChildData = childData || dataPoints || []
   const actualTitle = title || `${metricName}发展曲线`
   const actualUnit = unit || "cm"
-  const actualDimension = dimension || metricName
+  const _actualDimension = dimension || metricName
   const [hoveredPoint, setHoveredPoint] = useState<DataPoint | null>(null)
   const [showPercentiles, setShowPercentiles] = useState(true)
 

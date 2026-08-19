@@ -190,7 +190,7 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
           {/* 时间线轴 */}
           <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-linear-to-b from-blue-300 via-purple-300 to-pink-300" />
 
-          {Object.entries(groupedByMonth).map(([month, monthEvents], monthIndex) => (
+          {Object.entries(groupedByMonth).map(([month, monthEvents], _monthIndex) => (
             <div key={month} className="mb-8">
               {/* 月份标签 */}
               <div className="relative flex items-center mb-4">

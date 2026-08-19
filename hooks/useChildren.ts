@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
 import { db, type Child } from "@/lib/db/client"
+import { useCallback, useEffect, useState } from "react"
 
 interface UseChildrenReturn {
   children: Child[]
@@ -41,7 +41,7 @@ export function useChildren(userId?: string): UseChildrenReturn {
   }, [userId])
 
   useEffect(() => {
-    loadChildren()
+    void loadChildren()
   }, [loadChildren])
 
   const addChild = useCallback(async (data: Omit<Child, "id" | "created_at">): Promise<Child> => {

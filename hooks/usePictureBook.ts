@@ -282,7 +282,7 @@ export function usePictureBook(): UsePictureBookReturn {
   const [currentBook, setCurrentBook] = useState<PictureBook | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading] = useState(false)
   const [readingProgress, setReadingProgress] = useState<Map<string, ReadingProgress>>(new Map())
 
   const synthesisRef = useRef<SpeechSynthesis | null>(null)

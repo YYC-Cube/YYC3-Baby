@@ -18,7 +18,7 @@ export default function ChildrenPage() {
   const [editingChild, setEditingChild] = useState<Child | null>(null)
 
   useEffect(() => {
-    loadChildren()
+    void loadChildren()
   }, [])
 
   const loadChildren = async () => {
@@ -212,7 +212,7 @@ export default function ChildrenPage() {
                 if (data.current_stage !== undefined) createData.current_stage = data.current_stage
                 await db.create<Child>("children", createData)
               }
-              loadChildren()
+              void loadChildren()
               setShowAddModal(false)
               setEditingChild(null)
             }}

@@ -127,6 +127,8 @@ export default function AIChatPage() {
     }
   ]
 
+  // 异步契约：保持 async 签名供事件处理器统一调用（内部 setTimeout 模拟延迟）
+  // eslint-disable-next-line @typescript-eslint/require-await
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return
 

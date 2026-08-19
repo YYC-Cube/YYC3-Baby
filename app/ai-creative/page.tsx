@@ -73,7 +73,7 @@ export default function AICreativePage() {
     setActiveStoryId(story.id)
     setStoryTitle("")
     setStoryKeywords("")
-    handleContinueStory(story.id)
+    void handleContinueStory(story.id)
   }
 
   // 续写故事

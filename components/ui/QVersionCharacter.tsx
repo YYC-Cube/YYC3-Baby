@@ -88,7 +88,7 @@ export default function QVersionCharacter({
   const currentSize = sizeConfig[size]
 
   // 性别变换动画
-  const handleGenderToggle = async () => {
+  const handleGenderToggle = () => {
     if (!interactive || !targetChild) return
 
     setIsAnimating(true)

@@ -39,7 +39,7 @@ export default function HomePage() {
       ])
       setStats({ records, milestones, assessments })
     }
-    loadStats()
+    void loadStats()
   }, [currentChild])
 
   // 根据用户性别更新角色图片

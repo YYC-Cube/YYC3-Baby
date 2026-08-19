@@ -19,7 +19,7 @@ export function DatabaseInitializer() {
   const [migrationProgress, setMigrationProgress] = useState<{ success: boolean; message: string } | null>(null)
 
   useEffect(() => {
-    initializeDatabase()
+    void initializeDatabase()
   }, [])
 
   const initializeDatabase = async () => {

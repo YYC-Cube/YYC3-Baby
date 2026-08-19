@@ -10,22 +10,17 @@ import { IntelligentPredictionService } from '../services/prediction/index'
 import { DynamicModelSelector } from '../services/prediction/model-selector'
 import { PredictionQualityMonitor } from '../services/prediction/quality-monitor'
 import type {
-  PredictionData,
-  PredictionTask,
-  PredictionResult,
-  PredictionConfig,
   ModelSelection,
-  PredictionInsights
+  PredictionResult
 } from '../types/prediction/common'
 
-export enum AgentState {
-  IDLE = 'idle',
-  PLANNING = 'planning',
-  EXECUTING = 'executing',
-  REFLECTING = 'reflecting',
-  LEARNING = 'learning',
-  ERROR = 'error'
-}
+// AgentState 枚举已抽至 agent-state.ts（客户端运行时需要，避免整栈进客户端包）
+export { AgentState } from './agent-state'
+import { AgentState } from './agent-state'
+
+// 以下公共方法为"同步实现的 async 契约"：作为对外 Promise API 保留签名，
+// 内部无 await 属既有设计，定向豁免 require-await（见 TYPECHECK_BASELINE.md）。
+/* eslint-disable @typescript-eslint/require-await */
 
 export interface AgentTask {
   id: string
@@ -87,7 +82,7 @@ export interface SubtaskResult {
   modelSelection?: ModelSelection
   evaluation?: EvaluationResult
   preprocessing?: PreprocessingResult
-  optimization?: { performanceGain?: number; [key: string]: unknown }
+  optimization?: { performanceGain?: number;[key: string]: unknown }
   error?: Error
   metadata?: Record<string, unknown>
 }
@@ -468,10 +463,10 @@ export class AgenticCore extends EventEmitter {
       this.log('info', 'Processing user input', { input: input.text, timestamp: input.timestamp })
 
       // 1. 意图识别
-      const intent = await this.analyzeIntent(input)
+      const intent = this.analyzeIntent(input)
 
       // 2. 上下文更新
-      await this.contextManager.updateContext(intent.context, input)
+      void this.contextManager.updateContext(intent.context, input)
 
       // 3. 目标生成与分解
       const goal = await this.goalManager.createGoal(intent)
@@ -511,7 +506,7 @@ export class AgenticCore extends EventEmitter {
         message: `已接受任务: ${task.goal}`,
         estimatedTime: this.estimateCompletionTime(task),
         nextSteps: this.getNextStepsPreview(subtasks),
-        alternatives: await this.generateAlternatives(task)
+        alternatives: this.generateAlternatives(task)
       }
 
     } catch (error) {
@@ -529,7 +524,7 @@ export class AgenticCore extends EventEmitter {
   /**
    * 意图分析
    */
-  private async analyzeIntent(input: UserInput): Promise<AnalyzedIntent> {
+  private analyzeIntent(input: UserInput): AnalyzedIntent {
     const text = input.text.toLowerCase()
 
     // 基于关键词的简单意图识别
@@ -800,7 +795,7 @@ export class AgenticCore extends EventEmitter {
   /**
    * 生成替代方案
    */
-  private async generateAlternatives(task: AgentTask): Promise<AlternativeOption[]> {
+  private generateAlternatives(task: AgentTask): AlternativeOption[] {
     const alternatives: AlternativeOption[] = []
 
     // 快速方案
@@ -846,9 +841,9 @@ export class AgenticCore extends EventEmitter {
    * 启动任务处理循环
    */
   private startTaskProcessingLoop(): void {
-    setInterval(async () => {
+    setInterval(() => {
       if (this.state === AgentState.IDLE && this.taskQueue.length > 0) {
-        await this.processNextTask()
+        void this.processNextTask()
       }
     }, 1000)
   }
@@ -956,9 +951,9 @@ export class AgenticCore extends EventEmitter {
       case 'data_preprocessing':
         return this.executeDataPreprocessing(subtask, task)
       case 'model_selection':
-        return { success: true, modelSelection: await this.executeModelSelection(subtask, task) }
+        return { success: true, modelSelection: this.executeModelSelection(subtask, task) }
       case 'prediction':
-        return { success: true, predictions: await this.executePrediction(subtask, task) }
+        return { success: true, predictions: this.executePrediction(subtask, task) }
       case 'evaluation':
         return this.executeEvaluation(subtask, task)
       case 'optimization':
@@ -971,7 +966,7 @@ export class AgenticCore extends EventEmitter {
   /**
    * 执行数据预处理
    */
-  private async executeDataPreprocessing(subtask: Subtask, task: AgentTask): Promise<SubtaskResult> {
+  private executeDataPreprocessing(_subtask: Subtask, _task: AgentTask): SubtaskResult {
     const preprocessingResult: DataPreprocessingResult = {
       processed: true,
       featuresExtracted: Math.floor(Math.random() * 50) + 10,
@@ -988,7 +983,7 @@ export class AgenticCore extends EventEmitter {
   /**
    * 执行模型选择
    */
-  private async executeModelSelection(subtask: Subtask, task: AgentTask): Promise<ModelSelection> {
+  private executeModelSelection(_subtask: Subtask, _task: AgentTask): ModelSelection {
     // 模拟模型选择过程
     const availableModels = ['adaptive_ensemble', 'time_series_exponential_smoothing', 'statistical_anomaly_detection']
 
@@ -1005,7 +1000,7 @@ export class AgenticCore extends EventEmitter {
   /**
    * 执行预测
    */
-  private async executePrediction(subtask: Subtask, task: AgentTask): Promise<PredictionResult[]> {
+  private executePrediction(_subtask: Subtask, _task: AgentTask): PredictionResult[] {
     // 模拟预测结果
     const numPredictions = Math.floor(Math.random() * 10) + 5
     const results: PredictionResult[] = []
@@ -1028,7 +1023,7 @@ export class AgenticCore extends EventEmitter {
   /**
    * 执行评估
    */
-  private async executeEvaluation(subtask: Subtask, task: AgentTask): Promise<SubtaskResult> {
+  private executeEvaluation(_subtask: Subtask, _task: AgentTask): SubtaskResult {
     const evaluationResult: EvaluationResultExtended = {
       accuracy: 0.85 + Math.random() * 0.1,
       precision: 0.8 + Math.random() * 0.15,
@@ -1048,7 +1043,7 @@ export class AgenticCore extends EventEmitter {
   /**
    * 执行优化
    */
-  private async executeOptimization(subtask: Subtask, task: AgentTask): Promise<SubtaskResult> {
+  private executeOptimization(_subtask: Subtask, _task: AgentTask): SubtaskResult {
     const optimizationResult: OptimizationResultExtended = {
       optimized: true,
       improvement: Math.random() * 0.2,
@@ -1162,10 +1157,10 @@ export class AgenticCore extends EventEmitter {
    */
   private collectPerformanceMetrics(): PerformanceMetrics {
     // 兼容浏览器环境的内存使用率计算
-    const memoryUsage = typeof process !== 'undefined' && process.memoryUsage 
-      ? process.memoryUsage() 
+    const memoryUsage = typeof process !== 'undefined' && process.memoryUsage
+      ? process.memoryUsage()
       : { heapUsed: 0, heapTotal: 1 }; // 避免除零错误
-    
+
     return {
       cpuUsage: typeof process !== 'undefined' && process.cpuUsage ? process.cpuUsage().user : 0,
       memoryUsage: memoryUsage.heapUsed / memoryUsage.heapTotal,
@@ -1303,7 +1298,7 @@ class GoalManager {
     return `完成${intent.type}相关的智能任务`
   }
 
-  private generateKeyResults(intent: AnalyzedIntent): KeyResult[] {
+  private generateKeyResults(_intent: AnalyzedIntent): KeyResult[] {
     return [
       {
         id: 'kr_completion',
@@ -1325,7 +1320,7 @@ class GoalManager {
     return intent.confidence * 100
   }
 
-  private defineSuccessCriteria(intent: AnalyzedIntent): SuccessCriteria[] {
+  private defineSuccessCriteria(_intent: AnalyzedIntent): SuccessCriteria[] {
     return [
       {
         id: 'sc_success',

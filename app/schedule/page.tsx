@@ -541,9 +541,9 @@ function AIScheduleGeneratorModal({
 }) {
   const [isGenerating, setIsGenerating] = useState(false)
 
-  const handleGenerate = async () => {
+  const handleGenerate = () => {
     setIsGenerating(true)
-    await onGenerate()
+    onGenerate()
     setIsGenerating(false)
   }
 

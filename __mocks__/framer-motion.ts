@@ -12,6 +12,10 @@
 import { ReactNode } from 'react'
 import React from 'react'
 
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+// 以下解构为 mock 的合法模式：剥离动画属性后经 ...rest 透传 DOM 属性，
+// 变量本身不用于渲染，豁免 no-unused-vars；forwardRef 泛型用 any 保持 mock 兼容性。
+
 // 创建一个简单的React组件工厂
 const createMotionComponent = (tag: string) => {
   const MotionComponent = React.forwardRef<any, any>(({ children, ...props }, ref) => {

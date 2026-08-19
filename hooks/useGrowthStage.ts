@@ -125,7 +125,7 @@ export function useGrowthStage(initialBirthDate: Date | undefined): UseGrowthSta
   // 监听阶段变化
   useEffect(() => {
     const manager = managerRef.current
-    const handleStageChange = (stage: string) => {
+    const handleStageChange = (_stage: string) => {
       updateStageData()
     }
 

@@ -3,19 +3,21 @@
  * 提供动态模型选择、权重自适应和概念漂移检测功能
  */
 
-import { BasePredictor } from './base-predictor'
-import { TimeSeriesEngine } from './specialized-engines'
 import type {
-  PredictionData,
-  TrainingResult,
-  PredictionResult,
-  PerformanceHistory,
   DataDriftMetrics,
-  UpdatedWeights,
   DriftDetection,
+  PerformanceHistory,
+  PredictionData,
+  PredictionResult,
   PredictorConfig,
-  DataPoint
+  TrainingResult,
+  UpdatedWeights
 } from '@/types/prediction/common'
+import { BasePredictor } from './base-predictor'
+
+// 集成引擎方法按异步 API 契约保留 async 签名，内部为同步模拟实现，
+// 属既有设计，定向豁免 require-await。
+/* eslint-disable @typescript-eslint/require-await */
 
 /**
  * 集成引擎基类
@@ -207,7 +209,7 @@ export class EnsembleEngine extends BasePredictor {
     }
   }
 
-  protected async trainMetaLearner(data: PredictionData): Promise<void> {
+  protected async trainMetaLearner(_data: PredictionData): Promise<void> {
     // 简化的元学习器训练
     // 在实际应用中，这里应该训练一个元模型来学习如何最佳地组合基础预测器
     console.log('训练元学习器...')
@@ -396,7 +398,7 @@ export class AdaptiveEnsemble extends EnsembleEngine {
     performanceHistory: PerformanceHistory[],
     dataDrift: DataDriftMetrics
   ): Promise<UpdatedWeights> {
-    const startTime = Date.now()
+    const _startTime = Date.now()
 
     // 基于性能历史调整权重
     const recentPerformance = this.getRecentPerformance(performanceHistory, 5)
@@ -450,14 +452,14 @@ export class AdaptiveEnsemble extends EnsembleEngine {
 
     // 考虑数据漂移的影响
     const driftPenalty = dataDrift.severity === 'high' ? 0.8 :
-                        dataDrift.severity === 'medium' ? 0.9 : 1.0
+      dataDrift.severity === 'medium' ? 0.9 : 1.0
 
     const adjustedScores = scores.map(score => score * driftPenalty)
 
     // 归一化为权重
     const totalScore = adjustedScores.reduce((sum, score) => sum + score, 0)
     return totalScore > 0 ? adjustedScores.map(score => score / totalScore) :
-           adjustedScores.map(() => 1 / adjustedScores.length)
+      adjustedScores.map(() => 1 / adjustedScores.length)
   }
 
   private calculateWeightChange(oldWeights: number[], newWeights: number[]): number {

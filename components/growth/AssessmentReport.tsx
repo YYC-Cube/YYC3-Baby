@@ -13,7 +13,7 @@ interface PDFGeneratorInstance {
 
 // 动态导入PDFGenerator以避免SSR错误
 let PDFGeneratorClass: PDFGeneratorClass | null = null
-import("@/lib/pdf_generator").then(mod => {
+void import("@/lib/pdf_generator").then(mod => {
   PDFGeneratorClass = mod.PDFGenerator
 })
 

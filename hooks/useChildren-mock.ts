@@ -76,7 +76,7 @@ export function useChildrenMock(userId?: string): UseChildrenReturn {
   }, [userId, currentChild])
 
   useEffect(() => {
-    loadChildren()
+    void loadChildren()
   }, [loadChildren])
 
   const addChild = useCallback(async (data: Omit<MockChild, "id" | "created_at">): Promise<MockChild> => {

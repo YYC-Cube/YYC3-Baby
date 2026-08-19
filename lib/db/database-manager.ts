@@ -1,8 +1,11 @@
 // 数据库管理器 - 统一管理数据库连接和数据迁移
 // 支持从localStorage迁移到SQLite，并提供数据访问的统一接口
 
+// 备份/优化方法按异步 API 契约保留 async 签名，内部为同步实现。
+/* eslint-disable @typescript-eslint/require-await */
+
+import { db as localStorageDB, type Assessment, type Child, type GrowthRecord, type Milestone } from "./client"
 import { getDatabase, SQLiteDatabase } from "./sqlite-client"
-import { db as localStorageDB, type Child, type GrowthRecord, type Assessment, type Milestone } from "./client"
 
 export interface DatabaseConfig {
   type: "sqlite" | "localStorage" | "hybrid"
@@ -220,8 +223,8 @@ export class DatabaseManager {
         const defaultPath = backupPath || `./backups/yyc3_database_backup_${timestamp}.db`
 
         // 确保备份目录存在
-        const fs = require("fs")
-        const path = require("path")
+        const { default: fs } = await import("node:fs")
+        const { default: path } = await import("node:path")
         const backupDir = path.dirname(defaultPath)
 
         if (!fs.existsSync(backupDir)) {

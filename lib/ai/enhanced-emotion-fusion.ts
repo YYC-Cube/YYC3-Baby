@@ -3,6 +3,10 @@
  * 集成文本、语音、视觉和生理信号的深度情感分析
  */
 
+// 情感融合方法按异步 API 契约保留 async 签名，内部为同步规则实现，
+// 属既有设计，定向豁免 require-await。
+/* eslint-disable @typescript-eslint/require-await */
+
 export interface EmotionFeatures {
   // 基础情感类型
   primary: "joy" | "sadness" | "anger" | "fear" | "surprise" | "disgust" | "neutral"
@@ -392,7 +396,7 @@ export class EnhancedEmotionFusion {
     activity: string
     context: string
   }): Promise<Partial<EmotionFeatures>> {
-    const { attention, activity, context } = behavioralData
+    const { attention, activity, context: _context } = behavioralData
 
     // 注意力水平映射
     const attentionEmotion = attention > 0.8 ? {
@@ -441,11 +445,11 @@ export class EnhancedEmotionFusion {
     voiceEmotion: Partial<EmotionFeatures> | null,
     visualEmotion: Partial<EmotionFeatures> | null,
     behavioralEmotion: Partial<EmotionFeatures> | null,
-    context?: FusionContext
+    _context?: FusionContext
   ): EmotionFeatures {
     const emotions = [textEmotion, voiceEmotion, visualEmotion, behavioralEmotion].filter(Boolean)
     const weights = [this.EMOTION_WEIGHTS.text, this.EMOTION_WEIGHTS.voice,
-                     this.EMOTION_WEIGHTS.visual, this.EMOTION_WEIGHTS.behavioral]
+    this.EMOTION_WEIGHTS.visual, this.EMOTION_WEIGHTS.behavioral]
 
     if (emotions.length === 0) {
       return this.getNeutralEmotion()

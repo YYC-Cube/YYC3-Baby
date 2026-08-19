@@ -69,13 +69,13 @@ export default function EmailNotification({
       })
 
       if (response.ok) {
-        const result = await response.json()
+        await response.json()
         onNotificationSent({ success: true, message: "邮件发送成功！" })
         setCustomMessage("")
       } else {
         throw new Error("邮件发送失败")
       }
-    } catch (error) {
+    } catch {
       // 模拟成功（用于演示）
       setTimeout(() => {
         onNotificationSent({

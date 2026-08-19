@@ -44,7 +44,11 @@ export default [
       '@typescript-eslint/no-unsafe-argument': 'warn',
       // 悬浮 Promise：多为 UI 事件处理器中的 fire-and-forget，需逐个补 void/.catch
       '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-misused-promises': 'warn',
+      // React 事件属性（onClick 等）传 async 处理器是常见安全模式，豁免 void-return 检查；
+      // 其余（条件分支/函数参数）仍严格检查
+      '@typescript-eslint/no-misused-promises': ['warn', {
+        checksVoidReturn: { attributes: false },
+      }],
       // React Compiler 规则（渲染期 refs/非纯调用）：真实问题但存量 ~90 处，分批修复
       'react-hooks/refs': 'warn',
       'react-hooks/purity': 'warn',

@@ -3,6 +3,10 @@
  * 包含时间序列、异常检测、因果推断等专用预测引擎
  */
 
+// 预测引擎类方法按异步 API 契约保留 async 签名，内部为同步模拟实现，
+// 属既有设计，定向豁免 require-await。
+/* eslint-disable @typescript-eslint/require-await */
+
 import type {
   Anomaly,
   AnomalyExplanation,
@@ -108,9 +112,9 @@ export class TimeSeriesEngine extends BasePredictor {
     const params = this.config.parameters
 
     // 简化版预测逻辑
-    const windowSize = params.windowSize || 12
+    const _windowSize = params.windowSize || 12
     const alpha = Number(params.alpha) || 0.3
-    const beta = Number(params.beta) || 0.1
+    const _beta = Number(params.beta) || 0.1
     const gamma = Number(params.gamma) || 0.1
 
     const predictions: number[] = []
@@ -277,7 +281,7 @@ export class TimeSeriesEngine extends BasePredictor {
     return Math.sin(phase) * this.seasonality.strength
   }
 
-  private async generateTrainingPredictions(data: PredictionData, windowSize: number, alpha: number, beta: number, gamma: number): Promise<number[]> {
+  private async generateTrainingPredictions(data: PredictionData, windowSize: number, _alpha: number, _beta: number, _gamma: number): Promise<number[]> {
     const predictions: number[] = []
     const values = data.data.map(p => p.value)
 
@@ -617,7 +621,7 @@ export class CausalInferenceEngine extends BasePredictor {
     return new CausalInferenceEngine(config)
   }
 
-  async train(data: PredictionData): Promise<TrainingResult> {
+  async train(_data: PredictionData): Promise<TrainingResult> {
     // 因果推断的"训练"主要是学习因果关系
     const startTime = Date.now()
 
@@ -656,7 +660,7 @@ export class CausalInferenceEngine extends BasePredictor {
     }
   }
 
-  async evaluate(testData: PredictionData): Promise<Record<string, number>> {
+  async evaluate(_testData: PredictionData): Promise<Record<string, number>> {
     // 因果推断的评估指标与传统预测不同
     return {
       causalStrength: 0.8,

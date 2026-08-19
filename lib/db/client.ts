@@ -1,6 +1,10 @@
 // 数据库客户端封装
 // 目前使用localStorage模拟，待集成Supabase后替换
 
+// DB 客户端方法按异步 API 契约保留 async 签名（localStorage 同步实现），
+// 属既有设计，定向豁免 require-await。
+/* eslint-disable @typescript-eslint/require-await */
+
 export type StorageKey =
   | "users"
   | "children"
