@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect } from "react"
 import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function Error({
   error,
@@ -10,6 +11,8 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const router = useRouter()
+
   useEffect(() => {
     console.error("[v0] Error:", error)
   }, [error])
@@ -35,7 +38,7 @@ export default function Error({
             重试
           </button>
           <button
-            onClick={() => (window.location.href = "/")}
+            onClick={() => { router.push("/"); }}
             className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
           >
             返回首页

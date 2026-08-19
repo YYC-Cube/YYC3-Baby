@@ -19,7 +19,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/build-passing-22c55e" alt="build passing" />
-  <img src="https://img.shields.io/badge/tests-216%20passed-22c55e" alt="216 tests passed" />
+  <img src="https://img.shields.io/badge/tests-248%20passed-22c55e" alt="248 tests passed" />
   <img src="https://img.shields.io/badge/type--check-0%20errors-22c55e" alt="0 type errors" />
   <img src="https://img.shields.io/badge/security-0%20vulnerabilities-22c55e" alt="0 vulnerabilities" />
   <img src="https://img.shields.io/badge/%E5%BE%BD%E7%AB%A0-30%20%E6%9E%9A-d946ef?logo=medal&logoColor=white" alt="30 badges" />
@@ -56,7 +56,7 @@ bun run dev
 # 构建 / 生产启动
 bun run build && bun run start
 
-# 测试（216 个用例）
+# 测试（248 个用例）
 bun test
 ```
 
@@ -98,7 +98,7 @@ bun test
 | ------ | ------ |
 | `bun run dev` | Next.js 开发服务器（:1228） |
 | `bun run build` / `start` | 生产构建 / 启动 |
-| `bun test` | 单元测试（216 用例，全绿） |
+| `bun test` | 单元测试（248 用例，全绿） |
 | `bun run type-check` | 类型检查（应用代码 **0 错误**，见 TYPECHECK_BASELINE.md） |
 | `bun run lint` / `lint:fix` | ESLint 检查 / 自动修复 |
 
@@ -123,7 +123,7 @@ bun test
 ├── middleware.ts         # locale 路由中间件
 ├── hooks/ types/ config/ # 钩子、类型、配置
 ├── themes/               # Figma 三套主题参考（未接线，排除出 tsc）
-├── __tests__/            # 单元测试（216 用例）
+├── __tests__/            # 单元测试（248 用例）
 ├── public/               # 静态资源（icon/manifest/PWA/角色照片/CNAME）
 ├── scripts/              # 部署脚本 + 文档生成器（generate-docs.py）
 └── docs/                 # ★ 文档中心（唯一入口见 docs/README.md）
@@ -145,6 +145,7 @@ bun test
 
 | 文档 | 内容 |
 | ------ | ------ |
+| [用户使用手册](./docs/user-manual.md) | 面向家长的产品操作指南（功能地图/隐私/FAQ） |
 | [01 · 快速上手](./docs/developer/01-getting-started.md) | 环境要求、安装、启动、常见问题 |
 | [02 · 可视化架构体系](./docs/developer/02-architecture.md) | 系统分层 / 混合路由 / 数据流 / AI 链路 / 目录拓扑（Mermaid） |
 | [03 · 数据模型](./docs/developer/03-data-model.md) | SQLite 九张表、JSON 列约定、种子数据、备份 |
@@ -159,7 +160,8 @@ bun test
 
 - ✅ 构建通过，生产冒烟 200（含 `/en` i18n 路由、`/manifest.json`、`/icon.svg`）
 - ✅ SQLite 真实持久化（写入 → 重启 → 数据在）
-- ✅ 测试 216/216 全绿
+- ✅ 测试 248/248 全绿
 - ✅ 依赖 0 漏洞；类型债 1,986 → **0**（[TYPECHECK_BASELINE.md](./TYPECHECK_BASELINE.md)，门禁已恢复）
 - ✅ 徽章系统：30 枚勋章 × 真实数据评估引擎（`lib/badges/`）
-- 📍 下一步建议：按域清理剩余类型债 → 接线 themes 三套主题 → API 鉴权中间件
+- ✅ 鉴权中间件（JWT + bcrypt）、Winston 日志体系、语音三件套、四主题系统、组件语义化（90%）
+- 📍 后续：按域持续消化 lint 债务（~1450 warn，见 [07 · 测试与质量门禁](./docs/developer/07-testing-quality.md)）

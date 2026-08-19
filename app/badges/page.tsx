@@ -162,7 +162,7 @@ export default function BadgesPage() {
                   className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap ${
                     filter === item.id ? "bg-amber-500 text-white" : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
                   }`}
-                  onClick={() => setFilter(item.id)}
+                  onClick={() => { setFilter(item.id); }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -187,7 +187,7 @@ export default function BadgesPage() {
                   className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap ${
                     selectedCategory === category ? "bg-blue-500 text-white" : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
                   }`}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => { setSelectedCategory(category); }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -232,7 +232,7 @@ export default function BadgesPage() {
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ delay: Math.min(index * 0.03, 0.6) }}
                     whileHover={{ scale: 1.05, y: -5 }}
-                    onClick={() => setSelectedBadge(badge)}
+                    onClick={() => { setSelectedBadge(badge); }}
                     className="cursor-pointer"
                   >
                     <Card className={`h-full ${levelColor.bg} ${levelColor.border} ${levelColor.shadow} shadow-lg ${badge.isNew ? "ring-4 ring-yellow-300 ring-offset-1" : ""}`}>
@@ -297,7 +297,7 @@ export default function BadgesPage() {
 
       <Navigation />
 
-      <Dialog open={!!selectedBadge} onOpenChange={() => setSelectedBadge(null)}>
+      <Dialog open={!!selectedBadge} onOpenChange={() => { setSelectedBadge(null); }}>
         <DialogContent className="max-w-md">
           {selectedBadge && (
             <>
@@ -350,7 +350,7 @@ export default function BadgesPage() {
 
                 {selectedBadge.unlocked && (
                   <Button
-                    onClick={() => handleShare(selectedBadge).catch((err: unknown) => console.log("分享失败:", err))}
+                    onClick={() => handleShare(selectedBadge).catch((err: unknown) => { console.log("分享失败:", err); })}
                     className="w-full bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
                   >
                     <i className="ri-share-line mr-2" />

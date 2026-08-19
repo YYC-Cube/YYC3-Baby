@@ -25,7 +25,7 @@ interface ErrorReport {
 
 export async function POST(request: NextRequest) {
   try {
-    const report: ErrorReport = await request.json()
+    const report = (await request.json()) as ErrorReport
 
     // 验证必要字段
     if (!report.error?.message || !report.timestamp) {
@@ -46,10 +46,10 @@ export async function POST(request: NextRequest) {
 
     // 这里可以集成外部错误监控服务
     // 例如：Sentry, LogRocket, 或者自建的错误收集系统
-    await logErrorToExternalService(report)
+    void logErrorToExternalService(report)
 
     // 存储到本地日志（可选）
-    await logErrorToFile(report)
+    logErrorToFile(report)
 
     return NextResponse.json({
       success: true,
@@ -133,7 +133,7 @@ function isCriticalError(report: ErrorReport): boolean {
   )
 }
 
-async function logErrorToFile(report: ErrorReport) {
+function logErrorToFile(report: ErrorReport) {
   // 本地日志存储示例
   const logEntry = {
     timestamp: report.timestamp,
@@ -150,7 +150,7 @@ async function logErrorToFile(report: ErrorReport) {
 }
 
 // GET 请求 - 获取错误统计（管理员功能）
-export async function GET() {
+export function GET() {
   try {
     // 这里可以实现错误统计和管理功能
     return NextResponse.json({

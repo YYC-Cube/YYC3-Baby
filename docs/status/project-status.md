@@ -22,9 +22,9 @@ category: status
 
 | 指标 | 值 | 说明 |
 | ---- | ---- | ---- |
-| **总体进度** | **75%** | 全周期成长守护平台，核心链路已闭环，剩主题/组件迁移与运营增强 |
-| **当前阶段** | 文档治理 + 部署验证 + 组件迁移批次 2 | 项目实况跟踪机制建立，Pages 部署扩展至全文档目录 |
-| **上次更新** | 2026-08-19 | 本期：文档治理/部署验证/迁移批次 2 |
+| **总体进度** | **78%** | 全周期成长守护平台，核心链路闭环 + 上线收尾完成（文档/清理/测试） |
+| **当前阶段** | 上线收尾（文档·清理·测试·部署资源） | 用户手册落地、README/API 一致性修复、冗余清理、生产冒烟通过 |
+| **上次更新** | 2026-08-19 | 本期：收尾批次（文档 + 清理 + 测试 + 部署资源） |
 | **与计划偏差** | +0% | 计划内完成，无延期 |
 
 ### 1.2 里程碑达成情况
@@ -51,11 +51,11 @@ category: status
 | 日志体系（lib/logger）　　　 | 100%　 | 🟢 低　　 | 可观测性　 | 每日轮转 + 分析器 + 告警规则　　　　　　　　　　　　　　　　　　　 |
 | 语音（components/voice）　　 | 100%　 | 🟢 低　　 | 语音交互　 | 识别/合成/管理器三件套已移植　　　　　　　　　　　　　　　　　　　 |
 | 主题系统（theme-system）　　 | 95%　　 | 🟢 低　　 | 全站视觉　 | 四主题全量；剩 Background 组件增强　　　　　　　　　　　　　　　　 |
-| 组件语义化（Phase 3）　　　　 | 90%　　 | 🟢 低　　 | 全站组件　 | 语义类已建 + 迁移 6 批（accessibility/common/deployment/pwa/testing/headers/optimization/user-experience/theme/ai-xiaoyu）；残留仅特殊场景（视频/叠加层） |
-| 文档体系　　　　　　　　　　 | 90%　　 | 🟢 低　　 | 团队协作　 | developer 10 篇 + status/standard 新增；术语表/索引/引用核查完成 |
-| 部署（Pages + 生产）　　　　 | 95%　　 | 🟢 低　　 | 线上访问　 | Pages 扩展渲染 status/standard/analysis；本地模拟构建验证通过 |
+| 组件语义化（Phase 3）　　　　 | 90%　　 | 🟢 低　　 | 全站组件　 | 语义类已建 + 迁移 6 批；残留仅特殊场景（视频/叠加层） |
+| 文档体系　　　　　　　　　　 | 95%　　 | 🟢 低　　 | 团队协作　 | developer 10 篇 + 用户手册新增 + status/standard；README 数字一致性修复 |
+| 部署（Pages + 生产）　　　　 | 98%　　 | 🟢 低　　 | 线上访问　 | Pages 渲染扩展 + user-manual 接入 + 生产冒烟 10 页面 200 · audit 0 漏洞 |
 
-**延期风险总评**：无硬阻塞项。组件语义化（90%）已降为低风险，剩余收尾可在后续版本迭代中完成。
+**延期风险总评**：无硬阻塞项，无中高风险项。lint 债务（~1450 warn）为唯一持续低风险，已登记入 developer/07 按域消化。
 
 ---
 
@@ -70,6 +70,9 @@ category: status
 | P5 | lint warning ~1469（0 error） | 持续 | 低 | 代码质量 | 按债务清单分域消化 | 🔄 持续 | — |
 | P6 | Pages 未渲染 status/standard/analysis 目录 | 08-19 | 中 | 文档站完整性 | workflow 扩展渲染 4 目录 + 本地模拟验证 | ✅ 已解决 | 08-19 |
 | P7 | 新文档 front-matter tags 格式致 pandoc YAML 报错 | 08-19 | 中 | 文档站构建 | tags 改单流序列 `[a, b, c]` | ✅ 已解决 | 08-19 |
+| P8 | README 测试数/进度过期（216/72%） | 08-19 | 低 | 文档准确性 | README 全部 216→248、docs/README 72%→75%，当前状态同步 | ✅ 已解决 | 08-19 |
+| P9 | `.env.example` 含已弃用外部存储/监控项 | 08-19 | 低 | 上线配置 | 重写示例：当前有效变量前置，未接入项标注弃用 | ✅ 已解决 | 08-19 |
+| P10 | 冗余/无引用文件残留 | 08-19 | 低 | 仓库整洁 | 删除 dashboard.html / next-intl-stub / clear-all-localstorage / speech.ts；PROJECT-EXECUTION-MANAGER 误删后恢复 | ✅ 已解决 | 08-19 |
 
 ---
 
@@ -95,6 +98,7 @@ category: status
 | D3 | **Aurora 第四主题 + 语义 token 双层覆盖** | 小语四版本审计：aurora 为最高价值未融合资产 | 四主题体系 + shadcn 语义 token 全量补齐 | ✅ 已完成 |
 | D4 | **删除 `docs/YYC3-小语`（744 文件）** | 高价值资产已提炼；测试全绿后审批 | 目录删除 + tsconfig/文档清理 | ✅ 已完成 |
 | D5 | **`@custom-variant dark` 扩展** | data-theme 暗色主题下 shadcn dark: 变体失效 | 三种暗色上下文匹配，编译产物验证 | ✅ 已完成 |
+| D6 | **上线收尾批次** | 项目质量与交付要求 | 文档补全（用户手册）+ 清理（4 冗余文件）+ 一致性修复（README/.env）+ 冒烟测试 | ✅ 已完成 |
 
 ---
 
@@ -102,10 +106,10 @@ category: status
 
 | 项 | 优先级 | 计划 |
 | ---- | ---- | ---- |
-| 组件语义化迁移批次 2+ | P1 | 按 05-frontend 规范继续，每批功能验证 + 文档更新 |
-| README 测试数/门禁基线刷新 | P1 | 与 developer/07 保持一致（248 用例） |
+| lint 债务按域消化 | P2 | 按 developer/07 债务清单分批：先 no-unused-vars → require-await → any 家族 |
 | 生产环境多实例 SQLite 复核 | P2 | 评估 PostgreSQL 迁移或共享挂载方案 |
 | ThemeSwitcher 多入口接入 | P2 | 设置页之外（导航/弹层）复用 |
+| 用户手册多语言 | P3 | 英文版使用指南（en 文档站路由） |
 
 ---
 

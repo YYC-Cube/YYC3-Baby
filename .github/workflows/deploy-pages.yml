@@ -76,6 +76,11 @@ jobs:
               -o "site/analysis/${name}.html"
           done
 
+          # 渲染用户手册 → site/user-manual.html
+          pandoc docs/user-manual.md -f markdown -s --metadata "title=YYC³ 用户使用手册" \
+            --metadata lang=zh-CN --css=style.css --embed-resources=false \
+            -o site/user-manual.html
+
           # 落地页：文档中心主索引
           pandoc docs/README.md -f markdown -s --metadata "title=YYC³ 文档中心" \
             --metadata lang=zh-CN --css=style.css --embed-resources=false \

@@ -32,7 +32,7 @@ export function useBadges(childId?: string): UseBadgesReturn {
   const [error, setError] = useState<string | null>(null)
   const [tick, setTick] = useState(0)
 
-  const refresh = useCallback(() => setTick((t) => t + 1), [])
+  const refresh = useCallback(() => { setTick((t) => t + 1); }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -86,7 +86,7 @@ export function useBadges(childId?: string): UseBadgesReturn {
 
   const unlockedCount = useMemo(() => badges.filter((b) => b.unlocked).length, [badges])
 
-  const clearNewUnlocks = useCallback(() => setNewUnlocks([]), [])
+  const clearNewUnlocks = useCallback(() => { setNewUnlocks([]); }, [])
 
   return {
     badges,

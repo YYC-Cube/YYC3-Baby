@@ -327,7 +327,7 @@ export function VoiceSynthesis({
             <span className="text-gray-500">音色</span>
             <select
               value={state.selectedVoice?.voiceURI ?? ""}
-              onChange={(e) => handleVoiceChange(e.target.value)}
+              onChange={(e) => { handleVoiceChange(e.target.value); }}
               className="px-2 py-1 border border-gray-200 rounded-lg text-sm bg-white"
             >
               {state.voices.map((voice) => (
@@ -347,7 +347,7 @@ export function VoiceSynthesis({
             max={2}
             step={0.1}
             value={state.rate}
-            onChange={(e) => handleRateChange(Number(e.target.value))}
+            onChange={(e) => { handleRateChange(Number(e.target.value)); }}
             className="w-24"
           />
           <span className="text-xs text-gray-500 tabular-nums">{state.rate.toFixed(1)}x</span>
@@ -361,7 +361,7 @@ export function VoiceSynthesis({
             max={2}
             step={0.1}
             value={state.pitch}
-            onChange={(e) => handlePitchChange(Number(e.target.value))}
+            onChange={(e) => { handlePitchChange(Number(e.target.value)); }}
             className="w-24"
           />
           <span className="text-xs text-gray-500 tabular-nums">{state.pitch.toFixed(1)}</span>
@@ -375,7 +375,7 @@ export function VoiceSynthesis({
             max={1}
             step={0.05}
             value={state.volume}
-            onChange={(e) => handleVolumeChange(Number(e.target.value))}
+            onChange={(e) => { handleVolumeChange(Number(e.target.value)); }}
             className="w-24"
           />
         </label>

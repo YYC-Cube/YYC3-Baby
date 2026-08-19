@@ -14,7 +14,7 @@
 
 | 文档 | 内容 |
 | ---- | ---- |
-| [项目实况跟踪](./status/project-status.md) | 进度 72% · 里程碑 M1-M9 · 模块风险矩阵 · 问题台账 · 决策记录（每工作日 17:00 更新） |
+| [项目实况跟踪](./status/project-status.md) | 进度 75% · 里程碑 M1-M9 · 模块风险矩阵 · 问题台账 · 决策记录（每工作日 17:00 更新） |
 
 ## 专项分析（analysis/）
 
@@ -29,6 +29,7 @@
 
 | 文档 | 内容 |
 | ---- | ---- |
+| [用户使用手册](./user-manual.md) | 面向家长的产品操作指南（功能地图/常见操作/隐私/FAQ） |
 | [01 · 快速上手](./developer/01-getting-started.md) | 环境要求、安装、启动、常见问题 |
 | [02 · 可视化架构体系](./developer/02-architecture.md) | 系统分层 / 混合路由 / 数据流 / AI 链路 / 徽章评估（Mermaid） |
 | [03 · 数据模型](./developer/03-data-model.md) | SQLite 九张表、JSON 列约定、种子数据、备份 |

@@ -701,7 +701,7 @@ export class EnhancedVoiceService {
   private emit(event: string, data?: unknown): void {
     const listeners = this.eventListeners.get(event)
     if (listeners) {
-      listeners.forEach(callback => callback(data))
+      listeners.forEach(callback => { callback(data); })
     }
   }
 
