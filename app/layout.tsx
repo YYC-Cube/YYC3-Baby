@@ -11,6 +11,7 @@ import ClientWrapper from "@/components/ClientWrapper"
 import DndProvider from "@/components/DndProvider"
 import { ErrorBoundary } from "@/components/ErrorBoundary"
 import ReduxProvider from "@/components/ReduxProvider"
+import { ThemeBackgroundLayer } from "@/components/theme-system/ThemeBackgroundLayer"
 import { ThemeSystemProvider } from "@/components/theme-system/ThemeProvider"
 import { AuthProvider } from "@/hooks/useAuth"
 import { Analytics } from "@vercel/analytics/next"
@@ -101,6 +102,7 @@ export default function RootLayout({
             <DndProvider>
               <ReduxProvider>
                 <AuthProvider>
+                  <ThemeBackgroundLayer />
                   {children}
                   <ClientWrapper />
                 </AuthProvider>

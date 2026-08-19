@@ -37,8 +37,12 @@
   background-size: 300% 300%;
   animation: auroraBorderFlow 6s ease infinite;
   z-index: -1;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   mask-composite: exclude;
   -webkit-mask-composite: xor;
   padding: 1.5px;
@@ -63,14 +67,30 @@
   animation: auroraBounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-[data-theme='aurora'] .aurora-stagger > *:nth-child(1) { animation-delay: 0.05s; }
-[data-theme='aurora'] .aurora-stagger > *:nth-child(2) { animation-delay: 0.1s; }
-[data-theme='aurora'] .aurora-stagger > *:nth-child(3) { animation-delay: 0.15s; }
-[data-theme='aurora'] .aurora-stagger > *:nth-child(4) { animation-delay: 0.2s; }
-[data-theme='aurora'] .aurora-stagger > *:nth-child(5) { animation-delay: 0.25s; }
-[data-theme='aurora'] .aurora-stagger > *:nth-child(6) { animation-delay: 0.3s; }
-[data-theme='aurora'] .aurora-stagger > *:nth-child(7) { animation-delay: 0.35s; }
-[data-theme='aurora'] .aurora-stagger > *:nth-child(8) { animation-delay: 0.4s; }
+[data-theme='aurora'] .aurora-stagger > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+[data-theme='aurora'] .aurora-stagger > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+[data-theme='aurora'] .aurora-stagger > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+[data-theme='aurora'] .aurora-stagger > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
+[data-theme='aurora'] .aurora-stagger > *:nth-child(5) {
+  animation-delay: 0.25s;
+}
+[data-theme='aurora'] .aurora-stagger > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
+[data-theme='aurora'] .aurora-stagger > *:nth-child(7) {
+  animation-delay: 0.35s;
+}
+[data-theme='aurora'] .aurora-stagger > *:nth-child(8) {
+  animation-delay: 0.4s;
+}
 
 /* ── Aurora 玻璃卡片 ── */
 
@@ -130,27 +150,47 @@
 /* ── Aurora 渐变卡片 ── */
 
 [data-theme='aurora'] .aurora-gradient-1 {
-  background: linear-gradient(135deg, rgba(0, 255, 135, 0.12), rgba(96, 239, 255, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 135, 0.12),
+    rgba(96, 239, 255, 0.08)
+  );
   border-color: rgba(0, 255, 135, 0.15);
 }
 
 [data-theme='aurora'] .aurora-gradient-2 {
-  background: linear-gradient(135deg, rgba(96, 239, 255, 0.12), rgba(108, 92, 231, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(96, 239, 255, 0.12),
+    rgba(108, 92, 231, 0.08)
+  );
   border-color: rgba(96, 239, 255, 0.15);
 }
 
 [data-theme='aurora'] .aurora-gradient-3 {
-  background: linear-gradient(135deg, rgba(255, 107, 107, 0.12), rgba(255, 217, 61, 0.06));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.12),
+    rgba(255, 217, 61, 0.06)
+  );
   border-color: rgba(255, 107, 107, 0.15);
 }
 
 [data-theme='aurora'] .aurora-gradient-4 {
-  background: linear-gradient(135deg, rgba(108, 92, 231, 0.12), rgba(255, 107, 157, 0.06));
+  background: linear-gradient(
+    135deg,
+    rgba(108, 92, 231, 0.12),
+    rgba(255, 107, 157, 0.06)
+  );
   border-color: rgba(108, 92, 231, 0.15);
 }
 
 [data-theme='aurora'] .aurora-gradient-5 {
-  background: linear-gradient(135deg, rgba(0, 255, 135, 0.15), rgba(255, 217, 61, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 135, 0.15),
+    rgba(255, 217, 61, 0.08)
+  );
   border-color: rgba(0, 255, 135, 0.2);
 }
 
@@ -170,7 +210,8 @@
 /* ── Keyframes（作用域无关，全局定义）── */
 
 @keyframes auroraBreathe {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow:
       0 4px 20px rgba(0, 255, 135, 0.1),
       0 0 0 1px rgba(0, 255, 135, 0.08);
@@ -184,20 +225,38 @@
 }
 
 @keyframes auroraBorderFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes auroraBounceIn {
-  0% { opacity: 0; transform: translateY(24px) scale(0.96); }
-  40% { opacity: 1; transform: translateY(-6px) scale(1.01); }
-  70% { transform: translateY(3px) scale(0.995); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.01);
+  }
+  70% {
+    transform: translateY(3px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes auroraColorShift {
-  0%, 100% {
+  0%,
+  100% {
     border-color: rgba(0, 255, 135, 0.2);
     box-shadow: 0 0 15px rgba(0, 255, 135, 0.1);
   }
@@ -211,6 +270,189 @@
   }
 }
 
+/* ── Aurora Background（增强背景层）── */
+
+[data-theme='aurora'] .aurora-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 20% 50%,
+      rgba(0, 255, 135, 0.25) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(96, 239, 255, 0.25) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 80%,
+      rgba(255, 107, 107, 0.2) 0%,
+      transparent 50%
+    ),
+    linear-gradient(135deg, #0a1628 0%, #0d1f3c 30%, #0a1628 60%, #121a2e 100%);
+  background-size: 200% 200%;
+  animation: auroraComplex 20s ease infinite;
+}
+
+[data-theme='aurora'] .aurora-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+[data-theme='aurora'] .aurora-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 135, 0.4),
+    rgba(96, 239, 255, 0.1)
+  );
+  top: -10%;
+  left: -5%;
+  animation: auroraOrbFloat1 22s ease-in-out infinite;
+}
+
+[data-theme='aurora'] .aurora-orb-2 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(
+    circle,
+    rgba(96, 239, 255, 0.35),
+    rgba(108, 92, 231, 0.1)
+  );
+  top: 35%;
+  right: -8%;
+  animation: auroraOrbFloat2 18s ease-in-out infinite;
+}
+
+[data-theme='aurora'] .aurora-orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 107, 107, 0.25),
+    rgba(255, 217, 61, 0.08)
+  );
+  bottom: -5%;
+  left: 25%;
+  animation: auroraOrbFloat3 24s ease-in-out infinite;
+}
+
+[data-theme='aurora'] .aurora-orb-4 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(108, 92, 231, 0.3), transparent);
+  top: 15%;
+  left: 45%;
+  animation: auroraOrbFloat1 28s ease-in-out infinite reverse;
+}
+
+[data-theme='aurora'] .aurora-orb-5 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 135, 0.2),
+    rgba(96, 239, 255, 0.05)
+  );
+  bottom: 15%;
+  right: 15%;
+  animation: auroraOrbFloat2 20s ease-in-out infinite reverse;
+}
+
+[data-theme='aurora'] .aurora-particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 135, 0.6),
+    rgba(96, 239, 255, 0.2)
+  );
+}
+
+@keyframes auroraComplex {
+  0% {
+    background-position: 0% 50%;
+  }
+  33% {
+    background-position: 100% 30%;
+  }
+  66% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes auroraOrbFloat1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(60px, -80px) scale(1.15);
+  }
+  66% {
+    transform: translate(-30px, 40px) scale(0.9);
+  }
+}
+
+@keyframes auroraOrbFloat2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-80px, 50px) scale(0.85);
+  }
+  66% {
+    transform: translate(40px, -60px) scale(1.1);
+  }
+}
+
+@keyframes auroraOrbFloat3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.05);
+  }
+  33% {
+    transform: translate(50px, 80px) scale(0.9);
+  }
+  66% {
+    transform: translate(-70px, -30px) scale(1.15);
+  }
+}
+
+@keyframes auroraParticle {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translateY(-50px) translateX(25px) scale(1.15);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-25px) translateX(-20px) scale(0.85);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-60px) translateX(15px) scale(1.1);
+    opacity: 0.7;
+  }
+}
+
 /* ── 减少动效偏好降级 ── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -218,7 +460,14 @@
   [data-theme='aurora'] .aurora-border-flow::after,
   [data-theme='aurora'] .aurora-bounce-in,
   [data-theme='aurora'] .aurora-color-shift:hover,
-  [data-theme='aurora'] .aurora-stagger > * {
+  [data-theme='aurora'] .aurora-stagger > *,
+  [data-theme='aurora'] .aurora-bg,
+  [data-theme='aurora'] .aurora-orb-1,
+  [data-theme='aurora'] .aurora-orb-2,
+  [data-theme='aurora'] .aurora-orb-3,
+  [data-theme='aurora'] .aurora-orb-4,
+  [data-theme='aurora'] .aurora-orb-5,
+  [data-theme='aurora'] .aurora-particle {
     animation: none !important;
     opacity: 1 !important;
   }
