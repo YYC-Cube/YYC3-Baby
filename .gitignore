@@ -368,15 +368,17 @@ tracking/
 *.jpeg
 *.gif
 *.svg
-# Exception: Allow specific PNG files for project branding
-!public/git_1800_400-5.png
-!public/git_1800_450-6.png
-!public/placeholder-logo.png
-!public/yyc3-*.png
-!public/yyc3-white.png
-!public/yyc3-pwa-icon.png
-# Ignore other PNG files
 *.png
+
+# ---- 项目品牌/运行时图片放行（放在忽略规则之后，git 规则后匹配者优先）----
+# README 顶图
+!public/YYC3-Family.png
+# 默认头像回退图（themes/*/RoleInfoManager 引用）
+!public/placeholder-user.jpg
+# 角色主题图库（lib/character-manager.ts / lib/asset-manager.ts 引用）
+!public/role-photos/
+!public/role-photos/**
+public/role-photos/.DS_Store
 
 # ========================================
 # 📄 Documentation & Reports

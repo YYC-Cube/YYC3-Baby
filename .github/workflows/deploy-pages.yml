@@ -55,6 +55,10 @@ jobs:
             --metadata lang=zh-CN --css=style.css --embed-resources=false \
             -o site/README.html
 
+          # README 顶图随站点发布（README.html 内相对引用 public/YYC3-Family.png）
+          mkdir -p site/public
+          cp public/YYC3-Family.png site/public/YYC3-Family.png
+
           # 站内 .md 链接改写为 .html（跨页面导航可用）
           find site -name "*.html" -exec sed -i \
             -e 's/href="\([^"]*\)\.md"/href="\1.html"/g' \
