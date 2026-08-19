@@ -3,7 +3,7 @@
 ## 目录组织（components/ 20 个域目录）
 
 | 目录 | 职责 |
-|------|------|
+| ------ | ------ |
 | `ui/` | shadcn/ui 基础件 65+（Button/Card/Dialog/Form/Tabs…），Radix 无障碍基座 |
 | `ui/character-themed/` | 角色主题组件族（Input/Container/Alert），消费 `components/CharacterThemeContext` |
 | `headers/` `common/` | 页面头（PageHeader）、通用件（LanguageSwitcher 等） |
@@ -47,6 +47,39 @@ __tests__/lib/badges.test.ts  17 个用例锁行为
 要点：定义与引擎零副作用、页面零业务逻辑、解锁状态跨会话持久化（`yyc3_badge_unlocks_v1`）。
 
 ## 主题与角色系统
+
+### 统一主题系统（四主题 · data-theme）
+
+`components/theme-system/` 提供基于 next-themes 的四主题机制：
+
+| 主题 | data-theme | 类型 | 特征 |
+| ---- | ---- | ---- | ---- |
+| 暖阳 | `default` | 浅色 | 琥珀色系，默认 |
+| 赛博霓虹 | `cyberpunk` | 暗色 | 霓虹青 `#00f0ff` |
+| 液态翡翠 | `liquid` | 浅色 | 翡翠青绿 `#10b981` |
+| 极光 | `aurora` | 暗色 | 极光流动，`#00ff87`（动效见 `styles/aurora-effects.css`） |
+
+- `ThemeSystemProvider`（`attribute="data-theme"`）已在 `app/layout.tsx` 挂载；`ThemeSwitcher` 四选一胶囊；`ThemeBackgroundLayer` 按主题渲染增强背景
+- token 双层：兄弟 token（`--bg-app/--fg-default/--theme-accent`）+ shadcn 语义 token（`--background/--primary/--ring` 等，暗色主题全量覆盖）
+- **`@custom-variant dark` 已扩展**：`dark:` 变体在 `.dark`、`[data-theme='cyberpunk']`、`[data-theme='aurora']` 下均生效，shadcn 组件暗色适配自动工作
+
+### 语义类规范（Phase 3 · 组件三元表达式渐进 token 化）
+
+新组件优先使用语义类（四主题自适应），旧组件按页渐进迁移：
+
+| 语义类 | 映射 | 用途 |
+| ---- | ---- | ---- |
+| `text-adaptive` | `var(--fg-default)` | 正文/标题文字 |
+| `text-adaptive-muted` | `var(--fg-muted)` | 次要文字/说明 |
+| `bg-surface` | `var(--bg-surface)` | 卡片/容器表面 |
+| `bg-surface-soft` | `var(--bg-surface-soft)` | 弱化表面/输入框 |
+| `border-soft` | `var(--border-soft)` | 柔和边框 |
+| `text-theme-accent` | `var(--theme-accent)` | 主题强调文字 |
+| `bg-theme-accent` | `var(--theme-accent)` + `--theme-accent-fg` | 主题强调按钮 |
+
+**迁移原则**：`isDark ? 'text-white' : 'text-gray-800'` 类三元 → `text-adaptive`；`bg-white dark:bg-gray-800` → `bg-surface`；`border-gray-200 dark:border-gray-700` → `border-soft`。
+
+### 角色系统
 
 - `components/CharacterThemeContext`（reducer 型）提供 currentCharacter / themeColors / 表情切换 Hooks
 - `themes/` 存三套 Figma 主题参考（cyberpunk/default/liquid）——**未接线**，接线时需补齐其内部相对导入（`../foundation/*` 等），已排除出 tsc

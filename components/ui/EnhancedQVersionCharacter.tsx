@@ -687,7 +687,7 @@ export function CharacterInteractionPanel({
                   className="w-8 h-8 rounded-full mx-auto mb-2"
                   style={{ backgroundColor: theme.primaryColor }}
                 />
-                <div className="text-xs text-gray-700 dark:text-gray-300">{theme.displayName}</div>
+                <div className="text-xs text-adaptive-muted">{theme.displayName}</div>
               </button>
             ))}
           </div>

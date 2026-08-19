@@ -85,3 +85,46 @@ describe("CSS 主题层完整性", () => {
     expect(css).toContain("prefers-reduced-motion")
   })
 })
+
+describe("Phase 3 · 语义工具类与 dark 变体映射", () => {
+  it("globals.css 定义全部语义工具类", async () => {
+    const fs = await import("node:fs")
+    const css = fs.readFileSync("app/globals.css", "utf8")
+    const classes = [
+      ".text-adaptive",
+      ".text-adaptive-muted",
+      ".bg-surface",
+      ".bg-surface-soft",
+      ".border-soft",
+      ".text-theme-accent",
+      ".bg-theme-accent",
+    ]
+    for (const cls of classes) {
+      expect(css).toContain(cls)
+    }
+  })
+
+  it("语义类映射到兄弟 token", async () => {
+    const fs = await import("node:fs")
+    const css = fs.readFileSync("app/globals.css", "utf8")
+    expect(css).toMatch(/\.text-adaptive\s*\{[\s\S]*?var\(--fg-default\)/)
+    expect(css).toMatch(/\.bg-surface\s*\{[\s\S]*?var\(--bg-surface\)/)
+    expect(css).toMatch(/\.border-soft\s*\{[\s\S]*?var\(--border-soft\)/)
+  })
+
+  it("@custom-variant dark 覆盖 data-theme 暗色主题", async () => {
+    const fs = await import("node:fs")
+    const css = fs.readFileSync("app/globals.css", "utf8")
+    expect(css).toContain("@custom-variant dark")
+    expect(css).toContain("[data-theme='cyberpunk'] *")
+    expect(css).toContain("[data-theme='aurora'] *")
+  })
+
+  it("业务组件已迁移到语义类（无 dark:bg-gray 残留）", async () => {
+    const fs = await import("node:fs")
+    const widget = fs.readFileSync("components/ai-xiaoyu/FixedAIWidget.tsx", "utf8")
+    expect(widget).toContain("bg-surface")
+    expect(widget).toContain("text-adaptive")
+    expect(widget).not.toContain("dark:bg-gray-")
+  })
+})

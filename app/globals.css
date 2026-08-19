@@ -1,7 +1,11 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
+/* dark: 变体匹配三种暗色上下文：
+   - .dark class（旧 next-themes attribute="class" 遗留）
+   - [data-theme='cyberpunk'] / [data-theme='aurora']（统一主题系统的暗色主题）
+   使 shadcn 组件的 dark:* 变体在 data-theme 暗色主题下自动生效。 */
+@custom-variant dark (&:is(.dark *, [data-theme='cyberpunk'] *, [data-theme='aurora'] *));
 
 :root {
   --background: oklch(0.95 0.02 240);
@@ -171,6 +175,38 @@
 
 /* Aurora（极光）主题增强动效（仅 data-theme='aurora' 下激活） */
 @import '../styles/aurora-effects.css';
+
+/* ============================================================
+   语义工具类（Phase 3 · 组件三元表达式渐进 token 化）
+   —— 语义类优先规范：新组件直接用，旧组件按页渐进迁移。
+   四主题下均可用（default 暖阳走 :root 默认值）。
+   ============================================================ */
+
+.text-adaptive {
+  color: var(--fg-default);
+}
+.text-adaptive-muted {
+  color: var(--fg-muted);
+}
+.bg-surface {
+  background-color: var(--bg-surface);
+}
+.bg-surface-soft {
+  background-color: var(--bg-surface-soft);
+}
+.border-soft {
+  border-color: var(--border-soft);
+}
+.text-theme-accent {
+  color: var(--theme-accent);
+}
+.bg-theme-accent {
+  background-color: var(--theme-accent);
+  color: var(--theme-accent-fg);
+}
+.shadow-glow-theme {
+  box-shadow: var(--theme-glow) 0 0 15px;
+}
 
 /* ============================================================
    统一主题系统（路径 A · data-theme 机制打通）
