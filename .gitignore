@@ -338,8 +338,8 @@ monitoring/
 metrics/
 traces/
 
-# Analytics
-analytics/
+# Analytics (root-level data only; components/analytics/ is tracked)
+/analytics/
 tracking/
 
 # ========================================

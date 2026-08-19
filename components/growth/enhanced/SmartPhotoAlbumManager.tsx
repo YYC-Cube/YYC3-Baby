@@ -17,7 +17,7 @@ import React, { useState } from 'react'
 import { useMediaFiles } from './smart-photo-album/useMediaFiles'
 
 // 导入类型
-import { FilterParams, MediaFile, SortBy, ViewMode } from './smart-photo-album/types'
+import { MediaFile, ViewMode } from './smart-photo-album/types'
 
 // 导入子组件
 import { MediaFileDetail } from './smart-photo-album/MediaFileDetail'
@@ -102,21 +102,21 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">智能成长相册</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-adaptive mb-2">智能成长相册</h1>
+              <p className="text-adaptive-muted">
                 记录小语成长的每一个珍贵瞬间，AI智能分析与管理
               </p>
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={toggleViewMode}
-                className="p-2 rounded-md bg-white border border-gray-300 hover:bg-gray-50 transition-colors"
+                className="p-2 rounded-md bg-surface border border-soft hover:bg-surface-soft transition-colors"
                 aria-label={viewMode === 'grid' ? '切换到列表视图' : '切换到网格视图'}
               >
                 {viewMode === 'grid' ? (
-                  <List className="w-5 h-5 text-gray-600" />
+                  <List className="w-5 h-5 text-adaptive-muted" />
                 ) : (
-                  <Grid className="w-5 h-5 text-gray-600" />
+                  <Grid className="w-5 h-5 text-adaptive-muted" />
                 )}
               </button>
               <button
@@ -149,15 +149,15 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-surface rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
             >
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">上传媒体文件</h2>
+                <h2 className="text-2xl font-bold text-adaptive mb-6">上传媒体文件</h2>
                 <MediaUploader onUpload={handleUpload} />
                 <div className="mt-6 flex justify-end">
                   <button
                     onClick={() => { setShowUploader(false); }}
-                    className="px-6 py-2 rounded-md border border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors"
+                    className="px-6 py-2 rounded-md border border-soft hover:bg-surface-soft text-adaptive-muted transition-colors"
                   >
                     关闭
                   </button>
@@ -197,12 +197,12 @@ export const SmartPhotoAlbumManager: React.FC<SmartPhotoAlbumManagerProps> = ({
                 onClose={handleCloseDetail}
               />
             ) : (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+              <div className="bg-surface rounded-lg shadow-sm border border-soft p-8 text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-100 flex items-center justify-center">
                   <Upload className="w-8 h-8 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">选择或上传媒体文件</h3>
-                <p className="text-sm text-gray-500 mb-4">
+                <h3 className="text-lg font-medium text-adaptive mb-2">选择或上传媒体文件</h3>
+                <p className="text-sm text-adaptive-muted mb-4">
                   点击左侧的媒体文件查看详情，或上传新的照片和视频
                 </p>
                 <button

@@ -1,24 +1,23 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 import {
-  Calendar,
-  Clock,
-  Heart,
-  Star,
-  Trophy,
-  Camera,
-  Video,
-  Music,
-  Sparkles,
-  ChevronRight,
   Baby,
-  Gift,
   Cake,
+  Calendar,
+  Camera,
+  ChevronRight,
+  Clock,
+  Gift,
+  Heart,
   HeartHandshake,
-  TrendingUp
+  Sparkles,
+  Star,
+  TrendingUp,
+  Trophy,
+  Video
 } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
 
 // 增强的时间线事件接口
 interface EnhancedTimelineEvent {
@@ -294,13 +293,13 @@ export default function EnhancedGrowthTimeline({
 
           <div className="flex-1">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-bold text-slate-800 text-lg">{event.title}</h3>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium bg-white/70 ${config.textColor}`}>
+              <h3 className="font-bold text-adaptive text-lg">{event.title}</h3>
+              <span className={`px-3 py-1 rounded-full text-xs font-medium bg-white/70 dark:bg-gray-800/70 ${config.textColor}`}>
                 {config.label}
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-sm text-slate-500 mb-3">
+            <div className="flex items-center gap-3 text-sm text-adaptive-muted mb-3">
               <span className="flex items-center gap-1">
                 <Baby className="w-4 h-4" />
                 {event.age}
@@ -326,7 +325,7 @@ export default function EnhancedGrowthTimeline({
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden"
                 >
-                  <p className="text-slate-600 mb-4 leading-relaxed">{event.description}</p>
+                  <p className="text-adaptive-muted mb-4 leading-relaxed">{event.description}</p>
 
                   {/* 媒体预览 */}
                   {event.media && event.media.length > 0 && (
@@ -335,8 +334,8 @@ export default function EnhancedGrowthTimeline({
                         {event.media.map((media, mediaIndex) => (
                           <div key={mediaIndex} className="shrink-0">
                             {media.type === 'image' ? (
-                              <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                                <Camera className="w-6 h-6 text-gray-400" />
+                              <div className="w-20 h-20 bg-surface-soft rounded-lg flex items-center justify-center">
+                                <Camera className="w-6 h-6 text-adaptive-muted" />
                               </div>
                             ) : (
                               <div className="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center text-white text-xs">
@@ -356,7 +355,7 @@ export default function EnhancedGrowthTimeline({
                       {event.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
-                          className="px-3 py-1 bg-white/70 rounded-full text-xs text-slate-600"
+                          className="px-3 py-1 bg-white/70 dark:bg-gray-800/70 rounded-full text-xs text-adaptive-muted"
                         >
                           #{tag}
                         </span>
@@ -366,12 +365,12 @@ export default function EnhancedGrowthTimeline({
 
                   {/* 家庭反应 */}
                   {event.familyReaction && (
-                    <div className="bg-white/60 rounded-xl p-3 mb-4">
-                      <h4 className="text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <div className="bg-white/60 dark:bg-gray-800/60 rounded-xl p-3 mb-4">
+                      <h4 className="text-sm font-medium text-adaptive-muted mb-2 flex items-center gap-2">
                         <Heart className="w-4 h-4 text-pink-500" />
                         家庭反应
                       </h4>
-                      <ul className="text-sm text-slate-600 space-y-1">
+                      <ul className="text-sm text-adaptive-muted space-y-1">
                         {event.familyReaction.map((reaction, reactionIndex) => (
                           <li key={reactionIndex} className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 bg-pink-400 rounded-full" />
@@ -389,7 +388,7 @@ export default function EnhancedGrowthTimeline({
                         <Sparkles className="w-4 h-4" />
                         AI小语洞察
                       </h4>
-                      <p className="text-sm text-slate-600 leading-relaxed">{event.aiInsight}</p>
+                      <p className="text-sm text-adaptive-muted leading-relaxed">{event.aiInsight}</p>
                     </div>
                   )}
                 </motion.div>
@@ -398,9 +397,8 @@ export default function EnhancedGrowthTimeline({
           </div>
 
           <ChevronRight
-            className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
-              isExpanded ? 'rotate-90' : ''
-            }`}
+            className={`w-5 h-5 text-adaptive-muted transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''
+              }`}
           />
         </div>
       </motion.div>
@@ -451,11 +449,10 @@ export default function EnhancedGrowthTimeline({
       {/* 筛选器 */}
       <div className="flex flex-wrap gap-3 mb-6">
         <motion.button
-          className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-            selectedType === "all"
-              ? "bg-linear-to-r from-slate-800 to-slate-900 text-white shadow-lg"
-              : "bg-white text-slate-600 hover:bg-slate-50 shadow"
-          }`}
+          className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${selectedType === "all"
+            ? "bg-linear-to-r from-slate-800 to-slate-900 text-white shadow-lg"
+            : "bg-surface text-adaptive-muted hover:bg-surface-soft shadow"
+            }`}
           onClick={() => { setSelectedType("all"); }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -467,11 +464,10 @@ export default function EnhancedGrowthTimeline({
           return (
             <motion.button
               key={type}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
-                selectedType === type
-                  ? `bg-linear-to-r ${config.bgGradient} ${config.textColor} shadow-lg`
-                  : "bg-white text-slate-600 hover:bg-slate-50 shadow"
-              }`}
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${selectedType === type
+                ? `bg-linear-to-r ${config.bgGradient} ${config.textColor} shadow-lg`
+                : "bg-surface text-adaptive-muted hover:bg-surface-soft shadow"
+                }`}
               onClick={() => { setSelectedType(type); }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -492,11 +488,10 @@ export default function EnhancedGrowthTimeline({
         ].map(({ mode, icon: Icon, label }) => (
           <button
             key={mode}
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
-              viewMode === mode
-                ? 'bg-blue-100 text-blue-600 shadow-md'
-                : 'bg-white text-slate-400 hover:text-slate-600'
-            }`}
+            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${viewMode === mode
+              ? 'bg-blue-100 text-blue-600 shadow-md'
+              : 'bg-surface text-adaptive-muted hover:text-adaptive'
+              }`}
             onClick={() => { setViewMode(mode as "timeline" | "grid" | "carousel"); }}
           >
             <Icon className="w-4 h-4" />
@@ -538,10 +533,10 @@ export default function EnhancedGrowthTimeline({
                   </span>
                 </div>
                 <div className="ml-6">
-                  <h3 className="text-xl font-bold text-slate-700">
+                  <h3 className="text-xl font-bold text-adaptive">
                     {month.split("-")[0]}年{month.split("-")[1]}月
                   </h3>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-adaptive-muted">
                     {monthEvents.length}个珍贵瞬间
                   </p>
                 </div>
@@ -584,8 +579,8 @@ export default function EnhancedGrowthTimeline({
                     <event.icon className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-slate-800">{event.title}</h3>
-                    <p className="text-sm text-slate-500">
+                    <h3 className="font-bold text-adaptive">{event.title}</h3>
+                    <p className="text-sm text-adaptive-muted">
                       {event.age} · {event.date}
                     </p>
                   </div>
@@ -594,15 +589,15 @@ export default function EnhancedGrowthTimeline({
                   )}
                 </div>
 
-                <p className="text-slate-600 mb-4 line-clamp-3">{event.description}</p>
+                <p className="text-adaptive-muted mb-4 line-clamp-3">{event.description}</p>
 
                 {event.media && event.media.length > 0 && (
                   <div className="flex gap-2 mb-4">
                     {event.media.slice(0, 3).map((media, mediaIndex) => (
                       <div key={mediaIndex} className="flex-1">
                         {media.type === 'image' ? (
-                          <div className="w-full h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <Camera className="w-5 h-5 text-gray-400" />
+                          <div className="w-full h-16 bg-surface-soft rounded-lg flex items-center justify-center">
+                            <Camera className="w-5 h-5 text-adaptive-muted" />
                           </div>
                         ) : (
                           <div className="w-full h-16 bg-gray-800 rounded-lg flex items-center justify-center text-white text-xs">
@@ -617,12 +612,12 @@ export default function EnhancedGrowthTimeline({
                 {event.tags && (
                   <div className="flex gap-1 flex-wrap">
                     {event.tags.slice(0, 3).map((tag, tagIndex) => (
-                      <span key={tagIndex} className="px-2 py-1 bg-white/70 rounded-full text-xs text-slate-600">
+                      <span key={tagIndex} className="px-2 py-1 bg-white/70 dark:bg-gray-800/70 rounded-full text-xs text-adaptive-muted">
                         #{tag}
                       </span>
                     ))}
                     {event.tags.length > 3 && (
-                      <span className="px-2 py-1 bg-white/70 rounded-full text-xs text-slate-600">
+                      <span className="px-2 py-1 bg-white/70 dark:bg-gray-800/70 rounded-full text-xs text-adaptive-muted">
                         +{event.tags.length - 3}
                       </span>
                     )}
@@ -652,11 +647,11 @@ export default function EnhancedGrowthTimeline({
                     <div className={`w-16 h-16 bg-linear-to-r ${event.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg`}>
                       <event.icon className="w-8 h-8" />
                     </div>
-                    <h3 className="font-bold text-slate-800 text-lg mb-2">{event.title}</h3>
-                    <p className="text-sm text-slate-500 mb-4">
+                    <h3 className="font-bold text-adaptive text-lg mb-2">{event.title}</h3>
+                    <p className="text-sm text-adaptive-muted mb-4">
                       {event.age} · {event.date}
                     </p>
-                    <p className="text-slate-600 mb-4">{event.description}</p>
+                    <p className="text-adaptive-muted mb-4">{event.description}</p>
                     {event.isMemoryHighlight && (
                       <div className="flex justify-center mb-4">
                         <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
@@ -672,13 +667,13 @@ export default function EnhancedGrowthTimeline({
 
       {filteredEvents.length === 0 && (
         <div className="text-center py-20">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Camera className="w-10 h-10 text-gray-400" />
+          <div className="w-24 h-24 bg-surface-soft rounded-full flex items-center justify-center mx-auto mb-4">
+            <Camera className="w-10 h-10 text-adaptive-muted" />
           </div>
-          <p className="text-slate-400 text-lg">
+          <p className="text-adaptive-muted text-lg">
             暂无{selectedType !== "all" ? typeConfig[selectedType as keyof typeof typeConfig].label : "记录"}
           </p>
-          <p className="text-slate-400 text-sm mt-2">
+          <p className="text-adaptive-muted text-sm mt-2">
             开始记录{childName}的成长瞬间吧
           </p>
         </div>
@@ -696,7 +691,7 @@ export default function EnhancedGrowthTimeline({
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
             <motion.div
-              className="relative bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              className="relative bg-surface rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
@@ -704,7 +699,7 @@ export default function EnhancedGrowthTimeline({
             >
               <button
                 onClick={() => { setSelectedEvent(null); }}
-                className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center"
+                className="absolute top-4 right-4 w-8 h-8 bg-surface-soft hover:bg-surface rounded-full flex items-center justify-center"
               >
                 ×
               </button>
@@ -714,14 +709,14 @@ export default function EnhancedGrowthTimeline({
                   <selectedEvent.icon className="w-8 h-8" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-800">{selectedEvent.title}</h2>
-                  <p className="text-slate-500">
+                  <h2 className="text-2xl font-bold text-adaptive">{selectedEvent.title}</h2>
+                  <p className="text-adaptive-muted">
                     {selectedEvent.age} · {selectedEvent.date}
                   </p>
                 </div>
               </div>
 
-              <p className="text-slate-600 mb-6 text-lg leading-relaxed">{selectedEvent.description}</p>
+              <p className="text-adaptive-muted mb-6 text-lg leading-relaxed">{selectedEvent.description}</p>
 
               {selectedEvent.aiInsight && (
                 <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-6">
@@ -729,14 +724,14 @@ export default function EnhancedGrowthTimeline({
                     <Sparkles className="w-5 h-5" />
                     AI小语洞察
                   </h3>
-                  <p className="text-slate-600">{selectedEvent.aiInsight}</p>
+                  <p className="text-adaptive-muted">{selectedEvent.aiInsight}</p>
                 </div>
               )}
 
               {selectedEvent.tags && (
                 <div className="flex gap-2 flex-wrap">
                   {selectedEvent.tags.map((tag, index) => (
-                    <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-slate-600">
+                    <span key={index} className="px-3 py-1 bg-surface-soft rounded-full text-sm text-adaptive-muted">
                       #{tag}
                     </span>
                   ))}

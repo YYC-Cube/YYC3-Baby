@@ -1,19 +1,19 @@
 'use client'
 
-import React, { useState, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Upload,
-  X,
   Camera,
-  Video,
-  Image,
-  Film,
-  Trash2,
   Check,
+  Film,
   Heart,
-  Star
+  Image,
+  Star,
+  Trash2,
+  Upload,
+  Video,
+  X
 } from 'lucide-react'
+import React, { useCallback, useRef, useState } from 'react'
 
 // 增强的媒体文件接口
 export interface EnhancedMediaFile {
@@ -374,25 +374,24 @@ export default function EnhancedMediaUploader({
   })
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
+    <div className="w-full max-w-6xl mx-auto p-6 bg-surface rounded-2xl shadow-lg">
       {/* 头部 */}
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-adaptive mb-2 flex items-center gap-2">
           <Camera className="w-6 h-6 text-purple-600" />
           智能媒体上传器
         </h2>
-        <p className="text-gray-600">
+        <p className="text-adaptive-muted">
           上传照片和视频，记录小语的美好成长瞬间
         </p>
       </div>
 
       {/* 上传区域 */}
       <div
-        className={`relative border-2 border-dashed rounded-2xl p-12 transition-all duration-300 ${
-          isDragOver
-            ? 'border-purple-400 bg-purple-50'
-            : 'border-gray-300 hover:border-gray-400 bg-gray-50'
-        } ${enableDragDrop ? 'cursor-pointer' : ''}`}
+        className={`relative border-2 border-dashed rounded-2xl p-12 transition-all duration-300 ${isDragOver
+          ? 'border-purple-400 bg-purple-50'
+          : 'border-soft hover:border-gray-400 bg-surface-soft'
+          } ${enableDragDrop ? 'cursor-pointer' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -418,11 +417,11 @@ export default function EnhancedMediaUploader({
             <Upload className="w-8 h-8 text-purple-600" />
           </motion.div>
 
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          <h3 className="text-lg font-semibold text-adaptive mb-2">
             {isDragOver ? '释放以上传文件' : '拖拽文件到这里'}
           </h3>
 
-          <p className="text-gray-600 mb-4">
+          <p className="text-adaptive-muted mb-4">
             或者
             <button
               onClick={(e) => {
@@ -435,7 +434,7 @@ export default function EnhancedMediaUploader({
             </button>
           </p>
 
-          <div className="flex flex-wrap gap-4 justify-center text-sm text-gray-500">
+          <div className="flex flex-wrap gap-4 justify-center text-sm text-adaptive-muted">
             <span>最多 {maxFiles} 个文件</span>
             <span>单个文件最大 {maxFileSize}MB</span>
             <span>支持图片和视频</span>
@@ -455,7 +454,7 @@ export default function EnhancedMediaUploader({
       {/* 工具栏 */}
       {files.length > 0 && (
         <motion.div
-          className="mt-6 p-4 bg-gray-50 rounded-xl"
+          className="mt-6 p-4 bg-surface-soft rounded-xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -468,7 +467,7 @@ export default function EnhancedMediaUploader({
                   onChange={toggleSelectAll}
                   className="rounded text-purple-600"
                 />
-                <span className="text-sm text-gray-700">全选 ({selectedFiles.size})</span>
+                <span className="text-sm text-adaptive-muted">全选 ({selectedFiles.size})</span>
               </label>
 
               {selectedFiles.size > 0 && (
@@ -486,7 +485,7 @@ export default function EnhancedMediaUploader({
               <select
                 value={sortBy}
                 onChange={(e) => { setSortBy(e.target.value as 'name' | 'date' | 'size'); }}
-                className="px-3 py-1 border border-gray-300 rounded-lg text-sm"
+                className="px-3 py-1 border border-soft rounded-lg text-sm"
               >
                 <option value="date">按日期排序</option>
                 <option value="name">按名称排序</option>
@@ -496,13 +495,13 @@ export default function EnhancedMediaUploader({
               <div className="flex gap-2">
                 <button
                   onClick={() => { setViewMode('grid'); }}
-                  className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-purple-100 text-purple-600' : 'bg-gray-200 text-gray-600'}`}
+                  className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-purple-100 text-purple-600' : 'bg-surface-soft text-adaptive-muted'}`}
                 >
                   <Film className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => { setViewMode('list'); }}
-                  className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-purple-100 text-purple-600' : 'bg-gray-200 text-gray-600'}`}
+                  className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-purple-100 text-purple-600' : 'bg-surface-soft text-adaptive-muted'}`}
                 >
                   <Image className="w-4 h-4" />
                 </button>
@@ -559,8 +558,8 @@ export default function EnhancedMediaUploader({
       </AnimatePresence>
 
       {/* 上传统计 */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="flex items-center justify-between text-sm text-gray-600">
+      <div className="mt-6 pt-6 border-t border-soft">
+        <div className="flex items-center justify-between text-sm text-adaptive-muted">
           <div className="flex items-center gap-4">
             <span>共 {files.length} 个文件</span>
             <span>总计 {formatFileSize(files.reduce((sum, file) => sum + file.size, 0))}</span>
@@ -603,7 +602,7 @@ function MediaCard({
 
   return (
     <motion.div
-      className="relative bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-purple-300 transition-all duration-300 cursor-pointer"
+      className="relative bg-surface border-2 border-soft rounded-xl overflow-hidden hover:border-purple-300 transition-all duration-300 cursor-pointer"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
@@ -613,9 +612,8 @@ function MediaCard({
       onClick={onToggleSelect}
     >
       {/* 选择状态指示 */}
-      <div className={`absolute top-2 left-2 w-6 h-6 rounded-full border-2 z-10 transition-colors ${
-        isSelected ? 'bg-purple-600 border-purple-600' : 'bg-white border-gray-300'
-      }`}>
+      <div className={`absolute top-2 left-2 w-6 h-6 rounded-full border-2 z-10 transition-colors ${isSelected ? 'bg-purple-600 border-purple-600' : 'bg-surface border-soft'
+        }`}>
         {isSelected && (
           <Check className="w-4 h-4 text-white m-0.5" />
         )}
@@ -629,11 +627,11 @@ function MediaCard({
           onUpdate({ ...file, isFavorite: !file.isFavorite })
         }}
       >
-        <Heart className={`w-3 h-3 ${file.isFavorite ? 'text-pink-500 fill-pink-500' : 'text-gray-400'}`} />
+        <Heart className={`w-3 h-3 ${file.isFavorite ? 'text-pink-500 fill-pink-500' : 'text-adaptive-muted'}`} />
       </button>
 
       {/* 预览区域 */}
-      <div className="relative aspect-square bg-gray-100">
+      <div className="relative aspect-square bg-surface-soft">
         {file.thumbnail ? (
           <img
             src={file.thumbnail}
@@ -642,7 +640,7 @@ function MediaCard({
           />
         ) : file.type === 'image' ? (
           <div className="w-full h-full flex items-center justify-center">
-            <Image className="w-12 h-12 text-gray-400" />
+            <Image className="w-12 h-12 text-adaptive-muted" />
           </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-800">
@@ -720,7 +718,7 @@ function MediaCard({
               </span>
             ))}
             {file.tags.length > 2 && (
-              <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">
+              <span className="px-2 py-1 bg-surface-soft text-adaptive-muted rounded-full text-xs">
                 +{file.tags.length - 2}
               </span>
             )}
@@ -757,7 +755,7 @@ function MediaListItem({
 }) {
   return (
     <motion.div
-      className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-purple-300 transition-all duration-300"
+      className="flex items-center gap-4 p-4 bg-surface border border-soft rounded-xl hover:border-purple-300 transition-all duration-300"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
@@ -771,7 +769,7 @@ function MediaListItem({
       />
 
       {/* 缩略图 */}
-      <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+      <div className="w-16 h-16 bg-surface-soft rounded-lg overflow-hidden shrink-0">
         {file.thumbnail ? (
           <img
             src={file.thumbnail}
@@ -780,7 +778,7 @@ function MediaListItem({
           />
         ) : file.type === 'image' ? (
           <div className="w-full h-full flex items-center justify-center">
-            <Image className="w-8 h-8 text-gray-400" />
+            <Image className="w-8 h-8 text-adaptive-muted" />
           </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-800">
@@ -791,8 +789,8 @@ function MediaListItem({
 
       {/* 文件信息 */}
       <div className="flex-1 min-w-0">
-        <h4 className="font-medium text-gray-800 truncate">{file.name}</h4>
-        <div className="flex items-center gap-4 text-sm text-gray-500">
+        <h4 className="font-medium text-adaptive truncate">{file.name}</h4>
+        <div className="flex items-center gap-4 text-sm text-adaptive-muted">
           <span>{formatFileSize(file.size)}</span>
           {file.duration && <span>• {formatDuration(file.duration)}</span>}
           {file.dimensions && (
@@ -822,14 +820,14 @@ function MediaListItem({
           onClick={() => { onUpdate({ ...file, isFavorite: !file.isFavorite }); }}
           className="p-2 hover:bg-pink-50 rounded-lg transition-colors"
         >
-          <Heart className={`w-4 h-4 ${file.isFavorite ? 'text-pink-500 fill-pink-500' : 'text-gray-400'}`} />
+          <Heart className={`w-4 h-4 ${file.isFavorite ? 'text-pink-500 fill-pink-500' : 'text-adaptive-muted'}`} />
         </button>
 
         <button
           onClick={() => { onUpdate({ ...file, isFeatured: !file.isFeatured }); }}
           className="p-2 hover:bg-yellow-50 rounded-lg transition-colors"
         >
-          <Star className={`w-4 h-4 ${file.isFeatured ? 'text-yellow-500 fill-yellow-500' : 'text-gray-400'}`} />
+          <Star className={`w-4 h-4 ${file.isFeatured ? 'text-yellow-500 fill-yellow-500' : 'text-adaptive-muted'}`} />
         </button>
 
         <button

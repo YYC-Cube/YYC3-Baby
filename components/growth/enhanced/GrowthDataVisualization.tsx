@@ -1,38 +1,38 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
-} from 'recharts'
-import {
-  TrendingUp,
-  Brain,
   Activity,
   Award,
+  Brain,
   Download,
-  Share,
   Settings,
+  Share,
   Sparkles,
-  Star
+  Star,
+  TrendingUp
 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from 'recharts'
 // 成长数据接口
 interface GrowthData {
   date: string
@@ -380,8 +380,8 @@ export default function GrowthDataVisualization() {
   const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-          <p className="font-semibold text-gray-800 mb-2">{`日期: ${label}`}</p>
+        <div className="bg-surface p-4 rounded-lg shadow-lg border border-soft">
+          <p className="font-semibold text-adaptive mb-2">{`日期: ${label}`}</p>
           {payload.map((entry: TooltipEntry, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {`${entry.name}: ${entry.value}${entry.name.includes('身高') ? 'cm' : entry.name.includes('体重') ? 'kg' : ''}`}
@@ -429,11 +429,10 @@ export default function GrowthDataVisualization() {
                 <button
                   key={id}
                   onClick={() => { setSelectedChart(id as 'growth' | 'skills' | 'activities' | 'milestones'); }}
-                  className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
-                    selectedChart === id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${selectedChart === id
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-surface-soft text-adaptive-muted hover:bg-surface'
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                   {label}
@@ -452,11 +451,10 @@ export default function GrowthDataVisualization() {
                 <button
                   key={id}
                   onClick={() => { setTimeRange(id as 'all' | '3m' | '6m' | '1y'); }}
-                  className={`px-3 py-1 rounded-lg text-sm transition-all ${
-                    timeRange === id
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  className={`px-3 py-1 rounded-lg text-sm transition-all ${timeRange === id
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-surface-soft text-adaptive-muted hover:bg-surface'
+                    }`}
                 >
                   {label}
                 </button>
@@ -527,15 +525,15 @@ export default function GrowthDataVisualization() {
           ].map((stat, index) => (
             <motion.div
               key={index}
-              className="bg-white rounded-xl p-4 shadow-lg"
+              className="bg-surface rounded-xl p-4 shadow-lg"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 + index * 0.1 }}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                  <p className="text-adaptive-muted text-sm">{stat.label}</p>
+                  <p className="text-2xl font-bold text-adaptive">{stat.value}</p>
                   <p className="text-green-600 text-sm">{stat.change}</p>
                 </div>
                 <div className={`w-12 h-12 bg-linear-to-r ${stat.color} rounded-lg flex items-center justify-center text-2xl`}>
@@ -550,7 +548,7 @@ export default function GrowthDataVisualization() {
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedChart}
-            className="bg-white rounded-2xl shadow-lg p-6"
+            className="bg-surface rounded-2xl shadow-lg p-6"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
@@ -559,7 +557,7 @@ export default function GrowthDataVisualization() {
             {/* 生长曲线图 */}
             {selectedChart === 'growth' && (
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-adaptive mb-6 flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-blue-600" />
                   生长曲线
                 </h3>
@@ -575,10 +573,12 @@ export default function GrowthDataVisualization() {
                       <input
                         type="checkbox"
                         checked={selectedMetrics[key as keyof typeof selectedMetrics]}
-                        onChange={(e) => { setSelectedMetrics(prev => ({
-                          ...prev,
-                          [key]: e.target.checked
-                        })); }}
+                        onChange={(e) => {
+                          setSelectedMetrics(prev => ({
+                            ...prev,
+                            [key]: e.target.checked
+                          }));
+                        }}
                         className="w-4 h-4 text-blue-600 rounded"
                       />
                       <span className="text-gray-700">{label}</span>
@@ -640,7 +640,7 @@ export default function GrowthDataVisualization() {
             {/* 能力雷达图 */}
             {selectedChart === 'skills' && (
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-adaptive mb-6 flex items-center gap-2">
                   <Brain className="w-5 h-5 text-purple-600" />
                   能力发展雷达
                 </h3>
@@ -672,15 +672,15 @@ export default function GrowthDataVisualization() {
 
                   {/* 能力详情 */}
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-4">能力详情</h4>
+                    <h4 className="font-semibold text-adaptive mb-4">能力详情</h4>
                     <div className="space-y-4">
                       {radarData.map((skill, index) => (
                         <div key={index} className="flex items-center gap-4">
-                          <div className="w-24 text-sm font-medium text-gray-700">
+                          <div className="w-24 text-sm font-medium text-adaptive-muted">
                             {skill.skill}
                           </div>
                           <div className="flex-1">
-                            <div className="w-full bg-gray-200 rounded-full h-3">
+                            <div className="w-full bg-surface-soft rounded-full h-3">
                               <motion.div
                                 className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full"
                                 initial={{ width: 0 }}
@@ -717,7 +717,7 @@ export default function GrowthDataVisualization() {
             {/* 活动分析 */}
             {selectedChart === 'activities' && (
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-adaptive mb-6 flex items-center gap-2">
                   <Activity className="w-5 h-5 text-green-600" />
                   日常活动分析
                 </h3>
@@ -778,10 +778,10 @@ export default function GrowthDataVisualization() {
                     { icon: '📚', label: '阅读次数', value: '4.2次/天', color: 'yellow' },
                     { icon: '🎵', label: '音乐活动', value: '5.8次/天', color: 'purple' }
                   ].map((stat, index) => (
-                    <div key={index} className="text-center p-4 bg-gray-50 rounded-lg">
+                    <div key={index} className="text-center p-4 bg-surface-soft rounded-lg">
                       <div className="text-2xl mb-2">{stat.icon}</div>
-                      <div className="text-sm text-gray-600">{stat.label}</div>
-                      <div className="text-lg font-semibold text-gray-800">{stat.value}</div>
+                      <div className="text-sm text-adaptive-muted">{stat.label}</div>
+                      <div className="text-lg font-semibold text-adaptive">{stat.value}</div>
                     </div>
                   ))}
                 </div>
@@ -791,7 +791,7 @@ export default function GrowthDataVisualization() {
             {/* 里程碑 */}
             {selectedChart === 'milestones' && (
               <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-adaptive mb-6 flex items-center gap-2">
                   <Award className="w-5 h-5 text-orange-600" />
                   成长里程碑
                 </h3>
@@ -799,28 +799,26 @@ export default function GrowthDataVisualization() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* 里程碑时间线 */}
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-4">里程碑时间线</h4>
+                    <h4 className="font-semibold text-adaptive mb-4">里程碑时间线</h4>
                     <div className="space-y-4 max-h-96 overflow-y-auto">
                       {milestoneTimeline.map((item, index) => (
                         <motion.div
                           key={index}
-                          className={`flex gap-4 p-4 rounded-lg border-l-4 ${
-                            item.type === 'major'
-                              ? 'bg-orange-50 border-orange-400'
-                              : 'bg-blue-50 border-blue-400'
-                          }`}
+                          className={`flex gap-4 p-4 rounded-lg border-l-4 ${item.type === 'major'
+                            ? 'bg-orange-50 border-orange-400'
+                            : 'bg-blue-50 border-blue-400'
+                            }`}
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
                         >
                           <div className="shrink-0">
-                            <div className={`w-3 h-3 rounded-full mt-1 ${
-                              item.type === 'major' ? 'bg-orange-400' : 'bg-blue-400'
-                            }`} />
+                            <div className={`w-3 h-3 rounded-full mt-1 ${item.type === 'major' ? 'bg-orange-400' : 'bg-blue-400'
+                              }`} />
                           </div>
                           <div>
-                            <div className="font-medium text-gray-800">{item.milestone}</div>
-                            <div className="text-sm text-gray-600">
+                            <div className="font-medium text-adaptive">{item.milestone}</div>
+                            <div className="text-sm text-adaptive-muted">
                               {item.date} • {item.age}
                             </div>
                           </div>
@@ -831,7 +829,7 @@ export default function GrowthDataVisualization() {
 
                   {/* 成就分布 */}
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-4">能力发展分布</h4>
+                    <h4 className="font-semibold text-adaptive mb-4">能力发展分布</h4>
                     <ResponsiveContainer width="100%" height={300}>
                       <PieChart>
                         <Pie

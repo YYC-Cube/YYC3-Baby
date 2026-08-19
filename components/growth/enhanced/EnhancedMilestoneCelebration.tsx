@@ -1,24 +1,21 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence, useAnimation } from 'framer-motion'
+import { AnimatePresence, motion, useAnimation } from 'framer-motion'
 import {
-  Trophy,
-  Stars,
-  Heart,
-  Gift,
-  Sparkles,
+  Baby,
   Camera,
+  ChevronRight,
+  Download,
+  Gift,
+  Heart,
   Music,
   PartyPopper,
-  Cake,
-  Baby,
-  ChevronRight,
   Share,
-  Download,
-  X,
-  Play
+  Sparkles,
+  Stars,
+  Trophy
 } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // 增强的里程碑接口
 interface EnhancedMilestone {
@@ -273,7 +270,7 @@ export default function EnhancedMilestoneCelebration({
 
   const playCelebrationSound = useCallback(() => {
     try {
-      interface WebkitAudioContext extends AudioContext {}
+      interface WebkitAudioContext extends AudioContext { }
       interface WindowWithWebkitAudioContext extends Window {
         webkitAudioContext?: typeof AudioContext
       }
@@ -425,7 +422,7 @@ export default function EnhancedMilestoneCelebration({
 
           {/* 庆祝卡片 */}
           <motion.div
-            className="relative z-10 bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden"
+            className="relative z-10 bg-surface rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden"
             initial={{ scale: 0.5, y: 100, rotate: -5 }}
             animate={{ scale: 1, y: 0, rotate: 0 }}
             exit={{ scale: 0.5, y: 100, rotate: 5 }}
@@ -477,11 +474,11 @@ export default function EnhancedMilestoneCelebration({
                   animate={{ scale: 1 }}
                   transition={{ delay: 1, type: "spring" }}
                 >
-                  <div className={`inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r ${config.bgGradient} rounded-full border border-gray-200`}>
+                  <div className={`inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r ${config.bgGradient} rounded-full border border-soft`}>
                     {milestone.celebrationLevel === 'diamond' && <Stars className="w-4 h-4 text-blue-500" />}
                     {milestone.celebrationLevel === 'gold' && <Trophy className="w-4 h-4 text-yellow-500" />}
                     {milestone.celebrationLevel === 'silver' && <Gift className="w-4 h-4 text-gray-500" />}
-                    <span className="text-sm font-medium text-gray-700 capitalize">
+                    <span className="text-sm font-medium text-adaptive-muted capitalize">
                       {milestone.celebrationLevel} 成就
                     </span>
                   </div>
@@ -498,7 +495,7 @@ export default function EnhancedMilestoneCelebration({
                 <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-600 mb-2">
                   {milestone.title}
                 </h2>
-                <div className="flex items-center justify-center gap-3 text-gray-500">
+                <div className="flex items-center justify-center gap-3 text-adaptive-muted">
                   <span className="flex items-center gap-1">
                     <Baby className="w-4 h-4" />
                     {milestone.age}
@@ -518,7 +515,7 @@ export default function EnhancedMilestoneCelebration({
 
               {/* 描述 */}
               <motion.p
-                className="text-gray-600 text-center mb-6 leading-relaxed"
+                className="text-adaptive-muted text-center mb-6 leading-relaxed"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
@@ -534,7 +531,7 @@ export default function EnhancedMilestoneCelebration({
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-adaptive-muted mb-3 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-yellow-500" />
                     关键成就
                   </h3>
@@ -548,7 +545,7 @@ export default function EnhancedMilestoneCelebration({
                         transition={{ delay: 0.7 + index * 0.1 }}
                       >
                         <div className="w-2 h-2 bg-green-500 rounded-full" />
-                        <span className="text-sm text-gray-700">{achievement}</span>
+                        <span className="text-sm text-adaptive-muted">{achievement}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -563,7 +560,7 @@ export default function EnhancedMilestoneCelebration({
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.8 }}
                 >
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-adaptive-muted mb-3 flex items-center gap-2">
                     <Heart className="w-4 h-4 text-pink-500" />
                     家庭反应
                   </h3>
@@ -577,7 +574,7 @@ export default function EnhancedMilestoneCelebration({
                         transition={{ delay: 0.9 + index * 0.1 }}
                       >
                         <div className="w-2 h-2 bg-pink-500 rounded-full" />
-                        <span className="text-sm text-gray-700">{reaction}</span>
+                        <span className="text-sm text-adaptive-muted">{reaction}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -592,7 +589,7 @@ export default function EnhancedMilestoneCelebration({
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 1 }}
                 >
-                  <p className="text-sm text-gray-600 italic text-center">
+                  <p className="text-sm text-adaptive-muted italic text-center">
                     &quot;{milestone.personalizedMessage}&quot;
                   </p>
                 </motion.div>
@@ -621,7 +618,7 @@ export default function EnhancedMilestoneCelebration({
                 </button>
                 <button
                   onClick={onClose}
-                  className="px-6 py-3 bg-gray-100 text-gray-600 rounded-xl font-medium hover:bg-gray-200 transition-all duration-300 flex items-center gap-2"
+                  className="px-6 py-3 bg-surface-soft text-adaptive-muted rounded-xl font-medium hover:bg-surface transition-all duration-300 flex items-center gap-2"
                 >
                   继续探索
                   <ChevronRight className="w-4 h-4" />
@@ -650,11 +647,10 @@ export default function EnhancedMilestoneCelebration({
                   return (
                     <motion.div
                       key={index}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${
-                        isActive
-                          ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white'
-                          : 'bg-gray-200 text-gray-400'
-                      }`}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isActive
+                        ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white'
+                        : 'bg-surface-soft text-adaptive-muted'
+                        }`}
                       initial={{ scale: 0 }}
                       animate={{ scale: isActive ? 1 : 0.8 }}
                       transition={{ delay: step.delay / 1000 }}
