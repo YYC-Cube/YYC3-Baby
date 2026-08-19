@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/YYC3-Family.png" alt="YYC³ Family" />
+</p>
+
 # YYC³ 小语智能成长守护系统（统一基线）
 
 > YYC³ AI小语智能成长守护系统 — 0-3岁婴幼儿智能陪伴与成长守护平台。
@@ -103,10 +107,15 @@ unified/
 - 安全响应头（CSP / X-Frame-Options / nosniff / Referrer-Policy）配置于 `next.config.mjs`。
 - 依赖审计：`npm audit --package-lock-only --registry=https://registry.npmjs.org`，当前 **0 漏洞**。
 
+## 开发者文档
+
+完整技术文档套见 **[docs/developer/](./docs/developer/)**：快速上手 · 可视化架构（Mermaid 七图）· 数据模型 · API 参考 · 前端组件体系 · AI 引擎与安全 · 测试与质量门禁 · 部署 · 贡献指南。
+
 ## 当前状态
 
 - ✅ 构建通过，生产冒烟 200（含 `/en` i18n 路由、`/manifest.json`、`/icon.svg`）
 - ✅ SQLite 真实持久化（写入 → 重启 → 数据在）
-- ✅ 测试 199/199 全绿
-- ✅ 依赖 0 漏洞；类型债 1,986 → ~415（[TYPECHECK_BASELINE.md](./TYPECHECK_BASELINE.md)）
+- ✅ 测试 216/216 全绿
+- ✅ 依赖 0 漏洞；类型债 1,986 → **0**（[TYPECHECK_BASELINE.md](./TYPECHECK_BASELINE.md)，门禁已恢复）
+- ✅ 徽章系统：30 枚勋章 × 真实数据评估引擎（`lib/badges/`）
 - 📍 下一步建议：按域清理剩余类型债 → 接线 themes 三套主题 → API 鉴权中间件
