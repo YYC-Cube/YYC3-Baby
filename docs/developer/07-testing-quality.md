@@ -10,7 +10,7 @@ flowchart LR
 | 门禁 | 命令 | 当前基线 |
 | ------ | ------ | --------- |
 | 类型 | `bun run type-check` | **0 错误**（应用代码；`__tests__/`、`themes/` 排除） |
-| Lint | `bun run lint` | **0 error**，~460 warning（见债务清单） |
+| Lint | `bun run lint` | **0 error**，~170 warning（见债务清单） |
 | 构建 | `bun run build` | 通过（类型门禁已恢复，无 ignoreBuildErrors） |
 | 测试 | `bun test` | 251/251（19 文件，<1s；含 38 个安全行为用例） |
 | 依赖 | `npm audit --package-lock-only --registry=https://registry.npmjs.org` | 0 漏洞 |

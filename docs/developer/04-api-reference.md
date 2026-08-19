@@ -108,7 +108,8 @@ curl -c jar -X POST /api/auth/login ... && curl -b jar /api/children
 ```
 
 **配置**：`JWT_SECRET`（生产必设，`openssl rand -hex 32`；开发缺省时自动生成安装级随机密钥 `data/.jwt-dev-secret`）、
-`JWT_EXPIRES_IN`（默认 7d）、`JWT_REFRESH_EXPIRES_IN`（默认 30d）。**演示账号**（种子数据）：`parent@yyc3.com` / `demo123456`。
+`JWT_EXPIRES_IN`（默认 2h，泄露窗口收窄；前端 401 自动刷新无感）、`JWT_REFRESH_EXPIRES_IN`（默认 30d）。
+**演示账号**（仅开发/预览环境种子，**生产自动跳过种入**）：`parent@yyc3.com` / `demo123456`。
 
 ## 日志体系（Winston，P0-2 融合）
 

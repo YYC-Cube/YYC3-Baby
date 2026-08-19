@@ -67,10 +67,10 @@ function getSecret(): string {
   throw new Error("JWT_SECRET environment variable is not defined")
 }
 
-/** 签发访问令牌（默认 7 天，可用 JWT_EXPIRES_IN 覆盖） */
+/** 签发访问令牌（默认 2 小时——已有 30d refresh + httpOnly 通道，泄露窗口应收窄；可用 JWT_EXPIRES_IN 覆盖） */
 export function generateToken(payload: JWTPayload): string {
   const options: SignOptions = {
-    expiresIn: (process.env.JWT_EXPIRES_IN as SignOptions["expiresIn"]) || "7d",
+    expiresIn: (process.env.JWT_EXPIRES_IN as SignOptions["expiresIn"]) || "2h",
     issuer: ISSUER,
     audience: AUDIENCE,
   }

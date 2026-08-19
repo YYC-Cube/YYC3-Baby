@@ -10,8 +10,8 @@ import type { NextResponse } from "next/server"
 export const ACCESS_COOKIE = "yyc3_at"
 export const REFRESH_COOKIE = "yyc3_rt"
 
-// 与 lib/auth/jwt.ts 的默认有效期保持一致（7d / 30d，可被 env 覆盖）
-const ACCESS_MAX_AGE = 7 * 24 * 60 * 60
+// 与 lib/auth/jwt.ts 的默认有效期保持一致（2h / 30d，可被 env 覆盖）
+const ACCESS_MAX_AGE = 2 * 60 * 60
 const REFRESH_MAX_AGE = 30 * 24 * 60 * 60
 
 const baseCookie = {

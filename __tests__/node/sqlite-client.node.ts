@@ -109,3 +109,18 @@ test("种子数据：演示账号带 bcrypt 密码", async () => {
   await db.seedMockData()
   assert.equal(await db.count("users"), 1)
 })
+
+test("生产环境守卫：演示账号不得种入", async () => {
+  const db = freshDb()
+  const prev = process.env.NODE_ENV
+  process.env.NODE_ENV = "production"
+  try {
+    await db.seedMockData()
+    assert.equal(await db.count("users"), 0, "生产环境不应种入任何数据")
+  } finally {
+    process.env.NODE_ENV = prev
+  }
+  // 恢复非生产后可正常种子
+  await db.seedMockData()
+  assert.equal(await db.count("users"), 1)
+})

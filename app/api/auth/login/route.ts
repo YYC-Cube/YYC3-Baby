@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       message: "登录成功",
       data: {
         user,
-        tokens: { accessToken, refreshToken, expiresIn: process.env.JWT_EXPIRES_IN || "7d" },
+        tokens: { accessToken, refreshToken, expiresIn: process.env.JWT_EXPIRES_IN || "2h" },
       },
       meta: { timestamp: new Date().toISOString() },
     })

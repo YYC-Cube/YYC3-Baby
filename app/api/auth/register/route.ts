@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs"
 import { createUser } from "@/lib/auth/service"
 import { error as logError, info as logInfo } from "@/lib/logger/server"
 import { checkRateLimit } from "@/lib/rate-limit"
@@ -31,6 +32,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Rate Limit", message: "注册尝试过于频繁，请稍后再试" }, { status: 429 })
     }
 
+    // 哑哈希：抹平"新注册（真哈希）vs 重复邮箱（无哈希）"的时序差，防时序侧信道枚举
+    const dummyHash = "$2b$12$C6UzMDM.H6dfI/f/IKcEe.9RhMDzMdgDbmL0z2oQvVcA2m0dBZ5Xu"
+
     try {
       await createUser(parsed.data)
       logInfo("注册成功", { email: parsed.data.email }, { module: "auth", function: "register" })
@@ -38,6 +42,7 @@ export async function POST(request: Request) {
       const message = error instanceof Error ? error.message : "注册失败"
       if (message.includes("已注册")) {
         // 邮箱已存在：静默 no-op，响应与新注册完全一致，防止账号枚举
+        await bcrypt.compare(parsed.data.password, dummyHash)
         return NextResponse.json(
           { success: true, message: "注册成功，请使用邮箱和密码登录", meta: { timestamp: new Date().toISOString() } },
           { status: 201 }

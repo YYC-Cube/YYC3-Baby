@@ -169,4 +169,4 @@ bun test
 - ✅ 依赖 0 漏洞；类型债 1,986 → **0**（[TYPECHECK_BASELINE.md](./TYPECHECK_BASELINE.md)，门禁已恢复）
 - ✅ 徽章系统：30 枚勋章 × 真实数据评估引擎（`lib/badges/`）
 - ✅ 鉴权（JWT 类型声明 + httpOnly Cookie + 限流 + 租户隔离）、Winston 日志体系、语音三件套、四主题系统、组件语义化（90%）
-- 📍 后续：按域持续消化 lint 债务（~460 warn，见 [07 · 测试与质量门禁](./docs/developer/07-testing-quality.md)）
+- 📍 后续：按域持续消化 lint 债务（~170 warn，见 [07 · 测试与质量门禁](./docs/developer/07-testing-quality.md)）

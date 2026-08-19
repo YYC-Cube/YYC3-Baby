@@ -532,6 +532,12 @@ export class SQLiteDatabase {
   // 初始化示例数据
   async seedMockData(): Promise<void> {
     try {
+      // 生产环境禁止种入演示账号（parent@yyc3.com 公开口令不可进生产）
+      if (process.env.NODE_ENV === "production") {
+        console.log("📋 生产环境：跳过演示数据初始化")
+        return
+      }
+
       // 检查是否已有数据
       const userCount = await this.count("users")
       if (userCount > 0) {
