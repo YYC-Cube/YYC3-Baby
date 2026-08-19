@@ -1,6 +1,6 @@
-import { generateRefreshToken, generateToken } from "@/lib/auth/jwt"
 import { createUser } from "@/lib/auth/service"
-import { error as logError } from "@/lib/logger/server"
+import { error as logError, info as logInfo } from "@/lib/logger/server"
+import { checkRateLimit } from "@/lib/rate-limit"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
@@ -12,6 +12,8 @@ const registerSchema = z.object({
   phone: z.string().optional(),
 })
 
+// 枚举防护：注册成功与否响应完全一致（不返回用户数据/令牌，不泄露邮箱是否已注册）。
+// 客户端注册后统一走登录：新用户用刚提交的密码登录成功，重复邮箱登录失败（错误信息与"密码错误"不可区分）。
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => null)
@@ -23,30 +25,32 @@ export async function POST(request: Request) {
       )
     }
 
-    const user = await createUser(parsed.data)
-    const payload = { userId: user.id, email: user.email, role: user.role }
+    // 限流：每 IP 5 次/分钟
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
+    if (!checkRateLimit(`register:ip:${ip}`, 5, 60_000).allowed) {
+      return NextResponse.json({ success: false, error: "Rate Limit", message: "注册尝试过于频繁，请稍后再试" }, { status: 429 })
+    }
+
+    try {
+      await createUser(parsed.data)
+      logInfo("注册成功", { email: parsed.data.email }, { module: "auth", function: "register" })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "注册失败"
+      if (message.includes("已注册")) {
+        // 邮箱已存在：静默 no-op，响应与新注册完全一致，防止账号枚举
+        return NextResponse.json(
+          { success: true, message: "注册成功，请使用邮箱和密码登录", meta: { timestamp: new Date().toISOString() } },
+          { status: 201 }
+        )
+      }
+      throw error
+    }
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "注册成功",
-        data: {
-          user,
-          tokens: {
-            accessToken: generateToken(payload),
-            refreshToken: generateRefreshToken(payload),
-            expiresIn: process.env.JWT_EXPIRES_IN || "7d",
-          },
-        },
-        meta: { timestamp: new Date().toISOString() },
-      },
+      { success: true, message: "注册成功，请使用邮箱和密码登录", meta: { timestamp: new Date().toISOString() } },
       { status: 201 }
     )
   } catch (error) {
-    const message = error instanceof Error ? error.message : "注册失败"
-    if (message.includes("已注册")) {
-      return NextResponse.json({ success: false, error: "Conflict", message }, { status: 409 })
-    }
     logError("注册失败", error, { module: "auth", function: "register" })
     return NextResponse.json({ success: false, error: "Server Error", message: "注册失败" }, { status: 500 })
   }

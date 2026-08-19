@@ -72,31 +72,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
+        // 令牌在 httpOnly Cookie 中随请求自动携带；apiClient 内置 401→刷新→重试
+        const profileResult = await apiClient.getProfile();
 
-        if (token) {
-          // Verify token and get user profile
-          const profileResult = await apiClient.getProfile();
-
-          if (profileResult.success && profileResult.data) {
-            setAuthState({
-              user: profileResult.data.user,
-              isLoading: false,
-              isAuthenticated: true,
-              error: null,
-            });
-          } else {
-            // Token invalid, clear it
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            setAuthState({
-              user: null,
-              isLoading: false,
-              isAuthenticated: false,
-              error: null,
-            });
-          }
+        if (profileResult.success && profileResult.data) {
+          setAuthState({
+            user: profileResult.data.user,
+            isLoading: false,
+            isAuthenticated: true,
+            error: null,
+          });
         } else {
+          // 清理历史版本遗留的本地令牌（cookie 模式无持久化令牌）
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
           setAuthState({
             user: null,
             isLoading: false,
@@ -106,8 +95,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         setAuthState({
           user: null,
           isLoading: false,
@@ -117,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    initializeAuth();
+    void initializeAuth();
   }, []);
 
   // Login function
@@ -128,11 +115,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await apiClient.login(email, password);
 
       if (result.success && result.data) {
-        const { user, tokens } = result.data;
+        const { user } = result.data;
 
-        // Store tokens
-        localStorage.setItem('accessToken', tokens.accessToken);
-        localStorage.setItem('refreshToken', tokens.refreshToken);
+        // 令牌经 httpOnly Cookie 传输（服务端已 Set-Cookie），不再写 localStorage（XSS 防护）。
+        // 清理历史版本遗留的本地令牌。
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
 
         setAuthState({
           user,
@@ -167,6 +155,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Register function
+  // 注册接口为防账号枚举不返回令牌/用户数据（响应与重复邮箱一致），
+  // 注册后统一以登录完成会话建立：新用户用刚提交的密码登录成功
   const register = async (userData: {
     email: string;
     password: string;
@@ -179,31 +169,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await apiClient.register(userData);
 
-      if (result.success && result.data) {
-        const { user, tokens } = result.data;
-
-        // Store tokens
-        localStorage.setItem('accessToken', tokens.accessToken);
-        localStorage.setItem('refreshToken', tokens.refreshToken);
-
-        setAuthState({
-          user,
-          isLoading: false,
-          isAuthenticated: true,
-          error: null,
-        });
-
-        return true;
-      } else {
-        setAuthState({
-          user: null,
-          isLoading: false,
-          isAuthenticated: false,
-          error: result.error || '注册失败',
-        });
-
-        return false;
+      if (result.success) {
+        return await login(userData.email, userData.password);
       }
+
+      setAuthState({
+        user: null,
+        isLoading: false,
+        isAuthenticated: false,
+        error: result.error || '注册失败',
+      });
+
+      return false;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '注册时发生错误';
 
@@ -220,16 +197,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Logout function
   const logout = async (): Promise<void> => {
-    const refreshToken = localStorage.getItem('refreshToken');
-
     try {
-      if (refreshToken) {
-        await apiClient.logout(refreshToken);
-      }
+      // 服务端清除 httpOnly 令牌 Cookie；body refreshToken 兼容旧客户端
+      const refreshToken = localStorage.getItem('refreshToken') ?? undefined;
+      await apiClient.logout(refreshToken ?? '');
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      // Clear local storage regardless of API call success
+      // 清理本地遗留（cookie 模式下通常为空）
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
 

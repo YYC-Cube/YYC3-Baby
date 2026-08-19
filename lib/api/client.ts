@@ -10,7 +10,10 @@
  */
 
 // API Client Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3200';
+// 默认同源（空字符串）：本仓库自带 app/api/* 路由。
+// 历史默认值 http://localhost:3200 指向不存在的独立后端，导致登录/注册 UI 从未打通过本应用 API；
+// 如需拆分独立后端，显式设置 NEXT_PUBLIC_API_URL。
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 // API Client Class
 class APIClient {
@@ -39,7 +42,8 @@ class APIClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    retried = false
   ): Promise<{ success: boolean; data?: T; error?: string; message?: string }> {
     try {
       const url = `${this.baseURL}${endpoint}`;
@@ -49,10 +53,25 @@ class APIClient {
         ...options.headers,
       };
 
-      const response = await fetch(url, {
+      let response = await fetch(url, {
         ...options,
         headers,
       });
+
+      // access 令牌过期：单飞刷新后重试一次（auth 端点自身不重试）
+      if (response.status === 401 && !retried && !endpoint.includes('/api/auth/')) {
+        const { refreshAccessToken } = await import('./auth-fetch');
+        if (await refreshAccessToken()) {
+          response = await fetch(url, {
+            ...options,
+            headers: {
+              ...this.defaultHeaders,
+              ...this.getAuthHeaders(),
+              ...options.headers,
+            },
+          });
+        }
+      }
 
       const data = await response.json();
 

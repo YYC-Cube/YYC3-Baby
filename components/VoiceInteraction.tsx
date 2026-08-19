@@ -7,9 +7,9 @@
 
 "use client"
 
-import { useState, useRef, useCallback } from "react"
-import { motion } from "framer-motion"
 import { reportError } from "@/lib/global-error-handler"
+import { motion } from "framer-motion"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 interface VoiceInteractionProps {
   onTranscript: (text: string) => void
@@ -40,8 +40,9 @@ export default function VoiceInteraction({
   const analyserRef = useRef<AnalyserNode | null>(null)
   const animationFrameRef = useRef<number | null>(null)
 
-  // 检查浏览器支持
+  // 检查浏览器支持（SSR 安全：服务端渲染期视为不支持，挂载后再评估）
   const isSupported = () => {
+    if (typeof window === "undefined") return false
     const w = window as WindowWithSpeechRecognition
     return !!((w.SpeechRecognition || w.webkitSpeechRecognition) && navigator.mediaDevices?.getUserMedia)
   }
@@ -190,7 +191,7 @@ export default function VoiceInteraction({
     }
 
     if (audioContextRef.current) {
-      audioContextRef.current.close()
+      void audioContextRef.current.close()
     }
 
     setIsRecording(false)
@@ -209,14 +210,19 @@ export default function VoiceInteraction({
       cancelAnimationFrame(animationFrameRef.current)
     }
     if (audioContextRef.current) {
-      audioContextRef.current.close()
+      void audioContextRef.current.close()
     }
   }
 
   // 组件卸载时清理
-  const handleUnmount = useCallback(() => {
-    cleanup()
+  useEffect(() => {
+    return () => { cleanup(); }
   }, [])
+
+  // 支持性依赖 window，须在客户端挂载后评估（避免 SSR 判定与水合不一致）
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted) return null
 
   if (!isSupported()) {
     return (
@@ -237,13 +243,12 @@ export default function VoiceInteraction({
           whileTap={{ scale: 0.95 }}
           onClick={isRecording ? stopRecording : startRecording}
           disabled={isProcessing}
-          className={`relative w-20 h-20 rounded-full flex items-center justify-center transition-all ${
-            isRecording
+          className={`relative w-20 h-20 rounded-full flex items-center justify-center transition-all ${isRecording
               ? "bg-red-500 hover:bg-red-600 shadow-red-200"
               : isProcessing
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 shadow-blue-200"
-          } shadow-lg`}
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 shadow-blue-200"
+            } shadow-lg`}
         >
           {isProcessing ? (
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
@@ -256,8 +261,8 @@ export default function VoiceInteraction({
             </div>
           ) : (
             <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-              <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+              <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
             </svg>
           )}
         </motion.button>
@@ -267,8 +272,8 @@ export default function VoiceInteraction({
             {isProcessing
               ? "正在处理..."
               : isRecording
-              ? "正在录音..."
-              : "点击开始语音输入"
+                ? "正在录音..."
+                : "点击开始语音输入"
             }
           </p>
           <p className="text-xs text-gray-500 mt-1">

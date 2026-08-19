@@ -7,7 +7,8 @@
  * @created 2026-08-19
  */
 
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
+import { ACCESS_COOKIE } from "./cookies"
 import { extractTokenFromRequest, verifyToken, type JWTPayload } from "./jwt"
 import { findUserById, toAuthUser, type AuthUser } from "./service"
 
@@ -18,11 +19,38 @@ export interface AuthContext {
 }
 
 /**
+ * CSRF 纵深防御：Cookie 认证的非 GET 请求必须同源。
+ * SameSite=Lax 已阻断跨站携带，此处校验 Origin 头作为兜底（老浏览器/自定义客户端）。
+ */
+function isSameOriginCSRF(request: Request): boolean {
+  const origin = request.headers.get("origin")
+  if (!origin) return true // 非浏览器客户端（curl/SDK）无 Origin，放行交由其他校验
+  try {
+    const originHost = new URL(origin).host
+    const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host")
+    return !!host && originHost === host
+  } catch {
+    return false
+  }
+}
+
+/**
  * 必需认证：无有效令牌时返回 401 JSON 响应
+ * 令牌来源：Authorization Bearer 头（API 客户端）或 httpOnly Cookie（浏览器）
  * @returns 认证上下文（成功）或 NextResponse（失败）
  */
-export async function requireAuth(request: NextRequest): Promise<AuthContext | NextResponse> {
-  const token = extractTokenFromRequest(request.headers)
+export async function requireAuth(request: Request): Promise<AuthContext | NextResponse> {
+  // Cookie 认证的非 GET 请求先过同源校验（Bearer 头不受 CSRF 影响）
+  const cookieToken = request.headers.get("cookie")?.match(new RegExp(`(?:^|;\\s*)${ACCESS_COOKIE}=([^;]+)`))?.[1]
+  const usingCookie = !extractTokenFromRequest(request.headers) && !!cookieToken
+  if (usingCookie && request.method !== "GET" && !isSameOriginCSRF(request)) {
+    return NextResponse.json(
+      { success: false, error: "Forbidden", message: "跨站请求被拒绝" },
+      { status: 403 }
+    )
+  }
+
+  const token = extractTokenFromRequest(request.headers) ?? cookieToken
   if (!token) {
     return NextResponse.json(
       { success: false, error: "Authentication Error", message: "缺少认证令牌" },
@@ -32,7 +60,8 @@ export async function requireAuth(request: NextRequest): Promise<AuthContext | N
 
   let payload: JWTPayload
   try {
-    payload = verifyToken(token)
+    // 仅接受 access 令牌：refresh 令牌（30d）不得充当访问凭证
+    payload = verifyToken(token, "access")
   } catch (err) {
     const message = err instanceof Error && err.message.includes("expired")
       ? "令牌已过期"
