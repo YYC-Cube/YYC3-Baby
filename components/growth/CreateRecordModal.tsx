@@ -13,6 +13,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { authFetch } from "@/lib/api/auth-fetch"
 import { MediaUploader } from "./MediaUploader"
 import { TagSelector } from "./TagSelector"
 
@@ -57,7 +58,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
 
     setIsAnalyzing(true)
     try {
-      const response = await fetch("/api/ai/analyze-record", {
+      const response = await authFetch("/api/ai/analyze-record", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content, recordType }),
@@ -78,7 +79,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
     }
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const mediaUrls: string[] = []
 
     for (const file of mediaFiles) {

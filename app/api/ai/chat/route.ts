@@ -9,6 +9,8 @@
  * @license MIT
  */
 
+import { guardAIRequest } from "@/lib/api/ai-guard"
+import { NextResponse } from "next/server"
 import { selectRoleByContext, type AIRole } from "@/lib/ai_roles"
 
 // 预设的干净回复集合 - 彻底避免重复
@@ -112,6 +114,9 @@ function generateLocalResponse(message: string, role?: string): string {
 }
 
 export async function POST(request: Request) {
+  const guard = await guardAIRequest(request, { name: "chat", limit: 20 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     const { message, role, complexity } = await request.json()
 

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { guardAIRequest } from "@/lib/api/ai-guard"
 
 // 风格提示词映射
 const STYLE_PROMPTS: Record<string, string> = {
@@ -40,6 +41,10 @@ function sanitizePrompt(prompt: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  // fal.ai 生图按张计费，配额从严
+  const guard = await guardAIRequest(req, { name: "generate-image", limit: 6 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     const { prompt, style, aspectRatio } = await req.json()
 

@@ -1,6 +1,11 @@
 import { enhancedEmotionFusion } from "@/lib/ai/enhanced-emotion-fusion"
+import { guardAIRequest } from "@/lib/api/ai-guard"
+import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
+  const guard = await guardAIRequest(request, { name: "enhanced-emotion", limit: 30 })
+  if (guard instanceof NextResponse) return guard
+
   const startTime = Date.now()
 
   try {

@@ -1,6 +1,7 @@
 "use client"
 
 import type { HomeworkResult } from "@/lib/api/homework-correction"
+import { authFetch } from "@/lib/api/auth-fetch"
 import { AnimatePresence, motion } from "framer-motion"
 import { useCallback, useRef, useState } from "react"
 import { useDropzone } from "react-dropzone"
@@ -20,7 +21,7 @@ interface SmartHomeworkHelperProps {
 }
 
 export default function SmartHomeworkHelper({
-  homeworkId,
+  homeworkId: _homeworkId,
   subject,
   title,
   onHomeworkComplete,
@@ -34,7 +35,6 @@ export default function SmartHomeworkHelper({
   const [writtenAnswer, setWrittenAnswer] = useState("")
   const [isListening, setIsListening] = useState(false)
 
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
 
   // Handle image upload for homework correction
@@ -44,7 +44,7 @@ export default function SmartHomeworkHelper({
       const reader = new FileReader()
       reader.onload = (e) => {
         setUploadedImage(e.target?.result as string)
-        analyzeHomeworkImage(file)
+        void analyzeHomeworkImage(file)
       }
       reader.readAsDataURL(file)
     }
@@ -70,7 +70,7 @@ export default function SmartHomeworkHelper({
         reader.readAsDataURL(file)
       })
 
-      const response = await fetch("/api/ai/homework-correction", {
+      const response = await authFetch("/api/ai/homework-correction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image }),
@@ -91,7 +91,7 @@ export default function SmartHomeworkHelper({
       }
 
       // Convert API results to our component format
-      const formattedResults: HomeworkResult[] = correctionResult.results.map((result, index) => ({
+      const formattedResults: HomeworkResult[] = correctionResult.results.map((result, _index) => ({
         id: result.uuid,
         question: result.question,
         correctAnswer: result.correct_answer,
@@ -176,7 +176,7 @@ export default function SmartHomeworkHelper({
       const formData = new FormData()
       formData.append("audio", new File([audioBlob], "recording.webm", { type: "audio/webm" }))
 
-      const response = await fetch("/api/ai/speech-to-text", {
+      const response = await authFetch("/api/ai/speech-to-text", {
         method: "POST",
         body: formData,
       })
@@ -193,6 +193,8 @@ export default function SmartHomeworkHelper({
   }
 
   // Real text-to-speech for AI feedback - 完全禁用以避免声音干扰
+  // 异步契约：保持 async 签名供 onClick 统一调用（语音功能已禁用）
+  // eslint-disable-next-line @typescript-eslint/require-await
   const speakFeedback = async (text: string) => {
     // 永久禁用所有语音播放功能 - 避免产生鸣叫声和AI声音
     console.log(`[SmartHomeworkHelper] 语音播放已禁用: ${text.substring(0, 20)}...`)

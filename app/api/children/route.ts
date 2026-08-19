@@ -1,10 +1,15 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { listRows, createRow, isForeignKeyError } from "@/lib/db/server"
+import { createRow, isForeignKeyError, listRows } from "@/lib/db/server"
 import { requireAuth } from "@/lib/auth/guard"
+import { pickFields } from "@/lib/api/ownership"
 
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
+  // P0-2 数据隔离：儿童档案仅返回当前登录用户自己的
+  const auth = await requireAuth(request)
+  if (auth instanceof NextResponse) return auth
+
   try {
-    const children = await listRows("children")
+    const children = await listRows("children", { user_id: auth.user.id })
     return NextResponse.json({ data: children, success: true })
   } catch (error) {
     console.error("[api] Error fetching children:", error)
@@ -22,7 +27,16 @@ export async function POST(request: NextRequest) {
     if (!body?.name || !body?.birth_date) {
       return NextResponse.json({ error: "name 与 birth_date 为必填项", success: false }, { status: 400 })
     }
-    const newChild = await createRow("children", body)
+    // P0-3 防批量赋值：user_id 一律取自认证上下文，字段走白名单
+    const safeBody = pickFields(body, [
+      "name",
+      "nickname",
+      "birth_date",
+      "gender",
+      "avatar_url",
+      "current_stage",
+    ])
+    const newChild = await createRow("children", { ...safeBody, user_id: auth.user.id })
     return NextResponse.json({ data: newChild, success: true }, { status: 201 })
   } catch (error) {
     console.error("[api] Error creating child:", error)

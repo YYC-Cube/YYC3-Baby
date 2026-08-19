@@ -1,5 +1,7 @@
 import { generateText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
+import { guardAIRequest } from "@/lib/api/ai-guard"
+import { NextResponse } from "next/server"
 import { AI_ROLES, analyzeQueryComplexity, getCoordinatedPrompt } from "@/lib/ai_roles"
 
 const openai = createOpenAI({
@@ -10,6 +12,10 @@ const openai = createOpenAI({
 const model = openai("gpt-4o-mini") satisfies any
 
 export async function POST(request: Request) {
+  // 中/复杂度会触发多次模型调用，配额从严
+  const guard = await guardAIRequest(request, { name: "orchestrate", limit: 10 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     const { message } = await request.json()
 

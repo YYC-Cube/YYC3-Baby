@@ -10,6 +10,7 @@ import {
   type StoryStyle,
   ART_STYLE_CONFIG,
 } from "@/types/ai-creative"
+import { authFetch } from "@/lib/api/auth-fetch"
 import { useCallback, useState } from "react"
 
 const ARTWORK_KEY = "yyc3_artworks"
@@ -84,7 +85,7 @@ export function useAICreative() {
         const fullPrompt = buildFullPrompt(request.prompt, request.style)
 
         // 调用AI生图API
-        const response = await fetch("/api/ai/generate-image", {
+        const response = await authFetch("/api/ai/generate-image", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -236,7 +237,7 @@ export function useAICreative() {
 
       try {
         // 调用AI续写API
-        const response = await fetch("/api/ai/continue-story", {
+        const response = await authFetch("/api/ai/continue-story", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

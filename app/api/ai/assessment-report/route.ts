@@ -1,5 +1,7 @@
 import { generateText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
+import { guardAIRequest } from "@/lib/api/ai-guard"
+import { NextResponse } from "next/server"
 
 const openai = createOpenAI({
   apiKey: process.env['OPENAI_API_KEY'] ?? "",
@@ -20,6 +22,9 @@ interface DimensionData {
 }
 
 export async function POST(request: Request) {
+  const guard = await guardAIRequest(request, { name: "assessment-report", limit: 10 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     const { childName, childAge, stageId, stageName, scores } = await request.json()
 

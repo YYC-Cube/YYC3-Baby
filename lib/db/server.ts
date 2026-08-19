@@ -66,8 +66,9 @@ async function ensureSeeded(): Promise<void> {
 }
 
 // 将 SQLite 底层错误翻译为对 API 友好的错误信息
+// 只匹配外键错误；NOT NULL/UNIQUE 等其他约束错误不属于"关联记录不存在"
 export function isForeignKeyError(error: unknown): boolean {
-  const msg = String(error).toLowerCase(); return msg.includes("foreign key") || msg.includes("constraint")
+  const msg = String(error).toLowerCase(); return msg.includes("foreign key")
 }
 
 // 类型安全的表名白名单（防 SQL 注入：表名无法参数化）

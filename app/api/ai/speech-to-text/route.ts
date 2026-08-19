@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server"
+import { guardAIRequest } from "@/lib/api/ai-guard"
 import { getVoiceService } from "@/lib/api/voice-services"
 
 // 语音转写上限 25MB（BigModel ASR 限制）
 const MAX_AUDIO_BYTES = 25 * 1024 * 1024
 
 export async function POST(request: Request) {
+  // BigModel ASR 按时长计费，配额从严
+  const guard = await guardAIRequest(request, { name: "speech-to-text", limit: 10 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     let formData: FormData
     try {

@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
+import { guardAIRequest } from "@/lib/api/ai-guard"
 
 const openai = createOpenAI({
   apiKey: process.env['OPENAI_API_KEY'] ?? "",
@@ -21,6 +22,9 @@ const STYLE_TEMPLATES: Record<string, string> = {
 }
 
 export async function POST(req: NextRequest) {
+  const guard = await guardAIRequest(req, { name: "continue-story", limit: 10 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     const { keywords, style, previousContent, userInput } = await req.json()
 

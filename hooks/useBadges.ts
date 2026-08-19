@@ -6,6 +6,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { authFetch } from "@/lib/api/auth-fetch"
 import type { BadgeProgress, BadgeStats } from "@/types/badges"
 import { computeStats, evaluateAll, loadUnlockedMap, saveUnlockedMap, RawGrowthRecord, RawHomework, RawChild } from "@/lib/badges/engine"
 import { BADGE_COUNT } from "@/lib/badges/definitions"
@@ -43,12 +44,14 @@ export function useBadges(childId?: string): UseBadgesReturn {
       try {
         const query = childId ? `?childId=${encodeURIComponent(childId)}` : ""
         const [recordsRes, homeworkRes, childrenRes] = await Promise.all([
-          fetch(`/api/growth-records${query}`),
-          fetch(`/api/homework${query}`),
-          fetch("/api/children"),
+          authFetch(`/api/growth-records${query}`),
+          authFetch(`/api/homework${query}`),
+          authFetch("/api/children"),
         ])
 
-        if (!recordsRes.ok) throw new Error(`成长记录加载失败 (${recordsRes.status})`)
+        // 未登录（401）时按空数据渲染徽章，其余错误才中断
+        const unauthenticated = recordsRes.status === 401
+        if (!recordsRes.ok && !unauthenticated) throw new Error(`成长记录加载失败 (${recordsRes.status})`)
 
         const recordsJson = (await recordsRes.json()) as { data?: RawGrowthRecord[] }
         const homeworkJson = homeworkRes.ok ? ((await homeworkRes.json()) as { data?: RawHomework[] }) : { data: [] }
@@ -78,7 +81,7 @@ export function useBadges(childId?: string): UseBadgesReturn {
       }
     }
 
-    load()
+    void load()
     return () => {
       cancelled = true
     }

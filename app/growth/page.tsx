@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { authFetch } from "@/lib/api/auth-fetch"
 import PageHeader from "@/components/headers/PageHeader"
 import Navigation from "@/components/Navigation"
 import CreateRecordModal, { type CreateRecordPayload } from "@/components/growth/CreateRecordModal"
@@ -83,7 +84,7 @@ export default function GrowthPage() {
   const handleCreateRecord = async (record: CreateRecordPayload) => {
     setIsCreateModalOpen(false)
     try {
-      await fetch("/api/growth-records", {
+      await authFetch("/api/growth-records", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

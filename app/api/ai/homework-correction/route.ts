@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server"
+import { guardAIRequest } from "@/lib/api/ai-guard"
 import { getHomeworkCorrectionService } from "@/lib/api/homework-correction"
 
 // 请求体限制：base64 图片可能较大，超过 10MB 的作业照片直接拒绝
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024
 
 export async function POST(request: Request) {
+  // BigModel 视觉模型按次计费，配额从严
+  const guard = await guardAIRequest(request, { name: "homework-correction", limit: 10 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     const { image } = await request.json()
 

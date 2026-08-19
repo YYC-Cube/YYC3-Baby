@@ -1,6 +1,7 @@
-// 情感分析API端点
+import { guardAIRequest } from "@/lib/api/ai-guard"
+import { NextResponse } from "next/server"
 
-export const runtime = "edge"
+// 情感分析API端点（本地词典计算，无需 edge runtime；认证链依赖 node:sqlite）
 
 interface EmotionAnalysisRequest {
   text: string
@@ -17,6 +18,9 @@ interface EmotionAnalysisResponse {
 }
 
 export async function POST(request: Request) {
+  const guard = await guardAIRequest(request, { name: "emotion", limit: 30 })
+  if (guard instanceof NextResponse) return guard
+
   try {
     const { text, includeAdvice = false }: EmotionAnalysisRequest = await request.json()
 

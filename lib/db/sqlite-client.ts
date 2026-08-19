@@ -1,10 +1,16 @@
 // SQLite数据库客户端 - 真正的数据库解决方案
 // 使用 Node.js 内置的 node:sqlite（Node >= 22.13），文件级持久化
 
+// DB 客户端方法按异步 API 契约保留 async 签名（部分内部 await this.findMany 等），
+// 其余同步实现，定向豁免 require-await。
+/* eslint-disable @typescript-eslint/require-await */
+
 import { existsSync, mkdirSync } from "node:fs"
 import { dirname } from "node:path"
 import { DatabaseSync, type SQLInputValue } from "node:sqlite"
+import bcrypt from "bcryptjs"
 import type { Assessment, Child, GrowthRecord, Milestone } from "./client"
+import { assertSQLIdentifier } from "./identifier"
 
 // 数据库表创建SQL
 const CREATE_TABLES_SQL = `
@@ -190,6 +196,10 @@ export class SQLiteDatabase {
       // 兼容迁移：旧库 users 表补齐鉴权字段（P0-1 鉴权中间件融合）
       this.migrateUserAuthColumns()
 
+      // 兼容迁移：growth_records/homework_tasks 补齐 updated_at 列。
+      // 通用 update() 恒写 updated_at，缺列会导致更新静默失败（返回 null）。
+      this.migrateUpdatedAtColumns()
+
       console.log("✅ SQLite数据库初始化成功")
     } catch (error) {
       console.error("❌ SQLite数据库初始化失败:", error)
@@ -200,12 +210,15 @@ export class SQLiteDatabase {
   // 通用查询方法
   async findMany<T>(table: string, conditions: Record<string, unknown> = {}): Promise<T[]> {
     try {
+      assertSQLIdentifier(table, "table")
+      for (const key of Object.keys(conditions)) assertSQLIdentifier(key)
+
       let query = `SELECT * FROM ${table}`
       const params: SQLInputValue[] = []
 
       if (Object.keys(conditions).length > 0) {
         const whereClause = Object.keys(conditions)
-          .map((key, index) => `${key} = ?`)
+          .map(key => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
         params.push(...(Object.values(conditions) as SQLInputValue[]))
@@ -221,6 +234,7 @@ export class SQLiteDatabase {
 
   async findOne<T>(table: string, id: string): Promise<T | null> {
     try {
+      assertSQLIdentifier(table, "table")
       const stmt = this.db.prepare(`SELECT * FROM ${table} WHERE id = ?`)
       const result = stmt.get(id) as T | undefined
       return result || null
@@ -245,17 +259,18 @@ export class SQLiteDatabase {
     data: Omit<T, "id" | "created_at">
   ): Promise<T> {
     try {
+      assertSQLIdentifier(table, "table")
       const id = crypto.randomUUID()
       const created_at = new Date().toISOString()
       const item = { ...data, id, created_at } as unknown as T
 
-      const columns = Object.keys(item).join(", ")
-      const placeholders = Object.keys(item)
-        .map(() => `?`)
-        .join(", ")
+      const columns = Object.keys(item)
+      for (const col of columns) assertSQLIdentifier(col)
+      const columnList = columns.join(", ")
+      const placeholders = columns.map(() => `?`).join(", ")
       const values = Object.values(item) as SQLInputValue[]
 
-      const query = `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`
+      const query = `INSERT INTO ${table} (${columnList}) VALUES (${placeholders})`
       const stmt = this.db.prepare(query)
       stmt.run(...values)
 
@@ -294,15 +309,16 @@ export class SQLiteDatabase {
     data: Partial<Omit<T, "id" | "created_at">>
   ): Promise<T | null> {
     try {
+      assertSQLIdentifier(table, "table")
       const updated_at = new Date().toISOString()
       const updateData = { ...data, updated_at }
 
       const columns = Object.keys(updateData)
-        .map((key, index) => `${key} = ?`)
-        .join(", ")
+      for (const col of columns) assertSQLIdentifier(col)
+      const setClause = columns.map(key => `${key} = ?`).join(", ")
       const values: SQLInputValue[] = [...(Object.values(updateData) as SQLInputValue[]), id]
 
-      const query = `UPDATE ${table} SET ${columns} WHERE id = ?`
+      const query = `UPDATE ${table} SET ${setClause} WHERE id = ?`
       const stmt = this.db.prepare(query)
       stmt.run(...values)
 
@@ -332,6 +348,7 @@ export class SQLiteDatabase {
 
   async delete(table: string, id: string): Promise<boolean> {
     try {
+      assertSQLIdentifier(table, "table")
       const stmt = this.db.prepare(`DELETE FROM ${table} WHERE id = ?`)
       const result = stmt.run(id)
       return result.changes > 0
@@ -344,6 +361,7 @@ export class SQLiteDatabase {
   async deleteMany(table: string, ids: string[]): Promise<number> {
     try {
       if (ids.length === 0) return 0
+      assertSQLIdentifier(table, "table")
 
       const placeholders = ids.map(() => `?`).join(", ")
       const query = `DELETE FROM ${table} WHERE id IN (${placeholders})`
@@ -358,12 +376,15 @@ export class SQLiteDatabase {
 
   async count(table: string, conditions: Record<string, unknown> = {}): Promise<number> {
     try {
+      assertSQLIdentifier(table, "table")
+      for (const key of Object.keys(conditions)) assertSQLIdentifier(key)
+
       let query = `SELECT COUNT(*) as count FROM ${table}`
       const params: SQLInputValue[] = []
 
       if (Object.keys(conditions).length > 0) {
         const whereClause = Object.keys(conditions)
-          .map((key, index) => `${key} = ?`)
+          .map(key => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
         params.push(...(Object.values(conditions) as SQLInputValue[]))
@@ -391,6 +412,10 @@ export class SQLiteDatabase {
   ): Promise<{ data: T[]; total: number; totalPages: number }> {
     try {
       const { page, pageSize, filter = {}, sort = "created_at", order = "DESC" } = options
+      assertSQLIdentifier(table, "table")
+      assertSQLIdentifier(sort, "column")
+      if (order !== "ASC" && order !== "DESC") throw new Error(`非法排序方向: ${String(order)}`)
+      for (const key of Object.keys(filter)) assertSQLIdentifier(key)
       const offset = (page - 1) * pageSize
 
       // 查询总数
@@ -402,7 +427,7 @@ export class SQLiteDatabase {
 
       if (Object.keys(filter).length > 0) {
         const whereClause = Object.keys(filter)
-          .map((key, index) => `${key} = ?`)
+          .map(key => `${key} = ?`)
           .join(" AND ")
         query += ` WHERE ${whereClause}`
         params.push(...(Object.values(filter) as SQLInputValue[]))
@@ -486,6 +511,18 @@ export class SQLiteDatabase {
     }
   }
 
+  // 兼容迁移：数据表补齐 updated_at（幂等）
+  private migrateUpdatedAtColumns(): void {
+    for (const table of ["growth_records", "homework_tasks"]) {
+      try {
+        this.db.exec(`ALTER TABLE ${table} ADD COLUMN updated_at TEXT`)
+        console.log(`✅ 迁移: ${table} 表新增列 updated_at`)
+      } catch (err) {
+        if (!String(err).includes("duplicate column")) throw err
+      }
+    }
+  }
+
   // 关闭数据库连接
   close(): void {
     this.db.close()
@@ -505,12 +542,13 @@ export class SQLiteDatabase {
       console.log("🌱 开始初始化示例数据...")
 
       await this.transaction(async () => {
-        // 创建示例用户
+        // 创建示例用户（演示账号 parent@yyc3.com / demo123456，供登录后查看种子数据）
         const user = await this.create("users", {
           email: "parent@yyc3.com",
           name: "张女士",
           avatar_url: "/placeholder.svg?height=100&width=100",
           role: "parent",
+          password_hash: bcrypt.hashSync("demo123456", 12),
         })
 
         // 创建示例儿童档案
