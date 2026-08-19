@@ -2,14 +2,15 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { motion } from "framer-motion"
 import Navigation from "@/components/Navigation"
-import PageHeader from "@/components/headers/PageHeader"
 import UserCenter from "@/components/auth/UserCenter"
+import PageHeader from "@/components/headers/PageHeader"
+import ThemeSwitcher from "@/components/theme-system/ThemeSwitcher"
 import { useAuth } from "@/hooks/useAuth"
 import { useChildrenMock } from "@/hooks/useChildren-mock"
 import { characterManager } from "@/lib/character-manager"
+import { motion } from "framer-motion"
+import { useState } from "react"
 
 export default function SettingsPage() {
   const [eyeMode, setEyeMode] = useState(true)
@@ -34,9 +35,9 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-4">
                   {currentChild ? (
                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center overflow-hidden">
-                      <img 
-                        src={characterManager.getCharacterImagePath(characterManager.getCharacterForUser(currentChild), 'happy')} 
-                        alt={currentChild.name} 
+                      <img
+                        src={characterManager.getCharacterImagePath(characterManager.getCharacterForUser(currentChild), 'happy')}
+                        alt={currentChild.name}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -91,6 +92,17 @@ export default function SettingsPage() {
                   查看
                 </button>
               }
+            />
+          </SettingsSection>
+
+          {/* 界面主题 */}
+          <SettingsSection title="界面主题" icon="ri-palette-fill" iconColor="text-emerald-500" index={0}>
+            <SettingsItem
+              icon="ri-magic-fill"
+              iconColor="text-emerald-400"
+              title="主题风格"
+              subtitle="暖阳 / 赛博霓虹 / 液态翡翠"
+              action={<ThemeSwitcher compact />}
             />
           </SettingsSection>
 
@@ -246,9 +258,8 @@ function SettingsItem({
 function ToggleSwitch({ value, onChange }: { value: boolean; onChange: (value: boolean) => void }) {
   return (
     <motion.div
-      className={`relative w-12 h-6 rounded-full cursor-pointer transition-colors ${
-        value ? "bg-blue-400" : "bg-slate-300"
-      }`}
+      className={`relative w-12 h-6 rounded-full cursor-pointer transition-colors ${value ? "bg-blue-400" : "bg-slate-300"
+        }`}
       onClick={() => { onChange(!value); }}
       whileTap={{ scale: 0.95 }}
     >

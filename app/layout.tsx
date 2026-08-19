@@ -7,16 +7,17 @@
  * @created 2024-12-07
  * @updated 2024-12-07
  */
-import type React from "react"
-import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
+import ClientWrapper from "@/components/ClientWrapper"
+import DndProvider from "@/components/DndProvider"
+import { ErrorBoundary } from "@/components/ErrorBoundary"
+import ReduxProvider from "@/components/ReduxProvider"
+import { ThemeSystemProvider } from "@/components/theme-system/ThemeProvider"
+import { AuthProvider } from "@/hooks/useAuth"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import ClientWrapper from "@/components/ClientWrapper"
-import { ErrorBoundary } from "@/components/ErrorBoundary"
-import { AuthProvider } from "@/hooks/useAuth"
-import ReduxProvider from "@/components/ReduxProvider"
-import DndProvider from "@/components/DndProvider"
+import type { Metadata, Viewport } from "next"
+import { Inter } from "next/font/google"
+import type React from "react"
 // import { DatabaseInitializer } from "@/components/DatabaseInitializer"
 import "./globals.css"
 
@@ -90,20 +91,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
       </head>
       <body className={`${inter.className} antialiased selection:bg-orange-200 selection:text-orange-900`}>
         <ErrorBoundary>
-          <DndProvider>
-            <ReduxProvider>
-              <AuthProvider>
-                {children}
-                <ClientWrapper />
-              </AuthProvider>
-            </ReduxProvider>
-          </DndProvider>
+          <ThemeSystemProvider>
+            <DndProvider>
+              <ReduxProvider>
+                <AuthProvider>
+                  {children}
+                  <ClientWrapper />
+                </AuthProvider>
+              </ReduxProvider>
+            </DndProvider>
+          </ThemeSystemProvider>
         </ErrorBoundary>
         <Analytics />
         <SpeedInsights />

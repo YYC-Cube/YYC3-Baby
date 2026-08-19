@@ -168,3 +168,191 @@
 
 /* 全局UI组件统一化样式 - 彩色边线阴影效果 */
 @import '../styles/global-ui-enhancements.css';
+
+/* ============================================================
+   统一主题系统（路径 A · data-theme 机制打通）
+   三套主题：default 暖阳 / cyberpunk 赛博霓虹 / liquid 液态翡翠
+   —— 兄弟 token（--bg-app/--fg-default/--theme-accent）+ shadcn 语义
+      token（--background/--foreground/--primary 等）双重覆盖，
+      经 <html data-theme> 由 next-themes 切换（ThemeSystemProvider）。
+   default 保持现有浅色视觉；cyberpunk/liquid 走属性选择器接管。
+   ============================================================ */
+
+/* ── default 暖阳（:root 兄弟 token，不动现有 shadcn 语义）── */
+:root {
+  --bg-app: #fffbeb;            /* amber-50 */
+  --bg-surface: #ffffff;
+  --bg-surface-soft: #fef3c7;   /* amber-100 */
+  --fg-default: #1f2937;
+  --fg-muted: #6b7280;
+  --border-soft: #f3e8c8;
+  --theme-accent: #f59e0b;
+  --theme-accent-fg: #ffffff;
+  --theme-glow: rgba(245, 158, 11, 0.18);
+}
+
+/* ── cyberpunk 赛博霓虹（兄弟 token + shadcn 语义覆盖）── */
+[data-theme='cyberpunk'] {
+  --color-primary: #00f0ff;
+  --color-primary-dark: #00c4d1;
+  --color-primary-light: #5ff6ff;
+  --color-secondary-purple: #ff2d95;
+  --color-secondary-pink: #ff2d95;
+  --bg-app: #0a0a0f;
+  --bg-surface: #12121c;
+  --bg-surface-soft: #1a1a28;
+  --fg-default: #e5e7eb;
+  --fg-muted: #9ca3af;
+  --border-soft: #26263a;
+  --theme-accent: #00f0ff;
+  --theme-accent-fg: #05050a;
+  --theme-glow: rgba(0, 240, 255, 0.22);
+  color-scheme: dark;
+
+  /* shadcn 语义 token：让 Dialog/Popover/Select 等组件正确配色 */
+  --background: #0a0a0f;
+  --foreground: #e5e7eb;
+  --card: #12121c;
+  --card-foreground: #e5e7eb;
+  --popover: #12121c;
+  --popover-foreground: #e5e7eb;
+  --primary: #00f0ff;
+  --primary-foreground: #05050a;
+  --secondary: #1a1a28;
+  --secondary-foreground: #e5e7eb;
+  --muted: #1a1a28;
+  --muted-foreground: #9ca3af;
+  --accent: rgba(0, 240, 255, 0.14);
+  --accent-foreground: #00f0ff;
+  --destructive: #ff2d95;
+  --destructive-foreground: #ffffff;
+  --border: #26263a;
+  --input: #26263a;
+  --ring: #00f0ff;
+}
+
+/* ── liquid 液态翡翠（兄弟 token + shadcn 语义覆盖）── */
+[data-theme='liquid'] {
+  --color-primary: #10b981;
+  --color-primary-dark: #059669;
+  --color-primary-light: #34d399;
+  --color-secondary-purple: #14b8a6;
+  --color-secondary-pink: #2dd4bf;
+  --bg-app: #f0fdf9;            /* teal-50 */
+  --bg-surface: #ffffff;
+  --bg-surface-soft: #ccfbf1;   /* teal-100 */
+  --fg-default: #134e4a;
+  --fg-muted: #5f7470;
+  --border-soft: #b8ece2;
+  --theme-accent: #10b981;
+  --theme-accent-fg: #ffffff;
+  --theme-glow: rgba(16, 185, 129, 0.18);
+}
+
+/* ── 主题切换全局过渡（尊重减少动效偏好）── */
+body {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+}
+
+/* ── 非默认主题下的表面接管（同兄弟项目模式）── */
+[data-theme='cyberpunk'] body,
+[data-theme='liquid'] body {
+  background-color: var(--bg-app);
+  color: var(--fg-default);
+}
+
+[data-theme='cyberpunk'] .bg-white,
+[data-theme='liquid'] .bg-white {
+  background-color: var(--bg-surface);
+  color: var(--fg-default);
+}
+
+[data-theme='cyberpunk'] .bg-amber-50,
+[data-theme='cyberpunk'] .bg-orange-50,
+[data-theme='cyberpunk'] .bg-yellow-50,
+[data-theme='cyberpunk'] .bg-sky-50,
+[data-theme='cyberpunk'] .bg-sky-100,
+[data-theme='cyberpunk'] .bg-red-50,
+[data-theme='cyberpunk'] .bg-green-50,
+[data-theme='cyberpunk'] .bg-blue-50,
+[data-theme='cyberpunk'] .bg-gray-50,
+[data-theme='cyberpunk'] .bg-slate-50 {
+  background-color: var(--bg-surface-soft);
+}
+
+[data-theme='liquid'] .bg-amber-50,
+[data-theme='liquid'] .bg-orange-50,
+[data-theme='liquid'] .bg-yellow-50 {
+  background-color: var(--bg-surface-soft);
+}
+
+/* 深色主题下，原深色文字类翻转为浅色 */
+[data-theme='cyberpunk'] .text-gray-900,
+[data-theme='cyberpunk'] .text-gray-800,
+[data-theme='cyberpunk'] .text-gray-700,
+[data-theme='cyberpunk'] .text-slate-900,
+[data-theme='cyberpunk'] .text-slate-800,
+[data-theme='cyberpunk'] .text-slate-700 {
+  color: var(--fg-default) !important;
+}
+
+[data-theme='cyberpunk'] .text-gray-600,
+[data-theme='cyberpunk'] .text-gray-500,
+[data-theme='cyberpunk'] .text-slate-600,
+[data-theme='cyberpunk'] .text-slate-500 {
+  color: var(--fg-muted) !important;
+}
+
+/* 边框主题化 */
+[data-theme='cyberpunk'] .border,
+[data-theme='cyberpunk'] .border-gray-100,
+[data-theme='cyberpunk'] .border-gray-200,
+[data-theme='cyberpunk'] .border-slate-100,
+[data-theme='cyberpunk'] .border-slate-200,
+[data-theme='cyberpunk'] .border-amber-100,
+[data-theme='cyberpunk'] .border-amber-200 {
+  border-color: var(--border-soft) !important;
+}
+
+[data-theme='liquid'] .border-amber-100,
+[data-theme='liquid'] .border-amber-200 {
+  border-color: var(--border-soft) !important;
+}
+
+/* 液态主题下琥珀文字/图标转翡翠主色 */
+[data-theme='liquid'] .text-amber-600,
+[data-theme='liquid'] .text-amber-700,
+[data-theme='liquid'] .text-amber-800,
+[data-theme='liquid'] .text-amber-900,
+[data-theme='liquid'] .text-orange-600,
+[data-theme='liquid'] .text-orange-700,
+[data-theme='liquid'] .text-orange-800,
+[data-theme='liquid'] .text-orange-900 {
+  color: var(--color-primary-dark) !important;
+}
+
+/* 赛博主题强调色：琥珀系动作色转霓虹青 */
+[data-theme='cyberpunk'] .bg-amber-400,
+[data-theme='cyberpunk'] .bg-amber-500,
+[data-theme='cyberpunk'] .bg-orange-400,
+[data-theme='cyberpunk'] .bg-orange-500,
+[data-theme='cyberpunk'] .bg-yellow-400,
+[data-theme='cyberpunk'] .bg-yellow-500 {
+  background-color: var(--theme-accent) !important;
+  color: var(--theme-accent-fg) !important;
+}
+
+[data-theme='cyberpunk'] .text-amber-500,
+[data-theme='cyberpunk'] .text-amber-600,
+[data-theme='cyberpunk'] .text-orange-500,
+[data-theme='cyberpunk'] .text-orange-600 {
+  color: var(--theme-accent) !important;
+}
