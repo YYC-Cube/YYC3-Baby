@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server"
 import { guardAIRequest } from "@/lib/api/ai-guard"
+import { z } from "zod"
+
+const bodySchema = z.object({ content: z.string().min(1).max(10000) })
 
 export async function POST(request: Request) {
   const guard = await guardAIRequest(request, { name: "analyze-record", limit: 30 })
   if (guard instanceof NextResponse) return guard
 
   try {
-    const { content } = await request.json()
+    const parsed = bodySchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return NextResponse.json({ error: "content 为必填" }, { status: 400 })
+    }
+    const { content } = parsed.data
 
     // 实际应调用AI模型，这里使用模拟数据
     const mockResponse = {

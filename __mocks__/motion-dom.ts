@@ -65,7 +65,7 @@ export const addDomEvent = () => () => {}
 export const addPointerEvent = () => () => {}
 
 // Default export
-export default {
+const motionDomMock = {
   hover,
   press,
   pan,
@@ -83,3 +83,5 @@ export default {
   addDomEvent,
   addPointerEvent,
 }
+
+export default motionDomMock

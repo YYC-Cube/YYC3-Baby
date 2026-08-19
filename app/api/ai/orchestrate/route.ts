@@ -3,13 +3,18 @@ import { createOpenAI } from "@ai-sdk/openai"
 import { guardAIRequest } from "@/lib/api/ai-guard"
 import { NextResponse } from "next/server"
 import { AI_ROLES, analyzeQueryComplexity, getCoordinatedPrompt } from "@/lib/ai_roles"
+import { z } from "zod"
+
+const bodySchema = z.object({
+  message: z.string().min(1, "消息内容不能为空").max(4000),
+})
 
 const openai = createOpenAI({
   apiKey: process.env['OPENAI_API_KEY'] ?? "",
   ...(process.env['OPENAI_BASE_URL'] && { baseURL: process.env['OPENAI_BASE_URL'] })
 })
 
-const model = openai("gpt-4o-mini") satisfies any
+const model = openai("gpt-4o-mini")
 
 export async function POST(request: Request) {
   // 中/复杂度会触发多次模型调用，配额从严
@@ -17,11 +22,11 @@ export async function POST(request: Request) {
   if (guard instanceof NextResponse) return guard
 
   try {
-    const { message } = await request.json()
-
-    if (!message) {
-      return Response.json({ error: "消息内容不能为空" }, { status: 400 })
+    const parsed = bodySchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return Response.json({ error: parsed.error.issues[0]?.message ?? "消息内容不能为空" }, { status: 400 })
     }
+    const { message } = parsed.data
 
     if (!process.env['OPENAI_API_KEY']) {
       console.error("OpenAI API key is not configured")
@@ -55,12 +60,12 @@ export async function POST(request: Request) {
 
       const [mainResponse, supportResponse] = await Promise.all([
         generateText({
-          model: model as any,
+          model: model,
           system: AI_ROLES[mainRole].systemPrompt,
           prompt: message,
         }),
         generateText({
-          model: model as any,
+          model: model,
           system: `基于"${AI_ROLES[supportRole].name}"的视角，针对以下问题给出补充建议（50字以内）：`,
           prompt: message,
         }),
@@ -86,7 +91,7 @@ export async function POST(request: Request) {
     const coordinatedPrompt = getCoordinatedPrompt(message, involvedRoles)
 
     const { text: mainText } = await generateText({
-      model: model as any,
+      model: model,
       system: coordinatedPrompt,
       prompt: message,
     })
@@ -94,7 +99,7 @@ export async function POST(request: Request) {
     const roleInsights = await Promise.all(
       involvedRoles.slice(1, 4).map(async (role) => {
         const { text } = await generateText({
-          model: model as any,
+          model: model,
           system: `你是"${AI_ROLES[role].name}"，请从你的专业角度给出一条简短建议（30字以内）：`,
           prompt: message,
         })
@@ -108,7 +113,7 @@ export async function POST(request: Request) {
     )
 
     const { text: actionsText } = await generateText({
-      model: model as any,
+      model: model,
       system: "基于上述分析，给出3条具体可行的行动建议，每条15字以内，用|分隔：",
       prompt: `问题：${message}\n分析：${mainText}`,
     })
@@ -132,26 +137,27 @@ export async function POST(request: Request) {
         icon: AI_ROLES[r].icon,
       })),
     })
-  } catch (error: any) {
-    console.error("[AI Orchestrate Error]", error)
+  } catch (err) {
+    console.error("[AI Orchestrate Error]", err)
+    const error = err instanceof Error ? err.message : String(err)
 
     let errorMessage = "AI协同响应失败，请稍后重试"
     let statusCode = 500
 
-    if (error.message?.includes("API key")) {
+    if (error.includes("API key")) {
       errorMessage = "API密钥配置错误，请检查环境变量"
       statusCode = 401
-    } else if (error.message?.includes("rate limit")) {
+    } else if (error.includes("rate limit")) {
       errorMessage = "请求过于频繁，请稍后再试"
       statusCode = 429
-    } else if (error.message?.includes("timeout")) {
+    } else if (error.includes("timeout")) {
       errorMessage = "请求超时，请重试"
       statusCode = 408
     }
 
     return Response.json({
       error: errorMessage,
-      details: process.env.NODE_ENV === "development" ? error.message : undefined,
+      details: process.env.NODE_ENV === "development" ? error : undefined,
     }, { status: statusCode })
   }
 }

@@ -203,7 +203,8 @@ function ChartTooltipContent({
         {payload.map((item, index) => {
           const key = String(nameKey || item.name || item.dataKey || 'value')
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
-          const indicatorColor = String(color || item.payload?.fill || item.color || '')
+          const rawColor = color || item.payload?.fill || item.color || ''
+          const indicatorColor = typeof rawColor === 'string' ? rawColor : ''
 
           return (
             <div
@@ -298,7 +299,8 @@ function ChartLegendContent({
       )}
     >
       {payload.map((item) => {
-        const key = String(nameKey || item.dataKey || 'value')
+        const rawKey = nameKey || item.dataKey || 'value'
+        const key = typeof rawKey === 'string' ? rawKey : 'value'
         const itemConfig = getPayloadConfigFromPayload(config, item, key)
 
         return (

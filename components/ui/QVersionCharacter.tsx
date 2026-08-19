@@ -5,14 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useChildrenMock } from '@/hooks/useChildren-mock'
 import { characterManager } from '@/lib/character-manager'
 
-// Mock Child type to avoid database dependency
+// Mock Child type to avoid database dependency（与 lib/db/client 的 Child 结构兼容）
 type MockChild = {
   id: string
   user_id: string
   name: string
-  nickname: string
+  nickname?: string
   birth_date: string
-  gender: 'male' | 'female'
+  gender: 'male' | 'female' | 'other'
   created_at: string
 }
 

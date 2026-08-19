@@ -1,5 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { guardAIRequest } from "@/lib/api/ai-guard"
+import { z } from "zod"
+
+const bodySchema = z.object({
+  prompt: z.string().min(1),
+  style: z.string().optional(),
+  aspectRatio: z.string().optional(),
+})
 
 // 风格提示词映射
 const STYLE_PROMPTS: Record<string, string> = {
@@ -46,11 +53,11 @@ export async function POST(req: NextRequest) {
   if (guard instanceof NextResponse) return guard
 
   try {
-    const { prompt, style, aspectRatio } = await req.json()
-
-    if (!prompt || typeof prompt !== "string") {
+    const parsed = bodySchema.safeParse(await req.json())
+    if (!parsed.success) {
       return NextResponse.json({ error: "请提供描述内容" }, { status: 400 })
     }
+    const { prompt, style, aspectRatio } = parsed.data
 
     // 安全过滤
     const safePrompt = sanitizePrompt(prompt)
@@ -59,7 +66,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 构建完整提示词
-    const stylePrompt = STYLE_PROMPTS[style] || STYLE_PROMPTS['cartoon']
+    const stylePrompt = (style ? STYLE_PROMPTS[style] : undefined) || STYLE_PROMPTS['cartoon']
     const fullPrompt = `${safePrompt}, ${stylePrompt}, child-safe, family-friendly, bright and cheerful, high quality`
 
     // 尺寸映射
@@ -83,7 +90,7 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           prompt: fullPrompt,
-          image_size: sizeMap[aspectRatio] || "square_hd",
+          image_size: (aspectRatio ? sizeMap[aspectRatio] : undefined) || "square_hd",
           num_inference_steps: 4,
           enable_safety_checker: true,
         }),

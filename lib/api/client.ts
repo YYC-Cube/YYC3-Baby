@@ -73,13 +73,18 @@ class APIClient {
         }
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as {
+        success?: boolean
+        data?: T
+        error?: string
+        message?: string
+      };
 
       if (!response.ok) {
         throw new Error(data.error || data.message || `HTTP error! status: ${response.status}`);
       }
 
-      return data;
+      return data as { success: boolean; data?: T; error?: string; message?: string };
     } catch (error) {
       return {
         success: false,
@@ -90,7 +95,7 @@ class APIClient {
 
   // Auth endpoints
   async login(email: string, password: string) {
-    return this.request<{ user: any; tokens: { accessToken: string; refreshToken: string } }>('/api/auth/login', {
+    return this.request<{ user: unknown; tokens: { accessToken: string; refreshToken: string } }>('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
@@ -103,7 +108,7 @@ class APIClient {
     lastName: string;
     phone?: string;
   }) {
-    return this.request<{ user: any; tokens: { accessToken: string; refreshToken: string } }>('/api/auth/register', {
+    return this.request<{ user: unknown; tokens: { accessToken: string; refreshToken: string } }>('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData),
     });
@@ -117,7 +122,7 @@ class APIClient {
   }
 
   async getProfile() {
-    return this.request<{ user: any; stats: any }>('/api/auth/profile');
+    return this.request<{ user: unknown; stats: unknown }>('/api/auth/profile');
   }
 
   async updateProfile(profileData: {
@@ -126,7 +131,7 @@ class APIClient {
     phone?: string;
     avatarUrl?: string;
   }) {
-    return this.request<{ user: any }>('/api/auth/profile', {
+    return this.request<{ user: unknown }>('/api/auth/profile', {
       method: 'PUT',
       body: JSON.stringify(profileData),
     });
@@ -146,7 +151,7 @@ class APIClient {
       aiRole: string;
       aiRoleName: string;
       emotion: string;
-      context: any;
+      context: unknown;
     }>('/api/ai/chat', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -302,7 +307,7 @@ class APIClient {
         total: number;
         pages: number;
       };
-      filters: any;
+      filters: unknown;
     }>(`/api/growth/children/${childId}?${params.toString()}`);
   }
 
@@ -390,7 +395,7 @@ class APIClient {
         total: number;
         pages: number;
       };
-      filters: any;
+      filters: unknown;
     }>(`/api/growth/children/${childId}/search?${params.toString()}`);
   }
 
@@ -448,28 +453,7 @@ class APIClient {
 }
 
 // Create singleton instance
+// 注意：不按实例解构导出方法（会丢失 this 绑定导致运行时错误），一律经 apiClient.xxx 调用
 export const apiClient = new APIClient();
-
-// Export convenience methods
-export const {
-  login,
-  register,
-  logout,
-  getProfile,
-  updateProfile,
-  chat,
-  getConversationHistory,
-  getAISessions,
-  getAIRoles,
-  getChatStats,
-  createGrowthRecord,
-  getGrowthRecords,
-  getGrowthRecord,
-  updateGrowthRecord,
-  deleteGrowthRecord,
-  searchGrowthRecords,
-  getGrowthStats,
-  healthCheck,
-} = apiClient;
 
 export default apiClient;

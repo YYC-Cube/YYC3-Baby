@@ -1,6 +1,28 @@
-import { enhancedEmotionFusion } from "@/lib/ai/enhanced-emotion-fusion"
+import { enhancedEmotionFusion, type EmotionFeatures, type MultimodalInput } from "@/lib/ai/enhanced-emotion-fusion"
 import { guardAIRequest } from "@/lib/api/ai-guard"
 import { NextResponse } from "next/server"
+import { z } from "zod"
+
+// 请求体结构：音频/面部/肢体特征为高维可选载荷，用 passthrough 宽松接收
+const bodySchema = z.object({
+  text: z.string().optional(),
+  audioFeatures: z.record(z.string(), z.unknown()).optional(),
+  facialFeatures: z.record(z.string(), z.unknown()).optional(),
+  bodyLanguage: z.record(z.string(), z.unknown()).optional(),
+  audioDuration: z.number().optional(),
+  attention: z.number().optional(),
+  activity: z.string().optional(),
+  situation: z.string().optional(),
+  context: z
+    .object({
+      age: z.number().optional(),
+      previousEmotions: z.array(z.record(z.string(), z.unknown())).optional(),
+      environment: z.string().optional(),
+    })
+    .optional(),
+})
+
+type Body = z.infer<typeof bodySchema>
 
 export async function POST(request: Request) {
   const guard = await guardAIRequest(request, { name: "enhanced-emotion", limit: 30 })
@@ -9,32 +31,36 @@ export async function POST(request: Request) {
   const startTime = Date.now()
 
   try {
-    const body = await request.json()
+    const parsed = bodySchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return Response.json({ error: "请求体格式不正确" }, { status: 400 })
+    }
+    const body: Body = parsed.data
     const { text, audioFeatures, facialFeatures, bodyLanguage, context } = body
 
-    // 构建多模态输入
-    const multimodalInput: any = {
+    // 构建多模态输入（类型来自 enhanced-emotion-fusion）
+    const multimodalInput: MultimodalInput = {
       text,
       behavioralData: {
-        attention: body.attention || 0.5,
-        activity: body.activity || 'unknown',
-        context: body.situation || 'home'
+        attention: body.attention ?? 0.5,
+        activity: body.activity ?? "unknown",
+        context: body.situation ?? "home",
       },
       context: {
-        age: context?.age || 1,
-        previousEmotions: context?.previousEmotions || [],
-        environment: context?.environment || 'home'
-      }
+        age: context?.age ?? 1,
+        previousEmotions: (context?.previousEmotions ?? []) as unknown as EmotionFeatures[],
+        environment: context?.environment ?? "home",
+      },
     }
 
     if (audioFeatures) {
-      multimodalInput.audioData = { features: audioFeatures, duration: body.audioDuration || 1 }
+      multimodalInput.audioData = { features: audioFeatures as never, duration: body.audioDuration ?? 1 }
     }
 
     if (facialFeatures || bodyLanguage) {
       multimodalInput.videoData = {
-        facialFeatures: facialFeatures || {},
-        bodyLanguage: bodyLanguage || {}
+        facialFeatures: (facialFeatures ?? {}) as never,
+        bodyLanguage: (bodyLanguage ?? {}) as never,
       }
     }
 
@@ -52,34 +78,33 @@ export async function POST(request: Request) {
       trends,
       suggestions,
       processingTime: Date.now() - startTime,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }
 
     return Response.json(response)
-
   } catch (error) {
     console.error("[Enhanced Emotion Analysis Error]", error)
-    return Response.json(
-      { error: "增强情感分析失败，请稍后重试" },
-      { status: 500 }
-    )
+    return Response.json({ error: "增强情感分析失败，请稍后重试" }, { status: 500 })
   }
 }
 
 // 基于情感结果生成个性化建议
-function generateEmotionBasedSuggestions(emotion: any, context?: any): string[] {
+function generateEmotionBasedSuggestions(
+  emotion: EmotionFeatures,
+  context?: { age?: number; previousEmotions?: unknown[]; environment?: string }
+): string[] {
   const suggestions: string[] = []
 
   switch (emotion.primary) {
-    case 'joy':
+    case "joy":
       suggestions.push("宝宝现在很开心，这是很好的互动时机！")
       suggestions.push("可以延续这种愉快的情绪，一起做喜欢的游戏")
-      if (emotion.secondary === 'excitement') {
+      if (emotion.secondary === "excitement") {
         suggestions.push("宝宝很兴奋，注意观察是否需要适当平静下来")
       }
       break
 
-    case 'sadness':
+    case "sadness":
       suggestions.push("宝宝需要安慰，给一个温暖的拥抱")
       suggestions.push("轻声安抚，了解宝宝不开心的原因")
       if (emotion.intensity > 0.7) {
@@ -87,30 +112,30 @@ function generateEmotionBasedSuggestions(emotion: any, context?: any): string[] 
       }
       break
 
-    case 'anger':
+    case "anger":
       suggestions.push("保持冷静，理解宝宝的情绪表达")
       suggestions.push("帮助宝宝用语言表达需求和感受")
-      if (emotion.secondary === 'frustration') {
+      if (emotion.secondary === "frustration") {
         suggestions.push("宝宝可能遇到了困难，给予适当的帮助和引导")
       }
       break
 
-    case 'fear':
+    case "fear":
       suggestions.push("给予安全感，让知道你在身边")
       suggestions.push("耐心解释，帮助理解令他害怕的事物")
-      if (emotion.secondary === 'anxiety') {
+      if (emotion.secondary === "anxiety") {
         suggestions.push("创造平静的环境，减少刺激")
       }
       break
 
-    case 'surprise':
+    case "surprise":
       suggestions.push("这是学习的好机会，探索新事物")
-      if (emotion.secondary === 'curiosity') {
+      if (emotion.secondary === "curiosity") {
         suggestions.push("鼓励宝宝的探索欲望，提供安全的探索环境")
       }
       break
 
-    case 'neutral':
+    case "neutral":
       suggestions.push("宝宝现在比较平静，适合进行温和的活动")
       suggestions.push("观察宝宝是否想要互动或需要独处")
       break

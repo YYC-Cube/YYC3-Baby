@@ -2,13 +2,21 @@ import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
 import { guardAIRequest } from "@/lib/api/ai-guard"
+import { z } from "zod"
+
+const bodySchema = z.object({
+  keywords: z.array(z.string()).default([]),
+  style: z.string().optional(),
+  previousContent: z.string().max(20000).optional(),
+  userInput: z.string().max(2000).optional(),
+})
 
 const openai = createOpenAI({
   apiKey: process.env['OPENAI_API_KEY'] ?? "",
   ...(process.env['OPENAI_BASE_URL'] && { baseURL: process.env['OPENAI_BASE_URL'] })
 })
 
-const model = openai("gpt-4o-mini") as any
+const model = openai("gpt-4o-mini")
 
 // 故事风格模板
 const STYLE_TEMPLATES: Record<string, string> = {
@@ -26,9 +34,13 @@ export async function POST(req: NextRequest) {
   if (guard instanceof NextResponse) return guard
 
   try {
-    const { keywords, style, previousContent, userInput } = await req.json()
+    const parsed = bodySchema.safeParse(await req.json())
+    if (!parsed.success) {
+      return NextResponse.json({ error: "请求体格式不正确" }, { status: 400 })
+    }
+    const { keywords, style, previousContent, userInput } = parsed.data
 
-    const styleTemplate = STYLE_TEMPLATES[style] ?? STYLE_TEMPLATES['fairy_tale']
+    const styleTemplate = (style ? STYLE_TEMPLATES[style] : undefined) ?? STYLE_TEMPLATES['fairy_tale']
 
     // 构建系统提示词
     const systemPrompt = `你是一位专业的儿童故事作家，擅长创作适合3-12岁儿童的故事。
@@ -80,7 +92,7 @@ ${userInput ? `孩子新写的内容：${userInput}` : "请开始故事"}
     }
 
     // 降级：返回模板续写选项
-    const defaultOptions = generateDefaultOptions(keywords, style, previousContent)
+    const defaultOptions = generateDefaultOptions(keywords, style ?? 'fairy_tale', previousContent)
     return NextResponse.json({ options: defaultOptions })
   } catch (error) {
     console.error("续写故事错误:", error)

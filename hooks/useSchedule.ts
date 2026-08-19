@@ -207,8 +207,8 @@ export function useSchedule(): UseScheduleReturn {
   )
 
   // 异步契约：保持 async 签名供调用方统一 await（内部同步生成日程）
-  // eslint-disable-next-line @typescript-eslint/require-await
   const generateAISchedule = useCallback(
+    // eslint-disable-next-line @typescript-eslint/require-await -- 异步契约说明见上
     async (childId: string, preferences: AISchedulePreferences): Promise<Schedule[]> => {
       setIsLoading(true)
       setError(null)

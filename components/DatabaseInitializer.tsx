@@ -18,8 +18,10 @@ export function DatabaseInitializer() {
   const [showMigration, setShowMigration] = useState(false)
   const [migrationProgress, setMigrationProgress] = useState<{ success: boolean; message: string } | null>(null)
 
+  // 仅挂载时执行一次初始化；initializeDatabase 依赖内部 state setter（稳定），无需追踪
   useEffect(() => {
     void initializeDatabase()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const initializeDatabase = async () => {

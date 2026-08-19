@@ -47,6 +47,34 @@ export default function VoiceInteraction({
     return !!((w.SpeechRecognition || w.webkitSpeechRecognition) && navigator.mediaDevices?.getUserMedia)
   }
 
+  // 情感检测（简化版）——useCallback 稳定引用，供语音识别回调依赖
+  const detectEmotion = useCallback((text: string) => {
+    const emotionKeywords = {
+      happy: ["开心", "高兴", "快乐", "笑", "哈哈", "棒", "好", "喜欢", "爱"],
+      sad: ["难过", "伤心", "哭", "不舒服", "痛", "怕"],
+      excited: ["兴奋", "激动", "太棒了", "哇", "惊喜"],
+      calm: ["平静", "安静", "舒服", "放松"]
+    }
+
+    let detectedEmotion = "neutral"
+    let maxScore = 0
+
+    Object.entries(emotionKeywords).forEach(([emotion, keywords]) => {
+      const score = keywords.reduce((count, keyword) => {
+        return count + (text.includes(keyword) ? 1 : 0)
+      }, 0)
+
+      if (score > maxScore) {
+        maxScore = score
+        detectedEmotion = emotion
+      }
+    })
+
+    if (maxScore > 0) {
+      onEmotionDetected(detectedEmotion)
+    }
+  }, [onEmotionDetected])
+
   // 语音识别
   const startSpeechRecognition = useCallback(() => {
     if (!isSupported()) {
@@ -97,35 +125,7 @@ export default function VoiceInteraction({
 
     recognition.start()
     return recognition
-  }, [onTranscript])
-
-  // 情感检测（简化版）
-  const detectEmotion = (text: string) => {
-    const emotionKeywords = {
-      happy: ["开心", "高兴", "快乐", "笑", "哈哈", "棒", "好", "喜欢", "爱"],
-      sad: ["难过", "伤心", "哭", "不舒服", "痛", "怕"],
-      excited: ["兴奋", "激动", "太棒了", "哇", "惊喜"],
-      calm: ["平静", "安静", "舒服", "放松"]
-    }
-
-    let detectedEmotion = "neutral"
-    let maxScore = 0
-
-    Object.entries(emotionKeywords).forEach(([emotion, keywords]) => {
-      const score = keywords.reduce((count, keyword) => {
-        return count + (text.includes(keyword) ? 1 : 0)
-      }, 0)
-
-      if (score > maxScore) {
-        maxScore = score
-        detectedEmotion = emotion
-      }
-    })
-
-    if (maxScore > 0) {
-      onEmotionDetected(detectedEmotion)
-    }
-  }
+  }, [onTranscript, detectEmotion])
 
   // 音频可视化
   const startAudioVisualization = useCallback((stream: MediaStream) => {

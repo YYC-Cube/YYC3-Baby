@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (profileResult.success && profileResult.data) {
           setAuthState({
-            user: profileResult.data.user,
+            user: profileResult.data.user as User,
             isLoading: false,
             isAuthenticated: true,
             error: null,
@@ -115,7 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await apiClient.login(email, password);
 
       if (result.success && result.data) {
-        const { user } = result.data;
+        const user = result.data.user as User;
 
         // 令牌经 httpOnly Cookie 传输（服务端已 Set-Cookie），不再写 localStorage（XSS 防护）。
         // 清理历史版本遗留的本地令牌。
@@ -230,7 +230,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await apiClient.updateProfile(profileData);
 
       if (result.success && result.data) {
-        const { user } = result.data;
+        const user = result.data.user as User;
         setAuthState(prev => ({
           ...prev,
           user,
@@ -269,7 +269,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await apiClient.getProfile();
 
       if (result.success && result.data) {
-        const { user } = result.data;
+        const user = result.data.user as User;
         setAuthState(prev => ({
           ...prev,
           user,

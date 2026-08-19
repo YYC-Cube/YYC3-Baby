@@ -41,7 +41,16 @@ if (isServer) {
 const customFormat = winston.format.combine(
   winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss.SSS" }),
   winston.format.errors({ stack: true }),
-  winston.format.printf(({ timestamp, level, message, module, function: func, ...metadata }) => {
+  winston.format.printf((info) => {
+    // TransformableInfo 的具名键为 unknown，收敛为可打印的字符串形态
+    const { timestamp, level, message, module, function: func, ...metadata } = info as {
+      timestamp?: string
+      level?: string
+      message?: unknown
+      module?: string
+      function?: string
+      [k: string]: unknown
+    }
     const ts = String(timestamp)
     let msg = `${ts} [${String(level).toUpperCase()}]`
 

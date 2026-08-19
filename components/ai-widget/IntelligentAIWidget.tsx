@@ -40,7 +40,7 @@ import { authFetch } from '@/lib/api/auth-fetch'
 import { AgentState } from '../../core/agent-state'
 // 仅类型导入（编译期擦除）：避免 AgenticCore 及 prediction 服务栈进客户端包，
 // 运行时经 /api/agentic 调用服务端实例
-import type { AgentResponse, AgentTask, SystemStatus, UserInput } from '../../core/AgenticCore'
+import type { AgentResponse, AgentTask, SystemStatus } from '../../core/AgenticCore'
 
 // 拖拽类型定义
 export interface WidgetPosition {
@@ -101,13 +101,13 @@ interface DragItem {
 
 export const IntelligentAIWidget: React.FC<WidgetProps> = ({
   apiEndpoint: _apiEndpoint = '/api/ai-agent',
-  userId = 'default-user',
+  userId: _userId = 'default-user',
   workspaceId: _workspaceId = 'default-workspace',
   initialPosition = 'bottom-right',
   theme = 'auto',
   permissions: _permissions = ['basic'],
   onStateChange,
-  onError,
+  onError: _onError,
   width = 400,
   height = 600,
   className = '',

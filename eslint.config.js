@@ -10,7 +10,7 @@ const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
 });
 
-export default [
+const eslintConfig = [
   ...nextConfig,
   {
     files: ['**/*.{ts,tsx}'],
@@ -49,6 +49,10 @@ export default [
       '@typescript-eslint/no-misused-promises': ['warn', {
         checksVoidReturn: { attributes: false },
       }],
+      // <img> 裁决（2026-08）：本应用图片多为本地角色照片/占位符的小尺寸装饰性展示，
+      // 且部分 src 为 data-URL/动态值；next/image 需逐处补 width/height 与 remotePatterns，
+      // 在无视觉回归测试的前提下批量转换风险大于收益。需要图片优化时再按站点启用。
+      '@next/next/no-img-element': 'off',
       // React Compiler 规则（渲染期 refs/非纯调用）：真实问题但存量 ~90 处，分批修复
       'react-hooks/refs': 'warn',
       'react-hooks/purity': 'warn',
@@ -99,3 +103,5 @@ export default [
   },
   prettierConfig,
 ];
+
+export default eslintConfig

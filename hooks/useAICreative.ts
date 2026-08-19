@@ -48,13 +48,8 @@ export function useAICreative() {
     try {
       const stored = localStorage.getItem(ARTWORK_KEY)
       if (stored) {
-        const parsed = JSON.parse(stored)
-        setArtworks(
-          parsed.map((a: GeneratedArtwork) => ({
-            ...a,
-            createdAt: new Date(a.createdAt),
-          })),
-        )
+        const parsed = JSON.parse(stored) as GeneratedArtwork[]
+        setArtworks(parsed)
       }
     } catch (error) {
       console.error("加载作品失败:", error)
@@ -102,7 +97,7 @@ export function useAICreative() {
           throw new Error("图片生成失败")
         }
 
-        const data = await response.json()
+        const data = (await response.json()) as { imageUrl?: string }
 
         const artwork: GeneratedArtwork = {
           id: generateId("art"),
@@ -110,7 +105,7 @@ export function useAICreative() {
           prompt: request.prompt,
           style: request.style,
           aspectRatio: request.aspectRatio,
-          imageUrl: data.imageUrl,
+          imageUrl: data.imageUrl ?? "",
           thumbnailUrl: data.imageUrl,
           isFavorite: false,
           createdAt: new Date().toISOString(),
@@ -165,12 +160,11 @@ export function useAICreative() {
     try {
       const stored = localStorage.getItem(STORY_KEY)
       if (stored) {
-        const parsed = JSON.parse(stored)
+        const parsed = JSON.parse(stored) as StorySession[]
         setStories(
-          parsed.map((s: StorySession) => ({
+          parsed.map((s) => ({
             ...s,
-            createdAt: new Date(s.createdAt),
-            updatedAt: new Date(s.updatedAt ?? Date.now()).toISOString(),
+            updatedAt: s.updatedAt ?? new Date().toISOString(),
             segments: s.segments.map((seg) => ({
               ...seg,
               timestamp: seg.timestamp ? new Date(seg.timestamp).toISOString() : undefined,
@@ -253,8 +247,8 @@ export function useAICreative() {
           throw new Error("续写失败")
         }
 
-        const data = await response.json()
-        return data.options
+        const data = (await response.json()) as { options?: ContinuationOption[] }
+        return data.options ?? []
       } catch (error) {
         console.error("续写故事失败:", error)
         // 返回模拟续写选项

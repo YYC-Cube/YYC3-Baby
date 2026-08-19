@@ -43,8 +43,8 @@ async function doRefresh(): Promise<boolean> {
   if (Date.now() < refreshBackoffUntil) return false
   try {
     // 浏览器内相对路径即同源；非浏览器环境（测试）由注入的 location 提供 origin
-    const origin = typeof window !== "undefined" && (window as any).location?.origin
-      ? (window as any).location.origin
+    const origin = typeof window !== "undefined" && window.location?.origin
+      ? window.location.origin
       : ""
     // 双通道：localStorage 有 refreshToken 则随 body 发送（显式客户端），
     // 否则走 httpOnly Cookie（浏览器主路径，凭据随同源请求自动携带）
@@ -58,10 +58,10 @@ async function doRefresh(): Promise<boolean> {
       refreshBackoffUntil = Date.now() + 60_000
       return false
     }
-    const data = await res.json()
-    if (data?.success && data?.data?.token) {
+    const data = (await res.json()) as { success?: boolean; data?: { token?: string } }
+    if (data.success && data.data?.token) {
       // localStorage 模式（显式客户端）同步更新；cookie 模式由 Set-Cookie 完成
-      if (bodyToken) store.setAccessToken(data.data.token)
+      if (bodyToken && data.data.token) store.setAccessToken(data.data.token)
       return true
     }
     refreshBackoffUntil = Date.now() + 60_000

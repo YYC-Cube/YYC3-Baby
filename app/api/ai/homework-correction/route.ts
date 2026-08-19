@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server"
 import { guardAIRequest } from "@/lib/api/ai-guard"
+import { z } from "zod"
+
+const bodySchema = z.object({ image: z.string() })
 import { getHomeworkCorrectionService } from "@/lib/api/homework-correction"
 
 // 请求体限制：base64 图片可能较大，超过 10MB 的作业照片直接拒绝
@@ -11,7 +14,11 @@ export async function POST(request: Request) {
   if (guard instanceof NextResponse) return guard
 
   try {
-    const { image } = await request.json()
+    const parsed = bodySchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return NextResponse.json({ error: "缺少图片数据" }, { status: 400 })
+    }
+    const { image } = parsed.data
 
     if (typeof image !== "string" || !image.startsWith("data:image/")) {
       return NextResponse.json({ error: "缺少有效的图片数据（data:image/* base64）" }, { status: 400 })

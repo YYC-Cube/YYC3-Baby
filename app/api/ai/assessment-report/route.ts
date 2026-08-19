@@ -8,7 +8,7 @@ const openai = createOpenAI({
   ...(process.env['OPENAI_BASE_URL'] && { baseURL: process.env['OPENAI_BASE_URL'] })
 })
 
-const model = openai("gpt-4o-mini") satisfies any
+const model = openai("gpt-4o-mini")
 
 interface DimensionAnalysis {
   score: number
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
     // 生成AI评估报告
     const { text: aiReport } = await generateText({
-      model: model as any,
+      model: model,
       system: `你是YYC³ AI小语成长守护系统的"守护者"角色，专注于儿童发展评估。
 你的任务是基于评估数据生成专业、温暖、有建设性的发展报告。
 

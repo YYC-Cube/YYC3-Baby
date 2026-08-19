@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { authFetch } from "@/lib/api/auth-fetch"
+import type { AgeStageConfig } from "@/types/growth"
 import PageHeader from "@/components/headers/PageHeader"
 import Navigation from "@/components/Navigation"
 import CreateRecordModal, { type CreateRecordPayload } from "@/components/growth/CreateRecordModal"
@@ -72,7 +74,7 @@ export default function GrowthPage() {
   const childName = currentChild?.name || "小云"
 
   const growthStageData = useGrowthStage(childBirthDate)
-  const { stage, milestoneProgress, stageTransition, recommendations } = growthStageData as any
+  const { currentStage: stage, exactAge, milestoneProgress, approachingNextStage: stageTransition, recommendations } = growthStageData
 
   const tabs = [
     { id: "overview" as const, label: "总览", icon: "ri-dashboard-line" },
@@ -109,11 +111,11 @@ export default function GrowthPage() {
       <main className="px-4 py-4 space-y-6">
         {currentChild && (
           <div className="bg-white/70 rounded-2xl p-4 flex items-center gap-4">
-            <ChildQVersionAvatar child={currentChild as any} size="md" />
+            <ChildQVersionAvatar child={currentChild} size="md" />
             <div className="flex-1">
               <h3 className="font-bold text-slate-800">{currentChild.name}的成长记录</h3>
               <p className="text-sm text-slate-500">
-                {stage?.name} · {(currentChild as any).age_years || 0}岁{(currentChild as any).age_months || 0}个月
+                {stage?.name} · {exactAge?.years ?? 0}岁{exactAge?.months ?? 0}个月
               </p>
             </div>
             <ChildSelector />
@@ -123,9 +125,9 @@ export default function GrowthPage() {
         {!currentChild && (
           <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-center">
             <p className="text-amber-700">请先在设置中添加孩子档案</p>
-            <a href="/children" className="text-blue-600 underline text-sm mt-2 inline-block">
+            <Link href="/children" className="text-blue-600 underline text-sm mt-2 inline-block">
               去添加
-            </a>
+            </Link>
           </div>
         )}
 
@@ -187,10 +189,10 @@ export default function GrowthPage() {
 }
 
 interface OverviewTabProps {
-  stage: any
-  milestoneProgress: any
-  stageTransition: any
-  recommendations: any
+  stage: AgeStageConfig | null
+  milestoneProgress: { completed: number; total: number; upcoming: string[] }
+  stageTransition: { approaching: boolean; daysUntil: number; nextStage: string | null }
+  recommendations: { activities: string[]; books: string[]; skills: string[]; warnings: string[] }
   childName: string
   childBirthDate: Date
 }
@@ -243,18 +245,17 @@ function OverviewTab({
       </div>
 
       {/* 阶段转换提醒 */}
-      {stageTransition && stageTransition.daysUntilTransition <= 90 && (
+      {stageTransition?.approaching && stageTransition.daysUntil <= 90 && (
         <div className="bg-linear-to-r from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-200">
           <h3 className="font-bold text-amber-800 mb-2 flex items-center gap-2">
             <i className="ri-calendar-event-line" />
             阶段转换提醒
           </h3>
           <p className="text-sm text-amber-700">
-            还有 <span className="font-bold">{stageTransition.daysUntilTransition}</span> 天将进入
-            <span className="font-bold">「{stageTransition.nextStage?.name}」</span>
+            还有 <span className="font-bold">{stageTransition.daysUntil}</span> 天将进入
+            <span className="font-bold">「{stageTransition.nextStage ?? "下一阶段"}」</span>
             阶段
           </p>
-          <p className="text-xs text-amber-600 mt-2">{stageTransition.nextStage?.description}</p>
         </div>
       )}
 

@@ -17,7 +17,7 @@ export type DatabaseType = 'postgresql' | 'redis'
 export type QueryParams = (string | number | boolean | null | Date)[]
 
 export type WhereCondition = {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export type OrderBy = {
@@ -31,7 +31,7 @@ export type PaginationOptions = {
   offset?: number
 }
 
-export type TransactionCallback<T = any> = (client: PoolClient) => Promise<T>
+export type TransactionCallback<T = unknown> = (client: PoolClient) => Promise<T>
 
 export type DatabaseError = {
   code: string
@@ -66,54 +66,54 @@ export interface HealthStatus {
   redis: boolean
 }
 
-export interface QueryResult<T = any> {
+export interface QueryResult<T = unknown> {
   rows: T[]
   rowCount: number | null
   command: string
-  fields: any[]
+  fields: unknown[]
   oid: number
 }
 
 export interface DatabaseOperations {
-  query<T = any>(text: string, params?: QueryParams): Promise<QueryResult<T>>
+  query<T = unknown>(text: string, params?: QueryParams): Promise<QueryResult<T>>
   transaction<T>(callback: TransactionCallback<T>): Promise<T>
-  one<T = any>(text: string, params?: QueryParams): Promise<T | undefined>
-  many<T = any>(text: string, params?: QueryParams): Promise<T[]>
-  insert<T = any>(table: string, data: Record<string, any>): Promise<T>
-  update<T = any>(table: string, id: string | number, data: Record<string, any>): Promise<T>
-  delete<T = any>(table: string, id: string | number): Promise<T>
+  one<T = unknown>(text: string, params?: QueryParams): Promise<T | undefined>
+  many<T = unknown>(text: string, params?: QueryParams): Promise<T[]>
+  insert<T = unknown>(table: string, data: Record<string, unknown>): Promise<T>
+  update<T = unknown>(table: string, id: string | number, data: Record<string, unknown>): Promise<T>
+  delete<T = unknown>(table: string, id: string | number): Promise<T>
 }
 
 export interface RedisOperations {
-  set<T = any>(key: string, value: T, ttl?: number): Promise<void>
-  get<T = any>(key: string): Promise<T | null>
+  set<T = unknown>(key: string, value: T, ttl?: number): Promise<void>
+  get<T = unknown>(key: string): Promise<T | null>
   del(key: string): Promise<number>
   exists(key: string): Promise<number>
   expire(key: string, ttl: number): Promise<boolean>
   ttl(key: string): Promise<number>
   incr(key: string): Promise<number>
   decr(key: string): Promise<number>
-  hset(key: string, field: string, value: any): Promise<number>
-  hget<T = any>(key: string, field: string): Promise<T | null>
-  hgetall<T = any>(key: string): Promise<Record<string, T>>
+  hset(key: string, field: string, value: unknown): Promise<number>
+  hget<T = unknown>(key: string, field: string): Promise<T | null>
+  hgetall<T = unknown>(key: string): Promise<Record<string, T>>
   hdel(key: string, field: string): Promise<number>
-  lpush(key: string, ...values: any[]): Promise<number>
-  rpush(key: string, ...values: any[]): Promise<number>
-  lpop<T = any>(key: string): Promise<T | null>
-  rpop<T = any>(key: string): Promise<T | null>
-  lrange<T = any>(key: string, start: number, stop: number): Promise<T[]>
-  lrem(key: string, count: number, element: any): Promise<number>
+  lpush(key: string, ...values: unknown[]): Promise<number>
+  rpush(key: string, ...values: unknown[]): Promise<number>
+  lpop<T = unknown>(key: string): Promise<T | null>
+  rpop<T = unknown>(key: string): Promise<T | null>
+  lrange<T = unknown>(key: string, start: number, stop: number): Promise<T[]>
+  lrem(key: string, count: number, element: unknown): Promise<number>
   llen(key: string): Promise<number>
-  sadd(key: string, ...members: any[]): Promise<number>
-  srem(key: string, ...members: any[]): Promise<number>
-  sismember(key: string, member: any): Promise<number>
-  smembers<T = any>(key: string): Promise<T[]>
+  sadd(key: string, ...members: unknown[]): Promise<number>
+  srem(key: string, ...members: unknown[]): Promise<number>
+  sismember(key: string, member: unknown): Promise<number>
+  smembers<T = unknown>(key: string): Promise<T[]>
   scard(key: string): Promise<number>
-  zadd(key: string, score: number, member: any): Promise<number>
-  zrem(key: string, ...members: any[]): Promise<number>
-  zscore(key: string, member: any): Promise<number | null>
-  zrank(key: string, member: any): Promise<number | null>
-  zrange<T = any>(key: string, start: number, stop: number): Promise<T[]>
+  zadd(key: string, score: number, member: unknown): Promise<number>
+  zrem(key: string, ...members: unknown[]): Promise<number>
+  zscore(key: string, member: unknown): Promise<number | null>
+  zrank(key: string, member: unknown): Promise<number | null>
+  zrange<T = unknown>(key: string, start: number, stop: number): Promise<T[]>
   zcard(key: string): Promise<number>
 }
 
@@ -621,7 +621,7 @@ export interface ColumnDefinition {
   name: string
   type: string
   nullable?: boolean
-  default?: any
+  default?: unknown
   primary?: boolean
   unique?: boolean
   check?: string

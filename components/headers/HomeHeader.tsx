@@ -71,7 +71,7 @@ export default function HomeHeader() {
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
             whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setAuthModal("login")}
+            onClick={() => { setAuthModal("login") }}
           >
             登录
           </motion.button>
@@ -79,14 +79,14 @@ export default function HomeHeader() {
             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
             whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setAuthModal("register")}
+            onClick={() => { setAuthModal("register") }}
           >
             注册
           </motion.button>
           <LoginModal
             isOpen={authModal !== null}
             initialMode={authModal ?? "login"}
-            onClose={() => setAuthModal(null)}
+            onClose={() => { setAuthModal(null) }}
           />
         </div>
 

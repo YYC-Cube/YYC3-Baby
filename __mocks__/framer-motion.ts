@@ -203,7 +203,7 @@ export {
 }
 
 // 默认导出，兼容默认导入
-export default {
+const framerMotionMock = {
   motion,
   AnimatePresence,
   useAnimation,
@@ -227,3 +227,5 @@ export default {
   MotionValue,
   TransformProperties,
 }
+
+export default framerMotionMock

@@ -38,7 +38,7 @@ export function useChildren(userId?: string): UseChildrenReturn {
     } finally {
       setIsLoading(false)
     }
-  }, [userId])
+  }, [userId, currentChild])
 
   useEffect(() => {
     void loadChildren()

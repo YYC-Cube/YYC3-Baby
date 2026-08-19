@@ -100,7 +100,9 @@ export class DatabaseManager {
       }
 
       // 迁移用户数据
-      const users = JSON.parse(localStorage.getItem("yyc3_users") || "[]")
+      const users = JSON.parse(localStorage.getItem("yyc3_users") || "[]") as Array<{
+        email: string; name: string; avatar_url?: string; role?: string; created_at?: string
+      }>
       if (users.length > 0) {
         for (const user of users) {
           await this.sqliteDB.create("users", {
@@ -184,7 +186,10 @@ export class DatabaseManager {
       }
 
       // 迁移作业任务数据
-      const homework = JSON.parse(localStorage.getItem("yyc3_homework_tasks") || "[]")
+      const homework = JSON.parse(localStorage.getItem("yyc3_homework_tasks") || "[]") as Array<{
+        child_id: string; subject: string; title: string; description?: string
+        due_date?: string; status: string; priority: string; ai_feedback?: string
+      }>
       if (homework.length > 0) {
         for (const task of homework) {
           await this.sqliteDB.create("homework_tasks", {
@@ -274,7 +279,7 @@ export class DatabaseManager {
         // localStorage模式
         for (const table of tables) {
           const data = localStorage.getItem(`yyc3_${table}`)
-          stats[table] = data ? JSON.parse(data).length : 0
+          stats[table] = data ? (JSON.parse(data) as unknown[]).length : 0
         }
       }
 
@@ -300,7 +305,7 @@ export class DatabaseManager {
           for (const key of keys) {
             if (key.startsWith("yyc3_") && key !== "yyc3_initialized") {
               try {
-                const data = JSON.parse(localStorage.getItem(key) || "[]")
+                const data = JSON.parse(localStorage.getItem(key) || "[]") as unknown[]
                 if (Array.isArray(data) && data.length === 0) {
                   localStorage.removeItem(key)
                   cleaned++

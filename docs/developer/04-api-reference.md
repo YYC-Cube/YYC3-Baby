@@ -1,30 +1,36 @@
 # 04 · API 参考
 
 > Base URL：`http://localhost:1228`。数据接口统一返回 `{ data, success }` 包裹；错误返回 `{ error, success: false }` + 4xx/5xx。
+>
+> **认证（2026-08 安全强化后）**：除 `/api/auth/*` 与 `/api/error-report` 外，**全部端点需认证**。
+> 凭据双通道：httpOnly Cookie（浏览器，登录后自动携带）或 `Authorization: Bearer <accessToken>`（API 客户端）。
+> 数据端点按用户**租户隔离**（只见自己的数据）；AI 端点带**按用户限流**。
 
-## 数据 CRUD
+## 数据 CRUD（全部需认证 + 租户隔离）
 
 ### GET /api/children
 
-列出宝宝档案。响应 `data: Child[]`（含种子数据）。
+列出**当前用户**的宝宝档案（不可见他人与种子归属数据）。401 未认证。
 
 ### POST /api/children
 
 ```json
-// 请求（必填 name、birth_date；user_id 需存在于 users 表）
-{ "user_id": "<uuid>", "name": "小语", "birth_date": "2026-01-01", "gender": "female" }
-// 201 → { data: Child }
-// 400 → name/birth_date 缺失；400 → 关联的 user_id 不存在（外键）
+// 请求（必填 name、birth_date）
+{ "name": "小语", "birth_date": "2026-01-01", "gender": "female" }
+// 201 → { data: Child }（user_id 一律取自认证令牌，传入的 user_id 被忽略）
+// 400 → name/birth_date 缺失
 ```
+
+字段白名单：name / nickname / birth_date / gender / avatar_url / current_stage；其余字段（含恶意键）静默丢弃。
 
 ### GET /api/growth-records
 
 | Query | 说明 |
 |-------|------|
-| `childId` | 按宝宝过滤 |
+| `childId` | 按宝宝过滤（须属于当前用户，否则 **403**） |
 | `type` | milestone / observation / emotion / learning |
 
-响应按 `recorded_at` 倒序；`media_urls`、`tags` 已是结构化数组。
+仅返回当前用户孩子集合的记录，按 `recorded_at` 倒序；`media_urls`、`tags` 已是结构化数组。
 
 ### POST /api/growth-records
 
@@ -32,74 +38,77 @@
 // 必填 child_id、title、content；recorded_at 缺省为当前时间
 { "child_id": "<uuid>", "type": "observation", "title": "公园社交",
   "content": "主动邀请小朋友玩耍", "media_urls": [], "tags": ["社交"] }
+// 403 → child_id 不属于当前用户（防 IDOR 探测）
 ```
 
 ### GET /api/homework
 
-Query：`childId`、`status`（pending/in_progress/completed/overdue）。
+Query：`childId`、`status`（pending/in_progress/completed/overdue）。租户隔离同上。
 
 ### POST /api/homework
 
-必填 `child_id`、`subject`、`title`；`status` 默认 pending、`priority` 默认 normal。
+必填 `child_id`、`subject`、`title`；`status` 默认 pending、`priority` 默认 normal。child 归属校验同上（403）。
 
 ### PATCH /api/homework/[id]
 
-部分更新；`status → completed` 时自动补 `completed_at`。404 = 任务不存在。
+部分更新；`status → completed` 时自动补 `completed_at`。404 = 任务不存在；**403 = 任务属于其他用户**。
+`id` / `child_id` / `created_at` 不接受变更。
 
 ### DELETE /api/homework/[id]
 
-删除任务，`{ success: true }` 或 404。
+删除任务，`{ success: true }`；404 不存在 / 403 非本人。
 
-## AI 代理（服务端持有密钥）
+## 自治核心（服务端单例）
 
-### POST /api/ai/homework-correction
-
-```json
-// 请求：base64 data URL 图片（≤10MB）
-{ "image": "data:image/jpeg;base64,..." }
-// 200 → { results: [{uuid, question, correct_answer, user_answer, is_correct, explanation, score?}], explanations: [...] }
-// 400 图片缺失/格式错；413 超限；500 BigModel 调用失败
-```
-
-### POST /api/ai/speech-to-text
-
-`multipart/form-data`，字段 `audio`（≤25MB）。响应 `{ text }`；400 非 multipart；413 超限。
-
-### 其余 AI 端点（预设/轻实现）
-
-| 端点　　　　　　　　　　　　　　　　　　　　 | 用途　　　　　　　| 现状　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
-| ----------------------------------------------| -------------------| ----------------------------------------------------------------|
-| POST /api/ai/chat　　　　　　　　　　　　　　| AI 对话　　　　　 | 预设回复集 + 角色路由（接入 BigModel 的挂点在 `lib/ai_roles`） |
-| POST /api/ai/emotion · enhanced-emotion　　　| 情感分析　　　　　| 规则引擎实现　　　　　　　　　　　　　　　　　　　　　　　　　 |
-| POST /api/ai/analyze-record　　　　　　　　　| 记录标题/标签建议 | 轻实现　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
-| POST /api/ai/assessment-report　　　　　　　 | 评估报告　　　　　| 模板生成　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
-| POST /api/ai/continue-story · generate-image | 故事续写/图片　　 | 占位实现　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
-| POST /api/ai/orchestrate　　　　　　　　　　 | 任务编排　　　　　| AgenticCore 联动　　　　　　　　　　　　　　　　　　　　　　　 |
-| POST /api/error-report　　　　　　　　　　　 | 前端错误上报　　　| 日志落盘　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
-
-## 鉴权（JWT，P0-1 融合）
-
-基于 JWT + bcrypt 的无状态鉴权（移植自 YYC3-AI-Growth-Companion，适配 SQLite）：
-
-| 端点 | 方法 | 说明 |
+| 端点 | 限流 | 说明 |
 | ------ | ------ | ------ |
-| `/api/auth/register` | POST | 注册（邮箱唯一、密码 ≥8 位 bcrypt 哈希） |
-| `/api/auth/login` | POST | 登录，返回 `{ accessToken, refreshToken }` |
-| `/api/auth/refresh` | POST | 用 refreshToken 换取新 accessToken |
-| `/api/auth/logout` | POST | 登出（无状态 JWT，客户端清令牌） |
-| `/api/auth/profile` | GET/PUT | 当前用户信息与更新（需 Bearer 令牌） |
+| GET /api/agentic | 60/min | 引擎系统状态（state / 任务计数 / 成功率） |
+| POST /api/agentic | 20/min | `{ text, sessionId? }` → AgentResponse（身份取自令牌） |
 
-**保护规则**：写操作（children / growth-records / homework 的 POST/PATCH/DELETE）需 `Authorization: Bearer <token>`，未认证返回 401。
+AgenticCore 及 prediction 服务栈仅存在于服务端，客户端经此 HTTP 入口调用。
+
+## AI 代理（全部需认证 + 按用户限流，超限 429 带 `Retry-After`）
+
+| 端点 | 限流 | 说明 |
+| ------ | ------ | ------ |
+| POST /api/ai/homework-correction | 10/min | base64 data URL 图片（≤10MB）→ 批改结果；413 超限 |
+| POST /api/ai/speech-to-text | 10/min | multipart `audio`（≤25MB）→ `{ text }` |
+| POST /api/ai/generate-image | 6/min | 文生图（fal.ai 计费端点，从严） |
+| POST /api/ai/orchestrate · continue-story · assessment-report | 10/min | 真实模型调用 |
+| POST /api/ai/chat | 20/min | 预设回复集 + 角色路由 |
+| POST /api/ai/emotion · enhanced-emotion · analyze-record | 30/min | 规则/轻实现 |
+
+通用响应：**401** 未认证；**429** 超限（body 含重试秒数，头含 `Retry-After`）；**413** 体积超限。
+
+## 鉴权（JWT + httpOnly Cookie）
+
+JWT（access/refresh 携带 `type` 声明，不可互换）+ bcrypt。**令牌主通道为 httpOnly Cookie**：
+登录/刷新成功时 `Set-Cookie`（`yyc3_at` path=/；`yyc3_rt` path=/api/auth；HttpOnly + SameSite=Lax，生产含 Secure），
+浏览器请求自动携带；API 客户端可继续用 Bearer 头与 body `refreshToken`（兼容保留）。
+
+| 端点 | 限流 | 说明 |
+| ------ | ------ | ------ |
+| POST /api/auth/register | 5/min/IP | **防枚举**：重复邮箱静默 no-op，响应与新注册一致且**永不返回令牌/用户数据**；前端注册后自动登录 |
+| POST /api/auth/login | 10/min/IP + 5/min/邮箱 | 错误密码与不存在邮箱返回**相同的** `邮箱或密码错误`；成功同时下发 Cookie 与 body tokens |
+| POST /api/auth/refresh | 15/min/IP | refreshToken 来源：body 或 `yyc3_rt` Cookie；仅接受 refresh 类型；成功轮换 `yyc3_at` |
+| POST /api/auth/logout | - | 清除令牌 Cookie（无状态 JWT 无服务端吊销） |
+| GET/PUT /api/auth/profile | - | 当前用户信息（需认证） |
+
+**CSRF**：Cookie 认证的非 GET 请求校验 Origin 同源（跨源 → 403）；Bearer 头不受影响。
 
 ```bash
-# 调用示例
+# 浏览器路径：登录后 Cookie 自动携带，无需手动处理
+# API 客户端路径：
 TOKEN=$(curl -s -X POST /api/auth/login -H 'Content-Type: application/json' \
   -d '{"email":"a@b.c","password":"password123"}' | jq -r .data.tokens.accessToken)
-curl -X POST /api/growth-records -H "Authorization: Bearer $TOKEN" \
-  -H 'Content-Type: application/json' -d '{"child_id":"...","title":"...","content":"..."}'
+curl /api/children -H "Authorization: Bearer $TOKEN"
+
+# curl Cookie 路径：
+curl -c jar -X POST /api/auth/login ... && curl -b jar /api/children
 ```
 
-**配置**：`JWT_SECRET`（生产必设，`openssl rand -hex 32`）、`JWT_EXPIRES_IN`（默认 7d）、`JWT_REFRESH_EXPIRES_IN`（默认 30d）。
+**配置**：`JWT_SECRET`（生产必设，`openssl rand -hex 32`；开发缺省时自动生成安装级随机密钥 `data/.jwt-dev-secret`）、
+`JWT_EXPIRES_IN`（默认 7d）、`JWT_REFRESH_EXPIRES_IN`（默认 30d）。**演示账号**（种子数据）：`parent@yyc3.com` / `demo123456`。
 
 ## 日志体系（Winston，P0-2 融合）
 
@@ -108,8 +117,6 @@ curl -X POST /api/growth-records -H "Authorization: Bearer $TOKEN" \
 | 模块 | 职责 |
 | ------ | ------ |
 | `lib/logger/server.ts` | 服务端日志：控制台 + `logs/error-%DATE%.log`（错误，30 天）+ `logs/combined-%DATE%.log`（全量，14 天），20MB 轮转 |
-| `lib/logger/analyzer.ts` | 日志分析器：解析/统计/告警规则（高错误率/错误数/警告数/重复错误） |
-| `lib/logger.ts` | 前端浏览器日志（localStorage，原有） |
 
 **用法**：服务端路由 `import { error, info } from "@/lib/logger/server"`；已接入 auth 全部端点与 error-report。`LOG_DIR`（默认 `logs/`）、`LOG_LEVEL`（默认 dev=debug / prod=info）可配置；`logs/` 已 gitignore。
 
@@ -118,9 +125,10 @@ curl -X POST /api/growth-records -H "Authorization: Bearer $TOKEN" \
 | 状态 | 含义 |
 | ------ | ------ |
 | 400 | 参数缺失/格式错误/外键引用不存在（附中文说明） |
-| 401 | 未认证 / 令牌无效或过期 |
-| 403 | 已认证但权限不足 / 账号停用 |
+| 401 | 未认证 / 令牌无效、过期或类型不符 |
+| 403 | 数据不属于当前用户（租户隔离）/ Cookie 跨源写（CSRF 防护）/ 账号停用 |
 | 404 | 资源不存在 |
-| 409 | 资源冲突（如邮箱已注册） |
+| 409 | 资源冲突（注册已不再返回 409——防枚举下重复邮箱与新注册响应一致） |
 | 413 | 上传体积超限 |
+| 429 | 限流触发（头含 `Retry-After` 秒数） |
 | 500 | 服务端/上游异常（日志含 `[api]` 前缀可检索） |
