@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import type { PictureBook } from "@/types/ai-creative"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
 
 interface BookReaderProps {
   book: PictureBook
@@ -94,9 +94,8 @@ export default function BookReader({
         {chars.map((char, index) => (
           <span
             key={index}
-            className={`transition-colors duration-100 ${
-              index <= highlightedWord ? "text-amber-600 font-semibold" : "text-slate-700"
-            }`}
+            className={`transition-colors duration-100 ${index <= highlightedWord ? "text-amber-600 font-semibold" : "text-adaptive"
+              }`}
           >
             {char}
           </span>
@@ -122,24 +121,24 @@ export default function BookReader({
             initial={{ y: -60 }}
             animate={{ y: 0 }}
             exit={{ y: -60 }}
-            className="absolute top-0 left-0 right-0 z-10 bg-white/90 backdrop-blur-sm shadow-sm"
+            className="absolute top-0 left-0 right-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm"
           >
             <div className="flex items-center justify-between px-4 py-3">
               <button
                 onClick={onClose}
-                className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+                className="flex items-center gap-2 text-adaptive-muted hover:text-adaptive transition-colors"
               >
                 <i className="ri-arrow-left-line text-xl" />
                 <span className="text-sm font-medium">返回书架</span>
               </button>
 
-              <h1 className="text-base font-semibold text-slate-800 truncate max-w-[200px]">{book.title}</h1>
+              <h1 className="text-base font-semibold text-adaptive truncate max-w-[200px]">{book.title}</h1>
 
               <div className="flex items-center gap-3">
                 <span className="text-sm text-slate-500">
                   {currentPage} / {book.pages.length}
                 </span>
-                <button onClick={() => {}} className="p-2 text-slate-600 hover:text-amber-600 transition-colors">
+                <button onClick={() => { }} className="p-2 text-slate-600 hover:text-amber-600 transition-colors">
                   <i className="ri-settings-3-line text-xl" />
                 </button>
               </div>
@@ -178,13 +177,13 @@ export default function BookReader({
               />
 
               {/* 页码标签 */}
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-sm">
-                <span className="text-sm font-medium text-slate-700">第 {currentPage} 页</span>
+              <div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-sm">
+                <span className="text-sm font-medium text-adaptive">第 {currentPage} 页</span>
               </div>
             </div>
 
             {/* 文字内容 */}
-            <div className="w-full max-w-2xl bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+            <div className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
               <p className="text-xl leading-relaxed text-center font-medium">{renderHighlightedText(page.text)}</p>
             </div>
           </motion.div>
@@ -198,18 +197,17 @@ export default function BookReader({
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             exit={{ y: 100 }}
-            className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-lg"
+            className="absolute bottom-0 left-0 right-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg"
           >
             <div className="flex items-center justify-center gap-6 px-6 py-4">
               {/* 上一页 */}
               <button
                 onClick={() => { onPageChange(currentPage - 1); }}
                 disabled={currentPage <= 1}
-                className={`p-3 rounded-full transition-all ${
-                  currentPage <= 1
-                    ? "text-slate-300 cursor-not-allowed"
-                    : "text-slate-600 hover:bg-amber-100 hover:text-amber-600"
-                }`}
+                className={`p-3 rounded-full transition-all ${currentPage <= 1
+                  ? "text-slate-300 cursor-not-allowed"
+                  : "text-adaptive-muted hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-600"
+                  }`}
               >
                 <i className="ri-skip-back-line text-2xl" />
               </button>
@@ -242,11 +240,10 @@ export default function BookReader({
               <button
                 onClick={() => { onPageChange(currentPage + 1); }}
                 disabled={currentPage >= book.pages.length}
-                className={`p-3 rounded-full transition-all ${
-                  currentPage >= book.pages.length
-                    ? "text-slate-300 cursor-not-allowed"
-                    : "text-slate-600 hover:bg-amber-100 hover:text-amber-600"
-                }`}
+                className={`p-3 rounded-full transition-all ${currentPage >= book.pages.length
+                  ? "text-slate-300 cursor-not-allowed"
+                  : "text-slate-600 hover:bg-amber-100 hover:text-amber-600"
+                  }`}
               >
                 <i className="ri-skip-forward-line text-2xl" />
               </button>
@@ -258,11 +255,10 @@ export default function BookReader({
                 <button
                   key={p.pageNumber}
                   onClick={() => { onPageChange(p.pageNumber); }}
-                  className={`shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
-                    p.pageNumber === currentPage
-                      ? "border-amber-400 shadow-md"
-                      : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
+                  className={`shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${p.pageNumber === currentPage
+                    ? "border-amber-400 shadow-md"
+                    : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
                 >
                   <img
                     src={p.imageUrl || "/placeholder.svg"}
@@ -281,8 +277,8 @@ export default function BookReader({
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
         className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-64 flex items-center justify-start pl-2 opacity-0 hover:opacity-100 transition-opacity"
       >
-        <div className="p-2 rounded-full bg-white/80 shadow-lg">
-          <i className="ri-arrow-left-s-line text-2xl text-slate-600" />
+        <div className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg">
+          <i className="ri-arrow-left-s-line text-2xl text-adaptive-muted" />
         </div>
       </button>
 
@@ -290,8 +286,8 @@ export default function BookReader({
         onClick={() => currentPage < book.pages.length && onPageChange(currentPage + 1)}
         className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-64 flex items-center justify-end pr-2 opacity-0 hover:opacity-100 transition-opacity"
       >
-        <div className="p-2 rounded-full bg-white/80 shadow-lg">
-          <i className="ri-arrow-right-s-line text-2xl text-slate-600" />
+        <div className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg">
+          <i className="ri-arrow-right-s-line text-2xl text-adaptive-muted" />
         </div>
       </button>
     </motion.div>

@@ -11,16 +11,14 @@
 
 "use client"
 
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '@/lib/store'
-import { milestoneTracker, GrowthAssessment, DevelopmentLevel } from '@/lib/growth/milestone-tracker'
 import { emotionEngine } from '@/lib/ai/emotion-engine'
-import { voiceController, EmotionType } from '@/lib/ai/voice-interaction'
-import { addGrowthRecord } from '@/lib/store'
-import { Child } from '@/lib/store'
+import { EmotionType, voiceController } from '@/lib/ai/voice-interaction'
 import { characterManager } from '@/lib/character-manager'
+import { DevelopmentLevel, GrowthAssessment, milestoneTracker } from '@/lib/growth/milestone-tracker'
+import { addGrowthRecord, AppDispatch, Child } from '@/lib/store'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 interface GrowthDashboardProps {
   child: Child
@@ -179,25 +177,25 @@ export default function GrowthDashboard({ child }: GrowthDashboardProps) {
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* 头部信息 */}
-      <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+      <div className="bg-surface rounded-2xl shadow-sm p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             {/* 角色头像 */}
-            <motion.div 
+            <motion.div
               className="w-16 h-16 rounded-full overflow-hidden border-4 border-blue-100 shadow-md"
               whileHover={{ scale: 1.1 }}
             >
-              <img 
-                src={characterAvatar} 
-                alt={`${child.name || child.nickname} 的角色形象`} 
+              <img
+                src={characterAvatar}
+                alt={`${child.name || child.nickname} 的角色形象`}
                 className="w-full h-full object-cover"
               />
             </motion.div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">
+              <h1 className="text-2xl font-bold text-adaptive">
                 {child.name || child.nickname} 的成长记录
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-adaptive-muted mt-1">
                 年龄: {ageInMonths} 个月 | 当前阶段: {child.currentStage}
               </p>
             </div>
@@ -214,16 +212,15 @@ export default function GrowthDashboard({ child }: GrowthDashboardProps) {
       </div>
 
       {/* 标签页导航 */}
-      <div className="flex space-x-1 mb-6 bg-gray-100 p-1 rounded-lg">
+      <div className="flex space-x-1 mb-6 bg-surface-soft p-1 rounded-lg">
         {['overview', 'milestones', 'emotions', 'recommendations'].map((tab) => (
           <button
             key={tab}
             onClick={() => { setActiveTab(tab as 'overview' | 'milestones' | 'emotions' | 'recommendations'); }}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
-              activeTab === tab
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
+            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${activeTab === tab
+              ? 'bg-surface text-blue-600 shadow-sm'
+              : 'text-adaptive-muted hover:text-adaptive'
+              }`}
           >
             {tab === 'overview' && '总览'}
             {tab === 'milestones' && '里程碑'}
@@ -268,16 +265,16 @@ function OverviewTab({ assessment }: { assessment: GrowthAssessment | null }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* 领域得分 */}
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">发展领域得分</h2>
+      <div className="bg-surface rounded-2xl shadow-sm p-6">
+        <h2 className="text-xl font-bold text-adaptive mb-4">发展领域得分</h2>
         <div className="space-y-4">
           {domainScores.map((domain) => (
             <div key={domain.name}>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700">{domain.name}</span>
-                <span className="text-sm font-bold text-gray-900">{domain.score}%</span>
+                <span className="text-sm font-medium text-adaptive-muted">{domain.name}</span>
+                <span className="text-sm font-bold text-adaptive">{domain.score}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-surface-soft rounded-full h-2">
                 <div
                   className={`${domain.color} h-2 rounded-full transition-all duration-500`}
                   style={{ width: `${domain.score}%` }}
@@ -289,8 +286,8 @@ function OverviewTab({ assessment }: { assessment: GrowthAssessment | null }) {
       </div>
 
       {/* 优势与成长领域 */}
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">发展分析</h2>
+      <div className="bg-surface rounded-2xl shadow-sm p-6">
+        <h2 className="text-xl font-bold text-adaptive mb-4">发展分析</h2>
         <div className="space-y-4">
           <div>
             <h3 className="text-sm font-semibold text-green-600 mb-2">优势领域</h3>
@@ -334,29 +331,28 @@ function MilestonesTab({ child, onMilestoneAchievement }: { child: Child; onMile
   }, [child.age])
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">发展里程碑</h2>
+    <div className="bg-surface rounded-2xl shadow-sm p-6">
+      <h2 className="text-xl font-bold text-adaptive mb-4">发展里程碑</h2>
       <div className="space-y-4">
         {milestones.map((milestone) => (
           <div
             key={milestone.id}
-            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+            className="border border-soft rounded-lg p-4 hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-800">{milestone.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">{milestone.description}</p>
+                <h3 className="font-semibold text-adaptive">{milestone.title}</h3>
+                <p className="text-sm text-adaptive-muted mt-1">{milestone.description}</p>
                 <div className="mt-2">
                   <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
                     {milestone.ageRange.minMonths}-{milestone.ageRange.maxMonths}个月
                   </span>
-                  <span className={`text-xs ml-2 px-2 py-1 rounded ${
-                    milestone.importance === 'critical'
-                      ? 'bg-red-100 text-red-700'
-                      : milestone.importance === 'important'
+                  <span className={`text-xs ml-2 px-2 py-1 rounded ${milestone.importance === 'critical'
+                    ? 'bg-red-100 text-red-700'
+                    : milestone.importance === 'important'
                       ? 'bg-yellow-100 text-yellow-700'
-                      : 'bg-gray-100 text-gray-700'
-                  }`}>
+                      : 'bg-surface-soft text-adaptive-muted'
+                    }`}>
                     {milestone.importance === 'critical' ? '重要' : milestone.importance === 'important' ? '关注' : '一般'}
                   </span>
                 </div>
@@ -378,8 +374,8 @@ function MilestonesTab({ child, onMilestoneAchievement }: { child: Child; onMile
 // 情感记录标签页
 function EmotionsTab({ isRecording, onStartRecording }: { isRecording: boolean; onStartRecording: () => void }) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">情感互动记录</h2>
+    <div className="bg-surface rounded-2xl shadow-sm p-6">
+      <h2 className="text-xl font-bold text-adaptive mb-4">情感互动记录</h2>
       <div className="text-center">
         <div className="mb-6">
           <img
@@ -388,17 +384,16 @@ function EmotionsTab({ isRecording, onStartRecording }: { isRecording: boolean; 
             className="w-32 h-32 mx-auto rounded-full"
           />
         </div>
-        <p className="text-gray-600 mb-6">
+        <p className="text-adaptive-muted mb-6">
           点击下方按钮开始与小语进行语音互动，记录情感表达
         </p>
         <button
           onClick={onStartRecording}
           disabled={isRecording}
-          className={`px-8 py-4 rounded-xl font-medium transition-all transform hover:scale-105 active:scale-95 ${
-            isRecording
-              ? 'bg-red-500 text-white animate-pulse'
-              : 'bg-linear-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
-          }`}
+          className={`px-8 py-4 rounded-xl font-medium transition-all transform hover:scale-105 active:scale-95 ${isRecording
+            ? 'bg-red-500 text-white animate-pulse'
+            : 'bg-linear-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
+            }`}
         >
           {isRecording ? (
             <>
@@ -421,36 +416,34 @@ function EmotionsTab({ isRecording, onStartRecording }: { isRecording: boolean; 
 function RecommendationsTab({ assessment }: { assessment: GrowthAssessment | null }) {
   if (!assessment || assessment.recommendations.length === 0) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-6 text-center">
-        <p className="text-gray-600">暂无个性化成长建议</p>
+      <div className="bg-surface rounded-2xl shadow-sm p-6 text-center">
+        <p className="text-adaptive-muted">暂无个性化成长建议</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">个性化成长建议</h2>
+    <div className="bg-surface rounded-2xl shadow-sm p-6">
+      <h2 className="text-xl font-bold text-adaptive mb-4">个性化成长建议</h2>
       <div className="space-y-4">
         {assessment.recommendations.map((rec, index) => (
           <div
             key={index}
-            className={`border-l-4 pl-4 py-3 ${
-              rec.priority === 'high'
-                ? 'border-red-500 bg-red-50'
-                : rec.priority === 'medium'
+            className={`border-l-4 pl-4 py-3 ${rec.priority === 'high'
+              ? 'border-red-500 bg-red-50'
+              : rec.priority === 'medium'
                 ? 'border-yellow-500 bg-yellow-50'
                 : 'border-blue-500 bg-blue-50'
-            }`}
+              }`}
           >
             <div className="flex items-start justify-between mb-2">
-              <h3 className="font-semibold text-gray-800">{rec.title}</h3>
-              <span className={`text-xs px-2 py-1 rounded ${
-                rec.priority === 'high'
-                  ? 'bg-red-100 text-red-700'
-                  : rec.priority === 'medium'
+              <h3 className="font-semibold text-adaptive">{rec.title}</h3>
+              <span className={`text-xs px-2 py-1 rounded ${rec.priority === 'high'
+                ? 'bg-red-100 text-red-700'
+                : rec.priority === 'medium'
                   ? 'bg-yellow-100 text-yellow-700'
                   : 'bg-blue-100 text-blue-700'
-              }`}>
+                }`}>
                 {rec.priority === 'high' ? '高优先级' : rec.priority === 'medium' ? '中优先级' : '建议'}
               </span>
             </div>

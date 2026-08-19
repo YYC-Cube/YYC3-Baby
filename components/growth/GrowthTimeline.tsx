@@ -1,7 +1,7 @@
 "use client"
 
+import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 
 interface TimelineEvent {
   id: string
@@ -144,9 +144,8 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
       {/* 筛选器 */}
       <div className="flex gap-2 flex-wrap">
         <motion.button
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-            selectedType === "all" ? "bg-slate-800 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
-          }`}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedType === "all" ? "bg-slate-800 text-white" : "bg-surface text-adaptive-muted hover:bg-surface-soft"
+            }`}
           onClick={() => { setSelectedType("all"); }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -156,11 +155,10 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
         {Object.entries(typeConfig).map(([type, config]) => (
           <motion.button
             key={type}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedType === type
-                ? `${config.bgColor} ${config.textColor}`
-                : "bg-white text-slate-600 hover:bg-slate-100"
-            }`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedType === type
+              ? `${config.bgColor} ${config.textColor}`
+              : "bg-surface text-adaptive-muted hover:bg-surface-soft"
+              }`}
             onClick={() => { setSelectedType(type); }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -173,13 +171,13 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
       {/* 视图切换 */}
       <div className="flex justify-end gap-2">
         <button
-          className={`p-2 rounded-lg ${viewMode === "timeline" ? "bg-blue-100 text-blue-600" : "bg-white text-slate-400"}`}
+          className={`p-2 rounded-lg ${viewMode === "timeline" ? "bg-blue-100 text-blue-600" : "bg-surface text-adaptive-muted"}`}
           onClick={() => { setViewMode("timeline"); }}
         >
           <i className="ri-time-line text-xl" />
         </button>
         <button
-          className={`p-2 rounded-lg ${viewMode === "grid" ? "bg-blue-100 text-blue-600" : "bg-white text-slate-400"}`}
+          className={`p-2 rounded-lg ${viewMode === "grid" ? "bg-blue-100 text-blue-600" : "bg-surface text-adaptive-muted"}`}
           onClick={() => { setViewMode("grid"); }}
         >
           <i className="ri-grid-line text-xl" />
@@ -196,10 +194,10 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
             <div key={month} className="mb-8">
               {/* 月份标签 */}
               <div className="relative flex items-center mb-4">
-                <div className="w-12 h-12 bg-white rounded-full border-4 border-blue-400 flex items-center justify-center z-10">
+                <div className="w-12 h-12 bg-surface rounded-full border-4 border-blue-400 flex items-center justify-center z-10">
                   <span className="text-xs font-bold text-blue-600">{month.split("-")[1]}月</span>
                 </div>
-                <span className="ml-4 text-lg font-bold text-slate-700">
+                <span className="ml-4 text-lg font-bold text-adaptive">
                   {month.split("-")[0]}年{month.split("-")[1]}月
                 </span>
               </div>
@@ -234,12 +232,12 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
-                              <h4 className="font-bold text-slate-800">{event.title}</h4>
+                              <h4 className="font-bold text-adaptive">{event.title}</h4>
                               <span className={`text-xs px-2 py-1 rounded-full ${config.bgColor} ${config.textColor}`}>
                                 {config.label}
                               </span>
                             </div>
-                            <p className="text-sm text-slate-500 mt-1">
+                            <p className="text-sm text-adaptive-muted mt-1">
                               {event.age} · {event.date}
                             </p>
 
@@ -251,14 +249,14 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
                                   exit={{ height: 0, opacity: 0 }}
                                   className="mt-3 overflow-hidden"
                                 >
-                                  <p className="text-slate-600 text-sm mb-3">{event.description}</p>
+                                  <p className="text-adaptive-muted text-sm mb-3">{event.description}</p>
 
                                   {event.tags && (
                                     <div className="flex gap-2 flex-wrap mb-3">
                                       {event.tags.map((tag, i) => (
                                         <span
                                           key={i}
-                                          className="px-2 py-1 bg-white/60 rounded-full text-xs text-slate-600"
+                                          className="px-2 py-1 bg-white/60 dark:bg-gray-800/60 rounded-full text-xs text-adaptive-muted"
                                         >
                                           #{tag}
                                         </span>
@@ -267,19 +265,19 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
                                   )}
 
                                   {event.aiInsight && (
-                                    <div className="bg-white/50 rounded-xl p-3 mt-2">
-                                      <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3 mt-2">
+                                      <div className="flex items-center gap-2 text-xs text-adaptive-muted mb-1">
                                         <i className="ri-sparkling-line" />
                                         AI小语洞察
                                       </div>
-                                      <p className="text-sm text-slate-600">{event.aiInsight}</p>
+                                      <p className="text-sm text-adaptive-muted">{event.aiInsight}</p>
                                     </div>
                                   )}
                                 </motion.div>
                               )}
                             </AnimatePresence>
                           </div>
-                          <i className={`ri-arrow-${isExpanded ? "up" : "down"}-s-line text-slate-400`} />
+                          <i className={`ri-arrow-${isExpanded ? "up" : "down"}-s-line text-adaptive-muted`} />
                         </div>
                       </motion.div>
                     )
@@ -306,12 +304,12 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center ${config.textColor} bg-white/50`}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center ${config.textColor} bg-white/50 dark:bg-gray-800/50`}
                   >
                     <i className={`${event.icon} text-xl`} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-800 text-sm">{event.title}</h4>
+                    <h4 className="font-bold text-adaptive text-sm">{event.title}</h4>
                     <p className="text-xs text-slate-500">
                       {event.age} · {event.date}
                     </p>

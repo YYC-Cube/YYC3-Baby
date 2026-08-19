@@ -51,11 +51,11 @@ category: status
 | 日志体系（lib/logger）　　　 | 100%　 | 🟢 低　　 | 可观测性　 | 每日轮转 + 分析器 + 告警规则　　　　　　　　　　　　　　　　　　　 |
 | 语音（components/voice）　　 | 100%　 | 🟢 低　　 | 语音交互　 | 识别/合成/管理器三件套已移植　　　　　　　　　　　　　　　　　　　 |
 | 主题系统（theme-system）　　 | 95%　　 | 🟢 低　　 | 全站视觉　 | 四主题全量；剩 Background 组件增强　　　　　　　　　　　　　　　　 |
-| 组件语义化（Phase 3）　　　　 | 25%　　 | 🟡 中　　 | 全站组件　 | 语义类已建 + 迁移 2 批（FixedAIWidget/UserCenter/LoginModal/PageHeader）；~15 文件待迁移 |
+| 组件语义化（Phase 3）　　　　 | 45%　　 | 🟡 中　　 | 全站组件　 | 语义类已建 + 迁移 3 批（FixedAIWidget/UserCenter/LoginModal/PageHeader/BookReader/Growth*/EmotionMonitor）；残留仅特殊场景（视频/叠加层） |
 | 文档体系　　　　　　　　　　 | 90%　　 | 🟢 低　　 | 团队协作　 | developer 10 篇 + status/standard 新增；术语表/索引/引用核查完成 |
 | 部署（Pages + 生产）　　　　 | 95%　　 | 🟢 低　　 | 线上访问　 | Pages 扩展渲染 status/standard/analysis；本地模拟构建验证通过 |
 
-**延期风险总评**：无硬阻塞项。组件语义化（25%）为唯一中风险项，缓解 = 分批推进 + 每次门禁验证。
+**延期风险总评**：无硬阻塞项。组件语义化（45%）为唯一中风险项，缓解 = 分批推进 + 每次门禁验证。
 
 ---
 

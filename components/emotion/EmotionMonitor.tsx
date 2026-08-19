@@ -121,12 +121,12 @@ export default function EmotionMonitor({
 
   if (!isMonitoring) {
     return (
-      <div className={`bg-white rounded-2xl p-4 shadow-sm border border-gray-100 ${className}`}>
+      <div className={`bg-surface rounded-2xl p-4 shadow-sm border border-soft ${className}`}>
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-            <i className="ri-emotion-line text-gray-400" />
+          <div className="w-8 h-8 bg-surface-soft rounded-full flex items-center justify-center">
+            <i className="ri-emotion-line text-adaptive-muted" />
           </div>
-          <span className="text-gray-500">情感监测准备中...</span>
+          <span className="text-adaptive-muted">情感监测准备中...</span>
         </div>
       </div>
     )
@@ -135,20 +135,20 @@ export default function EmotionMonitor({
   if (compact) {
     return (
       <motion.div
-        className={`bg-white rounded-2xl p-3 shadow-sm border border-gray-100 cursor-pointer ${className}`}
+        className={`bg-surface rounded-2xl p-3 shadow-sm border border-soft cursor-pointer ${className}`}
         whileHover={{ scale: 1.02 }}
         onClick={() => { setIsExpanded(!isExpanded); }}
       >
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-2xl ${currentEmotionState ? emotionColors[String(currentEmotionState.currentEmotion).toLowerCase()] : 'bg-gray-100'
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-2xl ${currentEmotionState ? emotionColors[String(currentEmotionState.currentEmotion).toLowerCase()] : 'bg-surface-soft'
             }`}>
             {currentEmotionState ? emotionEmojis[String(currentEmotionState.currentEmotion).toLowerCase()] : '😊'}
           </div>
           <div className="flex-1">
-            <div className="font-medium text-gray-800">
+            <div className="font-medium text-adaptive">
               {currentEmotionState ? `情感状态: ${getEmotionName(currentEmotionState.currentEmotion)}` : '监测中'}
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-adaptive-muted">
               {currentEmotionState ? `强度: ${Math.round(currentEmotionState.intensity * 100)}%` : '分析中...'}
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function EmotionMonitor({
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="mt-3 pt-3 border-t border-gray-100"
+              className="mt-3 pt-3 border-t border-soft"
             >
               <EmotionAlerts alerts={recentAlerts as any} onClear={clearAlerts} />
               {showInsights && <EmotionInsights insights={emotionInsights} />}
@@ -176,7 +176,7 @@ export default function EmotionMonitor({
   }
 
   return (
-    <div className={`bg-white rounded-2xl p-6 shadow-sm border border-gray-100 ${className}`}>
+    <div className={`bg-surface rounded-2xl p-6 shadow-sm border border-soft ${className}`}>
       {/* 标题 */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -184,8 +184,8 @@ export default function EmotionMonitor({
             <i className="ri-heart-pulse-line text-xl" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-800">情感实时监测</h3>
-            <p className="text-sm text-gray-500">已监测 {Math.floor(sessionDuration / 60)} 分钟</p>
+            <h3 className="text-lg font-bold text-adaptive">情感实时监测</h3>
+            <p className="text-sm text-adaptive-muted">已监测 {Math.floor(sessionDuration / 60)} 分钟</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -211,26 +211,26 @@ export default function EmotionMonitor({
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{emotionEmojis[String(currentEmotionState.currentEmotion).toLowerCase()]}</span>
                 <div>
-                  <h4 className="font-bold text-gray-800">
+                  <h4 className="font-bold text-adaptive">
                     {getEmotionName(currentEmotionState.currentEmotion)}
                   </h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-adaptive-muted">
                     持续 {Math.floor(currentEmotionState.duration / 60)} 分钟
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm font-medium text-gray-700">强度</div>
+                <div className="text-sm font-medium text-adaptive-muted">强度</div>
                 <div className="text-xl font-bold">{Math.round(currentEmotionState.intensity * 100)}%</div>
               </div>
             </div>
 
             {/* 趋势指示器 */}
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-sm text-gray-600">趋势:</span>
+              <span className="text-sm text-adaptive-muted">趋势:</span>
               <div className={`px-2 py-1 rounded-full text-xs font-medium ${currentEmotionState.trend === 'improving' ? 'bg-green-100 text-green-700' :
-                  currentEmotionState.trend === 'declining' ? 'bg-red-100 text-red-700' :
-                    'bg-gray-100 text-gray-700'
+                currentEmotionState.trend === 'declining' ? 'bg-red-100 text-red-700' :
+                  'bg-surface-soft text-adaptive-muted'
                 }`}>
                 {currentEmotionState.trend === 'improving' ? '📈 改善中' :
                   currentEmotionState.trend === 'declining' ? '📉 下降中' : '➡️ 稳定'}
@@ -297,10 +297,10 @@ function EmotionAlerts({ alerts, onClear }: { alerts: EmotionAlert[], onClear: (
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between mb-2">
-        <h5 className="text-sm font-medium text-gray-700">情感警报</h5>
+        <h5 className="text-sm font-medium text-adaptive-muted">情感警报</h5>
         <button
           onClick={onClear}
-          className="text-xs text-gray-500 hover:text-gray-700"
+          className="text-xs text-adaptive-muted hover:text-adaptive"
         >
           清除全部
         </button>
@@ -312,21 +312,21 @@ function EmotionAlerts({ alerts, onClear }: { alerts: EmotionAlert[], onClear: (
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: index * 0.1 }}
           className={`p-3 rounded-lg border ${alert.severity === 'high' ? 'bg-red-50 border-red-200' :
-              alert.severity === 'medium' ? 'bg-orange-50 border-orange-200' :
-                'bg-blue-50 border-blue-200'
+            alert.severity === 'medium' ? 'bg-orange-50 border-orange-200' :
+              'bg-blue-50 border-blue-200'
             }`}
         >
           <div className="flex items-start gap-2">
             <i className={`${alert.severity === 'high' ? 'ri-error-warning-line text-red-500' :
-                alert.severity === 'medium' ? 'ri-alert-line text-orange-500' :
-                  'ri-information-line text-blue-500'
+              alert.severity === 'medium' ? 'ri-alert-line text-orange-500' :
+                'ri-information-line text-blue-500'
               } mt-0.5`} />
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-800">{alert.message}</p>
+              <p className="text-sm font-medium text-adaptive">{alert.message}</p>
               {alert.suggestions && alert.suggestions.length > 0 && (
                 <div className="mt-1">
-                  <p className="text-xs text-gray-600">建议:</p>
-                  <ul className="text-xs text-gray-500 ml-2">
+                  <p className="text-xs text-adaptive-muted">建议:</p>
+                  <ul className="text-xs text-adaptive-muted ml-2">
                     {alert.suggestions.map((suggestion: string, i: number) => (
                       <li key={i}>• {suggestion}</li>
                     ))}
@@ -346,7 +346,7 @@ function EmotionInsights({ insights }: { insights: EmotionInsight[] }) {
 
   return (
     <div>
-      <h5 className="text-sm font-medium text-gray-700 mb-2">情感洞察</h5>
+      <h5 className="text-sm font-medium text-adaptive-muted mb-2">情感洞察</h5>
       <div className="space-y-2">
         {insights.map((insight, index) => (
           <motion.div
@@ -355,16 +355,16 @@ function EmotionInsights({ insights }: { insights: EmotionInsight[] }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
             className={`p-3 rounded-lg border ${insight.severity === 'success' ? 'bg-green-50 border-green-200' :
-                insight.severity === 'warning' ? 'bg-yellow-50 border-yellow-200' :
-                  'bg-gray-50 border-gray-200'
+              insight.severity === 'warning' ? 'bg-yellow-50 border-yellow-200' :
+                'bg-surface-soft border-soft'
               }`}
           >
             <div className="flex items-center gap-2">
               <i className={`${insight.type === 'trend' ? 'ri-line-chart-line' :
-                  insight.type === 'pattern' ? 'ri-pulse-line' :
-                    'ri-lightbulb-line'
+                insight.type === 'pattern' ? 'ri-pulse-line' :
+                  'ri-lightbulb-line'
                 } text-sm`} />
-              <p className="text-sm text-gray-700">{insight.message}</p>
+              <p className="text-sm text-adaptive-muted">{insight.message}</p>
             </div>
           </motion.div>
         ))}
@@ -376,12 +376,12 @@ function EmotionInsights({ insights }: { insights: EmotionInsight[] }) {
 function EmotionHistory({ history }: { history: EmotionEvent[] }) {
   return (
     <div>
-      <h5 className="text-sm font-medium text-gray-700 mb-2">最近情感变化</h5>
+      <h5 className="text-sm font-medium text-adaptive-muted mb-2">最近情感变化</h5>
       <div className="flex gap-2 overflow-x-auto pb-2">
         {history.map((event) => (
           <div
             key={event.id}
-            className={`shrink-0 w-12 h-12 rounded-lg ${emotionColors[String(event.emotion).toLowerCase()]} flex items-center justify-center text-lg border border-gray-200`}
+            className={`shrink-0 w-12 h-12 rounded-lg ${emotionColors[String(event.emotion).toLowerCase()]} flex items-center justify-center text-lg border border-soft`}
             title={`${getEmotionName(event.emotion)} - ${event.context}`}
           >
             {emotionEmojis[String(event.emotion).toLowerCase()]}
@@ -395,23 +395,23 @@ function EmotionHistory({ history }: { history: EmotionEvent[] }) {
 function DetailedEmotionReport({ report }: { report: DetailedReport }) {
   return (
     <div>
-      <h5 className="text-lg font-bold text-gray-800 mb-4">情感分析报告</h5>
+      <h5 className="text-lg font-bold text-adaptive mb-4">情感分析报告</h5>
 
       {/* 摘要 */}
       <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-        <p className="text-sm text-gray-700">{report.summary}</p>
+        <p className="text-sm text-adaptive-muted">{report.summary}</p>
       </div>
 
       {/* 情感分布 */}
       {report.emotions && Object.keys(report.emotions).length > 0 && (
         <div className="mb-4">
-          <h6 className="text-sm font-medium text-gray-700 mb-2">情感分布</h6>
+          <h6 className="text-sm font-medium text-adaptive-muted mb-2">情感分布</h6>
           <div className="space-y-2">
             {Object.entries(report.emotions).map(([emotion, count]) => (
               <div key={emotion} className="flex items-center gap-2">
                 <span className="text-lg">{emotionEmojis[emotion as EmotionType]}</span>
-                <span className="text-sm text-gray-600">{getEmotionName(emotion as EmotionType)}</span>
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
+                <span className="text-sm text-adaptive-muted">{getEmotionName(emotion as EmotionType)}</span>
+                <div className="flex-1 bg-surface-soft rounded-full h-2">
                   <div
                     className="bg-blue-500 h-2 rounded-full"
                     style={{ width: `${(count / maxObjectValues(report.emotions || {})) * 100}%` }}

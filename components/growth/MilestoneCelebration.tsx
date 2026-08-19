@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 interface MilestoneCelebrationProps {
   isVisible: boolean
@@ -131,7 +131,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
 
           {/* 庆祝卡片 */}
           <motion.div
-            className="relative z-10 bg-white rounded-3xl p-8 mx-4 max-w-md w-full shadow-2xl"
+            className="relative z-10 bg-surface rounded-3xl p-8 mx-4 max-w-md w-full shadow-2xl"
             initial={{ scale: 0.5, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.5, y: 50, opacity: 0 }}
@@ -152,7 +152,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
             {/* 内容 */}
             <div className="text-center pt-14">
               <motion.h2
-                className="text-2xl font-bold text-slate-800 mb-2"
+                className="text-2xl font-bold text-adaptive mb-2"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4 }}
@@ -171,7 +171,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
               </motion.div>
 
               <motion.h3
-                className="text-xl font-semibold text-slate-700 mb-3"
+                className="text-xl font-semibold text-adaptive mb-3"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.6 }}
@@ -180,7 +180,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
               </motion.h3>
 
               <motion.p
-                className="text-slate-500 mb-6"
+                className="text-adaptive-muted mb-6"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.7 }}
@@ -195,7 +195,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                <p className="text-sm text-slate-600 italic">
+                <p className="text-sm text-adaptive-muted italic">
                   &quot;每一个小小的进步，都是成长路上的闪光时刻。
                   <br />
                   恭喜宝贝，继续加油!&quot;
@@ -217,7 +217,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
                 </button>
                 <button
                   onClick={onClose}
-                  className="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-medium hover:bg-slate-200 transition-colors"
+                  className="px-6 py-3 bg-surface-soft text-adaptive-muted rounded-xl font-medium hover:bg-surface transition-colors"
                 >
                   关闭
                 </button>
