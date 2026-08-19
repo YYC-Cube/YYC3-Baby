@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   if (auth instanceof NextResponse) return auth
 
   try {
-    const body = await request.json()
+    const body = (await request.json()) as Record<string, unknown>
     if (!body?.name || !body?.birth_date) {
       return NextResponse.json({ error: "name 与 birth_date 为必填项", success: false }, { status: 400 })
     }

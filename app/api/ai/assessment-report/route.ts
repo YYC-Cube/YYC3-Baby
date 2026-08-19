@@ -1,6 +1,15 @@
 import { generateText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
 import { guardAIRequest } from "@/lib/api/ai-guard"
+import { z } from "zod"
+
+const bodySchema = z.object({
+  childName: z.string(),
+  childAge: z.number(),
+  stageId: z.string(),
+  stageName: z.string(),
+  scores: z.record(z.string(), z.number()),
+})
 import { NextResponse } from "next/server"
 
 const openai = createOpenAI({
@@ -26,7 +35,11 @@ export async function POST(request: Request) {
   if (guard instanceof NextResponse) return guard
 
   try {
-    const { childName, childAge, stageId, stageName, scores } = await request.json()
+    const parsed = bodySchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return NextResponse.json({ error: "请求体格式不正确" }, { status: 400 })
+    }
+    const { childName, childAge, stageId, stageName, scores } = parsed.data
 
     // 计算各维度得分和总体评估
     const dimensionAnalysis = analyzeDimensions(scores)

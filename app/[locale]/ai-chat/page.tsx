@@ -14,9 +14,9 @@ export default function AIChatPage() {
     const saved = localStorage.getItem('yyc3-ai-chat-messages')
     if (saved) {
       try {
-        const parsedMessages = JSON.parse(saved)
+        const parsedMessages = JSON.parse(saved) as Message[]
         if (parsedMessages.length > 0) {
-          const maxId = Math.max(...parsedMessages.map((m: Message) => Number(m.id)))
+          const maxId = Math.max(...parsedMessages.map((m) => Number(m.id)))
           return maxId + 1
         }
       } catch (e) {

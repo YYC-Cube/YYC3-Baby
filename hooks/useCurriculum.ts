@@ -122,9 +122,9 @@ export function useCurriculum() {
         const storedSemester = localStorage.getItem(SEMESTER_KEY)
 
         if (stored) {
-          const parsed = JSON.parse(stored)
+          const parsed = JSON.parse(stored) as Array<Omit<Course, 'createdAt' | 'updatedAt'> & { createdAt: string; updatedAt: string }>
           setCourses(
-            parsed.map((c: Course) => ({
+            parsed.map((c) => ({
               ...c,
               createdAt: new Date(c.createdAt),
               updatedAt: new Date(c.updatedAt),
@@ -137,7 +137,7 @@ export function useCurriculum() {
         }
 
         if (storedSemester) {
-          const parsed = JSON.parse(storedSemester)
+          const parsed = JSON.parse(storedSemester) as Omit<Semester, 'startDate' | 'endDate'> & { startDate: string; endDate: string }
           setSemester({
             ...parsed,
             startDate: new Date(parsed.startDate),

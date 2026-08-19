@@ -10,9 +10,11 @@ flowchart LR
 | 门禁 | 命令 | 当前基线 |
 | ------ | ------ | --------- |
 | 类型 | `bun run type-check` | **0 错误**（应用代码；`__tests__/`、`themes/` 排除） |
-| Lint | `bun run lint` | **0 error**，~170 warning（见债务清单） |
+| Lint | `bun run lint` | **0 error**，~88 warning（见债务清单） |
 | 构建 | `bun run build` | 通过（类型门禁已恢复，无 ignoreBuildErrors） |
 | 测试 | `bun test` | 251/251（19 文件，<1s；含 38 个安全行为用例） |
+| DB 直测 | `bun run test:node` | 7/7（node:sqlite 注入/迁移/种子守卫） |
+| e2e | `bun run test:e2e` | 2/2（Playwright 冒烟，生产构建，本地门禁） |
 | 依赖 | `npm audit --package-lock-only --registry=https://registry.npmjs.org` | 0 漏洞 |
 
 ## 测试套件结构

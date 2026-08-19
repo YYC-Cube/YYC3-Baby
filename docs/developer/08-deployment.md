@@ -7,7 +7,14 @@ bun run build          # Turbopack 构建 + 全类型检查
 bun run start          # Node 进程监听 :1228
 ```
 
-数据落盘 `data/yyc3.db`（进程外文件，重启不丢）。多实例部署时注意：SQLite 单写者，多副本需共享挂载该目录或改用 PostgreSQL（接口已抽象）。
+数据落盘 `data/yyc3.db`（进程外文件，重启不丢）。
+
+**部署拓扑约束（单实例锁定）**：当前三种实现均为**单进程语义**，多实例/Serverless 水平扩缩前不可直接复制副本——
+1. **限流**（`lib/rate-limit.ts`）：进程内内存桶，多副本时每副本独立计数，实际配额 = 副本数 × 配置值。多实例前接 Upstash Redis 替换存储后端（接口不变，仅换实现）。
+2. **SQLite 单写者**：多副本需共享挂载 `data/` 或改用 PostgreSQL（接口已抽象）。
+3. **AgenticCore 服务端单例**（`lib/agentic/server.ts`）：状态仅进程内，多副本各自独立（无正确性问题，仅状态不共享）。
+
+**运行环境**：`next start` 为 production 模式——必须配置 `JWT_SECRET`（缺失即拒绝签发令牌），且**不会**种入演示账号（开发专属）。
 
 ## 环境变量清单
 

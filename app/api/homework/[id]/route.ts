@@ -19,7 +19,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ error: "无权修改该作业", success: false }, { status: 403 })
     }
 
-    const body = await request.json()
+    const body = (await request.json()) as Record<string, unknown>
     // 主键与归属字段不允许通过 PATCH 变更
     const { id: _ignoredId, child_id: _ignoredChildId, created_at: _ignoredCreatedAt, ...rest } = body ?? {}
     if (rest?.status === "completed" && !rest.completed_at) {

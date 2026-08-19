@@ -1191,7 +1191,7 @@ export class AgenticCore extends EventEmitter {
       this.log('error', 'Agent error', { error: error instanceof Error ? error.message : String(error) })
     })
 
-    this.on('taskCompleted', (task) => {
+    this.on('taskCompleted', (task: AgentTask) => {
       this.log('info', 'Task completed', {
         taskId: task.id,
         executionTime: task.metrics.executionTime,
@@ -1199,7 +1199,7 @@ export class AgenticCore extends EventEmitter {
       })
     })
 
-    this.on('taskFailed', ({ task, error }) => {
+    this.on('taskFailed', ({ task, error }: { task: AgentTask; error: Error }) => {
       this.log('error', 'Task failed', {
         taskId: task.id,
         error: error.message

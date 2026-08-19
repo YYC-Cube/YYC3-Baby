@@ -63,7 +63,7 @@ export default function CreateRecordModal({ isOpen, onClose, onSubmit }: CreateR
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content, recordType }),
       })
-      const data = await response.json()
+      const data = (await response.json()) as AIAnalysisResult
       setAiSuggestions(data)
 
       if (data.suggestedTitle && !title) {

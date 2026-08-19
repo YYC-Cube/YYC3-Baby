@@ -9,6 +9,7 @@
  * @license MIT
  */
 
+
 // Mock AbortController for JSDOM compatibility
 global.AbortController = class AbortController {
   signal = {

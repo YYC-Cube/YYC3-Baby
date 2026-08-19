@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   if (auth instanceof NextResponse) return auth
 
   try {
-    const body = await request.json()
+    const body = (await request.json()) as Record<string, unknown>
     if (!body?.child_id || !body?.subject || !body?.title) {
       return NextResponse.json({ error: "child_id/subject/title 为必填项", success: false }, { status: 400 })
     }

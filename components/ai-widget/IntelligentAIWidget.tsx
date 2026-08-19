@@ -234,11 +234,11 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, sessionId: state.sessionId })
       })
-      const result = await res.json()
-      if (!res.ok || !result?.success) {
-        throw new Error(result?.message || `请求失败 (${res.status})`)
+      const result = (await res.json()) as { success?: boolean; message?: string; data?: AgentResponse }
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || `请求失败 (${res.status})`)
       }
-      const response: AgentResponse = result.data
+      const response: AgentResponse = result.data as AgentResponse
 
       const assistantMessage: Message = {
         id: generateMessageId(),
@@ -352,9 +352,9 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
       try {
         const res = await authFetch('/api/agentic')
         if (!res.ok) return
-        const result = await res.json()
-        if (!cancelled && result?.success && result.data) {
-          setSystemStatus(result.data as SystemStatus)
+        const result = (await res.json()) as { success?: boolean; data?: SystemStatus }
+        if (!cancelled && result.success && result.data) {
+          setSystemStatus(result.data)
         }
       } catch {
         // 轮询失败静默：下次间隔重试
