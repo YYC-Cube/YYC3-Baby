@@ -6,8 +6,9 @@ import { Toaster as Sonner, ToasterProps } from 'sonner'
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'default' } = useTheme()
 
-  // data-theme 主题 → sonner 明暗映射（cyberpunk 为暗色，其余浅色）
-  const sonnerTheme: ToasterProps['theme'] = theme === 'cyberpunk' ? 'dark' : 'light'
+  // data-theme 主题 → sonner 明暗映射（cyberpunk/aurora 为暗色，其余浅色）
+  const sonnerTheme: ToasterProps['theme'] =
+    theme === 'cyberpunk' || theme === 'aurora' ? 'dark' : 'light'
 
   return (
     <Sonner

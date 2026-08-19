@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -91,8 +91,8 @@
 }
 
 @theme inline {
-  --font-sans: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --font-rounded: "YouYuan", "Varela Round", sans-serif;
+  --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-rounded: 'YouYuan', 'Varela Round', sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -146,7 +146,7 @@
 
 /* 自定义工具类 */
 .font-rounded {
-  font-family: "YouYuan", "Varela Round", sans-serif;
+  font-family: 'YouYuan', 'Varela Round', sans-serif;
 }
 
 .shadow-soft {
@@ -169,6 +169,9 @@
 /* 全局UI组件统一化样式 - 彩色边线阴影效果 */
 @import '../styles/global-ui-enhancements.css';
 
+/* Aurora（极光）主题增强动效（仅 data-theme='aurora' 下激活） */
+@import '../styles/aurora-effects.css';
+
 /* ============================================================
    统一主题系统（路径 A · data-theme 机制打通）
    三套主题：default 暖阳 / cyberpunk 赛博霓虹 / liquid 液态翡翠
@@ -180,9 +183,9 @@
 
 /* ── default 暖阳（:root 兄弟 token，不动现有 shadcn 语义）── */
 :root {
-  --bg-app: #fffbeb;            /* amber-50 */
+  --bg-app: #fffbeb; /* amber-50 */
   --bg-surface: #ffffff;
-  --bg-surface-soft: #fef3c7;   /* amber-100 */
+  --bg-surface-soft: #fef3c7; /* amber-100 */
   --fg-default: #1f2937;
   --fg-muted: #6b7280;
   --border-soft: #f3e8c8;
@@ -238,15 +241,55 @@
   --color-primary-light: #34d399;
   --color-secondary-purple: #14b8a6;
   --color-secondary-pink: #2dd4bf;
-  --bg-app: #f0fdf9;            /* teal-50 */
+  --bg-app: #f0fdf9; /* teal-50 */
   --bg-surface: #ffffff;
-  --bg-surface-soft: #ccfbf1;   /* teal-100 */
+  --bg-surface-soft: #ccfbf1; /* teal-100 */
   --fg-default: #134e4a;
   --fg-muted: #5f7470;
   --border-soft: #b8ece2;
   --theme-accent: #10b981;
   --theme-accent-fg: #ffffff;
   --theme-glow: rgba(16, 185, 129, 0.18);
+}
+
+/* ── aurora 极光（提炼自 YYC3-XY-AI aurora.css · 完整语义 token）── */
+[data-theme='aurora'] {
+  --color-primary: #00ff87;
+  --color-primary-dark: #00cc6a;
+  --color-primary-light: #33ff9f;
+  --color-secondary-purple: #6c5ce7;
+  --color-secondary-pink: #ff6b9d;
+  --bg-app: #0a1628; /* 深蓝夜空 */
+  --bg-surface: rgba(255, 255, 255, 0.06);
+  --bg-surface-soft: rgba(255, 255, 255, 0.1);
+  --fg-default: rgba(255, 255, 255, 0.9);
+  --fg-muted: rgba(255, 255, 255, 0.55);
+  --border-soft: rgba(0, 255, 135, 0.15);
+  --theme-accent: #00ff87;
+  --theme-accent-fg: #0a1628;
+  --theme-glow: rgba(0, 255, 135, 0.22);
+  color-scheme: dark;
+
+  /* shadcn 语义 token（补足评估报告缺口 1：Dialog/Popover/Select 等正确配色） */
+  --background: #0a1628;
+  --foreground: rgba(255, 255, 255, 0.9);
+  --card: rgba(255, 255, 255, 0.06);
+  --card-foreground: rgba(255, 255, 255, 0.9);
+  --popover: #0d1b30;
+  --popover-foreground: rgba(255, 255, 255, 0.9);
+  --primary: #00ff87;
+  --primary-foreground: #06251a;
+  --secondary: #6c5ce7;
+  --secondary-foreground: #ffffff;
+  --muted: rgba(255, 255, 255, 0.08);
+  --muted-foreground: #8ba3c4;
+  --accent: rgba(0, 255, 135, 0.14);
+  --accent-foreground: #00ff87;
+  --destructive: #ff6b6b;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 255, 135, 0.16);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #00ff87;
 }
 
 /* ── 主题切换全局过渡（尊重减少动效偏好）── */
@@ -264,13 +307,15 @@ body {
 
 /* ── 非默认主题下的表面接管（同兄弟项目模式）── */
 [data-theme='cyberpunk'] body,
-[data-theme='liquid'] body {
+[data-theme='liquid'] body,
+[data-theme='aurora'] body {
   background-color: var(--bg-app);
   color: var(--fg-default);
 }
 
 [data-theme='cyberpunk'] .bg-white,
-[data-theme='liquid'] .bg-white {
+[data-theme='liquid'] .bg-white,
+[data-theme='aurora'] .bg-white {
   background-color: var(--bg-surface);
   color: var(--fg-default);
 }
@@ -290,7 +335,17 @@ body {
 
 [data-theme='liquid'] .bg-amber-50,
 [data-theme='liquid'] .bg-orange-50,
-[data-theme='liquid'] .bg-yellow-50 {
+[data-theme='liquid'] .bg-yellow-50,
+[data-theme='aurora'] .bg-amber-50,
+[data-theme='aurora'] .bg-orange-50,
+[data-theme='aurora'] .bg-yellow-50,
+[data-theme='aurora'] .bg-sky-50,
+[data-theme='aurora'] .bg-sky-100,
+[data-theme='aurora'] .bg-red-50,
+[data-theme='aurora'] .bg-green-50,
+[data-theme='aurora'] .bg-blue-50,
+[data-theme='aurora'] .bg-gray-50,
+[data-theme='aurora'] .bg-slate-50 {
   background-color: var(--bg-surface-soft);
 }
 
@@ -300,14 +355,24 @@ body {
 [data-theme='cyberpunk'] .text-gray-700,
 [data-theme='cyberpunk'] .text-slate-900,
 [data-theme='cyberpunk'] .text-slate-800,
-[data-theme='cyberpunk'] .text-slate-700 {
+[data-theme='cyberpunk'] .text-slate-700,
+[data-theme='aurora'] .text-gray-900,
+[data-theme='aurora'] .text-gray-800,
+[data-theme='aurora'] .text-gray-700,
+[data-theme='aurora'] .text-slate-900,
+[data-theme='aurora'] .text-slate-800,
+[data-theme='aurora'] .text-slate-700 {
   color: var(--fg-default) !important;
 }
 
 [data-theme='cyberpunk'] .text-gray-600,
 [data-theme='cyberpunk'] .text-gray-500,
 [data-theme='cyberpunk'] .text-slate-600,
-[data-theme='cyberpunk'] .text-slate-500 {
+[data-theme='cyberpunk'] .text-slate-500,
+[data-theme='aurora'] .text-gray-600,
+[data-theme='aurora'] .text-gray-500,
+[data-theme='aurora'] .text-slate-600,
+[data-theme='aurora'] .text-slate-500 {
   color: var(--fg-muted) !important;
 }
 
@@ -318,7 +383,14 @@ body {
 [data-theme='cyberpunk'] .border-slate-100,
 [data-theme='cyberpunk'] .border-slate-200,
 [data-theme='cyberpunk'] .border-amber-100,
-[data-theme='cyberpunk'] .border-amber-200 {
+[data-theme='cyberpunk'] .border-amber-200,
+[data-theme='aurora'] .border,
+[data-theme='aurora'] .border-gray-100,
+[data-theme='aurora'] .border-gray-200,
+[data-theme='aurora'] .border-slate-100,
+[data-theme='aurora'] .border-slate-200,
+[data-theme='aurora'] .border-amber-100,
+[data-theme='aurora'] .border-amber-200 {
   border-color: var(--border-soft) !important;
 }
 
@@ -335,7 +407,15 @@ body {
 [data-theme='liquid'] .text-orange-600,
 [data-theme='liquid'] .text-orange-700,
 [data-theme='liquid'] .text-orange-800,
-[data-theme='liquid'] .text-orange-900 {
+[data-theme='liquid'] .text-orange-900,
+[data-theme='aurora'] .text-amber-600,
+[data-theme='aurora'] .text-amber-700,
+[data-theme='aurora'] .text-amber-800,
+[data-theme='aurora'] .text-amber-900,
+[data-theme='aurora'] .text-orange-600,
+[data-theme='aurora'] .text-orange-700,
+[data-theme='aurora'] .text-orange-800,
+[data-theme='aurora'] .text-orange-900 {
   color: var(--color-primary-dark) !important;
 }
 
@@ -345,7 +425,13 @@ body {
 [data-theme='cyberpunk'] .bg-orange-400,
 [data-theme='cyberpunk'] .bg-orange-500,
 [data-theme='cyberpunk'] .bg-yellow-400,
-[data-theme='cyberpunk'] .bg-yellow-500 {
+[data-theme='cyberpunk'] .bg-yellow-500,
+[data-theme='aurora'] .bg-amber-400,
+[data-theme='aurora'] .bg-amber-500,
+[data-theme='aurora'] .bg-orange-400,
+[data-theme='aurora'] .bg-orange-500,
+[data-theme='aurora'] .bg-yellow-400,
+[data-theme='aurora'] .bg-yellow-500 {
   background-color: var(--theme-accent) !important;
   color: var(--theme-accent-fg) !important;
 }
@@ -353,6 +439,10 @@ body {
 [data-theme='cyberpunk'] .text-amber-500,
 [data-theme='cyberpunk'] .text-amber-600,
 [data-theme='cyberpunk'] .text-orange-500,
-[data-theme='cyberpunk'] .text-orange-600 {
+[data-theme='cyberpunk'] .text-orange-600,
+[data-theme='aurora'] .text-amber-500,
+[data-theme='aurora'] .text-amber-600,
+[data-theme='aurora'] .text-orange-500,
+[data-theme='aurora'] .text-orange-600 {
   color: var(--theme-accent) !important;
 }

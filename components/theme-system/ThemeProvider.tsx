@@ -11,10 +11,10 @@
  * 作为统一基线（YYC3-Baby）的第一主题机制。token 定义见 app/globals.css 主题层。
  */
 
-import * as React from "react"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
+import * as React from "react"
 
-export const THEME_IDS = ["default", "cyberpunk", "liquid"] as const
+export const THEME_IDS = ["default", "cyberpunk", "liquid", "aurora"] as const
 export type ThemeId = (typeof THEME_IDS)[number]
 
 export const THEME_META: Record<ThemeId, { label: string; icon: string; desc: string }> = {
@@ -32,6 +32,11 @@ export const THEME_META: Record<ThemeId, { label: string; icon: string; desc: st
     label: "液态翡翠",
     icon: "ri-drop-fill",
     desc: "清爽的翡翠青绿，源自液态玻璃设计稿",
+  },
+  aurora: {
+    label: "极光",
+    icon: "ri-sparkling-2-fill",
+    desc: "自然渐变流动光影，清新通透的极光视觉",
   },
 }
 
