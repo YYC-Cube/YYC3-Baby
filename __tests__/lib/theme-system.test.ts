@@ -122,7 +122,8 @@ describe("Phase 3 · 语义工具类与 dark 变体映射", () => {
 
   it("业务组件已迁移到语义类（无 dark:bg-gray 残留）", async () => {
     const fs = await import("node:fs")
-    const widget = fs.readFileSync("components/ai-xiaoyu/FixedAIWidget.tsx", "utf8")
+    // 原样本 FixedAIWidget 已随孤儿清理删除，改用存活组件 SmartHomeworkHelper
+    const widget = fs.readFileSync("components/homework/SmartHomeworkHelper.tsx", "utf8")
     expect(widget).toContain("bg-surface")
     expect(widget).toContain("text-adaptive")
     expect(widget).not.toContain("dark:bg-gray-")

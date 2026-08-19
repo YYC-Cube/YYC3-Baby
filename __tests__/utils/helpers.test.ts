@@ -4,33 +4,9 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test'
-import { jest } from '@jest/globals'
 
-// 导入需要测试的工具函数
-import { formatDate } from '@/lib/utils/formatDate'
-
-// 示例工具函数测试
+// 示例工具函数测试（formatDate 的实现已随孤儿清理移除，其余用例为本地内联实现）
 describe('Utility Functions', () => {
-  describe('formatDate', () => {
-    it('formats date correctly for Chinese locale', () => {
-      const date = new Date('2024-01-01')
-      const formatted = formatDate(date, 'zh-CN')
-      expect(formatted).toBe('2024年1月1日')
-    })
-
-    it('formats date correctly for English locale', () => {
-      const date = new Date('2024-01-01')
-      const formatted = formatDate(date, 'en-US')
-      expect(formatted).toBe('January 1, 2024')
-    })
-
-    it('handles invalid dates', () => {
-      const date = new Date('invalid')
-      const formatted = formatDate(date, 'zh-CN')
-      expect(formatted).toBe('--')
-    })
-  })
-
   describe('calculateAge', () => {
     it('calculates age correctly', () => {
       const birthDate = new Date('2020-01-01')

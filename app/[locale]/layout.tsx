@@ -15,6 +15,10 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
+// 仅允许 zh/en：未知单段路径（如已删除的页面）在路由匹配阶段直接 404，
+// 避免落入 [locale] 动态段后被流式渲染成 200 状态 + 404 内容
+export const dynamicParams = false
+
 export default async function LocaleLayout({
   children,
   params,

@@ -3,43 +3,44 @@
  * 支持拖拽移动、智能布局、多视图切换和实时交互
  */
 
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
+import {
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  CheckCircle,
+  Info,
+  Maximize2,
+  MessageCircle,
+  Minimize2,
+  RefreshCw,
+  Settings2,
+  TrendingUp,
+  X,
+  Zap
+} from 'lucide-react'
 import Image from 'next/image'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
-import { useSelector } from 'react-redux'
-import {
-  MessageCircle,
-  BarChart3,
-  Settings2,
-  Maximize2,
-  Minimize2,
-  X,
-  RefreshCw,
-  Info,
-  TrendingUp,
-  Zap,
-  Activity,
-  AlertTriangle,
-  CheckCircle
-} from 'lucide-react'
 
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { Progress } from '@/components/ui/progress'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { Progress } from '@/components/ui/progress'
 import { Switch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 
 // 图标组件
-import AgenticCore from '../../core/AgenticCore'
-import type { UserInput, AgentResponse, AgentTask, SystemStatus } from '../../core/AgenticCore'
 import { characterManager } from '@/lib/character-manager'
-import { selectCurrentUser } from '@/lib/store'
+import { authFetch } from '@/lib/api/auth-fetch'
+import { AgentState } from '../../core/agent-state'
+// 仅类型导入（编译期擦除）：避免 AgenticCore 及 prediction 服务栈进客户端包，
+// 运行时经 /api/agentic 调用服务端实例
+import type { AgentResponse, AgentTask, SystemStatus, UserInput } from '../../core/AgenticCore'
 
 // 拖拽类型定义
 export interface WidgetPosition {
@@ -79,6 +80,8 @@ interface WidgetProps {
   width?: number
   height?: number
   className?: string
+  /** 助手头像性别（原 Redux mock 数据，收敛后由调用方传入） */
+  userGender?: 'male' | 'female'
 }
 
 interface Message {
@@ -107,12 +110,9 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
   onError,
   width = 400,
   height = 600,
-  className = ''
+  className = '',
+  userGender = 'female'
 }) => {
-  // 获取当前用户信息
-  const currentUser = useSelector(selectCurrentUser)
-  const userGender = currentUser?.gender || 'female' // 默认使用女性角色
-
   const [state, setState] = useState<WidgetState>(() => ({
     isVisible: true,
     isMinimized: false,
@@ -130,13 +130,10 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
-  const [activeTasks, setActiveTasks] = useState<AgentTask[]>([])
   const [systemStatus, setSystemStatus] = useState<SystemStatus | null>(null)
 
   const widgetRef = useRef<HTMLDivElement>(null)
-  const agenticCoreRef = useRef<AgenticCore | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const addNotificationRef = useRef<((message: string, type: 'info' | 'success' | 'error' | 'warning') => void) | null>(null)
 
   // 检测设备类型（预留用于响应式布局优化）
   const isTouchDevice = useMemo(() => {
@@ -216,7 +213,7 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
 
   // 处理消息发送
   const handleSendMessage = useCallback(async (text: string) => {
-    if (!text.trim() || !agenticCoreRef.current) return
+    if (!text.trim()) return
 
     const userMessage: Message = {
       id: generateMessageId(),
@@ -231,14 +228,17 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
     setIsProcessing(true)
 
     try {
-      const userInput: UserInput = {
-        text,
-        timestamp: Date.now(),
-        sessionId: state.sessionId,
-        userId
+      // AgenticCore 已服务端化：经 /api/agentic 调用，身份由服务端从令牌解析
+      const res = await authFetch('/api/agentic', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, sessionId: state.sessionId })
+      })
+      const result = await res.json()
+      if (!res.ok || !result?.success) {
+        throw new Error(result?.message || `请求失败 (${res.status})`)
       }
-
-      const response: AgentResponse = await agenticCoreRef.current.processInput(userInput)
+      const response: AgentResponse = result.data
 
       const assistantMessage: Message = {
         id: generateMessageId(),
@@ -282,61 +282,7 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
     } finally {
       setIsProcessing(false)
     }
-  }, [agenticCoreRef, userId, state.sessionId])
-
-  // 任务事件处理
-  const handleTaskCreated = useCallback((task: AgentTask) => {
-    setActiveTasks(prev => [...prev, task])
-    addNotificationRef.current?.(`任务 "${task.goal}" 已创建`, 'info')
-  }, [])
-
-  const handleTaskStarted = useCallback((task: AgentTask) => {
-    setActiveTasks(prev =>
-      prev.map(t => t.id === task.id ? { ...t, status: 'executing' } : t)
-    )
-  }, [])
-
-  const handleTaskCompleted = useCallback((task: AgentTask) => {
-    setActiveTasks(prev =>
-      prev.filter(t => t.id !== task.id)
-    )
-    addNotificationRef.current?.(`任务 "${task.goal}" 已完成`, 'success')
-  }, [])
-
-  const handleTaskFailed = useCallback(({ task, error }: { task: AgentTask; error: Error }) => {
-    setActiveTasks(prev =>
-      prev.map(t => t.id === task.id ? { ...t, status: 'failed' } : t)
-    )
-    addNotificationRef.current?.(`任务 "${task.goal}" 失败: ${error.message}`, 'error')
-  }, [])
-
-  const handleError = useCallback((error: Error) => {
-    console.error('Agent核心错误:', error)
-    addNotificationRef.current?.(`系统错误: ${error.message}`, 'error')
-  }, [])
-
-  // 添加通知
-  const addNotification = useCallback((message: string, type: 'info' | 'success' | 'error' | 'warning') => {
-    const notification: Message = {
-      id: generateMessageId(),
-      role: 'assistant',
-      content: message,
-      timestamp: Date.now(),
-      metadata: { type, isNotification: true }
-    }
-
-    setMessages(prev => [...prev, notification])
-
-    setState(prev => {
-      const newUnreadCount = prev.isMinimized ? prev.unreadCount + 1 : prev.unreadCount
-      return { ...prev, unreadCount: newUnreadCount }
-    })
-  }, [])
-
-  // 存储 addNotification 到 ref 供其他函数使用
-  useEffect(() => {
-    addNotificationRef.current = addNotification
-  }, [addNotification])
+  }, [state.sessionId])
 
   // 切换视图
   const switchView = useCallback((view: WidgetState['currentView']) => {
@@ -398,60 +344,31 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
     setState(prev => ({ ...prev, isResizing: false }))
   }, [])
 
-  // 初始化Widget
-  const initializeWidget = useCallback(async () => {
-    let statusInterval: NodeJS.Timeout | null = null
-
-    try {
-      // 创建Agent核心引擎实例
-      const agentCore = new AgenticCore({
-        maxConcurrentTasks: 5,
-        learningEnabled: true,
-        autoOptimization: true,
-        privacyMode: 'normal'
-      })
-
-      agenticCoreRef.current = agentCore
-
-      // 监听事件
-      agentCore.on('taskCreated', handleTaskCreated)
-      agentCore.on('taskStarted', handleTaskStarted)
-      agentCore.on('taskCompleted', handleTaskCompleted)
-      agentCore.on('taskFailed', handleTaskFailed)
-      agentCore.on('error', handleError)
-
-      // 定期更新系统状态
-      statusInterval = setInterval(() => {
-        const status = agentCore.getSystemStatus()
-        setSystemStatus(status)
-      }, 5000)
-
-    } catch (error) {
-      console.error('Widget初始化失败:', error)
-      onError?.(error as Error)
-    }
-
-    return () => {
-      if (statusInterval) {
-        clearInterval(statusInterval)
-      }
-    }
-  }, [handleTaskCreated, handleTaskStarted, handleTaskCompleted, handleTaskFailed, handleError, onError])
-
-  // 初始化
+  // 系统状态轮询：AgenticCore 运行在服务端，经 /api/agentic 获取状态
   useEffect(() => {
-    let cleanup: (() => void) | undefined
+    let cancelled = false
 
-    initializeWidget().then((cleanupFn) => {
-      cleanup = cleanupFn
-    })
-
-    return () => {
-      if (cleanup) {
-        cleanup()
+    const fetchStatus = async () => {
+      try {
+        const res = await authFetch('/api/agentic')
+        if (!res.ok) return
+        const result = await res.json()
+        if (!cancelled && result?.success && result.data) {
+          setSystemStatus(result.data as SystemStatus)
+        }
+      } catch {
+        // 轮询失败静默：下次间隔重试
       }
     }
-  }, [initializeWidget])
+
+    void fetchStatus()
+    const statusInterval = setInterval(() => { void fetchStatus() }, 5000)
+
+    return () => {
+      cancelled = true
+      clearInterval(statusInterval)
+    }
+  }, [])
 
   // 自动滚动到底部
   useEffect(() => {
@@ -483,9 +400,8 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
     <DndProvider backend={isTouchDevice ? TouchBackend : HTML5Backend}>
       <div
         ref={setWidgetRef}
-        className={`ai-widget ${className} ${state.mode} ${state.isMinimized ? 'minimized' : ''} ${
-          state.isFullscreen ? 'fullscreen' : ''
-        } ${isDragging ? 'dragging' : ''} ${isOver ? 'over' : ''}`}
+        className={`ai-widget ${className} ${state.mode} ${state.isMinimized ? 'minimized' : ''} ${state.isFullscreen ? 'fullscreen' : ''
+          } ${isDragging ? 'dragging' : ''} ${isOver ? 'over' : ''}`}
         style={{
           position: state.mode === 'floating' ? 'fixed' : 'relative',
           left: state.mode === 'floating' ? `${state.position.x}px` : 'auto',
@@ -509,13 +425,13 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
               <div className={`status-dot ${state.connectionStatus}`} />
               <span className="status-text">
                 {state.connectionStatus === 'connected' ? '在线' :
-                 state.connectionStatus === 'reconnecting' ? '重连中' : '离线'}
+                  state.connectionStatus === 'reconnecting' ? '重连中' : '离线'}
               </span>
             </div>
 
             {!state.isMinimized && (
               <h3 className="widget-title flex items-center gap-2">
-                <Image 
+                <Image
                   src={characterManager.getAIAvatarPath(userGender)}
                   alt="AI助手头像"
                   width={32}
@@ -523,9 +439,9 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
                   className="rounded-full border-2 border-white shadow-sm"
                 />
                 YYC³ AI助手
-                {activeTasks.length > 0 && (
+                {(systemStatus?.activeTasks ?? 0) > 0 && (
                   <Badge variant="secondary" className="ml-2">
-                    {activeTasks.length}
+                    {systemStatus?.activeTasks}
                   </Badge>
                 )}
               </h3>
@@ -611,8 +527,7 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
             {state.currentView === 'dashboard' && (
               <DashboardView
                 systemStatus={systemStatus}
-                activeTasks={activeTasks}
-                agenticCore={agenticCoreRef.current}
+                activeTasks={[]}
               />
             )}
 
@@ -625,14 +540,14 @@ export const IntelligentAIWidget: React.FC<WidgetProps> = ({
             {state.currentView === 'insights' && (
               <InsightsView
                 systemStatus={systemStatus}
-                completedTasks={agenticCoreRef.current?.getSystemStatus().completedTasks || 0}
+                completedTasks={systemStatus?.completedTasks ?? 0}
               />
             )}
 
             {state.currentView === 'settings' && (
               <SettingsView
                 theme={theme}
-                onThemeChange={() => {}}
+                onThemeChange={() => { }}
               />
             )}
           </div>
@@ -728,19 +643,17 @@ const ChatView: React.FC<{
 }
 
 // 子组件：仪表板视图
+// AgenticCore 已服务端化：引擎内任务在请求内同步完成，客户端不再维护任务事件流，
+// activeTasks 保留 props 以兼容列表 UI，当前恒为空
 const DashboardView: React.FC<{
   systemStatus: SystemStatus | null
   activeTasks: AgentTask[]
-  agenticCore: AgenticCore | null
-}> = ({ systemStatus, activeTasks, agenticCore }) => {
+}> = ({ systemStatus, activeTasks }) => {
   const [refreshing, setRefreshing] = useState(false)
 
   const handleRefresh = async () => {
     setRefreshing(true)
-    if (agenticCore) {
-      // 模拟刷新延迟
-      await new Promise(resolve => setTimeout(resolve, 1000))
-    }
+    await new Promise(resolve => setTimeout(resolve, 1000))
     setRefreshing(false)
   }
 
@@ -751,7 +664,7 @@ const DashboardView: React.FC<{
           <h4>系统状态</h4>
           <div className="status-item">
             <span>当前状态:</span>
-            <Badge variant={systemStatus?.state === 'idle' ? 'secondary' : 'default'}>
+            <Badge variant={systemStatus?.state === AgentState.IDLE ? 'secondary' : 'default'}>
               {systemStatus?.state || '未知'}
             </Badge>
           </div>
