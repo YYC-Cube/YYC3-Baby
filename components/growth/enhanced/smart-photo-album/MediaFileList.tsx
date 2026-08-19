@@ -7,10 +7,10 @@
  * @created 2025-01-30
  */
 
-import React from 'react';
 import { motion } from 'framer-motion';
+import { Check, Eye, FileText, Image as ImageIcon, Video } from 'lucide-react';
 import Image from 'next/image';
-import { Video, Image as ImageIcon, FileText, Check, Eye, Share2, Download } from 'lucide-react';
+import React from 'react';
 import { MediaFile, ViewMode } from './types';
 import { formatFileSize } from './utils';
 
@@ -92,12 +92,11 @@ export const MediaFileList: React.FC<MediaFileListProps> = ({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.2 }}
-          className={`cursor-pointer transition-all hover:shadow-lg ${
-            selectedFile?.id === file.id
+          className={`cursor-pointer transition-all hover:shadow-lg ${selectedFile?.id === file.id
               ? 'ring-2 ring-purple-500 rounded-lg overflow-hidden'
               : viewMode === 'grid' ? 'rounded-lg overflow-hidden bg-white shadow-sm'
-              : 'flex items-center p-3 bg-white rounded-lg shadow-sm'
-          }`}
+                : 'flex items-center p-3 bg-white rounded-lg shadow-sm'
+            }`}
           onClick={() => { onFileSelect(file); }}
         >
           {/* 网格视图 */}
@@ -191,7 +190,7 @@ export const MediaFileList: React.FC<MediaFileListProps> = ({
           {viewMode === 'list' && (
             <div className="flex items-center w-full">
               {/* 媒体预览 */}
-              <div className="w-20 h-16 overflow-hidden bg-gray-100 rounded-md mr-4 flex-shrink-0">
+              <div className="w-20 h-16 overflow-hidden bg-gray-100 rounded-md mr-4 shrink-0">
                 {file.type === 'photo' ? (
                   <Image
                     src={file.url || '/placeholder.png'}

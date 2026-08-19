@@ -12,7 +12,7 @@ export const VideoPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* 导航栏 */}
       <PageNavigation title="视频工坊" icon="🎬" />
 
@@ -25,7 +25,7 @@ export const VideoPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video) => (
             <Card key={video.id} className="cursor-pointer hover:shadow-xl transition-shadow">
-              <div className="aspect-video bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center text-6xl">
+              <div className="aspect-video bg-linear-to-br from-purple-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center text-6xl">
                 {video.thumbnail}
               </div>
               <div className="mb-2">

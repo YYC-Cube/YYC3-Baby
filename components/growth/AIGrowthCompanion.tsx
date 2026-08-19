@@ -32,7 +32,7 @@ interface GrowthInsight {
   timestamp: Date
 }
 
-export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGrowthCompanionProps) {
+export default function AIGrowthCompanion({ isOpen, onClose }: AIGrowthCompanionProps) {
   const [activeSection, setActiveSection] = useState<'insights' | 'chat' | 'planning'>('insights')
   const [insights, setInsights] = useState<GrowthInsight[]>([])
   const [chatMessage, setChatMessage] = useState("")
@@ -67,7 +67,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
         请用温暖、鼓励的语气，语言要简单易懂，适合家长阅读。
       `
 
-      const response = await sendMessage(prompt)
+      await sendMessage(prompt)
 
       // 解析AI响应并生成洞察
       const generatedInsights: GrowthInsight[] = [
@@ -226,7 +226,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
           onClick={(e) => { e.stopPropagation(); }}
         >
           {/* 头部 */}
-          <div className="bg-gradient-to-r from-purple-400 to-pink-400 text-white p-6">
+          <div className="bg-linear-to-r from-purple-400 to-pink-400 text-white p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
@@ -283,7 +283,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
           </div>
 
           {/* 内容区域 */}
-          <div className="p-6 max-h-[500px] overflow-y-auto">
+          <div className="p-6 max-h-125 overflow-y-auto">
             <AnimatePresence mode="wait">
               {activeSection === 'insights' && (
                 <motion.div
@@ -307,13 +307,13 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
                   {!isProcessing && insights.map((insight, index) => (
                     <motion.div
                       key={insight.id}
-                      className={`bg-gradient-to-r ${getInsightColor(insight.priority)} rounded-xl p-4 border`}
+                      className={`bg-linear-to-r ${getInsightColor(insight.priority)} rounded-xl p-4 border`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
                           <i className={`${getInsightIcon(insight.type)} text-lg ${insight.priority === 'high' ? 'text-red-500' : insight.priority === 'medium' ? 'text-blue-500' : 'text-green-500'}`} />
                         </div>
                         <div className="flex-1">
@@ -449,7 +449,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
                   className="space-y-4"
                 >
                   {/* 计划概览 */}
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-5">
+                  <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-xl p-5">
                     <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
                       <i className="ri-calendar-check-line text-blue-500" />
                       本周成长计划
@@ -461,7 +461,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
 
                   {/* 生成计划按钮 */}
                   <motion.button
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl p-4 font-bold flex items-center justify-center gap-2"
+                    className="w-full bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl p-4 font-bold flex items-center justify-center gap-2"
                     onClick={generateGrowthPlan}
                     disabled={isProcessing}
                     whileHover={{ scale: isProcessing ? 1 : 1.02 }}
@@ -519,7 +519,7 @@ export default function AIGrowthCompanion({ isOpen, onClose, currentTab }: AIGro
                 稍后查看
               </button>
               <button
-                className="flex-1 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:from-purple-600 hover:to-pink-600 transition"
+                className="flex-1 py-3 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:from-purple-600 hover:to-pink-600 transition"
                 onClick={onClose}
               >
                 已查看，谢谢小语

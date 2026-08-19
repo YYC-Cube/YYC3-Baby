@@ -29,26 +29,26 @@ const nextConfig = {
     const cspRoutes =
       process.env.NODE_ENV === "production"
         ? [
-            {
-              source: "/((?!_next/static).*)",
-              headers: [
-                {
-                  key: "Content-Security-Policy",
-                  value: [
-                    "default-src 'self'",
-                    "script-src 'self' 'unsafe-inline'",
-                    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-                    "font-src 'self' https://fonts.gstatic.com data:",
-                    "img-src 'self' data: blob: https:",
-                    "media-src 'self' blob: data:",
-                    "connect-src 'self' https://api.0379.love https://open.bigmodel.cn",
-                    "worker-src 'self' blob:",
-                    "frame-ancestors 'self'",
-                  ].join("; "),
-                },
-              ],
-            },
-          ]
+          {
+            source: "/((?!_next/static).*)",
+            headers: [
+              {
+                key: "Content-Security-Policy",
+                value: [
+                  "default-src 'self'",
+                  "script-src 'self' 'unsafe-inline'",
+                  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+                  "font-src 'self' https://fonts.gstatic.com data:",
+                  "img-src 'self' data: blob: https:",
+                  "media-src 'self' blob: data:",
+                  "connect-src 'self' https://api.0379.love https://open.bigmodel.cn",
+                  "worker-src 'self' blob:",
+                  "frame-ancestors 'self'",
+                ].join("; "),
+              },
+            ],
+          },
+        ]
         : []
 
     return [...commonRoutes, ...cspRoutes]

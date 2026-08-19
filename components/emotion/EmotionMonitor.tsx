@@ -180,7 +180,7 @@ export default function EmotionMonitor({
       {/* 标题 */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white">
+          <div className="w-12 h-12 bg-linear-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white">
             <i className="ri-heart-pulse-line text-xl" />
           </div>
           <div>
@@ -381,7 +381,7 @@ function EmotionHistory({ history }: { history: EmotionEvent[] }) {
         {history.map((event) => (
           <div
             key={event.id}
-            className={`flex-shrink-0 w-12 h-12 rounded-lg ${emotionColors[String(event.emotion).toLowerCase()]} flex items-center justify-center text-lg border border-gray-200`}
+            className={`shrink-0 w-12 h-12 rounded-lg ${emotionColors[String(event.emotion).toLowerCase()]} flex items-center justify-center text-lg border border-gray-200`}
             title={`${getEmotionName(event.emotion)} - ${event.context}`}
           >
             {emotionEmojis[String(event.emotion).toLowerCase()]}

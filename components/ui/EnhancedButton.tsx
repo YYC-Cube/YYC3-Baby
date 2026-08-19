@@ -18,10 +18,10 @@ export function EnhancedButton({
   const baseClasses = 'relative inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 focus:ring-blue-500',
+    primary: 'bg-linear-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 focus:ring-blue-500',
     secondary: 'bg-white text-gray-900 hover:bg-gray-50 focus:ring-gray-500',
     back: 'bg-white text-red-600 hover:bg-red-50 focus:ring-red-500',
-    colored: 'bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white hover:from-pink-600 hover:via-purple-600 hover:to-blue-600 focus:ring-purple-500'
+    colored: 'bg-linear-to-r from-pink-500 via-purple-500 to-blue-500 text-white hover:from-pink-600 hover:via-purple-600 hover:to-blue-600 focus:ring-purple-500'
   };
 
   const sizeClasses = {

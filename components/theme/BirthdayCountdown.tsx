@@ -86,7 +86,7 @@ export default function BirthdayCountdown() {
         transition={{ type: "spring", damping: 10 }}
       >
         <div className="relative">
-          <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-purple-500 rounded-xl flex items-center justify-center mb-2">
+          <div className="w-16 h-16 bg-linear-to-br from-pink-400 to-purple-500 rounded-xl flex items-center justify-center mb-2">
             <Icon className="w-8 h-8 text-white" />
           </div>
           {/* 装饰星星 */}
@@ -101,7 +101,7 @@ export default function BirthdayCountdown() {
         </div>
 
         <motion.div
-          className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600"
+          className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-pink-600 to-purple-600"
           key={value}
           initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -121,7 +121,7 @@ export default function BirthdayCountdown() {
         {!isCountdownComplete ? (
           <motion.div
             key="countdown"
-            className="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 rounded-3xl p-8 shadow-xl"
+            className="bg-linear-to-br from-pink-50 via-purple-50 to-blue-50 rounded-3xl p-8 shadow-xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -133,7 +133,7 @@ export default function BirthdayCountdown() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-2">
+              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-pink-500 to-purple-500 mb-2">
                 🎂 小语生日倒计时
               </h2>
               <p className="text-gray-600">距离小语1岁生日还有</p>
@@ -155,7 +155,7 @@ export default function BirthdayCountdown() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full"
+                  className="h-full bg-linear-to-r from-pink-400 to-purple-500 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.max(0, 100 - (timeLeft.days / 30 * 100))}%` }}
                   transition={{ duration: 1 }}
@@ -219,7 +219,7 @@ export default function BirthdayCountdown() {
 
             {/* 鼓励语句 */}
             <motion.div
-              className="text-center mt-6 p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl"
+              className="text-center mt-6 p-4 bg-linear-to-r from-purple-100 to-pink-100 rounded-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
@@ -240,7 +240,7 @@ export default function BirthdayCountdown() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => { setShowWishForm(true); }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full font-semibold shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-pink-500 to-purple-500 text-white rounded-full font-semibold shadow-lg"
               >
                 <MessageCircle className="w-5 h-5" />
                 发送生日祝福
@@ -255,7 +255,7 @@ export default function BirthdayCountdown() {
         ) : (
           <motion.div
             key="birthday"
-            className="bg-gradient-to-br from-pink-100 via-purple-100 to-yellow-100 rounded-3xl p-8 shadow-xl text-center"
+            className="bg-linear-to-br from-pink-100 via-purple-100 to-yellow-100 rounded-3xl p-8 shadow-xl text-center"
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", damping: 10, stiffness: 100 }}
@@ -263,7 +263,7 @@ export default function BirthdayCountdown() {
             {/* 庆祝动画 */}
             <div className="relative mb-6">
               <motion.div
-                className="w-32 h-32 mx-auto bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center"
+                className="w-32 h-32 mx-auto bg-linear-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
@@ -300,7 +300,7 @@ export default function BirthdayCountdown() {
               ))}
             </div>
 
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600 mb-4">
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-pink-600 to-purple-600 mb-4">
               🎉 生日快乐，小语！🎂
             </h2>
             <p className="text-xl text-gray-700 mb-6">
@@ -308,7 +308,7 @@ export default function BirthdayCountdown() {
             </p>
 
             <motion.div
-              className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full font-semibold"
+              className="inline-flex items-center gap-3 px-6 py-3 bg-linear-to-r from-pink-500 to-purple-500 text-white rounded-full font-semibold"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               whileHover={{ scale: 1.1, y: -2 }}

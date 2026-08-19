@@ -102,7 +102,7 @@ export default function GrowthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-purple-50 to-pink-50 pb-24">
+    <div className="min-h-screen bg-linear-to-b from-blue-50 via-purple-50 to-pink-50 pb-24">
       <PageHeader title="成长记录" showBack />
 
       <main className="px-4 py-4 space-y-6">
@@ -213,7 +213,7 @@ function OverviewTab({
       <StageIndicator birthDate={childBirthDate} childName={childName} showMilestones showRecommendations />
 
       {/* 成长概览卡片 */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl p-6 text-white">
+      <div className="bg-linear-to-r from-blue-500 to-purple-500 rounded-3xl p-6 text-white">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl">
             {stage?.icon || "👧"}
@@ -243,7 +243,7 @@ function OverviewTab({
 
       {/* 阶段转换提醒 */}
       {stageTransition && stageTransition.daysUntilTransition <= 90 && (
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-200">
+        <div className="bg-linear-to-r from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-200">
           <h3 className="font-bold text-amber-800 mb-2 flex items-center gap-2">
             <i className="ri-calendar-event-line" />
             阶段转换提醒
@@ -292,7 +292,7 @@ function OverviewTab({
 
       {/* 本周发展建议 */}
       {recommendations && (
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-5 border border-green-100">
+        <div className="bg-linear-to-r from-green-50 to-blue-50 rounded-2xl p-5 border border-green-100">
           <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
             <i className="ri-lightbulb-line text-green-500" />
             阶段发展建议
@@ -402,7 +402,7 @@ function RecordsTab({ onOpenCreateModal }: RecordsTabProps) {
 
       {/* 添加记录按钮 */}
       <motion.button
-        className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-2xl p-4 flex items-center justify-center gap-2 font-bold"
+        className="w-full bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-2xl p-4 flex items-center justify-center gap-2 font-bold"
         onClick={onOpenCreateModal}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
@@ -423,7 +423,7 @@ function RecordsTab({ onOpenCreateModal }: RecordsTabProps) {
             whileHover={{ scale: 1.02, x: 5 }}
           >
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+              <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-2xl shrink-0">
                 {record.emoji}
               </div>
               <div className="flex-1">
@@ -485,7 +485,7 @@ function AssessmentTab({ childName }: { childName: string }) {
           发展评估概览
         </h3>
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-green-400 to-blue-500 text-white">
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-r from-green-400 to-blue-500 text-white">
             <div>
               <div className="text-3xl font-bold">87</div>
               <div className="text-xs">综合分</div>
@@ -553,7 +553,7 @@ function AssessmentTab({ childName }: { childName: string }) {
       {/* 开始评估按钮 */}
       <motion.a
         href="/growth/assessment"
-        className="block w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-2xl p-4 text-center font-bold"
+        className="block w-full bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-2xl p-4 text-center font-bold"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
@@ -562,7 +562,7 @@ function AssessmentTab({ childName }: { childName: string }) {
       </motion.a>
 
       {/* AI洞察 */}
-      <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-5 border border-purple-100">
+      <div className="bg-linear-to-r from-purple-50 to-blue-50 rounded-2xl p-5 border border-purple-100">
         <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
           <i className="ri-sparkling-line text-purple-500" />
           AI小语洞察

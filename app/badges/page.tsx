@@ -58,13 +58,13 @@ export default function BadgesPage() {
   const formatDate = (iso?: string) => (iso ? new Date(iso).toLocaleDateString("zh-CN") : "")
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-yellow-50 pb-24">
+    <div className="min-h-screen bg-linear-to-b from-amber-50 via-orange-50 to-yellow-50 pb-24">
       <PageHeader title="勋章殿堂" showBack />
 
       <main className="px-4 py-4 space-y-6">
         {/* 成就总览（真实数据） */}
         {currentChild && (
-          <Card className="bg-gradient-to-r from-amber-500 to-orange-500 border-amber-600">
+          <Card className="bg-linear-to-r from-amber-500 to-orange-500 border-amber-600">
             <CardContent className="p-6 text-white">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl">🏆</div>
@@ -115,7 +115,7 @@ export default function BadgesPage() {
               initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              className="bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl p-4 text-white flex items-center gap-3 shadow-lg"
+              className="bg-linear-to-r from-yellow-400 to-amber-500 rounded-2xl p-4 text-white flex items-center gap-3 shadow-lg"
             >
               <span className="text-3xl">{newUnlocks[0].definition.icon}</span>
               <div className="flex-1">
@@ -135,7 +135,7 @@ export default function BadgesPage() {
             {unlockedByLevel.map(({ level, count, total }) => {
               const meta = BADGE_LEVELS[level]
               return (
-                <div key={level} className={`rounded-xl p-3 text-center bg-gradient-to-br ${meta.bg} border ${meta.border}`}>
+                <div key={level} className={`rounded-xl p-3 text-center bg-linear-to-br ${meta.bg} border ${meta.border}`}>
                   <div className="text-2xl">{meta.icon}</div>
                   <div className={`text-sm font-bold ${meta.text}`}>{meta.label}</div>
                   <div className="text-xs text-slate-500">{count}/{total} · {meta.points}分/枚</div>
@@ -239,7 +239,7 @@ export default function BadgesPage() {
                       <CardContent className="p-4">
                         <div className="flex flex-col items-center text-center space-y-3">
                           <div className="relative">
-                            <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${levelColor.bg} flex items-center justify-center text-4xl shadow-inner ${badge.unlocked ? "" : "opacity-50 grayscale"}`}>
+                            <div className={`w-20 h-20 rounded-full bg-linear-to-br ${levelColor.bg} flex items-center justify-center text-4xl shadow-inner ${badge.unlocked ? "" : "opacity-50 grayscale"}`}>
                               {def.icon}
                             </div>
                             {!badge.unlocked && (
@@ -351,7 +351,7 @@ export default function BadgesPage() {
                 {selectedBadge.unlocked && (
                   <Button
                     onClick={() => handleShare(selectedBadge).catch((err: unknown) => console.log("分享失败:", err))}
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                    className="w-full bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
                   >
                     <i className="ri-share-line mr-2" />
                     分享成就

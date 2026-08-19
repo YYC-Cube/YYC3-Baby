@@ -227,7 +227,7 @@ function BirthdayCake({ delay }: { delay: number }) {
     >
       <div className="relative">
         {/* 蛋糕层 */}
-        <div className="w-20 h-16 bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t-lg">
+        <div className="w-20 h-16 bg-linear-to-t from-yellow-600 to-yellow-400 rounded-t-lg">
           <div className="w-full h-4 bg-pink-400 rounded-t-lg" />
         </div>
 

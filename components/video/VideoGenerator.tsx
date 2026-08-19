@@ -435,7 +435,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
               </button>
               <button
                 onClick={handleGenerate}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:opacity-90"
+                className="flex-1 py-3 rounded-xl bg-linear-to-r from-pink-500 to-purple-500 text-white hover:opacity-90"
               >
                 开始生成
               </button>
@@ -461,7 +461,7 @@ export default function VideoGenerator({ childId: _childId, onComplete, onCancel
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${generationProgress}%` }}
-                className="h-full bg-gradient-to-r from-pink-500 to-purple-500 rounded-full"
+                className="h-full bg-linear-to-r from-pink-500 to-purple-500 rounded-full"
               />
             </div>
             <p className="text-sm text-slate-500 mt-2">{generationProgress}%</p>

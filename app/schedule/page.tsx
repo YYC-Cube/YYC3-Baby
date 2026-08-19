@@ -95,7 +95,7 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pb-24">
+    <div className="min-h-screen bg-linear-to-b from-blue-50 to-white pb-24">
       <PageHeader title="智能日程" showBack />
 
       <div className="px-4 py-4 space-y-4">
@@ -107,7 +107,7 @@ export default function SchedulePage() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
                   {currentChild.name.charAt(0)}
                 </div>
                 <div>
@@ -166,7 +166,7 @@ export default function SchedulePage() {
 
         <div className="flex gap-2">
           <motion.button
-            className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-bold flex items-center justify-center gap-2"
+            className="flex-1 py-3 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-bold flex items-center justify-center gap-2"
             onClick={handleAddSchedule}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -175,7 +175,7 @@ export default function SchedulePage() {
             添加日程
           </motion.button>
           <motion.button
-            className="px-4 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl font-bold flex items-center justify-center gap-2"
+            className="px-4 py-3 bg-linear-to-r from-green-500 to-teal-500 text-white rounded-xl font-bold flex items-center justify-center gap-2"
             onClick={() => { setShowAIGenerator(true); }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -268,7 +268,7 @@ function DayView({
         >
           <div className="flex items-start gap-3">
             <motion.button
-              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${
                 schedule.completed ? "bg-green-500 border-green-500 text-white" : "border-slate-300"
               }`}
               onClick={() => { onToggleComplete(schedule.id); }}
@@ -349,7 +349,7 @@ function TimelineView({
       <div className="relative">
         {hours.map((hour) => (
           <div key={hour} className="flex items-start h-16 border-b border-slate-100 last:border-0">
-            <span className="w-12 text-xs text-slate-400 flex-shrink-0">{hour}:00</span>
+            <span className="w-12 text-xs text-slate-400 shrink-0">{hour}:00</span>
             <div className="flex-1 relative">
               {schedules
                 .filter((s) => new Date(s.startTime).getHours() === hour)
@@ -520,7 +520,7 @@ function ScheduleEditorModal({
 
           <motion.button
             type="submit"
-            className="w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-bold"
+            className="w-full py-4 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-bold"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -564,7 +564,7 @@ function AIScheduleGeneratorModal({
       >
         <div className="text-center mb-6">
           <motion.div
-            className="w-16 h-16 mx-auto bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl mb-4"
+            className="w-16 h-16 mx-auto bg-linear-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl mb-4"
             animate={{ rotate: isGenerating ? 360 : 0 }}
             transition={{ duration: 2, repeat: isGenerating ? Number.POSITIVE_INFINITY : 0, ease: "linear" }}
           >
@@ -603,7 +603,7 @@ function AIScheduleGeneratorModal({
             取消
           </motion.button>
           <motion.button
-            className="flex-1 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl font-bold flex items-center justify-center gap-2"
+            className="flex-1 py-3 bg-linear-to-r from-green-500 to-teal-500 text-white rounded-xl font-bold flex items-center justify-center gap-2"
             onClick={handleGenerate}
             disabled={isGenerating}
             whileHover={{ scale: 1.02 }}

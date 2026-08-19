@@ -49,7 +49,7 @@ export default function VideosPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-purple-50 pb-24">
+    <div className="min-h-screen bg-linear-to-br from-rose-50 via-white to-purple-50 pb-24">
       <PageHeader title="AI视频工坊" subtitle="将美好回忆变成精彩视频" showBack />
 
       <div className="px-4 space-y-6">
@@ -85,7 +85,7 @@ export default function VideosPage() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => { setShowGenerator(true); }}
-          className="w-full p-4 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white flex items-center justify-center gap-3"
+          className="w-full p-4 rounded-2xl bg-linear-to-r from-pink-500 to-purple-500 text-white flex items-center justify-center gap-3"
         >
           <i className="ri-video-add-line text-2xl" />
           <span className="font-medium">创建新视频</span>
@@ -102,7 +102,7 @@ export default function VideosPage() {
               {getFavoriteVideos()
                 .slice(0, 5)
                 .map((video) => (
-                  <motion.div key={video.id} whileHover={{ scale: 1.02 }} className="flex-shrink-0 w-40">
+                  <motion.div key={video.id} whileHover={{ scale: 1.02 }} className="shrink-0 w-40">
                     <div
                       className="relative aspect-video rounded-xl overflow-hidden cursor-pointer"
                       onClick={() => { setSelectedVideo(video); }}
@@ -222,7 +222,7 @@ export default function VideosPage() {
                   className="bg-white rounded-xl p-3 flex gap-3 cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => { setSelectedVideo(video); }}
                 >
-                  <div className="relative w-32 aspect-video rounded-lg overflow-hidden flex-shrink-0">
+                  <div className="relative w-32 aspect-video rounded-lg overflow-hidden shrink-0">
                     <img
                       src={video.thumbnailUrl || "/placeholder.svg"}
                       alt={video.title}

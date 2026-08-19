@@ -70,9 +70,9 @@ export const CulturePage: React.FC<CulturePageProps> = ({ onNavigate }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-2xl whitespace-nowrap transition-all flex-shrink-0 text-sm ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-2xl whitespace-nowrap transition-all shrink-0 text-sm ${
                   selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-md shadow-emerald-500/20'
+                    ? 'bg-linear-to-r from-emerald-500 to-green-600 text-white shadow-md shadow-emerald-500/20'
                     : 'bg-white/40 backdrop-blur-md text-gray-600 hover:bg-white/60 border border-white/50'
                 }`}
                 style={{ fontWeight: 500 }}
@@ -118,7 +118,7 @@ export const CulturePage: React.FC<CulturePageProps> = ({ onNavigate }) => {
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                   <div className="absolute top-3 left-3">
                     <span className="px-2.5 py-1 bg-white/50 backdrop-blur-md rounded-xl text-xs text-gray-700 border border-white/50" style={{ fontWeight: 500 }}>
                       {item.category}

@@ -83,7 +83,7 @@ export default function VideoPlayer({ video, onClose, onViewCountUpdate }: Video
       {/* 视频内容区域 */}
       <div ref={playerRef} className="relative w-full h-full max-w-6xl max-h-[80vh] mx-auto">
         {/* 视频画面（模拟） */}
-        <div className="w-full h-full bg-gradient-to-br from-slate-900 to-slate-800 rounded-lg overflow-hidden">
+        <div className="w-full h-full bg-linear-to-br from-slate-900 to-slate-800 rounded-lg overflow-hidden">
           <img
             src={video.thumbnailUrl || "/placeholder.svg"}
             alt={video.title}
@@ -128,7 +128,7 @@ export default function VideoPlayer({ video, onClose, onViewCountUpdate }: Video
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent"
+              className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/80 to-transparent"
             >
               {/* 进度条 */}
               <div className="h-1 bg-white/30 rounded-full cursor-pointer mb-4 group" onClick={handleProgressClick}>

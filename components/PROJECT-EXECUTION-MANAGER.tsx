@@ -385,19 +385,19 @@ export default function ProjectExecutionManager() {
           项目整体指标
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg">
+          <div className="text-center p-4 bg-linear-to-br from-purple-50 to-pink-50 rounded-lg">
             <div className="text-3xl font-bold text-purple-600">{metrics.overallProgress}%</div>
             <div className="text-sm text-gray-600">总体进度</div>
           </div>
-          <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg">
+          <div className="text-center p-4 bg-linear-to-br from-blue-50 to-green-50 rounded-lg">
             <div className="text-3xl font-bold text-blue-600">{metrics.tasksCompleted}/{metrics.totalTasks}</div>
             <div className="text-sm text-gray-600">任务完成</div>
           </div>
-          <div className="text-center p-4 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg">
+          <div className="text-center p-4 bg-linear-to-br from-green-50 to-blue-50 rounded-lg">
             <div className="text-3xl font-bold text-green-600">{metrics.hoursSpent}h</div>
             <div className="text-sm text-gray-600">工时消耗</div>
           </div>
-          <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg">
+          <div className="text-center p-4 bg-linear-to-br from-orange-50 to-red-50 rounded-lg">
             <div className="text-3xl font-bold text-orange-600">${(metrics.budgetUsed/1000).toFixed(1)}K</div>
             <div className="text-sm text-gray-600">预算使用</div>
           </div>
@@ -423,7 +423,7 @@ export default function ProjectExecutionManager() {
                 <div className="mt-2">
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full"
+                      className="bg-linear-to-r from-purple-600 to-pink-600 h-2 rounded-full"
                       style={{ width: `${Math.min((kpi.current / kpi.target) * 100, 100)}%` }}
                     />
                   </div>
@@ -565,7 +565,7 @@ export default function ProjectExecutionManager() {
                   <div className="flex items-center">
                     <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
                       <div
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full"
+                        className="bg-linear-to-r from-purple-600 to-pink-600 h-2 rounded-full"
                         style={{ width: `${task.progress}%` }}
                       />
                     </div>
@@ -587,14 +587,14 @@ export default function ProjectExecutionManager() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50">
       {/* 顶部导航 */}
       <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <Rocket className="w-8 h-8 text-purple-600" />
-              <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+              <h1 className="text-xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-600">
                 YYC³ AI小语项目执行管理中心
               </h1>
             </div>
@@ -644,7 +644,7 @@ export default function ProjectExecutionManager() {
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full"
+                      className="bg-linear-to-r from-purple-600 to-pink-600 h-2 rounded-full"
                       style={{ width: `${phase.progress}%` }}
                     />
                   </div>

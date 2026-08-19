@@ -340,7 +340,7 @@ export default function SmartHomeworkHelper({
             exit={{ opacity: 0, y: -20 }}
             className="space-y-4"
           >
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 text-center">
+            <div className="bg-linear-to-br from-purple-50 to-pink-50 rounded-2xl p-8 text-center">
               {voiceRecording ? (
                 <div className="space-y-4">
                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
@@ -367,7 +367,7 @@ export default function SmartHomeworkHelper({
                       className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto cursor-pointer ${
                         isRecording
                           ? "bg-red-500 animate-pulse"
-                          : "bg-gradient-to-br from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600"
+                          : "bg-linear-to-br from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600"
                       }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -462,7 +462,7 @@ export default function SmartHomeworkHelper({
               transition={{ delay: index * 0.1 }}
             >
               <div className="flex items-start gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                   result.isCorrect ? "bg-green-500" : "bg-red-500"
                 }`}>
                   <i className={`text-white text-sm ${
@@ -494,7 +494,7 @@ export default function SmartHomeworkHelper({
 
       {/* Submit Button */}
       <motion.button
-        className="w-full mt-6 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold rounded-xl hover:from-blue-600 hover:to-purple-600 transition shadow-lg"
+        className="w-full mt-6 py-4 bg-linear-to-r from-blue-500 to-purple-500 text-white font-bold rounded-xl hover:from-blue-600 hover:to-purple-600 transition shadow-lg"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={submitForReview}

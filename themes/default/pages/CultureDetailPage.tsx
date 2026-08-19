@@ -106,7 +106,7 @@ export const CultureDetailPage: React.FC<CultureDetailPageProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-gray-600">加载文化详情...</p>
@@ -122,7 +122,7 @@ export const CultureDetailPage: React.FC<CultureDetailPageProps> = ({
   const typeTag = getTypeTag(cultureDetail.type);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
       <PageNavigation title={cultureDetail.title} onBack={onBack} />
       
       <div className="container mx-auto px-4 py-6 max-w-4xl pb-24">
@@ -173,7 +173,7 @@ export const CultureDetailPage: React.FC<CultureDetailPageProps> = ({
               <div className="absolute top-4 right-4">
                 <Button
                   variant="primary"
-                  className="bg-gradient-to-r from-purple-500 to-pink-500"
+                  className="bg-linear-to-r from-purple-500 to-pink-500"
                   onClick={() => alert('AR功能开发中...')}
                 >
                   📷 AR体验
@@ -358,7 +358,7 @@ export const CultureDetailPage: React.FC<CultureDetailPageProps> = ({
                     className="p-4 hover:shadow-lg transition-shadow cursor-pointer"
                     onClick={() => alert(`查看相关内容 ${relatedId}`)}
                   >
-                    <div className="h-32 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg mb-3 flex items-center justify-center">
+                    <div className="h-32 bg-linear-to-br from-purple-100 to-pink-100 rounded-lg mb-3 flex items-center justify-center">
                       <span className="text-4xl">🏛️</span>
                     </div>
                     <h3 className="font-semibold text-gray-900">

@@ -144,7 +144,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-5xl shadow-lg">
+              <div className="w-24 h-24 rounded-full bg-linear-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-5xl shadow-lg">
                 🎉
               </div>
             </motion.div>
@@ -161,7 +161,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
               </motion.h2>
 
               <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full mb-4"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-purple-100 to-pink-100 rounded-full mb-4"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.5, type: "spring" }}
@@ -190,7 +190,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
 
               {/* 祝福语 */}
               <motion.div
-                className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 mb-6"
+                className="bg-linear-to-r from-blue-50 to-purple-50 rounded-2xl p-4 mb-6"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.8 }}
@@ -211,7 +211,7 @@ export default function MilestoneCelebration({ isVisible, milestone, onClose }: 
               >
                 <button
                   onClick={onClose}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-shadow"
+                  className="px-6 py-3 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-shadow"
                 >
                   记录这一刻
                 </button>

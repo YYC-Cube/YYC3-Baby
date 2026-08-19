@@ -20,7 +20,7 @@ export function EnhancedCard({
   const variantClasses = {
     default: 'bg-white/95 backdrop-blur-sm border border-white/20',
     glass: 'bg-white/10 backdrop-blur-md border border-white/20',
-    colored: 'bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/30',
+    colored: 'bg-linear-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/30',
     'q-style': gender === 'male' ? 'q-style-male' : gender === 'female' ? 'q-style-female' : 'bg-white/95 backdrop-blur-sm'
   };
 

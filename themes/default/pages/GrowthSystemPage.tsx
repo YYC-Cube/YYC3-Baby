@@ -42,7 +42,7 @@ export const GrowthSystemPage: React.FC<GrowthSystemPageProps> = ({ onBack }) =>
     : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
       <PageNavigation 
         title={SYSTEM_CONFIG.systemName} 
         icon="🌟" 
@@ -82,7 +82,7 @@ export const GrowthSystemPage: React.FC<GrowthSystemPageProps> = ({ onBack }) =>
           </div>
 
           {/* 文化寄语 */}
-          <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-4">
+          <div className="bg-linear-to-r from-purple-100 to-pink-100 rounded-xl p-4">
             <div className="flex items-start gap-3">
               <Icon icon="🏛️" size="md" variant="primary" background="soft" circle />
               <div className="flex-1">
@@ -106,9 +106,9 @@ export const GrowthSystemPage: React.FC<GrowthSystemPageProps> = ({ onBack }) =>
             <button
               key={tab.id}
               onClick={() => setActiveView(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl whitespace-nowrap transition-all flex-shrink-0 ${
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl whitespace-nowrap transition-all shrink-0 ${
                 activeView === tab.id
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
+                  ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-md'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >

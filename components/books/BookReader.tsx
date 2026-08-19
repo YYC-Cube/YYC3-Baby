@@ -112,7 +112,7 @@ export default function BookReader({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-gradient-to-b from-amber-50 to-orange-50"
+      className="fixed inset-0 z-50 bg-linear-to-b from-amber-50 to-orange-50"
       onMouseMove={handleMouseMove}
     >
       {/* 顶部控制栏 */}
@@ -148,7 +148,7 @@ export default function BookReader({
             {/* 进度条 */}
             <div className="h-1 bg-amber-100">
               <motion.div
-                className="h-full bg-gradient-to-r from-amber-400 to-orange-400"
+                className="h-full bg-linear-to-r from-amber-400 to-orange-400"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.3 }}
@@ -225,7 +225,7 @@ export default function BookReader({
               {/* 播放/暂停 */}
               <button
                 onClick={() => { isPlaying ? onPause() : onPlay(); }}
-                className="p-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                className="p-4 rounded-full bg-linear-to-r from-amber-400 to-orange-400 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
               >
                 <i className={`${isPlaying ? "ri-pause-line" : "ri-play-line"} text-3xl`} />
               </button>
@@ -258,7 +258,7 @@ export default function BookReader({
                 <button
                   key={p.pageNumber}
                   onClick={() => { onPageChange(p.pageNumber); }}
-                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
                     p.pageNumber === currentPage
                       ? "border-amber-400 shadow-md"
                       : "border-transparent opacity-60 hover:opacity-100"

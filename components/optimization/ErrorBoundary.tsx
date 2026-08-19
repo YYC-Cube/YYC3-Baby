@@ -122,7 +122,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center justify-center p-8 bg-red-50 rounded-lg border border-red-200 min-h-[200px]"
+          className="flex flex-col items-center justify-center p-8 bg-red-50 rounded-lg border border-red-200 min-h-50"
         >
           <div className="text-center">
             <div className="text-red-500 mb-4">
@@ -296,7 +296,7 @@ export class NetworkErrorBoundary extends Component<
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center p-8 bg-orange-50 rounded-lg border border-orange-200 min-h-[200px]"
+            className="flex flex-col items-center justify-center p-8 bg-orange-50 rounded-lg border border-orange-200 min-h-50"
           >
             <i className="ri-wifi-off-line text-4xl text-orange-500 mb-4" />
             <h3 className="text-lg font-semibold text-orange-800 mb-2">

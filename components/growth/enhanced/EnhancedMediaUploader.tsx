@@ -413,7 +413,7 @@ export default function EnhancedMediaUploader({
               scale: isDragOver ? 1.1 : 1,
               rotate: isDragOver ? 5 : 0
             }}
-            className="w-16 h-16 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            className="w-16 h-16 bg-linear-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4"
           >
             <Upload className="w-8 h-8 text-purple-600" />
           </motion.div>
@@ -684,7 +684,7 @@ function MediaCard({
         {/* 悬停控制 */}
         {isHovered && (
           <motion.div
-            className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3"
+            className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent flex items-end p-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
@@ -771,7 +771,7 @@ function MediaListItem({
       />
 
       {/* 缩略图 */}
-      <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+      <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0">
         {file.thumbnail ? (
           <img
             src={file.thumbnail}

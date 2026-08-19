@@ -157,9 +157,9 @@ export const GrowthRecordPage: React.FC<{ onBack?: () => void }> = ({ onBack }) 
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all flex-shrink-0 ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all shrink-0 ${
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
+                    ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-md'
                     : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                 }`}
               >
@@ -173,7 +173,7 @@ export const GrowthRecordPage: React.FC<{ onBack?: () => void }> = ({ onBack }) 
 
       {/* 创建新记录按钮 */}
       <div className="container mx-auto px-4 py-6 max-w-6xl">
-        <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group">
+        <button className="w-full bg-linear-to-r from-purple-500 to-pink-500 text-white py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group">
           <span className="text-xl group-hover:scale-110 transition-transform">📝</span>
           <span className="font-medium">创建新记录</span>
         </button>
@@ -195,7 +195,7 @@ export const GrowthRecordPage: React.FC<{ onBack?: () => void }> = ({ onBack }) 
               <span className="text-5xl text-gray-300">📝</span>
             </div>
             <p className="text-gray-400 mb-6">还没有记录</p>
-            <button className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:shadow-lg transition-all">
+            <button className="px-6 py-2.5 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-full hover:shadow-lg transition-all">
               创建第一个记录
             </button>
           </div>
@@ -279,7 +279,7 @@ export const GrowthRecordPage: React.FC<{ onBack?: () => void }> = ({ onBack }) 
                 >
                   <div className="flex items-start gap-4">
                     {/* 图标 */}
-                    <div className={`${typeStyle.bg} w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0`}>
+                    <div className={`${typeStyle.bg} w-12 h-12 rounded-xl flex items-center justify-center shrink-0`}>
                       <span className="text-2xl">{typeStyle.icon}</span>
                     </div>
 
@@ -307,7 +307,7 @@ export const GrowthRecordPage: React.FC<{ onBack?: () => void }> = ({ onBack }) 
                     </div>
 
                     {/* 右侧信息 */}
-                    <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                    <div className="flex flex-col items-end gap-2 shrink-0">
                       <span className="text-xs text-gray-400">{record.date}</span>
                       <div className="flex items-center gap-1 text-green-600">
                         <span className="text-sm">✓</span>

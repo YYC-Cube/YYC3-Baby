@@ -155,7 +155,7 @@ export default function MilestoneDetector({ content, childAge, onMilestoneDetect
       <motion.button
         onClick={detectMilestones}
         disabled={isAnalyzing || !content.trim()}
-        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-xl font-medium disabled:opacity-50"
+        className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-yellow-400 to-orange-400 text-white rounded-xl font-medium disabled:opacity-50"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
@@ -191,7 +191,7 @@ export default function MilestoneDetector({ content, childAge, onMilestoneDetect
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 border border-yellow-200"
+                className="bg-linear-to-r from-yellow-50 to-orange-50 rounded-xl p-4 border border-yellow-200"
               >
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">

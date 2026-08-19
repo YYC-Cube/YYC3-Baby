@@ -212,7 +212,7 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
             {/* 角色图标 */}
             {showCharacter && currentCharacter && (
               <motion.div
-                className={`${sizeClasses.character} rounded-full overflow-hidden border-2 flex-shrink-0`}
+                className={`${sizeClasses.character} rounded-full overflow-hidden border-2 shrink-0`}
                 style={{
                   borderColor: typeConfig.borderColor
                 }}
@@ -236,7 +236,7 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
             {/* 类型图标 */}
             {!showCharacter && (
               <motion.div
-                className="flex-shrink-0"
+                className="shrink-0"
                 style={{ color: typeConfig.textColor }}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -299,7 +299,7 @@ export const CharacterAlert: React.FC<CharacterAlertProps> = ({
             {/* 关闭按钮 */}
             {dismissible && (
               <motion.button
-                className="flex-shrink-0 p-1 rounded-lg transition-colors hover:opacity-80"
+                className="shrink-0 p-1 rounded-lg transition-colors hover:opacity-80"
                 style={{ color: typeConfig.textColor }}
                 onClick={handleDismiss}
                 initial={{ opacity: 0, scale: 0 }}

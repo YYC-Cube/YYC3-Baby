@@ -1,8 +1,29 @@
+<!-- markdownlint-disable MD033 MD041 -->
 <p align="center">
   <img src="public/YYC3-Family.png" alt="YYC³ Family" />
 </p>
+<!-- markdownlint-enable MD033 MD041 -->
 
-# YYC³ 小语智能成长守护系统（统一基线）
+<h1 align="center">YYC³ 小语智能成长守护系统（统一基线）</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white" alt="Next.js 16" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white" alt="TypeScript 5.9" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
+  <img src="https://img.shields.io/badge/Bun-Test-14151A?logo=bun&logoColor=white" alt="Bun Test" />
+  <img src="https://img.shields.io/badge/SQLite-WAL-003B57?logo=sqlite&logoColor=white" alt="SQLite WAL" />
+  <img src="https://img.shields.io/badge/next--intl-v4-38BDF8?logo=vercel&logoColor=white" alt="next-intl v4" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow?logo=open-source-initiative&logoColor=white" alt="MIT License" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-22c55e" alt="build passing" />
+  <img src="https://img.shields.io/badge/tests-216%20passed-22c55e" alt="216 tests passed" />
+  <img src="https://img.shields.io/badge/type--check-0%20errors-22c55e" alt="0 type errors" />
+  <img src="https://img.shields.io/badge/security-0%20vulnerabilities-22c55e" alt="0 vulnerabilities" />
+  <img src="https://img.shields.io/badge/%E5%BE%BD%E7%AB%A0-30%20%E6%9E%9A-d946ef?logo=medal&logoColor=white" alt="30 badges" />
+</p>
 
 > YYC³ AI小语智能成长守护系统 — 0-3岁婴幼儿智能陪伴与成长守护平台。
 > 本仓库是多版本收敛后的**唯一开发基线**：代码源自 yyc3-xy-05 家族，整合 01/02/03 版本文档与测试、
@@ -11,7 +32,7 @@
 ## 技术栈
 
 | 层级 | 技术 |
-|------|------|
+| ------ | ------ |
 | 框架 | Next.js 16（App Router）+ React 19 + TypeScript 5.9 |
 | 运行时/包管理 | Node ≥ 22.13（`node:sqlite`）+ Bun（测试）/ npm 兼容 |
 | 样式 | Tailwind CSS 4 + shadcn/ui（Radix） |
@@ -35,7 +56,7 @@ bun run dev
 # 构建 / 生产启动
 bun run build && bun run start
 
-# 测试（199 个用例）
+# 测试（216 个用例）
 bun test
 ```
 
@@ -48,6 +69,22 @@ bun test
 - 外键约束开启，非法引用返回 400 与中文提示
 - 重启进程数据不丢失；备份走 `VACUUM INTO`
 
+## 徽章系统
+
+30 枚勋章 × 8 大分类 × 4 个等级，全部基于真实行为数据声明式评估（`lib/badges/`）。
+
+| 等级 | 分值 | 示例勋章 |
+| ------ | ------ | ------ |
+| 🥉 铜牌 | 10 | 初试啼声 · 好奇目光 · 七日之约 |
+| 🥈 银牌 | 30 | 成长档案馆 · 里程碑达人 · 全景记录者 |
+| 🥇 金牌 | 80 | 百年纪念册 · 作业终结者 · 多宝家庭 |
+| 💎 钻石 | 200 | 时光收藏家 · 一周年之礼 |
+
+- **评估引擎**：`useBadges` 拉取真实记录 → `computeStats()` 聚合 → `evaluateAll()` 逐枚评估（进度 0-100）
+- **分类**：成长记录 · 观察记录 · 情绪记录 · 学习成长 · 里程碑 · 作业任务 · 坚持陪伴 · 综合成就
+- **可扩展**：新增勋章只需在 `lib/badges/definitions.ts` 加一行工厂函数，页面零改动
+  （详见 [贡献指南](./docs/developer/09-contributing.md) 新增徽章指南）
+
 ## 国际化
 
 - `i18n/`（routing/navigation/request）+ `middleware.ts` 为 next-intl v4 标准结构
@@ -58,17 +95,16 @@ bun test
 ## 常用脚本
 
 | 命令 | 作用 |
-|------|------|
+| ------ | ------ |
 | `bun run dev` | Next.js 开发服务器（:1228） |
 | `bun run build` / `start` | 生产构建 / 启动 |
-| `bun test` | 单元测试（199 用例，全绿） |
-| `bun run type-check` | 类型检查（应用代码遗留 ~415，见 TYPECHECK_BASELINE.md） |
+| `bun test` | 单元测试（216 用例，全绿） |
+| `bun run type-check` | 类型检查（应用代码 **0 错误**，见 TYPECHECK_BASELINE.md） |
 | `bun run lint` / `lint:fix` | ESLint 检查 / 自动修复 |
 
 ## 目录结构
 
-```
-unified/
+```text
 ├── app/                  # Next.js App Router
 │   ├── api/              #   API 路由（AI 代理 + SQLite CRUD）
 │   ├── [locale]/         #   国际化路由（en）
@@ -77,6 +113,7 @@ unified/
 ├── lib/
 │   ├── ai/               #   AI 引擎（情感/语音/多模态）
 │   ├── api/              #   外部 API 客户端（服务端专用）
+│   ├── badges/           #   徽章定义与评估引擎（30 枚）
 │   ├── db/               #   SQLite 数据层（server.ts 为 API 统一入口）
 │   ├── prediction/       #   预测引擎基座与专项引擎
 │   └── store/            #   Redux 状态
@@ -86,17 +123,12 @@ unified/
 ├── middleware.ts         # locale 路由中间件
 ├── hooks/ types/ config/ # 钩子、类型、配置
 ├── themes/               # Figma 三套主题参考（未接线，排除出 tsc）
-├── __tests__/            # 单元测试（199 用例）
-├── public/               # 静态资源（icon/manifest/PWA/角色照片）
+├── __tests__/            # 单元测试（216 用例）
+├── public/               # 静态资源（icon/manifest/PWA/角色照片/CNAME）
 ├── scripts/              # 部署脚本 + 文档生成器（generate-docs.py）
-└── docs/                 # 全部文档资产
-    ├── architecture/     #   架构文档（63 篇，源 01）
-    ├── plans/            #   规划文档（19 篇，源 01/03）
-    ├── xy-02-microservices/ # 微服务文档库（2800+ 篇）
-    ├── history-snapshots/   # 历史快照独有文档（440 篇）
-    ├── creative/         #   沫语创作集
-    ├── library/          #   根文档架（原工作区 docs/，generate-docs.py 产物）
-    └── audit/            #   审计报告（原 audit-output/）
+└── docs/                 # ★ 文档中心（唯一入口见 docs/README.md）
+    ├── developer/        #   现行开发文档（10 篇，唯一维护）
+    └── archive/          #   历史归档（architecture/audit/creative/snapshots/plans）
 ```
 
 ## 安全约定
@@ -109,7 +141,19 @@ unified/
 
 ## 开发者文档
 
-完整技术文档套见 **[docs/developer/](./docs/developer/)**：快速上手 · 可视化架构（Mermaid 七图）· 数据模型 · API 参考 · 前端组件体系 · AI 引擎与安全 · 测试与质量门禁 · 部署 · 贡献指南。
+文档中心见 **[docs/README.md](./docs/README.md)**（唯一入口），现行开发文档套见 **[docs/developer/](./docs/developer/)**：
+
+| 文档 | 内容 |
+| ------ | ------ |
+| [01 · 快速上手](./docs/developer/01-getting-started.md) | 环境要求、安装、启动、常见问题 |
+| [02 · 可视化架构体系](./docs/developer/02-architecture.md) | 系统分层 / 混合路由 / 数据流 / AI 链路 / 目录拓扑（Mermaid） |
+| [03 · 数据模型](./docs/developer/03-data-model.md) | SQLite 九张表、JSON 列约定、种子数据、备份 |
+| [04 · API 参考](./docs/developer/04-api-reference.md) | 全部 REST 端点：请求/响应/错误码约定 |
+| [05 · 前端组件体系](./docs/developer/05-frontend.md) | 目录组织、UI 基建、状态管理、主题与角色系统 |
+| [06 · AI 引擎与安全](./docs/developer/06-ai-engine.md) | 服务端代理模式、密钥管理、AI 引擎模块清单 |
+| [07 · 测试与质量门禁](./docs/developer/07-testing-quality.md) | tsc / lint / test / audit 四道门禁 |
+| [08 · 部署](./docs/developer/08-deployment.md) | 本地生产、脚本、Docker 注意事项 |
+| [09 · 贡献指南](./docs/developer/09-contributing.md) | 分支模型、提交规范、徽章系统扩展指南 |
 
 ## 当前状态
 

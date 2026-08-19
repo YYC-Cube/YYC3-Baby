@@ -9,15 +9,12 @@
  * @license MIT
  */
 
-// 设置测试环境
-; (process.env as Record<string, string | undefined>).NODE_ENV = 'test'
+/// <reference types="bun-types" />
 
-// 导入 testing-library/jest-dom 以提供额外的匹配器
-import '@testing-library/jest-dom'
-
-// 导入JSDOM
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { JSDOM } = require('jsdom')
+import '@testing-library/jest-dom';
+import { mock } from 'bun:test';
+import { JSDOM } from 'jsdom';
+(process.env as Record<string, string | undefined>).NODE_ENV = 'test'
 
 // 设置 jsdom 环境
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
@@ -27,32 +24,33 @@ const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
 })
 
 // 将 jsdom 的全局对象设置为全局
-global.window = dom.window
-global.document = dom.window.document
-global.navigator = dom.window.navigator
-global.HTMLElement = dom.window.HTMLElement
-global.Element = dom.window.Element
-global.Node = dom.window.Node
-global.NodeList = dom.window.NodeList
-global.HTMLCollection = dom.window.HTMLCollection
-global.localStorage = dom.window.localStorage
-global.sessionStorage = dom.window.sessionStorage
-global.URL = dom.window.URL
-global.URLSearchParams = dom.window.URLSearchParams
-global.Blob = dom.window.Blob
-global.FileReader = dom.window.FileReader
-global.FormData = dom.window.FormData
-global.MouseEvent = dom.window.MouseEvent
-global.KeyboardEvent = dom.window.KeyboardEvent
-global.TouchEvent = dom.window.TouchEvent
-global.Event = dom.window.Event
-global.EventTarget = dom.window.EventTarget
+const jsdomWindow = dom.window as unknown as Window & typeof globalThis
+global.window = jsdomWindow
+global.document = jsdomWindow.document
+global.navigator = jsdomWindow.navigator
+global.HTMLElement = jsdomWindow.HTMLElement
+global.Element = jsdomWindow.Element
+global.Node = jsdomWindow.Node
+global.NodeList = jsdomWindow.NodeList
+global.HTMLCollection = jsdomWindow.HTMLCollection
+global.localStorage = jsdomWindow.localStorage
+global.sessionStorage = jsdomWindow.sessionStorage
+global.URL = jsdomWindow.URL
+global.URLSearchParams = jsdomWindow.URLSearchParams
+global.Blob = jsdomWindow.Blob
+global.FileReader = jsdomWindow.FileReader
+global.FormData = jsdomWindow.FormData
+global.MouseEvent = jsdomWindow.MouseEvent
+global.KeyboardEvent = jsdomWindow.KeyboardEvent
+global.TouchEvent = jsdomWindow.TouchEvent
+global.Event = jsdomWindow.Event
+global.EventTarget = jsdomWindow.EventTarget
 
-// 设置其他必要的全局对象
-global.fetch = require('node-fetch')
-global.Request = require('node-fetch').Request
-global.Response = require('node-fetch').Response
-global.Headers = require('node-fetch').Headers
+// fetch 家族：Bun / Node ≥ 18 均内置原生实现，显式声明以覆盖 jsdom 窗口作用域
+global.fetch = fetch
+global.Request = Request
+global.Response = Response
+global.Headers = Headers
 
 // Mock AbortController and AbortSignal for JSDOM compatibility
 global.AbortController = class AbortController {
@@ -85,10 +83,7 @@ global.AbortSignal = class AbortSignal {
 } as unknown as typeof AbortSignal
 
 // 导入Bun的mock功能
-import { mock } from 'bun:test'
-
-// Mock Next.js router
-mock.module('next/navigation', () => ({
+void mock.module('next/navigation', () => ({
   useRouter: () => ({
     push: () => { },
     replace: () => { },
@@ -102,7 +97,7 @@ mock.module('next/navigation', () => ({
 }))
 
 // Mock Next.js app router context
-mock.module('next/dist/client/components/app-router-context', () => ({
+void mock.module('next/dist/client/components/app-router-context', () => ({
   AppRouterContext: {
     Provider: ({ children }: { children: React.ReactNode }) => children,
   },
@@ -127,19 +122,19 @@ mock.module('next/dist/client/components/app-router-context', () => ({
 }))
 
 // Mock Next.js image
-mock.module('next/image', () => ({
+void mock.module('next/image', () => ({
   __esModule: true,
-  default: (props: any) => ({ type: 'img', props }),
+  default: (props: Record<string, unknown>) => ({ type: 'img', props }),
 }))
 
 // Mock framer-motion
-mock.module('framer-motion', () => import('./__mocks__/framer-motion'))
+void mock.module('framer-motion', () => import('./__mocks__/framer-motion'))
 
 // Mock motion-dom
-mock.module('motion-dom', () => import('./__mocks__/motion-dom'))
+void mock.module('motion-dom', () => import('./__mocks__/motion-dom'))
 
 // Mock next-intl
-mock.module('next-intl', () => ({
+void mock.module('next-intl', () => ({
   useLocale: () => 'zh',
   useTranslations: (namespace: string) => {
     // 简单的翻译函数模拟
@@ -157,7 +152,7 @@ mock.module('next-intl', () => ({
 }))
 
 // Mock use-intl
-mock.module('use-intl', () => ({
+void mock.module('use-intl', () => ({
   useTranslations: (namespace: string) => {
     // 简单的翻译函数模拟
     const translations: Record<string, Record<string, string>> = {

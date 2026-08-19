@@ -2,9 +2,9 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from '@/hooks/useAuth'
+import { AnimatePresence, motion } from "framer-motion"
+import { useState } from "react"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -22,7 +22,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
 
   const { login, register, isLoading, error } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLocalError(null)
 
@@ -91,7 +91,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
             onClick={(e) => { e.stopPropagation(); }}
           >
             {/* 头部 */}
-            <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6 text-white">
+            <div className="bg-linear-to-r from-blue-500 to-purple-500 p-6 text-white">
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-bold">
                   {mode === "login" ? "欢迎回来" : mode === "register" ? "创建账号" : "重置密码"}
@@ -114,9 +114,8 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
               {/* 错误提示 */}
               {(error || localError) && (
                 <div
-                  className={`p-3 rounded-lg text-sm ${
-                    localError?.includes("已发送") ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"
-                  }`}
+                  className={`p-3 rounded-lg text-sm ${localError?.includes("已发送") ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"
+                    }`}
                 >
                   <i className={`${localError?.includes("已发送") ? "ri-check-line" : "ri-error-warning-line"} mr-2`} />
                   {error || localError}
@@ -198,7 +197,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>

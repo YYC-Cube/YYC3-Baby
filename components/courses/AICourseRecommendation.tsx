@@ -1,7 +1,6 @@
 "use client"
 
 import { useAIXiaoyu } from "@/hooks/useAIXiaoyu"
-import { useChildren } from "@/hooks/useChildren"
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -50,7 +49,6 @@ export default function AICourseRecommendation({
   const [isGenerating, setIsGenerating] = useState(false)
 
   const { sendMessage } = useAIXiaoyu()
-  const { currentChild } = useChildren()
 
   useEffect(() => {
     if (isOpen && childId) {
@@ -69,7 +67,7 @@ export default function AICourseRecommendation({
 
       请以JSON格式返回，包含课程名称、描述、类别、难度、时长和标签。`
 
-      const response = await sendMessage(prompt, "advisor")
+      await sendMessage(prompt, "advisor")
 
       // 模拟解析推荐结果
       const mockRecommendations = {
@@ -154,7 +152,7 @@ export default function AICourseRecommendation({
 
       请提供阶段性学习计划，每个阶段包含目标、推荐课程和时长。`
 
-      const response = await sendMessage(prompt, "advisor")
+      await sendMessage(prompt, "advisor")
 
       // 模拟学习路径数据
       const mockLearningPath: LearningPath[] = [
@@ -271,13 +269,6 @@ export default function AICourseRecommendation({
     "怎样选择合适难度？"
   ]
 
-  const getChildDevelopmentStage = (age: number) => {
-    if (age < 3) return "婴幼儿期"
-    if (age < 6) return "学龄前期"
-    if (age < 12) return "学龄期"
-    return "青少年期"
-  }
-
   const getRecommendationIcon = (type: string) => {
     const icons = {
       personality: "ri-heart-line",
@@ -314,7 +305,7 @@ export default function AICourseRecommendation({
             className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden"
           >
             {/* 标题栏 */}
-            <div className="bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-4 text-white flex items-center justify-between">
+            <div className="bg-linear-to-r from-blue-500 to-purple-500 px-6 py-4 text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                   <i className="ri-graduation-cap-fill text-xl" />
@@ -339,8 +330,8 @@ export default function AICourseRecommendation({
                   key={tab.id}
                   onClick={() => { setActiveTab(tab.id as "recommendations" | "learning-path" | "consultation"); }}
                   className={`flex-1 px-4 py-3 font-medium transition-colors relative ${activeTab === tab.id
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-gray-500 hover:text-gray-700"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-500 hover:text-gray-700"
                     }`}
                 >
                   <i className={`${tab.icon} mr-2`} />
@@ -479,7 +470,7 @@ export default function AICourseRecommendation({
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="h-[500px] flex flex-col"
+                  className="h-125 flex flex-col"
                 >
                   <div className="text-center mb-4">
                     <h3 className="text-xl font-bold text-gray-800 mb-2">教育咨询顾问</h3>
@@ -503,8 +494,8 @@ export default function AICourseRecommendation({
                         className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}
                       >
                         <div className={`inline-block max-w-[80%] rounded-2xl px-4 py-3 ${message.role === 'user'
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-white border border-gray-200 text-gray-800'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-white border border-gray-200 text-gray-800'
                           }`}>
                           {message.content}
                         </div>
@@ -551,7 +542,7 @@ export default function AICourseRecommendation({
                       type="text"
                       value={currentMessage}
                       onChange={(e) => { setCurrentMessage(e.target.value); }}
-                      onKeyPress={(e) => e.key === 'Enter' && handleChatMessage()}
+                      onKeyDown={(e) => e.key === 'Enter' && handleChatMessage()}
                       placeholder="请输入您的问题..."
                       className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                       disabled={isGenerating}

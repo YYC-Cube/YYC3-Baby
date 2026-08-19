@@ -63,7 +63,7 @@ export default function BooksPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 pb-24">
+    <div className="min-h-screen bg-linear-to-b from-amber-50 to-orange-50 pb-24">
       <PageHeader title="有声绘本" showBack />
 
       {/* 搜索栏 */}
@@ -94,9 +94,9 @@ export default function BooksPage() {
               <button
                 key={category}
                 onClick={() => { handleCategoryChange(category); }}
-                className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                className={`shrink-0 flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   isActive
-                    ? "bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-md"
+                    ? "bg-linear-to-r from-amber-400 to-orange-400 text-white shadow-md"
                     : "bg-white text-slate-600 hover:bg-amber-50"
                 }`}
               >
@@ -127,7 +127,7 @@ export default function BooksPage() {
                 alt={books[0]?.title || "Book"}
                 className="w-full h-48 object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4">
                 <h3 className="text-xl font-bold text-white mb-1">{books[0]?.title || ""}</h3>
                 <p className="text-white/80 text-sm mb-3">{books[0]?.author || ""}</p>
@@ -176,7 +176,7 @@ export default function BooksPage() {
 
                   {/* AI生成标签 */}
                   {book.isAIGenerated && (
-                    <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full">
+                    <div className="absolute top-2 left-2 px-2 py-1 bg-linear-to-r from-purple-500 to-pink-500 rounded-full">
                       <span className="text-xs text-white font-medium">AI创作</span>
                     </div>
                   )}

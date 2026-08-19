@@ -25,7 +25,7 @@ export default function SettingsPage() {
         <section className="max-w-5xl mx-auto w-full px-8 pb-28 pt-4 grid grid-cols-1 md:grid-cols-2 gap-8">
           <section className="col-span-1 md:col-span-2">
             <motion.div
-              className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl p-6 shadow-soft text-white"
+              className="bg-linear-to-r from-blue-500 to-purple-500 rounded-3xl p-6 shadow-soft text-white"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}

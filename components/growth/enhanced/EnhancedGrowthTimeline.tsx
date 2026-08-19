@@ -269,26 +269,26 @@ export default function EnhancedGrowthTimeline({
           delay: index * 0.1,
           ease: "easeOut"
         }}
-        className={`relative bg-gradient-to-r ${config.bgGradient} rounded-2xl p-5 border-l-4 ${config.borderColor} cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg`}
+        className={`relative bg-linear-to-r ${config.bgGradient} rounded-2xl p-5 border-l-4 ${config.borderColor} cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg`}
         onClick={() => { setExpandedId(isExpanded ? null : event.id); }}
       >
         {/* 重要性标记 */}
         {event.importance && event.importance >= 8 && (
-          <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+          <div className="absolute -top-2 -right-2 w-8 h-8 bg-linear-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
             <Star className="w-4 h-4 text-white fill-white" />
           </div>
         )}
 
         {/* 连接点 */}
-        <div className={`absolute -left-[3.25rem] top-6 w-6 h-6 rounded-full bg-gradient-to-r ${event.color} border-4 border-white shadow-lg z-10`} />
+        <div className={`absolute -left-[3.25rem] top-6 w-6 h-6 rounded-full bg-linear-to-r ${event.color} border-4 border-white shadow-lg z-10`} />
 
         {/* 光晕效果 */}
         {event.isMemoryHighlight && (
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-200 to-purple-200 opacity-20 animate-pulse" />
+          <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-pink-200 to-purple-200 opacity-20 animate-pulse" />
         )}
 
         <div className="flex items-start gap-4">
-          <div className={`w-12 h-12 bg-gradient-to-r ${event.color} rounded-xl flex items-center justify-center text-white shadow-md`}>
+          <div className={`w-12 h-12 bg-linear-to-r ${event.color} rounded-xl flex items-center justify-center text-white shadow-md`}>
             <event.icon className="w-6 h-6" />
           </div>
 
@@ -333,7 +333,7 @@ export default function EnhancedGrowthTimeline({
                     <div className="mb-4">
                       <div className="flex gap-2 overflow-x-auto pb-2">
                         {event.media.map((media, mediaIndex) => (
-                          <div key={mediaIndex} className="flex-shrink-0">
+                          <div key={mediaIndex} className="shrink-0">
                             {media.type === 'image' ? (
                               <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
                                 <Camera className="w-6 h-6 text-gray-400" />
@@ -384,7 +384,7 @@ export default function EnhancedGrowthTimeline({
 
                   {/* AI洞察 */}
                   {event.aiInsight && (
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4">
+                    <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-xl p-4">
                       <h4 className="text-sm font-medium text-purple-700 mb-2 flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
                         AI小语洞察
@@ -408,9 +408,9 @@ export default function EnhancedGrowthTimeline({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-blue-50">
       {/* 头部统计区域 */}
-      <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 rounded-3xl p-8 text-white shadow-2xl mb-8">
+      <div className="bg-linear-to-r from-pink-500 via-purple-500 to-blue-500 rounded-3xl p-8 text-white shadow-2xl mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-3xl font-bold mb-2 flex items-center gap-3">
@@ -453,7 +453,7 @@ export default function EnhancedGrowthTimeline({
         <motion.button
           className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
             selectedType === "all"
-              ? "bg-gradient-to-r from-slate-800 to-slate-900 text-white shadow-lg"
+              ? "bg-linear-to-r from-slate-800 to-slate-900 text-white shadow-lg"
               : "bg-white text-slate-600 hover:bg-slate-50 shadow"
           }`}
           onClick={() => { setSelectedType("all"); }}
@@ -469,7 +469,7 @@ export default function EnhancedGrowthTimeline({
               key={type}
               className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
                 selectedType === type
-                  ? `bg-gradient-to-r ${config.bgGradient} ${config.textColor} shadow-lg`
+                  ? `bg-linear-to-r ${config.bgGradient} ${config.textColor} shadow-lg`
                   : "bg-white text-slate-600 hover:bg-slate-50 shadow"
               }`}
               onClick={() => { setSelectedType(type); }}
@@ -514,13 +514,13 @@ export default function EnhancedGrowthTimeline({
           {/* 滚动进度条 */}
           <div className="absolute top-0 right-0 w-1 h-full bg-gray-200 rounded-full">
             <div
-              className="bg-gradient-to-b from-pink-400 to-purple-400 rounded-full transition-all duration-300"
+              className="bg-linear-to-b from-pink-400 to-purple-400 rounded-full transition-all duration-300"
               style={{ height: `${scrollProgress * 100}%` }}
             />
           </div>
 
           {/* 时间轴 */}
-          <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-pink-300 via-purple-300 to-blue-300 rounded-full" />
+          <div className="absolute left-8 top-0 bottom-0 w-1 bg-linear-to-b from-pink-300 via-purple-300 to-blue-300 rounded-full" />
 
           {Object.entries(groupedByMonth).map(([month, monthEvents], monthIndex) => (
             <motion.div
@@ -576,11 +576,11 @@ export default function EnhancedGrowthTimeline({
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`bg-gradient-to-br ${config.bgGradient} rounded-2xl p-5 border-2 ${config.borderColor} hover:shadow-xl transition-all duration-300 cursor-pointer`}
+                className={`bg-linear-to-br ${config.bgGradient} rounded-2xl p-5 border-2 ${config.borderColor} hover:shadow-xl transition-all duration-300 cursor-pointer`}
                 onClick={() => { setSelectedEvent(event); }}
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${event.color} rounded-xl flex items-center justify-center text-white shadow-lg`}>
+                  <div className={`w-12 h-12 bg-linear-to-r ${event.color} rounded-xl flex items-center justify-center text-white shadow-lg`}>
                     <event.icon className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
@@ -646,10 +646,10 @@ export default function EnhancedGrowthTimeline({
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1 }}
-                  className={`flex-shrink-0 w-80 bg-gradient-to-br ${config.bgGradient} rounded-2xl p-6 border-2 ${config.borderColor} snap-start`}
+                  className={`shrink-0 w-80 bg-linear-to-br ${config.bgGradient} rounded-2xl p-6 border-2 ${config.borderColor} snap-start`}
                 >
                   <div className="text-center">
-                    <div className={`w-16 h-16 bg-gradient-to-r ${event.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg`}>
+                    <div className={`w-16 h-16 bg-linear-to-r ${event.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg`}>
                       <event.icon className="w-8 h-8" />
                     </div>
                     <h3 className="font-bold text-slate-800 text-lg mb-2">{event.title}</h3>
@@ -710,7 +710,7 @@ export default function EnhancedGrowthTimeline({
               </button>
 
               <div className="flex items-center gap-4 mb-6">
-                <div className={`w-16 h-16 bg-gradient-to-r ${selectedEvent.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
+                <div className={`w-16 h-16 bg-linear-to-r ${selectedEvent.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
                   <selectedEvent.icon className="w-8 h-8" />
                 </div>
                 <div>
@@ -724,7 +724,7 @@ export default function EnhancedGrowthTimeline({
               <p className="text-slate-600 mb-6 text-lg leading-relaxed">{selectedEvent.description}</p>
 
               {selectedEvent.aiInsight && (
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-6">
+                <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-6">
                   <h3 className="font-semibold text-purple-700 mb-3 flex items-center gap-2">
                     <Sparkles className="w-5 h-5" />
                     AI小语洞察

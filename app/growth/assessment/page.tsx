@@ -100,7 +100,7 @@ export default function AssessmentPage() {
           </div>
           <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+              className="h-full bg-linear-to-r from-blue-500 to-purple-500 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5 }}
@@ -166,7 +166,7 @@ export default function AssessmentPage() {
             <motion.button
               onClick={handleNext}
               disabled={!canProceed}
-              className="flex-1 px-5 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-5 py-3 bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: canProceed ? 1.02 : 1 }}
               whileTap={{ scale: canProceed ? 0.98 : 1 }}
             >
@@ -217,7 +217,7 @@ function QuestionCard({
       transition={{ delay: index * 0.05 }}
     >
       <div className="flex items-start gap-3">
-        <div className="w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-slate-600">
+        <div className="w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center shrink-0 text-sm font-bold text-slate-600">
           {index + 1}
         </div>
         <div className="flex-1">
@@ -346,7 +346,7 @@ function AssessmentReport({
         <div className="max-w-3xl mx-auto px-4 py-6 pb-24">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
             {/* 综合得分 */}
-            <div className="bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl p-6 text-white text-center">
+            <div className="bg-linear-to-br from-blue-500 to-purple-500 rounded-2xl p-6 text-white text-center">
               <h2 className="text-lg mb-3">综合发展评估得分</h2>
               <motion.div
                 className="text-6xl font-bold mb-2"
@@ -415,7 +415,7 @@ function AssessmentReport({
               <div className="space-y-2">
                 {recommendations.slice(0, 4).map((rec, i) => (
                   <div key={i} className="flex gap-2">
-                    <div className="w-5 h-5 bg-blue-400 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-5 h-5 bg-blue-400 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                       <i className="ri-arrow-right-line text-white text-xs" />
                     </div>
                     <p className="text-slate-700 text-sm leading-relaxed">{rec}</p>
@@ -435,7 +435,7 @@ function AssessmentReport({
                 重新评估
               </motion.button>
               <motion.button
-                className="flex-1 px-5 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl font-medium"
+                className="flex-1 px-5 py-3 bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl font-medium"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >

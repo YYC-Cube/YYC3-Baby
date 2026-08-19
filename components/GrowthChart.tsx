@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
 import { useChildren } from "@/hooks/useChildren"
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 interface GrowthData {
   date: string
@@ -11,11 +11,7 @@ interface GrowthData {
   activities: number // 完成的活动数量
 }
 
-interface GrowthChartProps {
-  childId?: string
-}
-
-export default function GrowthChart({ childId }: GrowthChartProps) {
+export default function GrowthChart() {
   const { currentChild } = useChildren()
   const [growthData, setGrowthData] = useState<GrowthData[]>([])
   const [selectedPeriod, setSelectedPeriod] = useState<"week" | "month">("week")
@@ -59,7 +55,7 @@ export default function GrowthChart({ childId }: GrowthChartProps) {
       {/* 头部 */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white">
+          <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white">
             📊
           </div>
           <div>
@@ -71,21 +67,19 @@ export default function GrowthChart({ childId }: GrowthChartProps) {
         <div className="flex gap-2">
           <button
             onClick={() => { setSelectedPeriod("week"); }}
-            className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === "week"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-slate-600 hover:bg-gray-200"
-            }`}
+            className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${selectedPeriod === "week"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-100 text-slate-600 hover:bg-gray-200"
+              }`}
           >
             本周
           </button>
           <button
             onClick={() => { setSelectedPeriod("month"); }}
-            className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-              selectedPeriod === "month"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-slate-600 hover:bg-gray-200"
-            }`}
+            className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${selectedPeriod === "month"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-100 text-slate-600 hover:bg-gray-200"
+              }`}
           >
             本月
           </button>
@@ -144,7 +138,7 @@ export default function GrowthChart({ childId }: GrowthChartProps) {
               </div>
               <div className="flex-1 bg-gray-100 rounded-full h-6 relative overflow-hidden">
                 <motion.div
-                  className="absolute left-0 top-0 h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full"
+                  className="absolute left-0 top-0 h-full bg-linear-to-r from-blue-400 to-blue-500 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${(data.studyTime / maxStudyTime) * 100}%` }}
                   transition={{ delay: index * 0.05 + 0.3, duration: 0.5 }}
@@ -177,10 +171,9 @@ export default function GrowthChart({ childId }: GrowthChartProps) {
                 {data.date.split('/')[1] || data.date.slice(-2)}
               </div>
               <motion.div
-                className={`w-full rounded-t-md ${
-                  data.mood >= 4 ? 'bg-green-400' :
+                className={`w-full rounded-t-md ${data.mood >= 4 ? 'bg-green-400' :
                   data.mood >= 3 ? 'bg-yellow-400' : 'bg-orange-400'
-                }`}
+                  }`}
                 initial={{ height: 0 }}
                 animate={{ height: `${(data.mood / 5) * 100}%` }}
                 transition={{ delay: index * 0.05 + 0.3, duration: 0.5 }}
@@ -192,15 +185,15 @@ export default function GrowthChart({ childId }: GrowthChartProps) {
 
       {/* 鼓励信息 */}
       <motion.div
-        className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-4 text-center"
+        className="bg-linear-to-r from-purple-100 to-pink-100 rounded-xl p-4 text-center"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.6 }}
       >
         <p className="text-sm font-medium text-slate-700">
           {totalActivities > 20 ? "太棒了！你完成了很多活动！" :
-           averageMood >= 4 ? "心情不错，继续保持哦！" :
-           `继续努力，${getAssistantName()}为你加油！💪`}
+            averageMood >= 4 ? "心情不错，继续保持哦！" :
+              `继续努力，${getAssistantName()}为你加油！💪`}
         </p>
       </motion.div>
     </div>

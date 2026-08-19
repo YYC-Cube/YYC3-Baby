@@ -169,3 +169,38 @@ flowchart LR
 ```
 
 > ⚠️ 服务进程必须跑 Node（`node:sqlite` 需要 Node ≥ 22.13）。`bun --bun next start` 与 Next 16 Turbopack 产物不兼容，仅用 Bun 跑测试。
+
+## 8. 徽章系统架构（30 枚 · 声明式评估）
+
+```mermaid
+flowchart TB
+    subgraph Data["真实行为数据"]
+        API["/api/growth-records · /api/children · /api/homework<br/>SQLite 九表（记录/里程碑/作业/多档案）"]
+    end
+    subgraph Engine["客户端评估引擎"]
+        useB["useBadges<br/>hooks/useBadges.ts"]
+        CS["computeStats()<br/>计数 / 连续天数 / 标签集 / 里程碑 / AI 分析"]
+        EV["evaluateAll()<br/>逐枚评估 → 进度 0-100 / null=未解锁"]
+        PER["localStorage 持久化<br/>解锁态 + NEW 标记（幂等）"]
+    end
+    subgraph Defs["声明式定义库（页面零改动）"]
+        DEF["lib/badges/definitions.ts<br/>countBadge / compoundBadge 工厂 × 30"]
+        LVL["BADGE_LEVELS<br/>铜10 · 银30 · 金80 · 钻石200"]
+    end
+    subgraph UI["展示层"]
+        PAGE["/badges 页面"]
+        CARD["BadgeCard<br/>进度条 · 解锁动画 · 分类筛选"]
+    end
+
+    API --> useB --> CS --> EV --> PER
+    EV --> DEF
+    EV --> LVL
+    EV --> UI
+    UI --> PAGE --> CARD
+```
+
+**设计要点：**
+- **完全声明式**：新增徽章 = `definitions.ts` 加一行 `countBadge(...)`，评估/展示零改动
+- **真实数据驱动**：不依赖手点解锁，进度与条件由用户行为记录实时计算
+- **幂等持久化**：解锁态写入 localStorage，`evaluateAll()` 重复执行不产生重复标记
+- **测试覆盖**：`__tests__/lib/badges.test.ts` 17 用例验证聚合/评估/持久化/定义完整性

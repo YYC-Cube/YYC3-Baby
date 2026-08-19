@@ -76,7 +76,7 @@ export default function HomeworkPage() {
         <section className="max-w-7xl mx-auto w-full px-8 pb-28 pt-4">
           {currentChild && (
             <div className="mb-6 bg-white/70 rounded-2xl p-4 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg shrink-0">
                 {currentChild.name.charAt(0)}
               </div>
               <div className="flex-1">

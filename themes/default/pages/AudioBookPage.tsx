@@ -65,7 +65,7 @@ export const AudioBookPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 pb-20">
+    <div className="min-h-screen bg-linear-to-br from-yellow-50 via-orange-50 to-pink-50 pb-20">
       {/* 导航栏 */}
       <PageNavigation title="有声绘本" icon="📖" />
 
@@ -95,7 +95,7 @@ export const AudioBookPage: React.FC = () => {
                 onClick={() => handleCategoryClick(category.id)}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
                   category.isActive
-                    ? 'bg-gradient-to-r from-orange-400 to-yellow-400 text-white shadow-md'
+                    ? 'bg-linear-to-r from-orange-400 to-yellow-400 text-white shadow-md'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -116,7 +116,7 @@ export const AudioBookPage: React.FC = () => {
             <h3 className="text-gray-900">今日推荐</h3>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
+          <div className="bg-linear-to-br from-purple-400 via-pink-400 to-orange-400 rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-4xl">📖</span>
@@ -153,7 +153,7 @@ export const AudioBookPage: React.FC = () => {
                 key={book.id}
                 className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all group cursor-pointer"
               >
-                <div className="relative aspect-[3/4] bg-gradient-to-br from-purple-100 via-pink-100 to-orange-100 flex items-center justify-center">
+                <div className="relative aspect-[3/4] bg-linear-to-br from-purple-100 via-pink-100 to-orange-100 flex items-center justify-center">
                   <div className="text-6xl">📖</div>
                   
                   {/* Favorite Button */}
@@ -171,7 +171,7 @@ export const AudioBookPage: React.FC = () => {
                   </button>
 
                   {/* Category Badge */}
-                  <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs flex items-center gap-1">
+                  <div className="absolute top-2 left-2 px-2 py-1 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs flex items-center gap-1">
                     <span>{book.badgeIcon}</span>
                     <span>{book.categoryBadge}</span>
                   </div>

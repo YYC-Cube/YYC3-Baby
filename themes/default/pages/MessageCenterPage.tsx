@@ -129,7 +129,7 @@ export const MessageCenterPage: React.FC = () => {
   }, {} as Record<string, Message[]>);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 pb-20">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 pb-20">
       {/* Header */}
       <div className="bg-white shadow-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
@@ -167,13 +167,13 @@ export const MessageCenterPage: React.FC = () => {
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className="text-2xl flex-shrink-0">{message.icon}</div>
+                <div className="text-2xl shrink-0">{message.icon}</div>
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h4 className={`${message.categoryColor} flex-1`}>
                       {message.title}
                     </h4>
-                    <span className="text-xs text-gray-500 flex-shrink-0">
+                    <span className="text-xs text-gray-500 shrink-0">
                       {message.timestamp.toLocaleString()}
                     </span>
                   </div>
@@ -201,13 +201,13 @@ export const MessageCenterPage: React.FC = () => {
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className="text-2xl flex-shrink-0">{message.icon}</div>
+                <div className="text-2xl shrink-0">{message.icon}</div>
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h4 className={`${message.categoryColor} flex-1`}>
                       {message.title}
                     </h4>
-                    <span className="text-xs text-gray-500 flex-shrink-0">
+                    <span className="text-xs text-gray-500 shrink-0">
                       {message.timestamp.toLocaleString()}
                     </span>
                   </div>
@@ -233,13 +233,13 @@ export const MessageCenterPage: React.FC = () => {
               className={`${message.categoryBg} rounded-xl p-4 mb-3 transition-all hover:shadow-md cursor-pointer`}
             >
               <div className="flex items-start gap-3">
-                <div className="text-2xl flex-shrink-0">{message.icon}</div>
+                <div className="text-2xl shrink-0">{message.icon}</div>
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h4 className={`${message.categoryColor} flex-1`}>
                       {message.title}
                     </h4>
-                    <span className="text-xs text-gray-500 flex-shrink-0">
+                    <span className="text-xs text-gray-500 shrink-0">
                       {message.timestamp.toLocaleString()}
                     </span>
                   </div>

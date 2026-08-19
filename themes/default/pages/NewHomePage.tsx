@@ -73,7 +73,7 @@ export const NewHomePage: React.FC<NewHomePageProps> = ({ onNavigate }) => {
               className="float-logo"
               whileHover={{ rotate: 15, scale: 1.1 }}
             >
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-emerald-400 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
                 <Leaf size={20} className="text-white" />
               </div>
             </motion.div>
@@ -172,7 +172,7 @@ export const NewHomePage: React.FC<NewHomePageProps> = ({ onNavigate }) => {
               <div className="mx-5 mb-5">
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-2xl p-5 relative overflow-hidden cursor-pointer"
+                  className="bg-linear-to-r from-emerald-500 to-green-600 text-white rounded-2xl p-5 relative overflow-hidden cursor-pointer"
                   style={{ boxShadow: '0 8px 30px rgba(16, 185, 129, 0.3)' }}
                 >
                   <div className="absolute inset-0 shimmer pointer-events-none" />
@@ -198,7 +198,7 @@ export const NewHomePage: React.FC<NewHomePageProps> = ({ onNavigate }) => {
               <div className="glass-card glass-green-1 p-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-md shadow-emerald-500/20">
+                    <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-md shadow-emerald-500/20">
                       <GraduationCap size={20} className="text-white" />
                     </div>
                     <div>
@@ -225,7 +225,7 @@ export const NewHomePage: React.FC<NewHomePageProps> = ({ onNavigate }) => {
             >
               <div className="glass-card p-5">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center shadow-md icon-hover-spin">
+                  <div className="w-9 h-9 rounded-xl bg-linear-to-br from-amber-400 to-orange-400 flex items-center justify-center shadow-md icon-hover-spin">
                     📋
                   </div>
                   <h3 className="text-gray-800" style={{ fontWeight: 600 }}>今日计划</h3>
@@ -288,7 +288,7 @@ export const NewHomePage: React.FC<NewHomePageProps> = ({ onNavigate }) => {
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6, ease: 'easeInOut' }}
-                    className={`w-11 h-11 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mx-auto mb-2 shadow-md text-white`}
+                    className={`w-11 h-11 bg-linear-to-br ${feature.color} rounded-xl flex items-center justify-center mx-auto mb-2 shadow-md text-white`}
                   >
                     {feature.icon}
                   </motion.div>
@@ -313,7 +313,7 @@ export const NewHomePage: React.FC<NewHomePageProps> = ({ onNavigate }) => {
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6, ease: 'easeInOut' }}
-                    className={`w-11 h-11 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mx-auto mb-2 shadow-md text-white`}
+                    className={`w-11 h-11 bg-linear-to-br ${feature.color} rounded-xl flex items-center justify-center mx-auto mb-2 shadow-md text-white`}
                   >
                     {feature.icon}
                   </motion.div>

@@ -20,7 +20,7 @@ export const CreatePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* 导航栏 */}
       <PageNavigation title="创意工坊" icon="🎨" />
 
@@ -56,7 +56,7 @@ export const CreatePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {recentWorks.map((work) => (
               <Card key={work.id} className="cursor-pointer hover:shadow-xl transition-shadow">
-                <div className="aspect-video bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center text-6xl">
+                <div className="aspect-video bg-linear-to-br from-purple-100 to-pink-100 rounded-lg mb-4 flex items-center justify-center text-6xl">
                   {work.thumbnail}
                 </div>
                 <h4 className="mb-2">{work.title}</h4>

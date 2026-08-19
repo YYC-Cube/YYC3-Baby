@@ -1,0 +1,53 @@
+# 📚 YYC³ 文档中心
+
+> **本目录是 YYC³ 全部文档资产的唯一入口。** 架构分层：
+
+| 目录 | 定位 | 维护策略 |
+| ---- | ---- | -------- |
+| [developer/](./developer/) | ★ **现行开发文档**（10 篇，唯一被维护的文档集） | 随代码变更持续更新 |
+| [archive/](./archive/) | 历史归档（白皮书/方案/审计/创作/快照） | 只读，不再维护 |
+
+## 现行文档（developer/）
+
+面向开发者的完整技术文档套，以 [developer/README.md](./developer/README.md) 为入口：
+
+| 文档 | 内容 |
+| ---- | ---- |
+| [01 · 快速上手](./developer/01-getting-started.md) | 环境要求、安装、启动、常见问题 |
+| [02 · 可视化架构体系](./developer/02-architecture.md) | 系统分层 / 混合路由 / 数据流 / AI 链路 / 徽章评估（Mermaid） |
+| [03 · 数据模型](./developer/03-data-model.md) | SQLite 九张表、JSON 列约定、种子数据、备份 |
+| [04 · API 参考](./developer/04-api-reference.md) | 全部 REST 端点：请求/响应/错误码约定 |
+| [05 · 前端组件体系](./developer/05-frontend.md) | 目录组织、UI 基建、状态管理、主题与角色系统 |
+| [06 · AI 引擎与安全](./developer/06-ai-engine.md) | 服务端代理模式、密钥管理、AI 引擎模块清单 |
+| [07 · 测试与质量门禁](./developer/07-testing-quality.md) | tsc / lint / test / audit 四道门禁 |
+| [08 · 部署](./developer/08-deployment.md) | 本地生产、脚本、Docker 注意事项 |
+| [09 · 贡献指南](./developer/09-contributing.md) | 分支模型、提交规范、徽章系统扩展指南 |
+
+## 历史归档（archive/）
+
+仅作追溯参考，内容可能过期，与当前代码不一致时以 `developer/` 为准：
+
+| 目录 | 内容 | 规模 |
+| ---- | ---- | ---- |
+| [architecture/](./archive/architecture/) | 旧版架构/方案/白皮书（合并初期归档） | 63 篇 |
+| [audit/](./archive/audit/) | 审计报告与 UI 方案 | 9 篇 |
+| [creative/](./archive/creative/) | 沫语创作集（爱之细语等） | 40 篇 |
+| [history-snapshots/](./archive/history-snapshots/) | 多版本合并前的项目快照 | 16 篇 |
+| [plans/](./archive/plans/) | 历次开发规划 | 19 篇 |
+
+## 已清除的冗余项
+
+2026-08-19 文档架构规范化时移除（git 历史可完整找回，`git checkout <commit> -- <path>`）：
+
+| 目录 | 原规模 | 清除原因 |
+| ---- | ------ | -------- |
+| `docs/library/` | ~13k 文件 / 130M | `generate-docs.py` 产物 + 多版本复制品，内容重复 |
+| `docs/xy-02-microservices/` | ~2,850 文件 / 14M | 合并前微服务文档库，与统一基线无关 |
+| `assets/` | 3 文件 | 无代码引用，内含过期 monorepo CI（apps/server、MongoDB） |
+
+## 文档维护规范
+
+1. **新增/修改文档一律写入 `developer/`**，不恢复 archive 旧结构
+2. 改架构/数据模型/API 时同步更新 `developer/` 对应篇目
+3. 新里程碑更新项目根 [README.md](../README.md) 的「当前状态」
+4. 删除性改动注明可找回的 commit（见 [09 · 贡献指南](./developer/09-contributing.md)）

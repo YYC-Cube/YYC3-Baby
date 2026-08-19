@@ -123,7 +123,7 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
   return (
     <div className="space-y-6">
       {/* 头部统计 */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl p-5 text-white">
+      <div className="bg-linear-to-r from-blue-500 to-purple-500 rounded-2xl p-5 text-white">
         <h3 className="text-lg font-bold mb-2">
           <i className="ri-time-line mr-2" />
           {childName}的成长时间线
@@ -190,7 +190,7 @@ export default function GrowthTimeline({ events = defaultEvents, childName = "�
       {viewMode === "timeline" && (
         <div className="relative">
           {/* 时间线轴 */}
-          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-300 via-purple-300 to-pink-300" />
+          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-linear-to-b from-blue-300 via-purple-300 to-pink-300" />
 
           {Object.entries(groupedByMonth).map(([month, monthEvents], monthIndex) => (
             <div key={month} className="mb-8">

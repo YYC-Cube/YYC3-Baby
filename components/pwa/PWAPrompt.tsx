@@ -54,7 +54,7 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
           className={`fixed top-4 right-4 bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-sm z-50 ${className}`}
         >
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                 <i className="ri-refresh-line text-white text-sm" />
               </div>
@@ -98,8 +98,8 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
           className={`fixed bottom-4 right-4 bg-white border-2 border-gray-200 rounded-2xl shadow-lg p-4 max-w-xs z-50 ${className}`}
         >
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+            <div className="shrink-0">
+              <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                 <i className="ri-download-line text-white text-lg" />
               </div>
             </div>
@@ -115,7 +115,7 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={installPWA}
-                  className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-medium rounded-md hover:from-blue-600 hover:to-purple-600 transition-all"
+                  className="flex-1 px-3 py-2 bg-linear-to-r from-blue-500 to-purple-500 text-white text-xs font-medium rounded-md hover:from-blue-600 hover:to-purple-600 transition-all"
                 >
                   安装
                 </motion.button>

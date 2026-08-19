@@ -29,7 +29,7 @@ export const SchedulePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* 导航栏 */}
       <PageNavigation title="智能课表" icon="📅" />
 
@@ -41,7 +41,7 @@ export const SchedulePage: React.FC = () => {
         </div>
 
         {/* 今日课程卡片 */}
-        <Card className="mb-6 bg-gradient-to-br from-blue-50 to-purple-50">
+        <Card className="mb-6 bg-linear-to-br from-blue-50 to-purple-50">
           <h3 className="mb-4">今日课程 - 周四</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-white rounded-lg p-3">

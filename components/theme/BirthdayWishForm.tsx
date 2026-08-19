@@ -10,9 +10,9 @@
 
 'use client'
 
+import { AnimatePresence, motion } from 'framer-motion'
+import { Heart, Send, Sparkles, Star, X } from 'lucide-react'
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, Heart, Star, Gift, MessageCircle, Sparkles } from 'lucide-react'
 
 interface BirthdayWish {
   name: string
@@ -27,7 +27,7 @@ interface BirthdayWishFormProps {
   onSubmit: (wish: BirthdayWish) => void
 }
 
-export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: BirthdayWishFormProps) {
+export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     message: '',
@@ -74,11 +74,6 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
   ]
 
   // 选择模板
-  const selectTemplate = (template: typeof birthdayTemplates[0]) => {
-    setFormData(prev => ({ ...prev, message: template.message }))
-    setShowTemplates(false)
-  }
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -105,7 +100,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
@@ -164,7 +159,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
           >
             {/* 头部 */}
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
+              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-pink-500 to-purple-500">
                 为小语送上生日祝福
               </h3>
               <button
@@ -261,9 +256,8 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
                             key={template.id}
                             type="button"
                             onClick={() => { handleTemplateSelect(String(template.id)); }}
-                            className={`text-left p-2 bg-white rounded border border-purple-200 hover:bg-purple-100 transition-colors ${
-                              formData.templateId === template.id ? 'ring-2 ring-purple-500' : ''
-                            }`}
+                            className={`text-left p-2 bg-white rounded border border-purple-200 hover:bg-purple-100 transition-colors ${formData.templateId === template.id ? 'ring-2 ring-purple-500' : ''
+                              }`}
                           >
                             <p className="font-medium text-sm text-purple-800">{template.title}</p>
                             <p className="text-xs text-gray-600 mt-1 line-clamp-2">{template.message}</p>
@@ -298,7 +292,7 @@ export default function BirthdayWishForm({ isOpen, onClose, onSubmit }: Birthday
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 bg-linear-to-r from-pink-500 to-purple-500 text-white rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <>

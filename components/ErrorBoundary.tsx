@@ -29,7 +29,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-50 to-purple-50 p-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -40,7 +40,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <p className="text-gray-600 mb-6">抱歉，小语遇到了一些问题。请刷新页面重试。</p>
             <button
               onClick={() => { window.location.reload(); }}
-              className="px-6 py-3 bg-gradient-to-r from-pink-400 to-purple-400 text-white rounded-full hover:shadow-lg transition-shadow"
+              className="px-6 py-3 bg-linear-to-r from-pink-400 to-purple-400 text-white rounded-full hover:shadow-lg transition-shadow"
             >
               刷新页面
             </button>

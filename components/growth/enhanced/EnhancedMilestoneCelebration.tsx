@@ -349,7 +349,7 @@ export default function EnhancedMilestoneCelebration({
         >
           {/* 背景遮罩 */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70 backdrop-blur-md"
+            className="absolute inset-0 bg-linear-to-br from-black/70 via-black/50 to-black/70 backdrop-blur-md"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -437,7 +437,7 @@ export default function EnhancedMilestoneCelebration({
             }}
           >
             {/* 顶部装饰条 */}
-            <div className={`h-2 bg-gradient-to-r ${config.borderGradient}`} />
+            <div className={`h-2 bg-linear-to-r ${config.borderGradient}`} />
 
             {/* 主要内容 */}
             <div className="p-8">
@@ -450,17 +450,17 @@ export default function EnhancedMilestoneCelebration({
               >
                 <div className="w-24 h-24 mx-auto relative">
                   {/* 背景光晕 */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${categoryColors[milestone.category]} rounded-full blur-xl opacity-30 animate-pulse`} />
+                  <div className={`absolute inset-0 bg-linear-to-r ${categoryColors[milestone.category]} rounded-full blur-xl opacity-30 animate-pulse`} />
 
                   {/* 主图标 */}
-                  <div className={`relative w-full h-full bg-gradient-to-r ${categoryColors[milestone.category]} rounded-2xl flex items-center justify-center text-5xl shadow-lg transform transition-transform duration-300 hover:scale-110`}>
+                  <div className={`relative w-full h-full bg-linear-to-r ${categoryColors[milestone.category]} rounded-2xl flex items-center justify-center text-5xl shadow-lg transform transition-transform duration-300 hover:scale-110`}>
                     {categoryIcons[milestone.category]}
                   </div>
 
                   {/* 重要性标记 */}
                   {milestone.importance >= 8 && (
                     <motion.div
-                      className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg"
+                      className="absolute -top-2 -right-2 w-10 h-10 bg-linear-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.8, type: "spring" }}
@@ -477,7 +477,7 @@ export default function EnhancedMilestoneCelebration({
                   animate={{ scale: 1 }}
                   transition={{ delay: 1, type: "spring" }}
                 >
-                  <div className={`inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r ${config.bgGradient} rounded-full border border-gray-200`}>
+                  <div className={`inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r ${config.bgGradient} rounded-full border border-gray-200`}>
                     {milestone.celebrationLevel === 'diamond' && <Stars className="w-4 h-4 text-blue-500" />}
                     {milestone.celebrationLevel === 'gold' && <Trophy className="w-4 h-4 text-yellow-500" />}
                     {milestone.celebrationLevel === 'silver' && <Gift className="w-4 h-4 text-gray-500" />}
@@ -495,7 +495,7 @@ export default function EnhancedMilestoneCelebration({
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2">
+                <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-600 mb-2">
                   {milestone.title}
                 </h2>
                 <div className="flex items-center justify-center gap-3 text-gray-500">
@@ -504,7 +504,7 @@ export default function EnhancedMilestoneCelebration({
                     {milestone.age}
                   </span>
                   <span>•</span>
-                  <span className={`px-2 py-1 rounded-full text-xs bg-gradient-to-r ${categoryColors[milestone.category]} text-white`}>
+                  <span className={`px-2 py-1 rounded-full text-xs bg-linear-to-r ${categoryColors[milestone.category]} text-white`}>
                     {milestone.category === 'motor' && '运动发展'}
                     {milestone.category === 'language' && '语言发展'}
                     {milestone.category === 'cognitive' && '认知发展'}
@@ -542,7 +542,7 @@ export default function EnhancedMilestoneCelebration({
                     {milestone.achievements.map((achievement, index) => (
                       <motion.div
                         key={index}
-                        className="flex items-center gap-3 p-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg"
+                        className="flex items-center gap-3 p-2 bg-linear-to-r from-green-50 to-emerald-50 rounded-lg"
                         initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.7 + index * 0.1 }}
@@ -571,7 +571,7 @@ export default function EnhancedMilestoneCelebration({
                     {milestone.familyReaction.map((reaction, index) => (
                       <motion.div
                         key={index}
-                        className="flex items-center gap-3 p-2 bg-gradient-to-r from-pink-50 to-rose-50 rounded-lg"
+                        className="flex items-center gap-3 p-2 bg-linear-to-r from-pink-50 to-rose-50 rounded-lg"
                         initial={{ x: 20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.9 + index * 0.1 }}
@@ -587,7 +587,7 @@ export default function EnhancedMilestoneCelebration({
               {/* 个性化消息 */}
               {milestone.personalizedMessage && (
                 <motion.div
-                  className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100"
+                  className="mb-6 p-4 bg-linear-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 1 }}
@@ -607,14 +607,14 @@ export default function EnhancedMilestoneCelebration({
               >
                 <button
                   onClick={() => onSave?.(milestone)}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 hover:scale-105"
+                  className="px-6 py-3 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 hover:scale-105"
                 >
                   <Download className="w-4 h-4" />
                   保存记录
                 </button>
                 <button
                   onClick={() => onShare?.(milestone)}
-                  className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 hover:scale-105"
+                  className="px-6 py-3 bg-linear-to-r from-green-500 to-emerald-500 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 hover:scale-105"
                 >
                   <Share className="w-4 h-4" />
                   分享喜悦
@@ -652,7 +652,7 @@ export default function EnhancedMilestoneCelebration({
                       key={index}
                       className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${
                         isActive
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                          ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white'
                           : 'bg-gray-200 text-gray-400'
                       }`}
                       initial={{ scale: 0 }}

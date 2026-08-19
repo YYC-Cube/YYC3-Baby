@@ -315,11 +315,11 @@ export default function DeploymentManager() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* 标题区域 */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-4">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-purple-600 mb-4">
             🚀 YYC³ AI小语系统部署管理
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -425,7 +425,7 @@ export default function DeploymentManager() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full"
+                  className="h-full bg-linear-to-r from-blue-500 to-green-500 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${overallProgress}%` }}
                   transition={{ duration: 0.3 }}

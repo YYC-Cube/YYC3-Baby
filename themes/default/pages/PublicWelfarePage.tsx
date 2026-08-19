@@ -35,7 +35,7 @@ export const PublicWelfarePage: React.FC = () => {
       points: 0,
       status: '已有 1,200 名同学参与',
       buttonText: '立即报名并开始',
-      buttonColor: 'bg-gradient-to-r from-green-500 to-emerald-500',
+      buttonColor: 'bg-linear-to-r from-green-500 to-emerald-500',
       gradientFrom: 'from-green-100',
       gradientTo: 'to-emerald-100',
     },
@@ -51,7 +51,7 @@ export const PublicWelfarePage: React.FC = () => {
       points: 0,
       status: '已有 580 位音频完成',
       buttonText: '查看详情并录制',
-      buttonColor: 'bg-gradient-to-r from-blue-500 to-cyan-500',
+      buttonColor: 'bg-linear-to-r from-blue-500 to-cyan-500',
       gradientFrom: 'from-blue-100',
       gradientTo: 'to-cyan-100',
     },
@@ -66,7 +66,7 @@ export const PublicWelfarePage: React.FC = () => {
       points: 150,
       status: '活动已结束',
       buttonText: '查看活动回顾',
-      buttonColor: 'bg-gradient-to-r from-purple-500 to-pink-500',
+      buttonColor: 'bg-linear-to-r from-purple-500 to-pink-500',
       gradientFrom: 'from-purple-100',
       gradientTo: 'to-pink-100',
     },
@@ -76,7 +76,7 @@ export const PublicWelfarePage: React.FC = () => {
   const historyActivities = activities.filter((a) => a.type === 'history');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-orange-50 pb-20">
+    <div className="min-h-screen bg-linear-to-br from-red-50 via-pink-50 to-orange-50 pb-20">
       {/* 导航栏 */}
       <PageNavigation title="公益活动中心" icon="🌱" />
 
@@ -118,11 +118,11 @@ export const PublicWelfarePage: React.FC = () => {
             {ongoingActivities.map((activity) => (
               <div
                 key={activity.id}
-                className={`bg-gradient-to-br ${activity.gradientFrom} ${activity.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all`}
+                className={`bg-linear-to-br ${activity.gradientFrom} ${activity.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all`}
               >
                 {/* Icon and Title */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className={`w-12 h-12 ${activity.iconBg} rounded-xl flex items-center justify-center text-2xl shadow-md flex-shrink-0`}>
+                  <div className={`w-12 h-12 ${activity.iconBg} rounded-xl flex items-center justify-center text-2xl shadow-md shrink-0`}>
                     {activity.icon}
                   </div>
                   <div className="flex-1">
@@ -172,11 +172,11 @@ export const PublicWelfarePage: React.FC = () => {
             {historyActivities.map((activity) => (
               <div
                 key={activity.id}
-                className={`bg-gradient-to-br ${activity.gradientFrom} ${activity.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all opacity-90`}
+                className={`bg-linear-to-br ${activity.gradientFrom} ${activity.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all opacity-90`}
               >
                 {/* Icon and Title */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className={`w-12 h-12 ${activity.iconBg} rounded-xl flex items-center justify-center text-2xl shadow-md flex-shrink-0`}>
+                  <div className={`w-12 h-12 ${activity.iconBg} rounded-xl flex items-center justify-center text-2xl shadow-md shrink-0`}>
                     {activity.icon}
                   </div>
                   <div className="flex-1">
@@ -226,7 +226,7 @@ export const PublicWelfarePage: React.FC = () => {
       </div>
 
       {/* Floating Action Info */}
-      <div className="fixed bottom-20 right-4 bg-gradient-to-br from-red-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm">
+      <div className="fixed bottom-20 right-4 bg-linear-to-br from-red-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm">
         <Heart className="w-4 h-4" fill="white" />
         <span>爱心值: 500</span>
       </div>

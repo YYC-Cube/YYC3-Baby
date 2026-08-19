@@ -632,7 +632,7 @@ export default function ParentUserManual() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* 标题区域 */}
         <motion.div
@@ -640,7 +640,7 @@ export default function ParentUserManual() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-500 to-purple-500 mb-4">
             📚 家长使用手册
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -710,7 +710,7 @@ export default function ParentUserManual() {
               transition={{ delay: 0.3 + index * 0.1 }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className={`w-12 h-12 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center mx-auto mb-3`}>
+              <div className={`w-12 h-12 bg-linear-to-r ${stat.color} rounded-xl flex items-center justify-center mx-auto mb-3`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
               <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
@@ -741,7 +741,7 @@ export default function ParentUserManual() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl flex items-center justify-center">
+                      <div className="w-16 h-16 bg-linear-to-r from-purple-100 to-pink-100 rounded-xl flex items-center justify-center">
                         <Icon className="w-8 h-8 text-purple-600" />
                       </div>
                       <div>
@@ -830,7 +830,7 @@ export default function ParentUserManual() {
                                   <ul className="space-y-1">
                                     {section.tips.map((tip, tipIndex) => (
                                       <li key={tipIndex} className="text-sm text-blue-600 flex items-start gap-2">
-                                        <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                                        <CheckCircle className="w-3 h-3 mt-0.5 shrink-0" />
                                         <span>{tip}</span>
                                       </li>
                                     ))}
@@ -848,7 +848,7 @@ export default function ParentUserManual() {
                                   <ul className="space-y-1">
                                     {section.warnings.map((warning, warningIndex) => (
                                       <li key={warningIndex} className="text-sm text-red-600 flex items-start gap-2">
-                                        <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                                        <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" />
                                         <span>{warning}</span>
                                       </li>
                                     ))}
@@ -869,7 +869,7 @@ export default function ParentUserManual() {
 
         {/* 底部帮助信息 */}
         <motion.div
-          className="mt-12 bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-8 text-center"
+          className="mt-12 bg-linear-to-r from-purple-100 to-pink-100 rounded-2xl p-8 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}

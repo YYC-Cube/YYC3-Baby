@@ -10,7 +10,7 @@
 沿用现行风格：`类型: 中文摘要 — 要点`，类型取值：
 
 | 类型 | 用途 |
-|------|------|
+| ------ | ------ |
 | feat | 新功能 |
 | fix | 缺陷修复 |
 | refactor | 结构调整（不改行为） |
@@ -39,7 +39,14 @@ git commit && git push
 
 ## 新增徽章指南（五分钟）
 
-徽章系统是完全声明式的，加一枚勋章只需在 `lib/badges/definitions.ts` 增加一条：
+徽章系统是完全声明式的（30 枚 × 8 分类 × 4 等级），加一枚勋章只需在 `lib/badges/definitions.ts` 增加一条：
+
+| 等级 | 分值 | 定位 |
+| ------ | ------ | ------ |
+| `bronze` 铜牌 | 10 | 新手起步（首记录、首个里程碑） |
+| `silver` 银牌 | 30 | 稳定投入（累计 20-50 次） |
+| `gold` 金牌 | 80 | 深度参与（累计 50-100 次 / 复合条件） |
+| `platinum` 钻石 | 200 | 里程碑级（满一年 / 200 条记录） |
 
 ```ts
 // 计数型：一行工厂
@@ -52,7 +59,9 @@ compoundBadge("night-owl", "夜航员", "在 22 点后仍有记录", "🦉", "si
   ["至少一条记录创建于 22:00 之后"]),
 ```
 
-若需要新统计字段：`types/badges.ts` 的 `BadgeStats` 加字段 → `lib/badges/engine.ts` 的 `computeStats()` 聚合 → 补一条单测。页面零改动。
+若需要新统计字段：`types/badges.ts` 的 `BadgeStats` 加字段 → `lib/badges/engine.ts` 的 `computeStats()` 聚合 → 补一条单测。页面零改动（评估流水线见 [02 · 架构](./02-architecture.md) §8）。
+
+> 新增后请在 `__tests__/lib/badges.test.ts` 补一条用例，保证「定义完整性」与「评估正确性」两组门禁持续覆盖。
 
 ## 新增页面/路由
 

@@ -62,7 +62,7 @@ export default function CurriculumPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50">
       <PageHeader icon="ri-calendar-schedule-line" title="智能课程表">
         <div className="flex items-center gap-2">
           <span className="text-sm text-slate-500">{semester.name}</span>
@@ -79,7 +79,7 @@ export default function CurriculumPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold">
                     {currentChild.name.charAt(0)}
                   </div>
                   <div>
@@ -116,7 +116,7 @@ export default function CurriculumPage() {
 
             <motion.button
               onClick={handleAddCourse}
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium shadow-lg flex items-center gap-2"
+              className="px-4 py-2 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium shadow-lg flex items-center gap-2"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -160,7 +160,7 @@ export default function CurriculumPage() {
                 transition={{ delay: i * 0.05 }}
               >
                 <div
-                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-2`}
+                  className={`w-8 h-8 rounded-lg bg-linear-to-br ${stat.color} flex items-center justify-center mb-2`}
                 >
                   <i className={`${stat.icon} text-white`} />
                 </div>

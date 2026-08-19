@@ -22,7 +22,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ userId, onNavigate }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
         <div className="text-center">
           <div className="animate-spin text-4xl mb-4">⏳</div>
           <p className="text-gray-600">加载设置中...</p>
@@ -33,7 +33,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ userId, onNavigate }
 
   if (!userInfo) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
         <p className="text-gray-600">无法加载用户信息</p>
       </div>
     );
@@ -74,7 +74,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ userId, onNavigate }
 
   if (showAvatarCustomizer) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
         <div className="container mx-auto px-4 py-8">
           <AvatarCustomizer
             userId={userId}
@@ -88,14 +88,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ userId, onNavigate }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 pb-20">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 pb-20">
       {/* 导航栏 */}
       <PageNavigation title="设置与管理" icon="⚙️" />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* 用户信息卡片 */}
         <div className="mb-6">
-          <div className="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-2xl p-6 text-white shadow-lg">
+          <div className="bg-linear-to-br from-blue-500 via-purple-500 to-pink-500 rounded-2xl p-6 text-white shadow-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">

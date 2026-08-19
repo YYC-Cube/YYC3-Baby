@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-50 to-purple-50 p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -29,7 +29,7 @@ export default function NotFound() {
         <p className="text-gray-600 mb-8">小语找不到这个页面呢，要不要回到首页看看？</p>
         <Link
           href="/"
-          className="inline-block px-8 py-3 bg-gradient-to-r from-pink-400 to-purple-400 text-white rounded-full hover:shadow-lg transition-shadow"
+          className="inline-block px-8 py-3 bg-linear-to-r from-pink-400 to-purple-400 text-white rounded-full hover:shadow-lg transition-shadow"
         >
           回到首页
         </Link>

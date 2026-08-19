@@ -397,7 +397,7 @@ function EmotionsTab({ isRecording, onStartRecording }: { isRecording: boolean; 
           className={`px-8 py-4 rounded-xl font-medium transition-all transform hover:scale-105 active:scale-95 ${
             isRecording
               ? 'bg-red-500 text-white animate-pulse'
-              : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
+              : 'bg-linear-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
           }`}
         >
           {isRecording ? (

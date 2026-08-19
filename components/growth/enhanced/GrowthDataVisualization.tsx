@@ -394,7 +394,7 @@ export default function GrowthDataVisualization() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-blue-50 to-purple-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* 标题区域 */}
         <motion.div
@@ -402,7 +402,7 @@ export default function GrowthDataVisualization() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-green-500 to-blue-500 mb-4">
             📊 成长数据可视化
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -538,7 +538,7 @@ export default function GrowthDataVisualization() {
                   <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
                   <p className="text-green-600 text-sm">{stat.change}</p>
                 </div>
-                <div className={`w-12 h-12 bg-gradient-to-r ${stat.color} rounded-lg flex items-center justify-center text-2xl`}>
+                <div className={`w-12 h-12 bg-linear-to-r ${stat.color} rounded-lg flex items-center justify-center text-2xl`}>
                   {stat.icon}
                 </div>
               </div>
@@ -682,7 +682,7 @@ export default function GrowthDataVisualization() {
                           <div className="flex-1">
                             <div className="w-full bg-gray-200 rounded-full h-3">
                               <motion.div
-                                className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                                className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${skill.value}%` }}
                                 transition={{ delay: index * 0.1, duration: 0.8 }}
@@ -813,7 +813,7 @@ export default function GrowthDataVisualization() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
                         >
-                          <div className="flex-shrink-0">
+                          <div className="shrink-0">
                             <div className={`w-3 h-3 rounded-full mt-1 ${
                               item.type === 'major' ? 'bg-orange-400' : 'bg-blue-400'
                             }`} />

@@ -153,7 +153,7 @@ export default function XiaoyuMemorialAlbum() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-4">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-blue-50 p-4">
       <div className="max-w-7xl mx-auto">
         {!currentPhoto ? (
           <div className="text-center py-20">
@@ -168,7 +168,7 @@ export default function XiaoyuMemorialAlbum() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-pink-500 to-purple-500 mb-4">
             🌟 小语成长纪念册
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -321,7 +321,7 @@ export default function XiaoyuMemorialAlbum() {
                   {currentPhoto.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-gradient-to-r from-pink-100 to-purple-100 text-purple-700 rounded-full text-sm"
+                      className="px-3 py-1 bg-linear-to-r from-pink-100 to-purple-100 text-purple-700 rounded-full text-sm"
                     >
                       #{tag}
                     </span>
@@ -330,7 +330,7 @@ export default function XiaoyuMemorialAlbum() {
 
                 {/* 故事 */}
                 {currentPhoto.story && (
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4">
+                  <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-xl p-4">
                     <h3 className="font-semibold text-purple-700 mb-2 flex items-center gap-2">
                       <Heart className="w-4 h-4" />
                       成长故事
@@ -367,7 +367,7 @@ export default function XiaoyuMemorialAlbum() {
                     <button
                       key={photo.id}
                       onClick={() => { goToPhoto(index); }}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all ${
+                      className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all ${
                         index === currentPhotoIndex
                           ? 'ring-4 ring-purple-500 scale-110'
                           : 'ring-2 ring-gray-200 hover:ring-gray-300'
@@ -446,7 +446,7 @@ export default function XiaoyuMemorialAlbum() {
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="relative">
               {/* 时间轴线 */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-pink-400 to-purple-400" />
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-linear-to-b from-pink-400 to-purple-400" />
 
               {xiaoyuPhotos.map((photo, index) => (
                 <motion.div
@@ -460,11 +460,11 @@ export default function XiaoyuMemorialAlbum() {
                   <div className="absolute -left-10 top-4 w-4 h-4 bg-white border-4 border-purple-400 rounded-full" />
 
                   {/* 内容卡片 */}
-                  <div className="flex gap-4 p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+                  <div className="flex gap-4 p-4 bg-linear-to-r from-pink-50 to-purple-50 rounded-xl">
                     <img
                       src={photo.thumbnail}
                       alt={photo.caption}
-                      className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                      className="w-20 h-20 rounded-lg object-cover shrink-0"
                     />
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-800">{photo.caption}</h3>
@@ -475,7 +475,7 @@ export default function XiaoyuMemorialAlbum() {
                       <p className="text-sm text-gray-700 mt-2 line-clamp-2">{photo.story}</p>
                     </div>
                     {photo.isFavorite && (
-                      <Star className="w-5 h-5 text-yellow-500 fill-yellow-500 flex-shrink-0" />
+                      <Star className="w-5 h-5 text-yellow-500 fill-yellow-500 shrink-0" />
                     )}
                   </div>
                 </motion.div>

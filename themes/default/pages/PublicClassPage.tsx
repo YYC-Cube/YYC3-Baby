@@ -223,7 +223,7 @@ export const PublicClassPage: React.FC = () => {
   const allCourses = courses;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 pb-20">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 pb-20">
       {/* 导航栏 */}
       <PageNavigation title="精品网课" icon="📚" />
 
@@ -304,7 +304,7 @@ export const PublicClassPage: React.FC = () => {
                   onClick={() => handleCategoryClick(category.id)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
                     category.isActive
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
+                      ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-md'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -329,7 +329,7 @@ export const PublicClassPage: React.FC = () => {
                 <h3 className="text-gray-900">热门推荐</h3>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-2xl p-6 text-white relative overflow-hidden shadow-xl">
+              <div className="bg-linear-to-br from-purple-500 via-pink-500 to-orange-400 rounded-2xl p-6 text-white relative overflow-hidden shadow-xl">
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-4xl">{courses[0].thumbnail}</span>
@@ -386,11 +386,11 @@ export const PublicClassPage: React.FC = () => {
                 {courses.slice(1).map((course) => (
                   <div
                     key={course.id}
-                    className={`bg-gradient-to-br ${course.gradientFrom} ${course.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all cursor-pointer`}
+                    className={`bg-linear-to-br ${course.gradientFrom} ${course.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all cursor-pointer`}
                   >
                     {/* Header */}
                     <div className="flex items-start gap-3 mb-3">
-                      <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl shadow-md flex-shrink-0">
+                      <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl shadow-md shrink-0">
                         {course.thumbnail}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -456,7 +456,7 @@ export const PublicClassPage: React.FC = () => {
                     </div>
 
                     {/* Action Button */}
-                    <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                    <button className="w-full bg-linear-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2">
                       <Play className="w-4 h-4" fill="currentColor" />
                       <span>开始学习</span>
                       <ChevronRight className="w-4 h-4" />
@@ -488,11 +488,11 @@ export const PublicClassPage: React.FC = () => {
             {enrolledCourses.map((course) => (
               <div
                 key={course.id}
-                className={`bg-gradient-to-br ${course.gradientFrom} ${course.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all`}
+                className={`bg-linear-to-br ${course.gradientFrom} ${course.gradientTo} rounded-2xl p-5 shadow-md hover:shadow-xl transition-all`}
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl shadow-md flex-shrink-0">
+                  <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl shadow-md shrink-0">
                     {course.thumbnail}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -515,14 +515,14 @@ export const PublicClassPage: React.FC = () => {
                   </div>
                   <div className="w-full bg-white/60 rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all"
+                      className="bg-linear-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all"
                       style={{ width: `${course.progress}%` }}
                     ></div>
                   </div>
                 </div>
 
                 {/* Action Button */}
-                <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                <button className="w-full bg-linear-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2">
                   <Play className="w-4 h-4" fill="currentColor" />
                   <span>继续学习</span>
                   <ChevronRight className="w-4 h-4" />
@@ -536,7 +536,7 @@ export const PublicClassPage: React.FC = () => {
                 <p className="text-gray-500 mb-6">还没有开始学习课程</p>
                 <button
                   onClick={() => setActiveTab('all')}
-                  className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:shadow-lg transition-all"
+                  className="px-6 py-2.5 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:shadow-lg transition-all"
                 >
                   去选课
                 </button>
@@ -552,7 +552,7 @@ export const PublicClassPage: React.FC = () => {
             <p className="text-gray-500 mb-6">还没有收藏课程</p>
             <button
               onClick={() => setActiveTab('all')}
-              className="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-xl hover:shadow-lg transition-all"
+              className="px-6 py-2.5 bg-linear-to-r from-pink-500 to-red-500 text-white rounded-xl hover:shadow-lg transition-all"
             >
               去发现课程
             </button>
@@ -562,7 +562,7 @@ export const PublicClassPage: React.FC = () => {
 
       {/* Floating Stats */}
       <div className="fixed bottom-20 right-4 space-y-2">
-        <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm">
+        <div className="bg-linear-to-br from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm">
           <Award className="w-4 h-4" />
           <span>学习积分: 1250</span>
         </div>

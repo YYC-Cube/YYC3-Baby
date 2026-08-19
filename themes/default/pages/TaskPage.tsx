@@ -32,7 +32,7 @@ export const TaskPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* 导航栏 */}
       <PageNavigation title="作业任务" icon="📝" />
 

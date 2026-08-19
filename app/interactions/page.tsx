@@ -56,7 +56,7 @@ export default function InteractionsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+    <div className="min-h-screen flex flex-col bg-linear-to-br from-pink-50 via-purple-50 to-blue-50">
       <PageHeader icon="ri-heart-3-line" title="成长互动记录">
         <div className="flex items-center gap-2">
           <span className="text-sm text-slate-500">记录每一次温暖陪伴</span>
@@ -73,7 +73,7 @@ export default function InteractionsPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold">
                     {currentChild.name.charAt(0)}
                   </div>
                   <div>
@@ -116,7 +116,7 @@ export default function InteractionsPage() {
                 transition={{ delay: i * 0.05 }}
               >
                 <div
-                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-2`}
+                  className={`w-8 h-8 rounded-lg bg-linear-to-br ${stat.color} flex items-center justify-center mb-2`}
                 >
                   <i className={`${stat.icon} text-white`} />
                 </div>
@@ -155,7 +155,7 @@ export default function InteractionsPage() {
 
             <motion.button
               onClick={handleAddRecord}
-              className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl font-medium shadow-lg flex items-center gap-2"
+              className="px-4 py-2 bg-linear-to-r from-pink-500 to-purple-500 text-white rounded-xl font-medium shadow-lg flex items-center gap-2"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -291,7 +291,7 @@ function InteractionCard({
       <AnimatePresence>
         {expanded && record.aiAnalysis && (
           <motion.div
-            className="border-t bg-gradient-to-br from-purple-50 to-pink-50 p-4"
+            className="border-t bg-linear-to-br from-purple-50 to-pink-50 p-4"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -302,7 +302,7 @@ function InteractionCard({
                 <div className="flex items-center gap-2">
                   <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-purple-400 to-pink-400"
+                      className="h-full bg-linear-to-r from-purple-400 to-pink-400"
                       style={{ width: `${record.aiAnalysis.qualityScore}%` }}
                     />
                   </div>
@@ -557,7 +557,7 @@ function InteractionEditor({
           <button
             onClick={handleSave}
             disabled={!formData.title}
-            className="flex-1 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl font-medium disabled:opacity-50"
+            className="flex-1 py-2 bg-linear-to-r from-pink-500 to-purple-500 text-white rounded-xl font-medium disabled:opacity-50"
           >
             保存
           </button>

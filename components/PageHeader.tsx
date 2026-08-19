@@ -42,7 +42,7 @@ export default function PageHeader({
             />
           )}
           {icon && (
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white colored-shadow-border">
+            <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white colored-shadow-border">
               <i className={`${icon} text-lg`} />
             </div>
           )}

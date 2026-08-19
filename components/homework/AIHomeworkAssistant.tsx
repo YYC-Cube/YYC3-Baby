@@ -98,7 +98,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
           onClick={(e) => { e.stopPropagation(); }}
         >
           {/* 头部 */}
-          <div className="bg-gradient-to-r from-blue-400 to-purple-500 text-white p-6">
+          <div className="bg-linear-to-r from-blue-400 to-purple-500 text-white p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">

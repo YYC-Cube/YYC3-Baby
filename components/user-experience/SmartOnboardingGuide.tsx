@@ -511,7 +511,7 @@ export default function SmartOnboardingGuide() {
                     <ul className="space-y-2">
                       {currentStep.tips.map((tip, index) => (
                         <li key={index} className="flex items-start gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
                           <span className="text-sm text-gray-600">{tip}</span>
                         </li>
                       ))}

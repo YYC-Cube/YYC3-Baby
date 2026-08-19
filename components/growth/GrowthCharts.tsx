@@ -96,7 +96,7 @@ export default function GrowthCharts({ data, childName = "宝宝" }: GrowthChart
 
       {/* 总体得分卡片 */}
       <motion.div
-        className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white"
+        className="bg-linear-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >

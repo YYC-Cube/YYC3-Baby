@@ -167,7 +167,7 @@ export default function QVersionCharacter({
                 const target = e.target as HTMLImageElement
                 target.style.display = 'none'
                 target.parentElement!.innerHTML = `
-                  <div class="w-full h-full bg-gradient-to-br ${currentGender === 'male' ? 'from-blue-400 to-blue-600' : 'from-pink-400 to-pink-600'} flex items-center justify-center">
+                  <div class="w-full h-full bg-linear-to-br ${currentGender === 'male' ? 'from-blue-400 to-blue-600' : 'from-pink-400 to-pink-600'} flex items-center justify-center">
                     <span class="text-white font-bold text-2xl">${currentGender === 'male' ? '男' : '女'}</span>
                   </div>
                 `
@@ -210,7 +210,7 @@ export default function QVersionCharacter({
           exit={{ opacity: 0, y: 10 }}
           className={`mt-2 text-center ${currentSize.nameSize} font-medium text-slate-700`}
         >
-          <span className={`bg-gradient-to-r ${themeColors.primary} bg-clip-text text-transparent font-bold`}>
+          <span className={`bg-linear-to-r ${themeColors.primary} bg-clip-text text-transparent font-bold`}>
             {characterName}
           </span>
           {targetChild?.nickname && (

@@ -358,7 +358,7 @@ export default function SystemTestingSuite() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-4">
       <div className="max-w-7xl mx-auto">
         {/* 标题区域 */}
         <div className="text-center mb-8">
@@ -476,7 +476,7 @@ export default function SystemTestingSuite() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full"
+                  className="h-full bg-linear-to-r from-blue-500 to-green-500 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${overallProgress}%` }}
                   transition={{ duration: 0.3 }}
@@ -491,9 +491,9 @@ export default function SystemTestingSuite() {
           {testSuites.map((suite) => (
             <div key={suite.category} className="bg-white rounded-xl shadow-lg overflow-hidden">
               {/* 套件头部 */}
-              <div className="p-6 border-b bg-gradient-to-r from-white to-gray-50">
+              <div className="p-6 border-b bg-linear-to-r from-white to-gray-50">
                 <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${suite.color} rounded-lg flex items-center justify-center`}>
+                  <div className={`w-12 h-12 bg-linear-to-r ${suite.color} rounded-lg flex items-center justify-center`}>
                     <suite.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>

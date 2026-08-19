@@ -20,7 +20,7 @@ export function Skeleton({ className, variant = "rectangular", width, height, an
 
   const animationClasses = {
     pulse: "animate-pulse",
-    wave: "animate-shimmer bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 bg-[length:200%_100%]",
+    wave: "animate-shimmer bg-linear-to-r from-slate-200 via-slate-100 to-slate-200 bg-[length:200%_100%]",
     none: "",
   }
 

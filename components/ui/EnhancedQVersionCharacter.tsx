@@ -256,7 +256,7 @@ export default function EnhancedQVersionCharacter({
               <div
                 className={`
                   w-full h-full rounded-full flex items-center justify-center
-                  bg-gradient-to-br ${themeColors.gradient}
+                  bg-linear-to-br ${themeColors.gradient}
                   text-white font-bold
                   ${currentSize.iconSize}
                 `}
@@ -322,7 +322,7 @@ export default function EnhancedQVersionCharacter({
         {/* 主题切换按钮 - 仅在详细模式显示 */}
         {mode === 'interactive' && (
           <div className="absolute -top-1 -right-1 flex gap-1">
-            {character.themes.map((theme, index) => (
+            {character.themes.map((theme) => (
               <button
                 key={theme.id}
                 className={`
@@ -357,7 +357,7 @@ export default function EnhancedQVersionCharacter({
           {/* 角色名称 */}
           <div className={`${currentSize.nameSize} font-medium text-gray-700`}>
             <span
-              className="bg-gradient-to-r bg-clip-text text-transparent font-bold"
+              className="bg-linear-to-r bg-clip-text text-transparent font-bold"
               style={{ backgroundImage: themeColors.gradient }}
             >
               {character.name}

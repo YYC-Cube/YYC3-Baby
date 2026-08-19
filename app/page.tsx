@@ -85,7 +85,7 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold">
                     {currentChild.name.charAt(0)}
                   </div>
                   <div className="flex-1">
@@ -122,7 +122,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Q版角色 + 柴犬 */}
-            <div className="relative w-full flex-grow flex items-center justify-center max-h-[50vh]">
+            <div className="relative w-full grow flex items-center justify-center max-h-[50vh]">
               <div className="w-full h-full relative">
                 {characterImagePath ? (
                   <motion.img
@@ -169,7 +169,7 @@ export default function HomePage() {
           >
             {isAuthenticated && currentChild && (
               <motion.div
-                className="bg-gradient-to-r from-blue-500 to-purple-500 p-5 rounded-3xl text-white"
+                className="bg-linear-to-r from-blue-500 to-purple-500 p-5 rounded-3xl text-white"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
               >
@@ -287,7 +287,7 @@ function HomeworkCenterCard({ childName }: { childName?: string }) {
 
       <Link href="/homework">
         <motion.button
-          className="group relative bg-gradient-to-r from-orange-300 to-orange-400 hover:from-orange-400 hover:to-orange-500 text-white px-8 md:px-10 py-4 md:py-5 shadow-glow transition-all flex items-center gap-3 rounded-2xl"
+          className="group relative bg-linear-to-r from-orange-300 to-orange-400 hover:from-orange-400 hover:to-orange-500 text-white px-8 md:px-10 py-4 md:py-5 shadow-glow transition-all flex items-center gap-3 rounded-2xl"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
