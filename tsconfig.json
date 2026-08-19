@@ -43,7 +43,6 @@
     "node_modules",
     "themes",
     ".next",
-    "__tests__",
-    "docs/YYC3-小语"
+    "__tests__"
   ]
 }
