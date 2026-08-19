@@ -20,7 +20,7 @@
 bun install --registry https://registry.npmmirror.com
 cp .env.example .env.local   # 填入 BIGMODEL_API_KEY
 bun run dev                   # http://localhost:1228
-bun test                      # 216 个用例
+bun test                      # 248 个用例
 ```
 
 ## 技术栈速览

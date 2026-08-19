@@ -36,7 +36,7 @@ jobs:
       - name: Build documentation site
         run: |
           set -e
-          mkdir -p site/developer
+          mkdir -p site/developer site/status site/standard site/analysis
 
           # 自定义域名（baby.yyc3.vip）
           cp public/CNAME site/CNAME
@@ -50,6 +50,30 @@ jobs:
             pandoc "$f" -f markdown -s --metadata "title=${title}" --metadata lang=zh-CN \
               --css=style.css --embed-resources=false \
               -o "site/developer/${name}.html"
+          done
+
+          # 渲染项目实况 → site/status/*.html
+          for f in docs/status/*.md; do
+            name="$(basename "${f%.md}")"
+            pandoc "$f" -f markdown -s --metadata "title=YYC³ 项目实况 · ${name}" \
+              --metadata lang=zh-CN --css=style.css --embed-resources=false \
+              -o "site/status/${name}.html"
+          done
+
+          # 渲染术语规范 → site/standard/*.html
+          for f in docs/standard/*.md; do
+            name="$(basename "${f%.md}")"
+            pandoc "$f" -f markdown -s --metadata "title=YYC³ 标准规范 · ${name}" \
+              --metadata lang=zh-CN --css=style.css --embed-resources=false \
+              -o "site/standard/${name}.html"
+          done
+
+          # 渲染专项分析 → site/analysis/*.html
+          for f in docs/analysis/*.md; do
+            name="$(basename "${f%.md}")"
+            pandoc "$f" -f markdown -s --metadata "title=YYC³ 专项分析 · ${name}" \
+              --metadata lang=zh-CN --css=style.css --embed-resources=false \
+              -o "site/analysis/${name}.html"
           done
 
           # 落地页：文档中心主索引

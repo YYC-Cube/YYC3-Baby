@@ -87,7 +87,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl w-full max-w-md overflow-hidden"
+            className="bg-surface rounded-2xl w-full max-w-md overflow-hidden"
             onClick={(e) => { e.stopPropagation(); }}
           >
             {/* 头部 */}

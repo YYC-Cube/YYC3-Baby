@@ -6,7 +6,7 @@ version: v1.0.0
 created: 2026-08-19
 updated: 2026-08-19
 status: active
-tags: [analysis],[comparison],[fusion],[roadmap]
+tags: [analysis, comparison, fusion, roadmap]
 category: report
 ---
 
@@ -150,9 +150,9 @@ flowchart LR
 
 **执行原则**：
 
-1. **以本项目为基线**，目标项目仅作移植源 —— 保持类型债 0、216 测试全绿、CI/CD 门禁
+1. **以本项目为基线**，目标项目仅作移植源 —— 保持类型债 0、248 测试全绿、CI/CD 门禁
 2. 每个 P0 项独立成 commit，先移植源码 + 补测试 + 跑门禁，再进下一个
-3. 每项融合后更新 [docs/developer/](../developer/) 对应篇目与 `TYPECHECK_BASELINE.md`
+3. 每项融合后更新 [docs/developer/](../developer/) 对应篇目与 [docs/status/project-status.md](../status/project-status.md)
 4. 合并前用 `git diff --no-index` 对共享文件（multimodal_fusion、AgenticCore、lib/ai/*）做差异比对，避免覆盖本项目已有增强
 
 ## 七、风险与注意事项

@@ -2,9 +2,9 @@
 
 import type React from "react"
 
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
 import { BackButton } from "@/components/ui/BackButton"
+import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 
 interface PageHeaderProps {
   title: string
@@ -30,7 +30,7 @@ export default function PageHeader({
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className={`sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 ${className}`}
+      className={`sticky top-0 z-30 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-700 ${className}`}
     >
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">

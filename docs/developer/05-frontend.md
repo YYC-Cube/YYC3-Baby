@@ -78,6 +78,7 @@ __tests__/lib/badges.test.ts  17 个用例锁行为
 | `bg-theme-accent` | `var(--theme-accent)` + `--theme-accent-fg` | 主题强调按钮 |
 
 **迁移原则**：`isDark ? 'text-white' : 'text-gray-800'` 类三元 → `text-adaptive`；`bg-white dark:bg-gray-800` → `bg-surface`；`border-gray-200 dark:border-gray-700` → `border-soft`。
+**透明度约束**：语义类为实色类，**不支持 `/opacity` 修饰**（如 `bg-surface/80` 无效）。透明/毛玻璃场景使用 `bg-white/80 dark:bg-gray-800/80` 组合（`dark:` 已映射 data-theme）。
 
 ### 角色系统
 

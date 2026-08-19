@@ -72,11 +72,11 @@ export default function UserCenter() {
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden z-50"
+              className="absolute top-full right-0 mt-2 w-56 bg-surface rounded-xl shadow-lg border border-soft overflow-hidden z-50"
             >
-              <div className="p-4 border-b border-slate-100 bg-slate-50">
-                <p className="font-medium text-slate-800">{displayName || "用户"}</p>
-                <p className="text-xs text-slate-500 truncate">{user.email}</p>
+              <div className="p-4 border-b border-soft bg-surface-soft">
+                <p className="font-medium text-adaptive">{displayName || "用户"}</p>
+                <p className="text-xs text-adaptive-muted truncate">{user.email}</p>
               </div>
 
               <div className="p-2">

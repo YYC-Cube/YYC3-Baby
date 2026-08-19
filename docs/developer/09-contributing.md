@@ -71,4 +71,4 @@ compoundBadge("night-owl", "夜航员", "在 22 点后仍有记录", "🦉", "si
 
 ## 文档维护
 
-改架构/数据模型/API 时同步更新 `docs/developer/` 对应篇目；新里程碑更新 `README.md` 的「当前状态」与 `TYPECHECK_BASELINE.md`（若债务数字变化）。
+改架构/数据模型/API 时同步更新 `docs/developer/` 对应篇目；新里程碑更新 [docs/status/project-status.md](../status/project-status.md) 的进度与里程碑（每工作日 17:00）；测试计数变化同步更新 [07 · 测试与质量门禁](./07-testing-quality.md)。
