@@ -1,18 +1,18 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Clock,
-  Calendar,
   Cake,
-  Star,
-  Heart,
+  Calendar,
+  Clock,
   Gift,
-  Sparkles,
+  Heart,
+  MessageCircle,
   PartyPopper,
-  MessageCircle
+  Sparkles,
+  Star
 } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import { useBirthdayTheme } from './BirthdayThemeProvider'
 import BirthdayWishForm from './BirthdayWishForm'
 
@@ -79,7 +79,7 @@ export default function BirthdayCountdown() {
     const Icon = icon
     return (
       <motion.div
-        className="flex flex-col items-center p-4 bg-white rounded-2xl shadow-lg min-w-[100px]"
+        className="flex flex-col items-center p-4 bg-surface rounded-2xl shadow-lg min-w-[100px]"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         whileHover={{ scale: 1.05, y: -5 }}
@@ -165,7 +165,7 @@ export default function BirthdayCountdown() {
 
             {/* 准备事项 */}
             <div className="bg-white/70 rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-adaptive mb-4 flex items-center gap-2">
                 <PartyPopper className="w-5 h-5 text-purple-600" />
                 生日准备清单
               </h3>
@@ -179,7 +179,7 @@ export default function BirthdayCountdown() {
                   >
                     <Heart className="w-4 h-4 text-green-600" />
                   </motion.div>
-                  <span className="text-gray-700">生日蛋糕订购</span>
+                  <span className="text-adaptive-muted">生日蛋糕订购</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -190,7 +190,7 @@ export default function BirthdayCountdown() {
                   >
                     <Gift className="w-4 h-4 text-green-600" />
                   </motion.div>
-                  <span className="text-gray-700">礼物准备</span>
+                  <span className="text-adaptive-muted">礼物准备</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -201,7 +201,7 @@ export default function BirthdayCountdown() {
                   >
                     <Star className="w-4 h-4 text-green-600" />
                   </motion.div>
-                  <span className="text-gray-700">装饰布置</span>
+                  <span className="text-adaptive-muted">装饰布置</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -212,7 +212,7 @@ export default function BirthdayCountdown() {
                   >
                     <Cake className="w-4 h-4 text-green-600" />
                   </motion.div>
-                  <span className="text-gray-700">家庭聚会安排</span>
+                  <span className="text-adaptive-muted">家庭聚会安排</span>
                 </div>
               </div>
             </div>
@@ -303,7 +303,7 @@ export default function BirthdayCountdown() {
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-pink-600 to-purple-600 mb-4">
               🎉 生日快乐，小语！🎂
             </h2>
-            <p className="text-xl text-gray-700 mb-6">
+            <p className="text-xl text-adaptive-muted mb-6">
               今天是小语1岁的生日，让我们一起庆祝这个特别的日子！
             </p>
 
@@ -320,7 +320,7 @@ export default function BirthdayCountdown() {
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       {/* 生日祝福表单 */}
       <BirthdayWishForm
         isOpen={showWishForm}

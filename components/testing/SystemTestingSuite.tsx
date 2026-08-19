@@ -1,23 +1,23 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   CheckCircle,
-  Zap,
-  Globe,
-  Shield,
-  Database,
-  XCircle,
-  Loader,
   Clock,
-  Square,
-  Play,
-  Pause,
-  RefreshCw,
+  Database,
+  Download,
+  Globe,
   Info,
-  Download
+  Loader,
+  Pause,
+  Play,
+  RefreshCw,
+  Shield,
+  Square,
+  XCircle,
+  Zap
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 // 测试结果接口
 interface TestResult {
@@ -245,13 +245,13 @@ export default function SystemTestingSuite() {
     setTestResults(prev => prev.map(t => {
       if (t.id === test.id) {
         const updatedTest = { ...t }
-        ;(updatedTest as any).status = success ? 'passed' : 'failed'
-        ;(updatedTest as any).duration = duration
-        ;(updatedTest as any).details = success
-          ? '测试通过，所有功能正常运行'
-          : '测试失败，发现需要修复的问题'
+          ; (updatedTest as any).status = success ? 'passed' : 'failed'
+          ; (updatedTest as any).duration = duration
+          ; (updatedTest as any).details = success
+            ? '测试通过，所有功能正常运行'
+            : '测试失败，发现需要修复的问题'
         if (t.metrics) {
-          ;(updatedTest as any).metrics = {
+          ; (updatedTest as any).metrics = {
             ...t.metrics,
             actual: success
               ? Math.random() * parseFloat(String(t.metrics['target'])) * 0.8
@@ -319,8 +319,8 @@ export default function SystemTestingSuite() {
       case 'passed': return 'bg-green-100 text-green-700'
       case 'failed': return 'bg-red-100 text-red-700'
       case 'running': return 'bg-blue-100 text-blue-700'
-      case 'pending': return 'bg-gray-100 text-gray-700'
-      case 'skipped': return 'bg-gray-100 text-gray-700'
+      case 'pending': return 'bg-surface-soft text-adaptive-muted'
+      case 'skipped': return 'bg-surface-soft text-adaptive-muted'
     }
   }
 
@@ -362,40 +362,40 @@ export default function SystemTestingSuite() {
       <div className="max-w-7xl mx-auto">
         {/* 标题区域 */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          <h1 className="text-4xl font-bold text-adaptive mb-4">
             🔧 YYC³ AI小语系统测试套件
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-adaptive-muted max-w-2xl mx-auto">
             全面的系统测试工具，确保为小语的1岁生日提供完美的用户体验
           </p>
         </div>
 
         {/* 测试统计 */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-            <div className="text-3xl font-bold text-gray-800 mb-2">{testStats.total}</div>
-            <div className="text-sm text-gray-600">总测试数</div>
+          <div className="bg-surface rounded-xl shadow-lg p-6 text-center">
+            <div className="text-3xl font-bold text-adaptive mb-2">{testStats.total}</div>
+            <div className="text-sm text-adaptive-muted">总测试数</div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+          <div className="bg-surface rounded-xl shadow-lg p-6 text-center">
             <div className="text-3xl font-bold text-green-600 mb-2">{testStats.passed}</div>
-            <div className="text-sm text-gray-600">通过</div>
+            <div className="text-sm text-adaptive-muted">通过</div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+          <div className="bg-surface rounded-xl shadow-lg p-6 text-center">
             <div className="text-3xl font-bold text-red-600 mb-2">{testStats.failed}</div>
-            <div className="text-sm text-gray-600">失败</div>
+            <div className="text-sm text-adaptive-muted">失败</div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+          <div className="bg-surface rounded-xl shadow-lg p-6 text-center">
             <div className="text-3xl font-bold text-blue-600 mb-2">{testStats.running}</div>
-            <div className="text-sm text-gray-600">运行中</div>
+            <div className="text-sm text-adaptive-muted">运行中</div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+          <div className="bg-surface rounded-xl shadow-lg p-6 text-center">
             <div className="text-3xl font-bold text-purple-600 mb-2">{passRate.toFixed(1)}%</div>
-            <div className="text-sm text-gray-600">通过率</div>
+            <div className="text-sm text-adaptive-muted">通过率</div>
           </div>
         </div>
 
         {/* 控制面板 */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-surface rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex gap-2">
               <button
@@ -439,7 +439,7 @@ export default function SystemTestingSuite() {
               <select
                 value={selectedCategory}
                 onChange={(e) => { setSelectedCategory(e.target.value); }}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="px-4 py-2 border border-soft rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">所有测试</option>
                 <option value="functionality">功能测试</option>
@@ -470,7 +470,7 @@ export default function SystemTestingSuite() {
           {/* 进度条 */}
           {(isRunning || overallProgress > 0) && (
             <div className="mt-4">
-              <div className="flex justify-between text-sm text-gray-600 mb-2">
+              <div className="flex justify-between text-sm text-adaptive-muted mb-2">
                 <span>测试进度</span>
                 <span>{overallProgress.toFixed(0)}%</span>
               </div>
@@ -489,23 +489,23 @@ export default function SystemTestingSuite() {
         {/* 测试结果列表 */}
         <div className="space-y-6">
           {testSuites.map((suite) => (
-            <div key={suite.category} className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div key={suite.category} className="bg-surface rounded-xl shadow-lg overflow-hidden">
               {/* 套件头部 */}
-              <div className="p-6 border-b bg-linear-to-r from-white to-gray-50">
+              <div className="p-6 border-b bg-linear-to-r from-surface to-surface-soft">
                 <div className="flex items-center gap-3">
                   <div className={`w-12 h-12 bg-linear-to-r ${suite.color} rounded-lg flex items-center justify-center`}>
                     <suite.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800">{suite.name}</h3>
-                    <p className="text-sm text-gray-600">{suite.tests.length} 个测试用例</p>
+                    <h3 className="text-xl font-semibold text-adaptive">{suite.name}</h3>
+                    <p className="text-sm text-adaptive-muted">{suite.tests.length} 个测试用例</p>
                   </div>
                   <div className="ml-auto">
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-800">
+                      <div className="text-2xl font-bold text-adaptive">
                         {filteredResults.filter(t => t.category === suite.category).length}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-adaptive-muted">
                         {filteredResults.filter(t =>
                           t.category === suite.category && t.status === 'passed'
                         ).length} 通过
@@ -522,12 +522,11 @@ export default function SystemTestingSuite() {
                   .map((test, index) => (
                     <motion.div
                       key={test.id}
-                      className={`border rounded-lg p-4 transition-all ${
-                        test.status === 'running' ? 'border-blue-300 bg-blue-50' :
+                      className={`border rounded-lg p-4 transition-all ${test.status === 'running' ? 'border-blue-300 bg-blue-50' :
                         test.status === 'passed' ? 'border-green-300 bg-green-50' :
-                        test.status === 'failed' ? 'border-red-300 bg-red-50' :
-                        'border-gray-200 hover:border-gray-300'
-                      }`}
+                          test.status === 'failed' ? 'border-red-300 bg-red-50' :
+                            'border-soft hover:border-gray-300'
+                        }`}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
@@ -536,10 +535,10 @@ export default function SystemTestingSuite() {
                         <div className="flex items-center gap-3">
                           {getStatusIcon(test.status)}
                           <div>
-                            <h4 className="font-medium text-gray-800">{test.name}</h4>
-                            <p className="text-sm text-gray-600">{test.description}</p>
+                            <h4 className="font-medium text-adaptive">{test.name}</h4>
+                            <p className="text-sm text-adaptive-muted">{test.description}</p>
                             {showDetails && (
-                              <p className="text-xs text-gray-500 mt-1">{test.details}</p>
+                              <p className="text-xs text-adaptive-muted mt-1">{test.details}</p>
                             )}
                           </div>
                         </div>
@@ -547,20 +546,19 @@ export default function SystemTestingSuite() {
                           {test.metrics && test.metrics['actual'] !== undefined && (
                             <div className="text-right">
                               <div className="text-xs text-gray-500">实际值</div>
-                              <div className={`text-sm font-medium ${
-                                parseFloat(String(test.metrics['actual'])) < parseFloat(String(test.metrics['target']))
-                                  ? 'text-green-600'
-                                  : 'text-red-600'
-                              }`}>
+                              <div className={`text-sm font-medium ${parseFloat(String(test.metrics['actual'])) < parseFloat(String(test.metrics['target']))
+                                ? 'text-green-600'
+                                : 'text-red-600'
+                                }`}>
                                 {String(test.metrics['actual'])} / {String(test.metrics['target'])}
                               </div>
                             </div>
                           )}
                           <div className={`px-3 py-1 rounded-full text-sm ${getStatusColor(test.status)}`}>
                             {test.status === 'passed' ? '通过' :
-                             test.status === 'failed' ? '失败' :
-                             test.status === 'running' ? '运行中' :
-                             test.status === 'pending' ? '待运行' : '跳过'}
+                              test.status === 'failed' ? '失败' :
+                                test.status === 'running' ? '运行中' :
+                                  test.status === 'pending' ? '待运行' : '跳过'}
                           </div>
                           {test.duration > 0 && (
                             <div className="text-sm text-gray-500">
@@ -580,10 +578,10 @@ export default function SystemTestingSuite() {
         {!isRunning && testStats.total > 0 && testStats.total === testStats.passed + testStats.failed && (
           <div className="mt-8 bg-green-50 border border-green-200 rounded-xl p-6 text-center">
             <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            <h3 className="text-xl font-semibold text-adaptive mb-2">
               {testStats.failed === 0 ? '所有测试通过！' : '测试完成'}
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-adaptive-muted mb-4">
               {testStats.failed === 0
                 ? '系统准备就绪，可以为小语的1岁生日提供完美的体验！'
                 : `发现 ${testStats.failed} 个问题，建议修复后重新测试。`

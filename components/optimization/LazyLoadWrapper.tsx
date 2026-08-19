@@ -197,7 +197,7 @@ export function LazyImage({
   if (error) {
     return (
       <div
-        className={`flex items-center justify-center bg-gray-100 rounded-lg ${className}`}
+        className={`flex items-center justify-center bg-surface-soft rounded-lg ${className}`}
         style={{ width, height }}
       >
         <div className="text-gray-400 text-center">

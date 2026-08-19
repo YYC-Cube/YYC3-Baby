@@ -8,13 +8,13 @@
  * @updated 2024-10-15
  */
 
-import React, { useState, useEffect, useMemo } from 'react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Search, Filter, Heart, MessageCircle, Calendar, User } from 'lucide-react'
+import { Calendar, Filter, Heart, MessageCircle, Search, User } from 'lucide-react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 interface BirthdayWish {
   id: string
@@ -49,12 +49,12 @@ const BirthdayWishesDisplay: React.FC = () => {
     }
 
     loadWishes()
-    
+
     // 监听存储变化，实时更新
     const handleStorageChange = () => {
       loadWishes()
     }
-    
+
     window.addEventListener('storage', handleStorageChange)
     return () => { window.removeEventListener('storage', handleStorageChange); }
   }, [])
@@ -74,7 +74,7 @@ const BirthdayWishesDisplay: React.FC = () => {
 
     // 按搜索词筛选
     if (searchTerm) {
-      filtered = filtered.filter(wish => 
+      filtered = filtered.filter(wish =>
         wish.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         wish.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (wish.customTitle && wish.customTitle.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -153,7 +153,7 @@ const BirthdayWishesDisplay: React.FC = () => {
                 className="pl-10"
               />
             </div>
-            
+
             <Select value={filterRelationship} onValueChange={setFilterRelationship}>
               <SelectTrigger>
                 <SelectValue placeholder="按关系筛选" />
@@ -165,7 +165,7 @@ const BirthdayWishesDisplay: React.FC = () => {
                 ))}
               </SelectContent>
             </Select>
-            
+
             <Select value={sortBy} onValueChange={(value: 'newest' | 'oldest' | 'name') => { setSortBy(value); }}>
               <SelectTrigger>
                 <SelectValue placeholder="排序方式" />
@@ -177,7 +177,7 @@ const BirthdayWishesDisplay: React.FC = () => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div className="flex justify-between items-center mt-4">
             <div className="text-sm text-gray-500">
               共 {filteredAndSortedWishes.length} 条祝福
@@ -195,11 +195,11 @@ const BirthdayWishesDisplay: React.FC = () => {
       {filteredAndSortedWishes.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <MessageCircle className="h-12 w-12 text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">暂无祝福</h3>
-            <p className="text-gray-500 text-center">
-              {wishes.length === 0 
-                ? "还没有人送上祝福，成为第一个送上祝福的人吧！" 
+            <MessageCircle className="h-12 w-12 text-adaptive-muted mb-4" />
+            <h3 className="text-lg font-medium text-adaptive mb-2">暂无祝福</h3>
+            <p className="text-adaptive-muted text-center">
+              {wishes.length === 0
+                ? "还没有人送上祝福，成为第一个送上祝福的人吧！"
                 : "没有符合筛选条件的祝福，请尝试调整筛选条件。"}
             </p>
           </CardContent>
@@ -225,8 +225,8 @@ const BirthdayWishesDisplay: React.FC = () => {
                 )}
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 mb-3">{wish.message}</p>
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <p className="text-adaptive-muted mb-3">{wish.message}</p>
+                <div className="flex items-center justify-between text-xs text-adaptive-muted">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {formatDate(wish.timestamp)}

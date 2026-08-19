@@ -151,7 +151,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
           onClick={onClose}
         >
           <motion.div
-            className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl"
+            className="bg-surface rounded-3xl p-6 w-full max-w-md shadow-2xl"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -164,9 +164,9 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
               </h3>
               <button
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-full hover:bg-surface-soft transition-colors"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-adaptive-muted" />
               </button>
             </div>
 
@@ -174,7 +174,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* 姓名输入 */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="name" className="block text-sm font-medium text-adaptive-muted mb-1">
                   您的姓名 *
                 </label>
                 <input
@@ -183,7 +183,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-soft rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="请输入您的姓名"
                   required
                 />
@@ -191,7 +191,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
 
               {/* 关系选择 */}
               <div>
-                <label htmlFor="relationship" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="relationship" className="block text-sm font-medium text-adaptive-muted mb-1">
                   您和小语的关系
                 </label>
                 <select
@@ -199,7 +199,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
                   name="relationship"
                   value={formData.relationship}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-soft rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 >
                   <option value="">请选择</option>
                   <option value="家人">家人</option>
@@ -212,7 +212,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
               {/* 祝福消息 */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="message" className="block text-sm font-medium text-adaptive-muted">
                     生日祝福 *
                   </label>
                   <button
@@ -256,7 +256,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
                             key={template.id}
                             type="button"
                             onClick={() => { handleTemplateSelect(String(template.id)); }}
-                            className={`text-left p-2 bg-white rounded border border-purple-200 hover:bg-purple-100 transition-colors ${formData.templateId === template.id ? 'ring-2 ring-purple-500' : ''
+                            className={`text-left p-2 bg-surface rounded border border-soft hover:bg-surface-soft transition-colors ${formData.templateId === template.id ? 'ring-2 ring-purple-500' : ''
                               }`}
                           >
                             <p className="font-medium text-sm text-purple-800">{template.title}</p>
@@ -274,7 +274,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2 border border-soft rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                   placeholder={formData.isCustomMessage ? "写下您对小语的生日祝福..." : "您可以编辑选中的祝福语模板..."}
                   required
                 />
@@ -285,7 +285,7 @@ export default function BirthdayWishForm({ isOpen, onClose }: BirthdayWishFormPr
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-2 border border-soft text-adaptive-muted rounded-lg hover:bg-surface-soft transition-colors"
                 >
                   取消
                 </button>

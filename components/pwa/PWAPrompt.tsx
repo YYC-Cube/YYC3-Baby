@@ -5,9 +5,9 @@
 
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { usePWA } from '@/hooks/usePWA'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useState } from 'react'
 
 interface PWAPromptProps {
   className?: string
@@ -79,7 +79,7 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => { setDismissedUpdate(true); }}
-                  className="px-3 py-1.5 bg-white text-gray-600 text-xs font-medium rounded-md border border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="px-3 py-1.5 bg-surface text-adaptive-muted text-xs font-medium rounded-md border border-soft hover:bg-surface-soft transition-colors"
                 >
                   稍后更新
                 </motion.button>
@@ -95,7 +95,7 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 50, scale: 0.8 }}
           transition={{ duration: 0.3 }}
-          className={`fixed bottom-4 right-4 bg-white border-2 border-gray-200 rounded-2xl shadow-lg p-4 max-w-xs z-50 ${className}`}
+          className={`fixed bottom-4 right-4 bg-surface border-2 border-soft rounded-2xl shadow-lg p-4 max-w-xs z-50 ${className}`}
         >
           <div className="flex items-start gap-3">
             <div className="shrink-0">
@@ -104,10 +104,10 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
               </div>
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-gray-800 mb-1">
+              <h3 className="text-sm font-semibold text-adaptive mb-1">
                 安装YYC³ AI小语
               </h3>
-              <p className="text-xs text-gray-600 mb-3">
+              <p className="text-xs text-adaptive-muted mb-3">
                 安装到桌面，获得更好的使用体验！
               </p>
               <div className="flex gap-2">
@@ -123,7 +123,7 @@ export default function PWAPrompt({ className = '' }: PWAPromptProps) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={dismissInstallPrompt}
-                  className="px-3 py-2 bg-gray-100 text-gray-600 text-xs font-medium rounded-md hover:bg-gray-200 transition-colors"
+                  className="px-3 py-2 bg-surface-soft text-adaptive-muted text-xs font-medium rounded-md hover:bg-surface transition-colors"
                 >
                   暂不
                 </motion.button>

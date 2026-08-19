@@ -1,19 +1,19 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
-  HelpCircle,
-  X,
-  Sparkles,
-  Zap,
   CheckCircle,
-  Hand,
   ChevronLeft,
   ChevronRight,
+  Hand,
+  HelpCircle,
+  Pause,
   Play,
-  Pause
+  Sparkles,
+  X,
+  Zap
 } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 // 引导步骤接口
 interface GuideStep {
   id: string
@@ -405,34 +405,32 @@ export default function SmartOnboardingGuide() {
         {isActive && currentStep && (
           <motion.div
             ref={containerRef}
-            className={`fixed z-50 ${
-              currentStep.position === 'center'
-                ? 'inset-0 flex items-center justify-center p-8'
-                : currentStep.position === 'top'
+            className={`fixed z-50 ${currentStep.position === 'center'
+              ? 'inset-0 flex items-center justify-center p-8'
+              : currentStep.position === 'top'
                 ? ''
                 : currentStep.position === 'bottom'
-                ? ''
-                : currentStep.position === 'left'
-                ? ''
-                : ''
-            }`}
+                  ? ''
+                  : currentStep.position === 'left'
+                    ? ''
+                    : ''
+              }`}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             style={{
               ...(targetElement && currentStep.position !== 'center' && {
                 top: currentStep.position === 'bottom' ? highlightPosition.bottom + 20 :
-                     currentStep.position === 'top' ? highlightPosition.top - 320 :
-                     highlightPosition.top,
+                  currentStep.position === 'top' ? highlightPosition.top - 320 :
+                    highlightPosition.top,
                 left: currentStep.position === 'right' ? highlightPosition.right + 20 :
-                     currentStep.position === 'left' ? highlightPosition.left - 420 :
-                     highlightPosition.left + highlightPosition.width / 2 - 200
+                  currentStep.position === 'left' ? highlightPosition.left - 420 :
+                    highlightPosition.left + highlightPosition.width / 2 - 200
               })
             }}
           >
-            <div className={`bg-white rounded-2xl shadow-2xl overflow-hidden ${
-              currentStep.position === 'center' ? 'max-w-2xl w-full' : 'w-96'
-            }`}>
+            <div className={`bg-surface rounded-2xl shadow-2xl overflow-hidden ${currentStep.position === 'center' ? 'max-w-2xl w-full' : 'w-96'
+              }`}>
               {/* 箭头 */}
               {arrowPosition && (
                 <div
@@ -457,9 +455,9 @@ export default function SmartOnboardingGuide() {
               {currentStep.skippable && (
                 <button
                   onClick={() => { setShowSkipConfirm(true); }}
-                  className="absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors z-20"
+                  className="absolute top-4 right-4 w-8 h-8 bg-surface-soft rounded-full flex items-center justify-center hover:bg-surface transition-colors z-20"
                 >
-                  <X className="w-4 h-4 text-gray-600" />
+                  <X className="w-4 h-4 text-adaptive-muted" />
                 </button>
               )}
 
@@ -470,24 +468,23 @@ export default function SmartOnboardingGuide() {
                   {guideSteps.map((_, index) => (
                     <div
                       key={index}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        index === currentStepIndex
-                          ? 'bg-purple-600 w-8'
-                          : index < currentStepIndex
+                      className={`w-2 h-2 rounded-full transition-all ${index === currentStepIndex
+                        ? 'bg-purple-600 w-8'
+                        : index < currentStepIndex
                           ? 'bg-green-500'
-                          : 'bg-gray-300'
-                      }`}
+                          : 'bg-surface-soft'
+                        }`}
                     />
                   ))}
                 </div>
 
                 {/* 标题和描述 */}
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center justify-center gap-2">
+                  <h3 className="text-xl font-bold text-adaptive mb-3 flex items-center justify-center gap-2">
                     {currentStepIndex === guideSteps.length - 1 && <Sparkles className="w-6 h-6 text-yellow-500" />}
                     {currentStep.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">{currentStep.description}</p>
+                  <p className="text-adaptive-muted leading-relaxed">{currentStep.description}</p>
                 </div>
 
                 {/* 图片或视频 */}
@@ -512,7 +509,7 @@ export default function SmartOnboardingGuide() {
                       {currentStep.tips.map((tip, index) => (
                         <li key={index} className="flex items-start gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                          <span className="text-sm text-gray-600">{tip}</span>
+                          <span className="text-sm text-adaptive-muted">{tip}</span>
                         </li>
                       ))}
                     </ul>
@@ -534,22 +531,21 @@ export default function SmartOnboardingGuide() {
               </div>
 
               {/* 操作按钮 */}
-              <div className="border-t p-6 bg-gray-50">
+              <div className="border-t border-soft p-6 bg-surface-soft">
                 <div className="flex items-center justify-between">
                   <button
                     onClick={prevStep}
                     disabled={currentStepIndex === 0}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                      currentStepIndex === 0
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-white text-gray-700 hover:bg-gray-100'
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${currentStepIndex === 0
+                      ? 'bg-surface-soft text-adaptive-muted cursor-not-allowed'
+                      : 'bg-surface text-adaptive-muted hover:bg-surface-soft'
+                      }`}
                   >
                     <ChevronLeft className="w-4 h-4" />
                     上一步
                   </button>
 
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-adaptive-muted">
                     {currentStepIndex + 1} / {guideSteps.length}
                   </div>
 
@@ -575,7 +571,7 @@ export default function SmartOnboardingGuide() {
                 <div className="mt-4 flex justify-center">
                   <button
                     onClick={() => { setIsPaused(!isPaused); }}
-                    className="flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
+                    className="flex items-center gap-2 text-adaptive-muted hover:text-adaptive transition-colors"
                   >
                     {isPaused ? (
                       <>
@@ -606,19 +602,19 @@ export default function SmartOnboardingGuide() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white rounded-2xl p-6 max-w-md w-full"
+              className="bg-surface rounded-2xl p-6 max-w-md w-full"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
             >
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">确定要跳过引导吗？</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-lg font-semibold text-adaptive mb-3">确定要跳过引导吗？</h3>
+              <p className="text-adaptive-muted mb-6">
                 跳过引导后，您可以随时点击右下角的帮助图标重新查看。
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => { setShowSkipConfirm(false); }}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all"
+                  className="flex-1 px-4 py-2 border border-soft text-adaptive-muted rounded-lg hover:bg-surface-soft transition-all"
                 >
                   继续引导
                 </button>

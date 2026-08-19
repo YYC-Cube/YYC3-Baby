@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export default function HomeHeader() {
   const [time, setTime] = useState("08:30")
@@ -36,7 +36,7 @@ export default function HomeHeader() {
       <div className="flex items-center gap-6">
         <div className="text-right">
           <motion.div
-            className="text-3xl font-bold text-slate-700 font-rounded tracking-widest"
+            className="text-3xl font-bold text-adaptive font-rounded tracking-widest"
             key={time}
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
@@ -44,11 +44,11 @@ export default function HomeHeader() {
           >
             {time}
           </motion.div>
-          <div className="text-sm text-slate-500 font-medium">{date}</div>
+          <div className="text-sm text-adaptive-muted font-medium">{date}</div>
         </div>
 
         <motion.div
-          className="flex items-center gap-2 bg-white/60 px-4 py-2 backdrop-blur-sm rounded-md"
+          className="flex items-center gap-2 bg-white/60 dark:bg-gray-800/60 px-4 py-2 backdrop-blur-sm rounded-md"
           whileHover={{ scale: 1.05 }}
         >
           <motion.i
@@ -56,8 +56,8 @@ export default function HomeHeader() {
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
           />
-          <span className="text-lg font-bold text-slate-600">23°C</span>
-          <span className="text-xs text-slate-400">适宜户外</span>
+          <span className="text-lg font-bold text-adaptive">23°C</span>
+          <span className="text-xs text-adaptive-muted">适宜户外</span>
         </motion.div>
       </div>
 
@@ -126,7 +126,7 @@ function QuickActionButton({
   return (
     <Link href={href}>
       <motion.button
-        className={`flex items-center gap-2 bg-white px-4 py-2 shadow-sm transition cursor-pointer text-slate-600 rounded-md ${hoverColor}`}
+        className={`flex items-center gap-2 bg-surface px-4 py-2 shadow-sm transition cursor-pointer text-adaptive-muted rounded-md ${hoverColor}`}
         whileHover={{ scale: 1.05, y: -2 }}
         whileTap={{ scale: 0.95 }}
       >

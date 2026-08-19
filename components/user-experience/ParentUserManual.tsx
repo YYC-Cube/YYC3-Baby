@@ -1,30 +1,30 @@
 'use client'
 
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
-  BookOpen,
-  Star,
-  Brain,
-  HelpCircle,
-  Award,
-  Search,
-  X,
-  Download,
-  Share,
-  Printer,
-  Clock,
-  Bookmark,
-  Target,
-  BookmarkCheck,
-  ChevronDown,
-  Lightbulb,
-  CheckCircle,
   AlertCircle,
-  MessageCircle,
+  Award,
+  Bookmark,
+  BookmarkCheck,
+  BookOpen,
+  Brain,
+  CheckCircle,
+  ChevronDown,
+  Clock,
+  Download,
+  HelpCircle,
+  Lightbulb,
   Mail,
-  Phone
+  MessageCircle,
+  Phone,
+  Printer,
+  Search,
+  Share,
+  Star,
+  Target,
+  X
 } from 'lucide-react'
+import React, { useState } from 'react'
 
 // 手册章节接口
 interface ManualChapter {
@@ -598,7 +598,7 @@ export default function ParentUserManual() {
       case 'beginner': return 'text-green-600 bg-green-100'
       case 'intermediate': return 'text-yellow-600 bg-yellow-100'
       case 'advanced': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
+      default: return 'text-adaptive-muted bg-surface-soft'
     }
   }
 
@@ -643,7 +643,7 @@ export default function ParentUserManual() {
           <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-500 to-purple-500 mb-4">
             📚 家长使用手册
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-adaptive-muted max-w-2xl mx-auto">
             详细的操作指南和专业育儿建议，帮助您更好地使用YYC³ AI小语系统
           </p>
 
@@ -656,12 +656,12 @@ export default function ParentUserManual() {
                 placeholder="搜索手册内容..."
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); }}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                className="w-full pl-10 pr-4 py-3 border border-soft rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               />
               {searchQuery && (
                 <button
                   onClick={() => { setSearchQuery(''); }}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-adaptive-muted hover:text-adaptive"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -704,7 +704,7 @@ export default function ParentUserManual() {
           ].map((stat, index) => (
             <motion.div
               key={index}
-              className="bg-white rounded-xl shadow-lg p-6 text-center"
+              className="bg-surface rounded-xl shadow-lg p-6 text-center"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 + index * 0.1 }}
@@ -713,8 +713,8 @@ export default function ParentUserManual() {
               <div className={`w-12 h-12 bg-linear-to-r ${stat.color} rounded-xl flex items-center justify-center mx-auto mb-3`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
-              <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
+              <div className="text-2xl font-bold text-adaptive">{stat.value}</div>
+              <div className="text-sm text-adaptive-muted">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -729,7 +729,7 @@ export default function ParentUserManual() {
             return (
               <motion.div
                 key={chapter.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                className="bg-surface rounded-2xl shadow-lg overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 + chapterIndex * 0.1 }}
@@ -745,12 +745,12 @@ export default function ParentUserManual() {
                         <Icon className="w-8 h-8 text-purple-600" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">{chapter.title}</h3>
-                        <p className="text-gray-600 mb-3">{chapter.description}</p>
+                        <h3 className="text-xl font-bold text-adaptive mb-2">{chapter.title}</h3>
+                        <p className="text-adaptive-muted mb-3">{chapter.description}</p>
                         <div className="flex items-center gap-4 text-sm">
                           <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4 text-gray-500" />
-                            <span className="text-gray-600">{chapter.estimatedReadTime}分钟</span>
+                            <Clock className="w-4 h-4 text-adaptive-muted" />
+                            <span className="text-adaptive-muted">{chapter.estimatedReadTime}分钟</span>
                           </div>
                           <div className={`px-2 py-1 rounded-full text-xs ${getDifficultyColor(chapter.difficulty)}`}>
                             {getDifficultyText(chapter.difficulty)}
@@ -772,9 +772,8 @@ export default function ParentUserManual() {
                       </div>
                     </div>
                     <ChevronDown
-                      className={`w-6 h-6 text-gray-500 transition-transform ${
-                        isExpanded ? 'rotate-180' : ''
-                      }`}
+                      className={`w-6 h-6 text-adaptive-muted transition-transform ${isExpanded ? 'rotate-180' : ''
+                        }`}
                     />
                   </div>
                 </div>
@@ -796,17 +795,16 @@ export default function ParentUserManual() {
                           return (
                             <div key={section.id} className="border-l-4 border-purple-200 pl-6">
                               <div className="flex items-center justify-between mb-3">
-                                <h4 className="text-lg font-semibold text-gray-800">{section.title}</h4>
+                                <h4 className="text-lg font-semibold text-adaptive">{section.title}</h4>
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     toggleBookmark(section.id)
                                   }}
-                                  className={`p-2 rounded-lg transition-colors ${
-                                    isBookmarked
-                                      ? 'bg-yellow-100 text-yellow-600'
-                                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                                  }`}
+                                  className={`p-2 rounded-lg transition-colors ${isBookmarked
+                                    ? 'bg-yellow-100 text-yellow-600'
+                                    : 'bg-surface-soft text-adaptive-muted hover:bg-surface'
+                                    }`}
                                 >
                                   {isBookmarked ? (
                                     <BookmarkCheck className="w-4 h-4" />
@@ -816,7 +814,7 @@ export default function ParentUserManual() {
                                 </button>
                               </div>
 
-                              <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+                              <div className="prose prose-lg max-w-none text-adaptive-muted leading-relaxed whitespace-pre-line">
                                 {section.content}
                               </div>
 
@@ -874,20 +872,20 @@ export default function ParentUserManual() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">需要更多帮助？</h3>
-          <p className="text-gray-700 mb-6">
+          <h3 className="text-2xl font-bold text-adaptive mb-4">需要更多帮助？</h3>
+          <p className="text-adaptive-muted mb-6">
             我们的客服团队随时为您提供专业的技术支持和育儿指导
           </p>
           <div className="flex justify-center gap-4">
-            <button className="px-6 py-3 bg-white text-purple-600 rounded-lg hover:bg-gray-50 transition-all flex items-center gap-2 shadow-md">
+            <button className="px-6 py-3 bg-surface text-purple-600 rounded-lg hover:bg-surface-soft transition-all flex items-center gap-2 shadow-md">
               <MessageCircle className="w-4 h-4" />
               在线客服
             </button>
-            <button className="px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-50 transition-all flex items-center gap-2 shadow-md">
+            <button className="px-6 py-3 bg-surface text-blue-600 rounded-lg hover:bg-surface-soft transition-all flex items-center gap-2 shadow-md">
               <Mail className="w-4 h-4" />
               邮件支持
             </button>
-            <button className="px-6 py-3 bg-white text-green-600 rounded-lg hover:bg-gray-50 transition-all flex items-center gap-2 shadow-md">
+            <button className="px-6 py-3 bg-surface text-green-600 rounded-lg hover:bg-surface-soft transition-all flex items-center gap-2 shadow-md">
               <Phone className="w-4 h-4" />
               电话支持
             </button>
