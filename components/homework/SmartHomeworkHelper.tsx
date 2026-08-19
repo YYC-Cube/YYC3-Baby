@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { useDropzone } from "react-dropzone"
 import type { HomeworkResult } from "@/lib/api/homework-correction"
+import { AnimatePresence, motion } from "framer-motion"
+import { useCallback, useRef, useState } from "react"
+import { useDropzone } from "react-dropzone"
 
 
 interface VoiceRecording {
@@ -234,11 +234,11 @@ export default function SmartHomeworkHelper({
   }
 
   return (
-    <div className="bg-white rounded-3xl shadow-soft p-6 w-full max-w-2xl mx-auto">
+    <div className="bg-surface rounded-3xl shadow-soft p-6 w-full max-w-2xl mx-auto">
       {/* Header */}
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-slate-800 mb-2">{title}</h3>
-        <p className="text-slate-500">AI小语帮你智能批改作业</p>
+        <h3 className="text-2xl font-bold text-adaptive mb-2">{title}</h3>
+        <p className="text-adaptive-muted">AI小语帮你智能批改作业</p>
         <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mt-2">
           {subject}
         </span>
@@ -253,11 +253,10 @@ export default function SmartHomeworkHelper({
         ].map((tab) => (
           <motion.button
             key={tab.id}
-            className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
-              activeTab === tab.id
-                ? "bg-blue-500 text-white shadow-lg"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-            }`}
+            className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${activeTab === tab.id
+              ? "bg-blue-500 text-white shadow-lg"
+              : "bg-surface-soft text-adaptive-muted hover:bg-surface"
+              }`}
             onClick={() => { setActiveTab(tab.id as "upload" | "voice" | "write"); }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -281,13 +280,12 @@ export default function SmartHomeworkHelper({
           >
             <div
               {...getRootProps()}
-              className={`border-3 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
-                isDragActive
-                  ? "border-blue-400 bg-blue-50"
-                  : uploadedImage
+              className={`border-3 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${isDragActive
+                ? "border-blue-400 bg-blue-50"
+                : uploadedImage
                   ? "border-green-400 bg-green-50"
                   : "border-slate-300 hover:border-blue-300 hover:bg-blue-50/30"
-              }`}
+                }`}
             >
               <input {...getInputProps()} />
 
@@ -309,10 +307,10 @@ export default function SmartHomeworkHelper({
                     <i className="ri-upload-cloud-2-fill text-2xl text-blue-500" />
                   </div>
                   <div>
-                    <p className="text-slate-700 font-medium">
+                    <p className="text-adaptive font-medium">
                       {isDragActive ? "放下照片即可上传" : "点击或拖拽作业照片到这里"}
                     </p>
-                    <p className="text-slate-500 text-sm">支持 JPG、PNG、WebP 格式</p>
+                    <p className="text-adaptive-muted text-sm">支持 JPG、PNG、WebP 格式</p>
                   </div>
                 </div>
               )}
@@ -348,9 +346,9 @@ export default function SmartHomeworkHelper({
                   </div>
                   <div>
                     <p className="text-green-700 font-medium mb-2">录音完成！</p>
-                    <div className="bg-white rounded-xl p-3 text-left">
-                      <p className="text-sm text-slate-600 mb-2">识别内容：</p>
-                      <p className="text-slate-800">{voiceRecording.transcript}</p>
+                    <div className="bg-surface rounded-xl p-3 text-left">
+                      <p className="text-sm text-adaptive-muted mb-2">识别内容：</p>
+                      <p className="text-adaptive">{voiceRecording.transcript}</p>
                     </div>
                     <button
                       onClick={() => speakFeedback(voiceRecording.transcript)}
@@ -364,23 +362,21 @@ export default function SmartHomeworkHelper({
                 <div className="space-y-6">
                   <div className="text-center">
                     <motion.div
-                      className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto cursor-pointer ${
-                        isRecording
-                          ? "bg-red-500 animate-pulse"
-                          : "bg-linear-to-br from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600"
-                      }`}
+                      className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto cursor-pointer ${isRecording
+                        ? "bg-red-500 animate-pulse"
+                        : "bg-linear-to-br from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600"
+                        }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={isRecording ? stopRecording : startRecording}
                     >
-                      <i className={`text-white text-3xl ${
-                        isRecording ? "ri-stop-fill" : "ri-mic-fill"
-                      }`} />
+                      <i className={`text-white text-3xl ${isRecording ? "ri-stop-fill" : "ri-mic-fill"
+                        }`} />
                     </motion.div>
-                    <p className="text-slate-700 font-medium mt-4">
+                    <p className="text-adaptive font-medium mt-4">
                       {isRecording ? "点击停止录音" : "点击开始录音"}
                     </p>
-                    <p className="text-slate-500 text-sm">
+                    <p className="text-adaptive-muted text-sm">
                       录下你的答题过程，AI小语会帮你分析
                     </p>
                   </div>
@@ -410,27 +406,26 @@ export default function SmartHomeworkHelper({
             exit={{ opacity: 0, y: -20 }}
             className="space-y-4"
           >
-            <div className="bg-slate-50 rounded-2xl p-6">
-              <label className="block text-slate-700 font-medium mb-3">
+            <div className="bg-surface-soft rounded-2xl p-6">
+              <label className="block text-adaptive font-medium mb-3">
                 写下你的答案：
               </label>
               <textarea
                 value={writtenAnswer}
                 onChange={(e) => { setWrittenAnswer(e.target.value); }}
                 placeholder="在这里输入你的作业答案..."
-                className="w-full h-32 px-4 py-3 border border-slate-300 rounded-xl resize-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                className="w-full h-32 px-4 py-3 border border-soft rounded-xl resize-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
               />
               <div className="flex items-center justify-between mt-4">
-                <span className="text-sm text-slate-500">
+                <span className="text-sm text-adaptive-muted">
                   {writtenAnswer.length} 个字符
                 </span>
                 <button
                   onClick={() => { setIsListening(!isListening); }}
-                  className={`px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 ${
-                    isListening
-                      ? "bg-red-100 text-red-600"
-                      : "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 ${isListening
+                    ? "bg-red-100 text-red-600"
+                    : "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                    }`}
                 >
                   <i className={`ri-${isListening ? "stop" : "mic"}-fill`} />
                   {isListening ? "停止识别" : "语音输入"}
@@ -448,39 +443,35 @@ export default function SmartHomeworkHelper({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h4 className="font-bold text-slate-800 mb-3">批改结果</h4>
+          <h4 className="font-bold text-adaptive mb-3">批改结果</h4>
           {results.map((result, index) => (
             <motion.div
               key={result.id}
-              className={`border-2 rounded-xl p-4 ${
-                result.isCorrect
-                  ? "border-green-300 bg-green-50"
-                  : "border-red-300 bg-red-50"
-              }`}
+              className={`border-2 rounded-xl p-4 ${result.isCorrect
+                ? "border-green-300 bg-green-50"
+                : "border-red-300 bg-red-50"
+                }`}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
             >
               <div className="flex items-start gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                  result.isCorrect ? "bg-green-500" : "bg-red-500"
-                }`}>
-                  <i className={`text-white text-sm ${
-                    result.isCorrect ? "ri-check-fill" : "ri-close-fill"
-                  }`} />
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${result.isCorrect ? "bg-green-500" : "bg-red-500"
+                  }`}>
+                  <i className={`text-white text-sm ${result.isCorrect ? "ri-check-fill" : "ri-close-fill"
+                    }`} />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-slate-800 mb-1">{result.question}</p>
-                  <div className="text-sm text-slate-600 space-y-1">
+                  <p className="font-medium text-adaptive mb-1">{result.question}</p>
+                  <div className="text-sm text-adaptive-muted space-y-1">
                     <p>你的答案：<span className="font-medium">{result.userAnswer}</span></p>
                     <p>正确答案：<span className="font-medium">{result.correctAnswer}</span></p>
                     <p className="text-blue-600">{result.explanation}</p>
                   </div>
                   {result.score && (
                     <div className="mt-2">
-                      <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
-                        result.score === 100 ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                      }`}>
+                      <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${result.score === 100 ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                        }`}>
                         得分：{result.score}分
                       </span>
                     </div>

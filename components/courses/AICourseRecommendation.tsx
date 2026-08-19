@@ -302,7 +302,7 @@ export default function AICourseRecommendation({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden"
+            className="bg-surface rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden"
           >
             {/* 标题栏 */}
             <div className="bg-linear-to-r from-blue-500 to-purple-500 px-6 py-4 text-white flex items-center justify-between">
@@ -331,7 +331,7 @@ export default function AICourseRecommendation({
                   onClick={() => { setActiveTab(tab.id as "recommendations" | "learning-path" | "consultation"); }}
                   className={`flex-1 px-4 py-3 font-medium transition-colors relative ${activeTab === tab.id
                     ? "text-blue-600 bg-blue-50"
-                    : "text-gray-500 hover:text-gray-700"
+                    : "text-adaptive-muted hover:text-adaptive"
                     }`}
                 >
                   <i className={`${tab.icon} mr-2`} />
@@ -357,19 +357,19 @@ export default function AICourseRecommendation({
                   className="space-y-6"
                 >
                   <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">个性化课程推荐</h3>
-                    <p className="text-gray-600">基于{childName}的年龄特点和发展需求定制</p>
+                    <h3 className="text-xl font-bold text-adaptive mb-2">个性化课程推荐</h3>
+                    <p className="text-adaptive-muted">基于{childName}的年龄特点和发展需求定制</p>
                   </div>
 
                   {/* 推荐类型卡片 */}
                   <div className="space-y-4">
                     {Object.entries(recommendations).map(([type, courses]) => (
-                      <div key={type} className="bg-gray-50 rounded-2xl p-4">
+                      <div key={type} className="bg-surface-soft rounded-2xl p-4">
                         <div className="flex items-center gap-2 mb-3">
                           <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${getRecommendationColor(type)}`}>
                             <i className={getRecommendationIcon(type)} />
                           </div>
-                          <h4 className="font-bold text-gray-800">
+                          <h4 className="font-bold text-adaptive">
                             {type === 'personality' ? '性格发展' :
                               type === 'developmental' ? '能力提升' : '兴趣探索'}
                           </h4>
@@ -379,16 +379,16 @@ export default function AICourseRecommendation({
                           {courses.map(course => (
                             <motion.div
                               key={course.id}
-                              className="bg-white rounded-xl p-3 border border-gray-200"
+                              className="bg-surface rounded-xl p-3 border border-soft"
                               whileHover={{ scale: 1.02, y: -2 }}
                             >
-                              <h5 className="font-medium text-gray-800 mb-1">{course.title}</h5>
-                              <p className="text-sm text-gray-600 mb-2">{course.description}</p>
+                              <h5 className="font-medium text-adaptive mb-1">{course.title}</h5>
+                              <p className="text-sm text-adaptive-muted mb-2">{course.description}</p>
                               <div className="flex items-center justify-between text-xs">
                                 <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
                                   {course.difficulty}
                                 </span>
-                                <span className="text-gray-500">{course.duration}</span>
+                                <span className="text-adaptive-muted">{course.duration}</span>
                               </div>
                             </motion.div>
                           ))}
@@ -406,8 +406,8 @@ export default function AICourseRecommendation({
                   className="space-y-6"
                 >
                   <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">个性化学习路径</h3>
-                    <p className="text-gray-600">循序渐进的能力发展计划</p>
+                    <h3 className="text-xl font-bold text-adaptive mb-2">个性化学习路径</h3>
+                    <p className="text-adaptive-muted">循序渐进的能力发展计划</p>
                   </div>
 
                   <div className="space-y-6">
@@ -417,15 +417,15 @@ export default function AICourseRecommendation({
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-white border border-gray-200 rounded-2xl p-5"
+                        className="bg-surface border border-soft rounded-2xl p-5"
                       >
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
                             {index + 1}
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-bold text-gray-800">{phase.phase}</h4>
-                            <p className="text-sm text-gray-600">{phase.description}</p>
+                            <h4 className="font-bold text-adaptive">{phase.phase}</h4>
+                            <p className="text-sm text-adaptive-muted">{phase.description}</p>
                           </div>
                           <span className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
                             {phase.duration}
@@ -433,10 +433,10 @@ export default function AICourseRecommendation({
                         </div>
 
                         <div className="mb-4">
-                          <h5 className="font-medium text-gray-700 mb-2">学习目标</h5>
+                          <h5 className="font-medium text-adaptive-muted mb-2">学习目标</h5>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                             {phase.goals.map((goal, goalIndex) => (
-                              <div key={goalIndex} className="flex items-center gap-2 text-sm text-gray-600">
+                              <div key={goalIndex} className="flex items-center gap-2 text-sm text-adaptive-muted">
                                 <i className="ri-checkbox-circle-fill text-green-500" />
                                 {goal}
                               </div>
@@ -445,17 +445,17 @@ export default function AICourseRecommendation({
                         </div>
 
                         <div>
-                          <h5 className="font-medium text-gray-700 mb-2">推荐课程</h5>
+                          <h5 className="font-medium text-adaptive-muted mb-2">推荐课程</h5>
                           <div className="space-y-2">
                             {phase.courses.map(course => (
-                              <div key={course.id} className="bg-gray-50 rounded-xl p-3">
+                              <div key={course.id} className="bg-surface-soft rounded-xl p-3">
                                 <div className="flex justify-between items-start mb-1">
-                                  <h6 className="font-medium text-gray-800">{course.title}</h6>
+                                  <h6 className="font-medium text-adaptive">{course.title}</h6>
                                   <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
                                     {course.duration}
                                   </span>
                                 </div>
-                                <p className="text-sm text-gray-600">{course.description}</p>
+                                <p className="text-sm text-adaptive-muted">{course.description}</p>
                               </div>
                             ))}
                           </div>
@@ -473,14 +473,14 @@ export default function AICourseRecommendation({
                   className="h-125 flex flex-col"
                 >
                   <div className="text-center mb-4">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">教育咨询顾问</h3>
-                    <p className="text-gray-600">专业解答您的教育问题</p>
+                    <h3 className="text-xl font-bold text-adaptive mb-2">教育咨询顾问</h3>
+                    <p className="text-adaptive-muted">专业解答您的教育问题</p>
                   </div>
 
                   {/* 聊天区域 */}
-                  <div className="flex-1 bg-gray-50 rounded-2xl p-4 overflow-y-auto mb-4">
+                  <div className="flex-1 bg-surface-soft rounded-2xl p-4 overflow-y-auto mb-4">
                     {chatMessages.length === 0 && (
-                      <div className="text-center text-gray-500 py-8">
+                      <div className="text-center text-adaptive-muted py-8">
                         <i className="ri-customer-service-2-line text-4xl mb-2" />
                         <p>有什么教育问题想要咨询吗？</p>
                       </div>
@@ -495,7 +495,7 @@ export default function AICourseRecommendation({
                       >
                         <div className={`inline-block max-w-[80%] rounded-2xl px-4 py-3 ${message.role === 'user'
                           ? 'bg-blue-500 text-white'
-                          : 'bg-white border border-gray-200 text-gray-800'
+                          : 'bg-surface border border-soft text-adaptive'
                           }`}>
                           {message.content}
                         </div>
@@ -508,7 +508,7 @@ export default function AICourseRecommendation({
                         animate={{ opacity: 1, y: 0 }}
                         className="text-left mb-4"
                       >
-                        <div className="inline-block bg-white border border-gray-200 rounded-2xl px-4 py-3">
+                        <div className="inline-block bg-surface border border-soft rounded-2xl px-4 py-3">
                           <div className="flex items-center gap-2">
                             <motion.div
                               animate={{ rotate: 360 }}
@@ -516,7 +516,7 @@ export default function AICourseRecommendation({
                             >
                               <i className="ri-loader-4-line text-blue-500" />
                             </motion.div>
-                            <span className="text-gray-600">正在思考...</span>
+                            <span className="text-adaptive-muted">正在思考...</span>
                           </div>
                         </div>
                       </motion.div>
@@ -544,7 +544,7 @@ export default function AICourseRecommendation({
                       onChange={(e) => { setCurrentMessage(e.target.value); }}
                       onKeyDown={(e) => e.key === 'Enter' && handleChatMessage()}
                       placeholder="请输入您的问题..."
-                      className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="flex-1 px-4 py-3 border border-soft rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                       disabled={isGenerating}
                     />
                     <button

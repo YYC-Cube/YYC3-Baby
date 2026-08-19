@@ -11,9 +11,9 @@
 
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { useAIXiaoyu } from "@/hooks/useAIXiaoyu"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 interface Homework {
   id: string
@@ -91,7 +91,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
         onClick={onClose}
       >
         <motion.div
-          className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+          className="bg-surface rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
           initial={{ scale: 0.9, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
@@ -131,7 +131,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
           </div>
 
           {/* 标签页 */}
-          <div className="flex border-b border-slate-200 bg-slate-50">
+          <div className="flex border-b border-soft bg-surface-soft">
             {[
               { id: 'guide' as const, icon: 'ri-lightbulb-line', label: 'AI辅导' },
               { id: 'solve' as const, icon: 'ri-edit-line', label: '解题助手' },
@@ -139,11 +139,10 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
             ].map((tab) => (
               <button
                 key={tab.id}
-                className={`flex-1 flex flex-col items-center py-3 text-xs transition-all ${
-                  activeTab === tab.id
-                    ? 'text-blue-500 border-b-2 border-blue-500 bg-white'
-                    : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
-                }`}
+                className={`flex-1 flex flex-col items-center py-3 text-xs transition-all ${activeTab === tab.id
+                  ? 'text-blue-500 border-b-2 border-blue-500 bg-surface'
+                  : 'text-adaptive-muted hover:text-adaptive hover:bg-surface'
+                  }`}
                 onClick={() => { setActiveTab(tab.id); }}
               >
                 <i className={`${tab.icon} text-lg mb-1`} />
@@ -174,7 +173,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
                         <span>小语正在思考辅导方案...</span>
                       </div>
                     ) : (
-                      <div className="text-slate-700 whitespace-pre-wrap text-sm leading-relaxed">
+                      <div className="text-adaptive whitespace-pre-wrap text-sm leading-relaxed">
                         {aiSuggestion || '请稍等，正在生成辅导建议...'}
                       </div>
                     )}
@@ -185,7 +184,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
                       <i className="ri-magic-line" />
                       学习小贴士
                     </h5>
-                    <ul className="text-sm text-slate-600 space-y-1">
+                    <ul className="text-sm text-adaptive-muted space-y-1">
                       <li>• 先仔细阅读题目，理解题意</li>
                       <li>• 回忆相关的知识点和方法</li>
                       <li>• 分步骤解答，检查每一步</li>
@@ -229,7 +228,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
                         <i className="ri-lightbulb-flash-line" />
                         解题思路
                       </h5>
-                      <div className="text-slate-700 whitespace-pre-wrap text-sm leading-relaxed">
+                      <div className="text-adaptive whitespace-pre-wrap text-sm leading-relaxed">
                         {aiSuggestion}
                       </div>
                     </div>
@@ -250,7 +249,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
                       <i className="ri-error-warning-line" />
                       常见错误
                     </h5>
-                    <div className="space-y-2 text-sm text-slate-600">
+                    <div className="space-y-2 text-sm text-adaptive-muted">
                       {homework.subject === '数学' && (
                         <>
                           <p>• <strong>计算错误</strong>：加减法时注意进位和退位</p>
@@ -280,7 +279,7 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
                       <i className="ri-heart-line" />
                       小语鼓励
                     </h5>
-                    <p className="text-sm text-slate-600 leading-relaxed">
+                    <p className="text-sm text-adaptive-muted leading-relaxed">
                       别担心犯错，每个错误都是学习的好机会！小语相信你通过努力一定能够掌握这些知识点。记住，练习让你更优秀！💪
                     </p>
                   </div>
@@ -290,10 +289,10 @@ export default function AIHomeworkAssistant({ homework, isOpen, onClose, onCompl
           </div>
 
           {/* 底部操作 */}
-          <div className="border-t border-slate-200 p-6 bg-slate-50">
+          <div className="border-t border-soft p-6 bg-surface-soft">
             <div className="flex gap-3">
               <button
-                className="flex-1 py-3 bg-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-300 transition"
+                className="flex-1 py-3 bg-surface-soft text-adaptive-muted rounded-xl font-bold hover:bg-surface transition"
                 onClick={onClose}
               >
                 稍后再做
