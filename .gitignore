@@ -599,9 +599,8 @@ scripts/test-*.sh
 # 🌍 Localization & i18n
 # ========================================
 
-# Localization
+# Localization（i18n/ 为 next-intl 必需配置，必须提交）
 locales/
-i18n/
 translations/
 
 # ========================================
