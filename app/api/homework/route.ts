@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { listRows, createRow, isForeignKeyError } from "@/lib/db/server"
+import { requireAuth } from "@/lib/auth/guard"
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,6 +21,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // P0-1 鉴权：写操作需登录
+  const auth = await requireAuth(request)
+  if (auth instanceof NextResponse) return auth
+
   try {
     const body = await request.json()
     if (!body?.child_id || !body?.subject || !body?.title) {

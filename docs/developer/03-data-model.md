@@ -21,7 +21,7 @@ erDiagram
 
 | 表 | 用途 | 关键列 | JSON 列（自动序列化） |
 |----|------|--------|----------------------|
-| `users` | 家长账户 | email(唯一)、role | — |
+| `users` | 家长账户 | email(唯一)、role、password_hash、first_name/last_name、is_active、email_verified（JWT 鉴权，P0-1 融合） | — |
 | `children` | 宝宝档案 | birth_date、gender、current_stage | — |
 | `growth_records` | 成长记录 | type(milestone/observation/emotion/learning)、recorded_at | media_urls、tags |
 | `growth_assessments` | 成长评估 | overall_score、stage_id | dimensions、recommendations |

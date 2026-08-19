@@ -5,7 +5,14 @@
 | 目录 | 定位 | 维护策略 |
 | ---- | ---- | -------- |
 | [developer/](./developer/) | ★ **现行开发文档**（10 篇，唯一被维护的文档集） | 随代码变更持续更新 |
+| [analysis/](./analysis/) | 专项分析报告（兄弟项目对比/技术选型/融合路线） | 结论入 developer/ 后归档 |
 | [archive/](./archive/) | 历史归档（白皮书/方案/审计/创作/快照） | 只读，不再维护 |
+
+## 专项分析（analysis/）
+
+| 文档 | 内容 |
+| ---- | ---- |
+| [YYC3-AI-Growth-Companion 对比分析与融合路线](./analysis/YYC3-AI-Growth-Companion-对比分析与融合路线.md) | 兄弟项目差距矩阵 · P0/P1/P2 融合并行项 · 三阶段路线图 |
 
 ## 现行文档（developer/）
 

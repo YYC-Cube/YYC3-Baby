@@ -187,6 +187,9 @@ export class SQLiteDatabase {
       // 启用外键约束
       this.db.exec("PRAGMA foreign_keys = ON")
 
+      // 兼容迁移：旧库 users 表补齐鉴权字段（P0-1 鉴权中间件融合）
+      this.migrateUserAuthColumns()
+
       console.log("✅ SQLite数据库初始化成功")
     } catch (error) {
       console.error("❌ SQLite数据库初始化失败:", error)
@@ -458,6 +461,28 @@ export class SQLiteDatabase {
       console.log("✅ 数据库优化完成")
     } catch (error) {
       console.error("❌ 数据库优化失败:", error)
+    }
+  }
+
+  // 兼容迁移：users 表补齐鉴权字段（P0-1 鉴权中间件融合，幂等）
+  private migrateUserAuthColumns(): void {
+    const authColumns: Array<{ name: string; ddl: string }> = [
+      { name: "password_hash", ddl: "password_hash TEXT" },
+      { name: "first_name", ddl: "first_name TEXT" },
+      { name: "last_name", ddl: "last_name TEXT" },
+      { name: "phone", ddl: "phone TEXT" },
+      { name: "is_active", ddl: "is_active INTEGER DEFAULT 1" },
+      { name: "email_verified", ddl: "email_verified INTEGER DEFAULT 0" },
+      { name: "last_login_at", ddl: "last_login_at TEXT" },
+    ]
+    for (const col of authColumns) {
+      try {
+        this.db.exec(`ALTER TABLE users ADD COLUMN ${col.ddl}`)
+        console.log(`✅ 迁移: users 表新增列 ${col.name}`)
+      } catch (err) {
+        // 列已存在时忽略（幂等），其余错误才抛出
+        if (!String(err).includes("duplicate column")) throw err
+      }
     }
   }
 

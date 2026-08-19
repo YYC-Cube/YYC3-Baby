@@ -1,7 +1,12 @@
+import { requireAuth } from "@/lib/auth/guard"
+import { deleteRow, updateRow } from "@/lib/db/server"
 import { type NextRequest, NextResponse } from "next/server"
-import { updateRow, deleteRow } from "@/lib/db/server"
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // P0-1 鉴权：写操作需登录
+  const auth = await requireAuth(request)
+  if (auth instanceof NextResponse) return auth
+
   try {
     const { id } = await params
     const body = await request.json()
@@ -20,7 +25,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   }
 }
 
-export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // P0-1 鉴权：写操作需登录
+  const auth = await requireAuth(request)
+  if (auth instanceof NextResponse) return auth
+
   try {
     const { id } = await params
     const deleted = await deleteRow("homework_tasks", id)
