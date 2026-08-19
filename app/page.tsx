@@ -19,7 +19,7 @@ import Navigation from "@/components/Navigation"
 import ChildSelector from "@/components/ChildSelector"
 import { useAuth } from "@/hooks/useAuth"
 import { useChildren } from "@/hooks/useChildren"
-import { db, type Assessment, type GrowthRecord, type Milestone } from "@/lib/db/client"
+import { authFetch } from "@/lib/api/auth-fetch"
 import { getCharacterForUser, characterManager, type CharacterConfig } from "@/lib/character-manager"
 
 export default function HomePage() {
@@ -32,12 +32,24 @@ export default function HomePage() {
   useEffect(() => {
     const loadStats = async () => {
       if (!currentChild) return
-      const [records, milestones, assessments] = await Promise.all([
-        db.count<GrowthRecord>("growth_records", (r) => r.child_id === currentChild.id),
-        db.count<Milestone>("milestones", (m) => m.child_id === currentChild.id),
-        db.count<Assessment>("growth_assessments", (a) => a.child_id === currentChild.id),
-      ])
-      setStats({ records, milestones, assessments })
+      // 服务端聚合统计（httpOnly Cookie 认证；未登录时保持 0）
+      try {
+        const res = await authFetch("/api/stats")
+        if (!res.ok) return
+        const result = (await res.json()) as {
+          success?: boolean
+          data?: { records?: number; milestones?: number; assessments?: number }
+        }
+        if (result.success && result.data) {
+          setStats({
+            records: result.data.records ?? 0,
+            milestones: result.data.milestones ?? 0,
+            assessments: result.data.assessments ?? 0,
+          })
+        }
+      } catch {
+        // 统计失败静默：卡片保持 0
+      }
     }
     void loadStats()
   }, [currentChild])

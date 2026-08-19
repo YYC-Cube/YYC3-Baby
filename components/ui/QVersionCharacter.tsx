@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useChildrenMock } from '@/hooks/useChildren-mock'
 import { characterManager } from '@/lib/character-manager'
 
-// Mock Child type to avoid database dependency（与 lib/db/client 的 Child 结构兼容）
+// 展示用 Child 形状（与 lib/db/types 的 Child 结构兼容）
 type MockChild = {
   id: string
   user_id: string

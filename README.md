@@ -62,7 +62,7 @@ bun test
 
 ## 数据层
 
-- **真实持久化**：children / growth-records / homework（含 `[id]`）四个 API 走
+- **真实持久化**：children / growth-records / homework（含 `[id]`）全套 CRUD API 走
   `lib/db/server.ts` → `lib/db/sqlite-client.ts`（`node:sqlite`），数据落盘 `data/yyc3.db`
 - 首次访问自动建表并灌入种子数据（示例家庭/作业/课程）
 - JSON 列（media_urls/tags 等）由 server 层自动序列化/反序列化

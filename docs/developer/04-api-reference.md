@@ -23,6 +23,14 @@
 
 字段白名单：name / nickname / birth_date / gender / avatar_url / current_stage；其余字段（含恶意键）静默丢弃。
 
+### PATCH /api/children/[id]
+
+部分更新（白名单同上；id/user_id 不可变更）。404 不存在 / 403 非本人。
+
+### DELETE /api/children/[id]
+
+删除档案，**外键级联删除**其成长记录/作业/里程碑/评估。404 不存在 / 403 非本人。
+
 ### GET /api/growth-records
 
 | Query | 说明 |
@@ -40,6 +48,14 @@
   "content": "主动邀请小朋友玩耍", "media_urls": [], "tags": ["社交"] }
 // 403 → child_id 不属于当前用户（防 IDOR 探测）
 ```
+
+### DELETE /api/growth-records/[id]
+
+删除记录。404 不存在 / 403 非本人（记录 → 孩子 → 用户归属校验）。
+
+### GET /api/stats
+
+当前用户聚合统计：`data: { children, records, milestones, assessments }`（首页卡片数据源）。
 
 ### GET /api/homework
 

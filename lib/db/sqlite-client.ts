@@ -9,8 +9,8 @@ import { existsSync, mkdirSync } from "node:fs"
 import { dirname } from "node:path"
 import { DatabaseSync, type SQLInputValue } from "node:sqlite"
 import bcrypt from "bcryptjs"
-import type { Assessment, Child, GrowthRecord, Milestone } from "./client"
 import { assertSQLIdentifier } from "./identifier"
+import type { Assessment, Child, GrowthRecord, Milestone } from "./types"
 
 // 数据库表创建SQL
 const CREATE_TABLES_SQL = `

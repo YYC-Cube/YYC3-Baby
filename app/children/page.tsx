@@ -2,40 +2,28 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Navigation from "@/components/Navigation"
 import PageHeader from "@/components/headers/PageHeader"
-import { db, type Child } from "@/lib/db/client"
-import { useAuth } from "@/hooks/useAuth"
+import { useChildren } from "@/hooks/useChildren"
+import type { Child } from "@/lib/db/types"
+import { authFetch } from "@/lib/api/auth-fetch"
 import { ChildQVersionAvatar, GenderSelector } from "@/components/ui/QVersionCharacter"
 
 export default function ChildrenPage() {
-  const { user } = useAuth()
-  const [children, setChildren] = useState<Child[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  // 数据统一：经服务端 API（httpOnly Cookie 认证 + 租户隔离）
+  const { children, isLoading, error, refreshChildren, deleteChild } = useChildren()
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingChild, setEditingChild] = useState<Child | null>(null)
 
-  useEffect(() => {
-    void loadChildren()
-  }, [])
-
-  const loadChildren = async () => {
-    setIsLoading(true)
-    try {
-      await db.seedMockData()
-      const data = await db.findMany<Child>("children")
-      setChildren(data)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   const handleDelete = async (id: string) => {
     if (confirm("确定要删除该儿童档案吗？相关的成长记录也将被删除。")) {
-      await db.delete("children", id)
-      setChildren(children.filter((c) => c.id !== id))
+      try {
+        await deleteChild(id)
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "删除失败，请先登录")
+      }
     }
   }
 
@@ -68,6 +56,11 @@ export default function ChildrenPage() {
     <div className="min-h-screen flex flex-col bg-linear-to-b from-sky-50 to-white">
       <PageHeader title="儿童档案" subtitle="管理孩子的成长档案" showBack />
 
+      {error && (
+        <div className="mx-4 mt-3 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-700">
+          {error}——请先在首页登录后再管理档案
+        </div>
+      )}
       <main className="flex-1 px-4 pb-24 pt-4">
         <div className="max-w-4xl mx-auto">
           {/* 添加按钮 */}
@@ -198,21 +191,35 @@ export default function ChildrenPage() {
               setEditingChild(null)
             }}
             onSave={async (data) => {
-              if (editingChild) {
-                await db.update<Child>("children", editingChild.id, data)
-              } else {
-                const createData: Omit<Child, "id" | "created_at"> = {
-                  user_id: user?.id || "user-001",
-                  name: data.name || "",
-                  birth_date: data.birth_date || new Date().toISOString(),
-                  gender: data.gender || "male",
+              try {
+                const res = editingChild
+                  ? await authFetch(`/api/children/${editingChild.id}`, {
+                      method: "PATCH",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(data),
+                    })
+                  : await authFetch("/api/children", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      // user_id 由服务端从认证令牌取，客户端不传
+                      body: JSON.stringify({
+                        name: data.name || "",
+                        birth_date: data.birth_date || new Date().toISOString(),
+                        gender: data.gender || "male",
+                        nickname: data.nickname,
+                        avatar_url: data.avatar_url,
+                        current_stage: data.current_stage,
+                      }),
+                    })
+                if (!res.ok) {
+                  const result = (await res.json().catch(() => ({}))) as { message?: string }
+                  throw new Error(result.message ?? "保存失败，请先登录")
                 }
-                if (data.nickname !== undefined) createData.nickname = data.nickname
-                if (data.avatar_url !== undefined) createData.avatar_url = data.avatar_url
-                if (data.current_stage !== undefined) createData.current_stage = data.current_stage
-                await db.create<Child>("children", createData)
+              } catch (err) {
+                alert(err instanceof Error ? err.message : "保存失败")
+                return // 保留弹窗，用户可重试
               }
-              void loadChildren()
+              await refreshChildren()
               setShowAddModal(false)
               setEditingChild(null)
             }}

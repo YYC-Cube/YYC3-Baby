@@ -5,7 +5,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from "next/link"
 import { useChildren } from "@/hooks/useChildren"
-import type { Child } from "@/lib/db/client"
+import type { Child } from "@/lib/db/types"
 
 interface ChildSelectorProps {
   onSelect?: (child: Child) => void

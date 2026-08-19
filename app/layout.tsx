@@ -18,7 +18,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import type React from "react"
-// import { DatabaseInitializer } from "@/components/DatabaseInitializer"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], display: "swap" })

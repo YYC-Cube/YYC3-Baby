@@ -1,8 +1,7 @@
 /**
- * 最小业务闭环 e2e 冒烟（宗师闭环记录建议）
- * 流程：UI 登录（演示账号）→ 建娃（API，httpOnly Cookie 认证）→ 写成长记录 → 校验租户隔离 → 登出 → 401
- * 说明：children/growth 页面 UI 目前读写 localStorage mock 层（见阶段记录），
- *       数据写入真实服务端经浏览器内 fetch 完成——覆盖 cookie 认证 + 租户隔离 + 外键全链路。
+ * 最小业务闭环 e2e 冒烟（含数据自清理）
+ * 流程：UI 登录（演示账号）→ 建娃 → 写成长记录 → 复核落库 → 删除娃（级联清理）→ 校验租户隔离 → 登出 → 401
+ * 全程 httpOnly Cookie 认证；数据经真实服务端 API（mock 层已于 2026-08 移除）。
  */
 import { expect, test } from "@playwright/test"
 
@@ -59,8 +58,6 @@ test("登录 → 建娃 → 写记录 → 登出 全链路", async ({ page }) =>
   expect(names).not.toContain("小明") // 其他用户的数据不可见
 
   // —— 5. 记录可按 childId 查询（复核写入真实落库）——
-  // 已知边界：children/growth-records 暂无 DELETE 端点，e2e 每次运行会在开发库留下
-  // 1 个 "e2e娃娃*" 及其记录（阶段记录已列为开放项）
   const records = await page.evaluate(async (cid) => {
     const res = await fetch(`/api/growth-records?childId=${cid}`)
     return { status: res.status, body: await res.json() }
@@ -68,7 +65,20 @@ test("登录 → 建娃 → 写记录 → 登出 全链路", async ({ page }) =>
   expect(records.status).toBe(200)
   expect((records.body.data as Array<{ title: string }>).some((r) => r.title === "e2e 冒烟记录")).toBe(true)
 
-  // —— 6. 登出（UI 弹窗或 API 清 Cookie）→ 数据访问 401 ——
+  // —— 6. 自清理：删除 e2e 娃娃（级联删除记录）并复核 ——
+  const cleanup = await page.evaluate(async (cid) => {
+    const res = await fetch(`/api/children/${cid}`, { method: "DELETE" })
+    return res.status
+  }, childId)
+  expect(cleanup).toBe(200)
+  const stillThere = await page.evaluate(async (name) => {
+    const res = await fetch("/api/children")
+    const body = await res.json()
+    return (body.data as Array<{ name: string }>).some((c) => c.name === name)
+  }, `e2e娃娃${stamp}`)
+  expect(stillThere).toBe(false)
+
+  // —— 7. 登出（UI 弹窗或 API 清 Cookie）→ 数据访问 401 ——
   await page.evaluate(async () => {
     await fetch("/api/auth/logout", { method: "POST" })
   })

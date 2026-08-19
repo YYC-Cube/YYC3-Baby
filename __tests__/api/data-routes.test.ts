@@ -62,7 +62,9 @@ mock.module("@/lib/auth/service", () => ({
 
 // mock 就位后再加载路由模块
 const childrenRoute = await import("../../app/api/children/route")
+const childrenIdRoute = await import("../../app/api/children/[id]/route")
 const growthRoute = await import("../../app/api/growth-records/route")
+const growthIdRoute = await import("../../app/api/growth-records/[id]/route")
 const homeworkRoute = await import("../../app/api/homework/route")
 const homeworkIdRoute = await import("../../app/api/homework/[id]/route")
 
@@ -187,6 +189,62 @@ describe("GET /api/homework", () => {
   test("按用户孩子集合过滤", async () => {
     const { body } = await j(await homeworkRoute.GET(authed("http://x/api/homework", "user-b")))
     expect(body.data.map((r: Row) => r.id)).toEqual(["hw-b"])
+  })
+})
+
+describe("PATCH/DELETE /api/children/[id]", () => {
+  const P = (id: string) => ({ params: Promise.resolve({ id }) })
+
+  test("改他人档案 → 403 且未更新", async () => {
+    const req = authed("http://x/api/children/child-b1", "user-a", {
+      method: "PATCH", body: JSON.stringify({ name: "hack" }),
+    })
+    const { status } = await j(await childrenIdRoute.PATCH(req, P("child-b1")))
+    expect(status).toBe(403)
+    expect(db.updatedCalls.length).toBe(0)
+  })
+
+  test("改自己档案 → 200；user_id/id 不可变更", async () => {
+    const req = authed("http://x/api/children/child-a1", "user-a", {
+      method: "PATCH", body: JSON.stringify({ name: "改名", user_id: "evil", id: "evil" }),
+    })
+    const { status } = await j(await childrenIdRoute.PATCH(req, P("child-a1")))
+    expect(status).toBe(200)
+    const call = db.updatedCalls.at(-1)!
+    expect(call.data.name).toBe("改名")
+    expect(call.data).not.toHaveProperty("user_id")
+    expect(call.data).not.toHaveProperty("id")
+  })
+
+  test("删自己档案 → 200；删他人 → 403；不存在 → 404", async () => {
+    const ok = await j(await childrenIdRoute.DELETE(authed("http://x/api/children/child-a1", "user-a", { method: "DELETE" }), P("child-a1")))
+    expect(ok.status).toBe(200)
+    expect(db.deleted).toContain("child-a1")
+
+    const cross = await j(await childrenIdRoute.DELETE(authed("http://x/api/children/child-b1", "user-a", { method: "DELETE" }), P("child-b1")))
+    expect(cross.status).toBe(403)
+
+    const ghost = await j(await childrenIdRoute.DELETE(authed("http://x/api/children/ghost", "user-a", { method: "DELETE" }), P("ghost")))
+    expect(ghost.status).toBe(404)
+  })
+})
+
+describe("DELETE /api/growth-records/[id]", () => {
+  const P = (id: string) => ({ params: Promise.resolve({ id }) })
+
+  test("删他人记录 → 403；删自己的 → 200", async () => {
+    const cross = await j(await growthIdRoute.DELETE(authed("http://x/api/growth-records/gr-b", "user-a", { method: "DELETE" }), P("gr-b")))
+    expect(cross.status).toBe(403)
+    expect(db.deleted.length).toBe(0)
+
+    const ok = await j(await growthIdRoute.DELETE(authed("http://x/api/growth-records/gr-a", "user-a", { method: "DELETE" }), P("gr-a")))
+    expect(ok.status).toBe(200)
+    expect(db.deleted).toContain("gr-a")
+  })
+
+  test("不存在 → 404", async () => {
+    const { status } = await j(await growthIdRoute.DELETE(authed("http://x/api/growth-records/ghost", "user-a", { method: "DELETE" }), P("ghost")))
+    expect(status).toBe(404)
   })
 })
 
