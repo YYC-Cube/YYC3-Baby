@@ -10,10 +10,12 @@ interface LoginModalProps {
   isOpen: boolean
   onClose: () => void
   onSuccess?: () => void
+  /** 打开时的初始模式（如首页"注册"按钮直达注册表单） */
+  initialMode?: "login" | "register" | "reset"
 }
 
-export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalProps) {
-  const [mode, setMode] = useState<"login" | "register" | "reset">("login")
+export default function LoginModal({ isOpen, onClose, onSuccess, initialMode = "login" }: LoginModalProps) {
+  const [mode, setMode] = useState<"login" | "register" | "reset">(initialMode)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")

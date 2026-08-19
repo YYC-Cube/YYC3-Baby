@@ -8,8 +8,9 @@
 flowchart TB
     subgraph Client["浏览器客户端"]
         UI["React 19 组件树<br/>app/ + components/"]
-        Hooks["Hooks 层<br/>useBadges · useChildren · useAIChat · 24+"]
-        Store["Redux Toolkit<br/>lib/store/"]
+        Hooks["Hooks 层<br/>useBadges · useChildren · useAIChat …"]
+        Auth["AuthProvider Context<br/>useAuth（登录态）"]
+        AF["authFetch/apiClient<br/>自动附带 httpOnly Cookie 凭据 · 401→刷新→重试"]
         LS["localStorage<br/>徽章解锁态 · 主题偏好"]
     end
 
@@ -21,25 +22,28 @@ flowchart TB
     end
 
     subgraph Server["服务端（API Routes）"]
-        AIAPI["/api/ai/*<br/>作业批改 · 语音转写 · 情感分析"]
-        CRUD["/api/children · growth-records · homework<br/>CRUD + 校验"]
+        AIAPI["/api/ai/*<br/>认证+限流 · 作业批改 · 语音转写 · 情感分析"]
+        AG["/api/agentic<br/>AgenticCore 服务端单例"]
+        AuthAPI["/api/auth/*<br/>JWT 签发/刷新/登出（httpOnly Cookie）"]
+        CRUD["/api/children · growth-records · homework<br/>CRUD + 认证 + 租户隔离 + 归属校验"]
         DBL["lib/db/server.ts<br/>表名白名单 · JSON 列序列化 · 种子确保"]
     end
 
     subgraph Data["数据层"]
         SQLite[("node:sqlite<br/>data/yyc3.db<br/>WAL · 外键约束")]
-        Seed["种子数据<br/>示例家庭/作业/课程"]
+        Seed["种子数据<br/>示例家庭/作业/课程（含演示账号）"]
     end
 
     subgraph External["外部服务"]
         BigModel["BigModel 开放平台<br/>open.bigmodel.cn"]
     end
 
-    UI --> Hooks --> Store
+    UI --> Hooks --> Auth
+    Hooks --> AF
     UI --> LS
     Client -->|fetch| MW --> RSC --> Pages
     RSC --> I18N
-    Hooks -->|JSON| AIAPI & CRUD
+    AF -->|JSON| AIAPI & CRUD & AuthAPI & AG
     AIAPI -->|服务端持有密钥| BigModel
     CRUD --> DBL --> SQLite
     Seed --> SQLite

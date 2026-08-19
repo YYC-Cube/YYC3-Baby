@@ -4,15 +4,15 @@
 
 ```mermaid
 flowchart LR
-    T["bunx tsc --noEmit<br/>0 错误"] --> L["bun run lint<br/>0 error"] --> B["next build<br/>含类型检查"] --> U["bun test<br/>248 用例"] --> P["推送 ✅"]
+    T["bunx tsc --noEmit<br/>0 错误"] --> L["bun run lint<br/>0 error"] --> B["next build<br/>含类型检查"] --> U["bun test<br/>251 用例"] --> P["推送 ✅"]
 ```
 
 | 门禁 | 命令 | 当前基线 |
 | ------ | ------ | --------- |
 | 类型 | `bun run type-check` | **0 错误**（应用代码；`__tests__/`、`themes/` 排除） |
-| Lint | `bun run lint` | **0 error**，~1.5k warning（见债务清单） |
+| Lint | `bun run lint` | **0 error**，~460 warning（见债务清单） |
 | 构建 | `bun run build` | 通过（类型门禁已恢复，无 ignoreBuildErrors） |
-| 测试 | `bun test` | 248/248（16 文件，<1s） |
+| 测试 | `bun test` | 251/251（19 文件，<1s；含 38 个安全行为用例） |
 | 依赖 | `npm audit --package-lock-only --registry=https://registry.npmjs.org` | 0 漏洞 |
 
 ## 测试套件结构

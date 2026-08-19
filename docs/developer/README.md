@@ -20,10 +20,10 @@
 bun install --registry https://registry.npmmirror.com
 cp .env.example .env.local   # 填入 BIGMODEL_API_KEY
 bun run dev                   # http://localhost:1228
-bun test                      # 248 个用例
+bun test                      # 251 个用例
 ```
 
 ## 技术栈速览
 
 Next.js 16（App Router · Turbopack）· React 19 · TypeScript 5.9（strict）· Tailwind CSS 4 ·
-shadcn/ui（Radix）· Redux Toolkit + TanStack Query · node:sqlite · next-intl v4 · Bun（测试运行时）
+shadcn/ui（Radix）· React state + AuthProvider Context + authFetch · node:sqlite · next-intl v4 · Bun（测试运行时）

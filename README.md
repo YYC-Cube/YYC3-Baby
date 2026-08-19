@@ -19,7 +19,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/build-passing-22c55e" alt="build passing" />
-  <img src="https://img.shields.io/badge/tests-248%20passed-22c55e" alt="248 tests passed" />
+  <img src="https://img.shields.io/badge/tests-251%20passed-22c55e" alt="251 tests passed" />
   <img src="https://img.shields.io/badge/type--check-0%20errors-22c55e" alt="0 type errors" />
   <img src="https://img.shields.io/badge/security-0%20vulnerabilities-22c55e" alt="0 vulnerabilities" />
   <img src="https://img.shields.io/badge/%E5%BE%BD%E7%AB%A0-30%20%E6%9E%9A-d946ef?logo=medal&logoColor=white" alt="30 badges" />
@@ -36,7 +36,7 @@
 | 框架 | Next.js 16（App Router）+ React 19 + TypeScript 5.9 |
 | 运行时/包管理 | Node ≥ 22.13（`node:sqlite`）+ Bun（测试）/ npm 兼容 |
 | 样式 | Tailwind CSS 4 + shadcn/ui（Radix） |
-| 状态 | Redux Toolkit + TanStack Query + SWR |
+| 状态 | React state + AuthProvider Context + authFetch/apiClient（认证自动附带与刷新） |
 | AI | BigModel 开放平台（作业批改 / 语音 / 情感分析），密钥仅服务端 |
 | 数据 | SQLite（`node:sqlite`，`data/yyc3.db`，WAL） |
 | i18n | next-intl v4（zh 默认 / en，`/en` 前缀路由） |
@@ -56,7 +56,7 @@ bun run dev
 # 构建 / 生产启动
 bun run build && bun run start
 
-# 测试（248 个用例）
+# 测试（251 个用例）
 bun test
 ```
 
@@ -98,7 +98,7 @@ bun test
 | ------ | ------ |
 | `bun run dev` | Next.js 开发服务器（:1228） |
 | `bun run build` / `start` | 生产构建 / 启动 |
-| `bun test` | 单元测试（248 用例，全绿） |
+| `bun test` | 单元测试（251 用例，全绿） |
 | `bun run type-check` | 类型检查（应用代码 **0 错误**，见 TYPECHECK_BASELINE.md） |
 | `bun run lint` / `lint:fix` | ESLint 检查 / 自动修复 |
 
@@ -111,19 +111,20 @@ bun test
 │   └── <feature>/        #   功能页面（growth/homework/books/...）
 ├── components/           # React 组件（ui/ 基础件 + 业务分组 + 角色主题）
 ├── lib/
+│   ├── agentic/           #   AgenticCore 服务端单例（经 /api/agentic 调用）
 │   ├── ai/               #   AI 引擎（情感/语音/多模态）
-│   ├── api/              #   外部 API 客户端（服务端专用）
+│   ├── api/              #   外部 API 客户端（服务端）+ authFetch/ai-guard（客户端认证）
+│   ├── auth/             #   JWT/守卫/Cookie 传输
 │   ├── badges/           #   徽章定义与评估引擎（30 枚）
 │   ├── db/               #   SQLite 数据层（server.ts 为 API 统一入口）
-│   ├── prediction/       #   预测引擎基座与专项引擎
-│   └── store/            #   Redux 状态
+│   └── prediction/       #   预测引擎基座与专项引擎
 ├── services/prediction/  # 智能预测服务（模型选择/质量监控）
 ├── core/                 # AgenticCore 自治核心
 ├── i18n/ messages/       # next-intl 配置与中英文案
 ├── middleware.ts         # locale 路由中间件
 ├── hooks/ types/ config/ # 钩子、类型、配置
 ├── themes/               # Figma 三套主题参考（未接线，排除出 tsc）
-├── __tests__/            # 单元测试（248 用例）
+├── __tests__/            # 单元测试（251 用例）
 ├── public/               # 静态资源（icon/manifest/PWA/角色照片/CNAME）
 ├── scripts/              # 部署脚本 + 文档生成器（generate-docs.py）
 └── docs/                 # ★ 文档中心（唯一入口见 docs/README.md）
@@ -135,7 +136,11 @@ bun test
 
 - **密钥只进服务端**：`BIGMODEL_API_KEY` 为服务端变量；AI 调用一律走 `app/api/ai/*` 代理路由。
   禁止 `NEXT_PUBLIC_` 前缀承载密钥。
-- `.env*` 已 gitignore；`data/`（SQLite 库文件）同样不入库。
+- **认证**：JWT（access/refresh 类型声明不可互换）经 **httpOnly Cookie** 传输（Bearer 头兼容），
+  SameSite=Lax + Origin 校验防 CSRF；数据 API 一律登录 + 按用户隔离，写操作校验归属；
+  AI 路由认证 + 限流（429 带 Retry-After）。生产必须配置 `JWT_SECRET`。
+- **演示账号**（种子数据）：`parent@yyc3.com` / `demo123456`。
+- `.env*` 已 gitignore；`data/`（SQLite 库文件与开发密钥）同样不入库。
 - 安全响应头（CSP / X-Frame-Options / nosniff / Referrer-Policy）配置于 `next.config.mjs`。
 - 依赖审计：`npm audit --package-lock-only --registry=https://registry.npmjs.org`，当前 **0 漏洞**。
 
@@ -160,8 +165,8 @@ bun test
 
 - ✅ 构建通过，生产冒烟 200（含 `/en` i18n 路由、`/manifest.json`、`/icon.svg`）
 - ✅ SQLite 真实持久化（写入 → 重启 → 数据在）
-- ✅ 测试 248/248 全绿
+- ✅ 测试 251/251 全绿（含 38 个安全行为用例）
 - ✅ 依赖 0 漏洞；类型债 1,986 → **0**（[TYPECHECK_BASELINE.md](./TYPECHECK_BASELINE.md)，门禁已恢复）
 - ✅ 徽章系统：30 枚勋章 × 真实数据评估引擎（`lib/badges/`）
-- ✅ 鉴权中间件（JWT + bcrypt）、Winston 日志体系、语音三件套、四主题系统、组件语义化（90%）
-- 📍 后续：按域持续消化 lint 债务（~1450 warn，见 [07 · 测试与质量门禁](./docs/developer/07-testing-quality.md)）
+- ✅ 鉴权（JWT 类型声明 + httpOnly Cookie + 限流 + 租户隔离）、Winston 日志体系、语音三件套、四主题系统、组件语义化（90%）
+- 📍 后续：按域持续消化 lint 债务（~460 warn，见 [07 · 测试与质量门禁](./docs/developer/07-testing-quality.md)）

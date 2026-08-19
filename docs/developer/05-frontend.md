@@ -24,12 +24,13 @@
 ```mermaid
 flowchart LR
     L["本地状态 useState<br/>（表单/弹窗）"] --- H["领域 Hooks<br/>useChildren · useBadges · useAIChat…"]
-    H --- R["Redux Toolkit<br/>lib/store/（全局跨页状态）"]
-    R --- Q["TanStack Query / SWR<br/>（服务端状态缓存）"]
-    Q --> F["fetch → /api/*"]
+    H --- C["AuthProvider Context<br/>useAuth（登录态/用户信息）"]
+    C --> F["authFetch / apiClient<br/>自动凭据 + 401→刷新→重试"]
+    F --> API["fetch → /api/*（httpOnly Cookie）"]
 ```
 
-选型规则：**能 useState 不上 Hook，能 Hook 不上 Redux，服务端数据一律走 fetch + 缓存库**。
+选型规则：**能 useState 不上 Hook，能 Hook 不上全局 Context；服务端数据一律走 authFetch/apiClient**。
+（原 Redux Toolkit / TanStack Query / SWR 已于 2026-08 架构收敛中移除——实际消费面只剩单一选择器与零星缓存，维护成本大于收益。）
 
 ## 徽章系统（本次完善后的标准范式）
 

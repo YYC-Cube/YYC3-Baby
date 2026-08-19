@@ -16,6 +16,7 @@
     "build": "next build",
     "start": "next start -p 1228",
     "test": "bun test",
+    "test:node": "node --experimental-strip-types --import ./scripts/ts-node-hooks.mjs --test __tests__/node/*.node.ts",
     "lint": "eslint --config eslint.config.js",
     "lint:fix": "eslint --config eslint.config.js --fix",
     "type-check": "bunx tsc --noEmit",

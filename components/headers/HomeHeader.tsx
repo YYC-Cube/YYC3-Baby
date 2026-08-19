@@ -1,5 +1,6 @@
 "use client"
 
+import LoginModal from "@/components/auth/LoginModal"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -7,6 +8,8 @@ import { useEffect, useState } from "react"
 export default function HomeHeader() {
   const [time, setTime] = useState("08:30")
   const [date, setDate] = useState("11月24日 星期五")
+  // 登录/注册入口：LoginModal 弹窗（/auth/* 页面路由不存在，历史链接为死链）
+  const [authModal, setAuthModal] = useState<"login" | "register" | null>(null)
 
   useEffect(() => {
     const updateTime = () => {
@@ -62,26 +65,29 @@ export default function HomeHeader() {
       </div>
 
       <div className="flex gap-3 items-center">
-        {/* 登录/注册按钮 */}
+        {/* 登录/注册按钮（弹窗形式，避免死链路由） */}
         <div className="flex gap-2">
-          <Link href="/auth/login">
-            <motion.button
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
-              whileHover={{ scale: 1.05, y: -1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              登录
-            </motion.button>
-          </Link>
-          <Link href="/auth/register">
-            <motion.button
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
-              whileHover={{ scale: 1.05, y: -1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              注册
-            </motion.button>
-          </Link>
+          <motion.button
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setAuthModal("login")}
+          >
+            登录
+          </motion.button>
+          <motion.button
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setAuthModal("register")}
+          >
+            注册
+          </motion.button>
+          <LoginModal
+            isOpen={authModal !== null}
+            initialMode={authModal ?? "login"}
+            onClose={() => setAuthModal(null)}
+          />
         </div>
 
         <QuickActionButton
