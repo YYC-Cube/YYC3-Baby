@@ -28,8 +28,10 @@ jobs:
 
       - name: Install pandoc
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends pandoc
+          curl -sL https://github.com/jgm/pandoc/releases/download/3.6.4/pandoc-3.6.4-linux-amd64.tar.gz -o pandoc.tar.gz
+          tar xzf pandoc.tar.gz
+          sudo cp pandoc-3.6.4/bin/pandoc /usr/local/bin/
+          pandoc --version | head -1
 
       - name: Build documentation site
         run: |
@@ -45,18 +47,18 @@ jobs:
           for f in docs/developer/*.md; do
             name="$(basename "${f%.md}")"
             title="YYC³ 开发者文档 · ${name}"
-            pandoc "$f" -s --metadata "title=${title}" --metadata lang=zh-CN \
+            pandoc "$f" -f markdown -s --metadata "title=${title}" --metadata lang=zh-CN \
               --css=style.css --embed-resources=false \
               -o "site/developer/${name}.html"
           done
 
           # 落地页：文档中心主索引
-          pandoc docs/README.md -s --metadata "title=YYC³ 文档中心" \
+          pandoc docs/README.md -f markdown -s --metadata "title=YYC³ 文档中心" \
             --metadata lang=zh-CN --css=style.css --embed-resources=false \
             -o site/index.html
 
           # 项目 README 同步渲染（供「项目 README」交叉链接使用）
-          pandoc README.md -s --metadata "title=YYC³ 小语智能成长守护系统" \
+          pandoc README.md -f markdown -s --metadata "title=YYC³ 小语智能成长守护系统" \
             --metadata lang=zh-CN --css=style.css --embed-resources=false \
             -o site/README.html
 
