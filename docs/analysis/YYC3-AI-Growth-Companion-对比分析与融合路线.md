@@ -110,7 +110,7 @@ category: report
 | # | 融合项 | 目标源码 | 落地到本项目 | 收益 | 状态 |
 | ---- | ---- | ---- | ---- | ---- | ---- |
 | 1 | **API 鉴权中间件** | `backend/src/middleware/auth.ts`、`controllers/authController.ts`、`middleware/rateLimiter.ts` | `lib/auth/`（jwt/guard/service/mapper）+ `app/api/auth/*`（register/login/refresh/logout/profile）+ 写路由保护 | 补齐 README 规划的"API 鉴权中间件"，安全闭环 | ✅ 已完成 2026-08-19 |
-| 2 | **Winston 日志体系** | `lib/winston-logger.ts`、`lib/logger.client.ts`、`lib/log-analyzer.ts` | 移植为 `lib/logger/` 分层（server/client/analyzer） | 可观测性提升，替代现有 logger.ts |
+| 2 | **Winston 日志体系** | `lib/winston-logger.ts`、`lib/logger.client.ts`、`lib/log-analyzer.ts` | `lib/logger/`（server/analyzer/index）+ 接入 auth 端点与 error-report | 可观测性提升，替代现有 console.error | ✅ 已完成 2026-08-19 |
 | 3 | **语音组件补齐** | `components/voice/VoiceRecognition.tsx`、`VoiceSynthesis.tsx`、`lib/voice/voice-system.ts` | 与本项目 `lib/voice/`、`components/voice/VoiceInteraction.tsx` diff 合并 | 语音交互闭环 |
 | 4 | **监控探针** | `lib/monitoring/`、`monitoring/prometheus.yml`、prom-client | 移植 `lib/monitoring/`（后端探针），Grafana 配置可后续接 | 生产可观测性 |
 

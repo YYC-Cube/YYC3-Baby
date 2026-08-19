@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server"
-import { z } from "zod"
 import { generateToken, verifyToken } from "@/lib/auth/jwt"
 import { findUserById, toAuthUser } from "@/lib/auth/service"
+import { error as logError } from "@/lib/logger/server"
+import { NextResponse } from "next/server"
+import { z } from "zod"
 
 const refreshSchema = z.object({
   refreshToken: z.string().min(1, "refreshToken 为必填"),
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
       meta: { timestamp: new Date().toISOString() },
     })
   } catch (error) {
-    console.error("[auth] refresh error:", error)
+    logError("刷新令牌失败", error, { module: "auth", function: "refresh" })
     return NextResponse.json({ success: false, error: "Server Error", message: "刷新令牌失败" }, { status: 500 })
   }
 }

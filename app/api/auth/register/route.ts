@@ -1,5 +1,6 @@
 import { generateRefreshToken, generateToken } from "@/lib/auth/jwt"
 import { createUser } from "@/lib/auth/service"
+import { error as logError } from "@/lib/logger/server"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
     if (message.includes("已注册")) {
       return NextResponse.json({ success: false, error: "Conflict", message }, { status: 409 })
     }
-    console.error("[auth] register error:", error)
+    logError("注册失败", error, { module: "auth", function: "register" })
     return NextResponse.json({ success: false, error: "Server Error", message: "注册失败" }, { status: 500 })
   }
 }

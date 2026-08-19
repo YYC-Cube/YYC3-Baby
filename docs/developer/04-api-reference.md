@@ -67,15 +67,15 @@ Query：`childId`、`status`（pending/in_progress/completed/overdue）。
 
 ### 其余 AI 端点（预设/轻实现）
 
-| 端点 | 用途 | 现状 |
-| ------ | ------ | ------ |
-| POST /api/ai/chat | AI 对话 | 预设回复集 + 角色路由（接入 BigModel 的挂点在 `lib/ai_roles`） |
-| POST /api/ai/emotion · enhanced-emotion | 情感分析 | 规则引擎实现 |
-| POST /api/ai/analyze-record | 记录标题/标签建议 | 轻实现 |
-| POST /api/ai/assessment-report | 评估报告 | 模板生成 |
-| POST /api/ai/continue-story · generate-image | 故事续写/图片 | 占位实现 |
-| POST /api/ai/orchestrate | 任务编排 | AgenticCore 联动 |
-| POST /api/error-report | 前端错误上报 | 日志落盘 |
+| 端点　　　　　　　　　　　　　　　　　　　　 | 用途　　　　　　　| 现状　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
+| ----------------------------------------------| -------------------| ----------------------------------------------------------------|
+| POST /api/ai/chat　　　　　　　　　　　　　　| AI 对话　　　　　 | 预设回复集 + 角色路由（接入 BigModel 的挂点在 `lib/ai_roles`） |
+| POST /api/ai/emotion · enhanced-emotion　　　| 情感分析　　　　　| 规则引擎实现　　　　　　　　　　　　　　　　　　　　　　　　　 |
+| POST /api/ai/analyze-record　　　　　　　　　| 记录标题/标签建议 | 轻实现　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
+| POST /api/ai/assessment-report　　　　　　　 | 评估报告　　　　　| 模板生成　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
+| POST /api/ai/continue-story · generate-image | 故事续写/图片　　 | 占位实现　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
+| POST /api/ai/orchestrate　　　　　　　　　　 | 任务编排　　　　　| AgenticCore 联动　　　　　　　　　　　　　　　　　　　　　　　 |
+| POST /api/error-report　　　　　　　　　　　 | 前端错误上报　　　| 日志落盘　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
 
 ## 鉴权（JWT，P0-1 融合）
 
@@ -100,6 +100,18 @@ curl -X POST /api/growth-records -H "Authorization: Bearer $TOKEN" \
 ```
 
 **配置**：`JWT_SECRET`（生产必设，`openssl rand -hex 32`）、`JWT_EXPIRES_IN`（默认 7d）、`JWT_REFRESH_EXPIRES_IN`（默认 30d）。
+
+## 日志体系（Winston，P0-2 融合）
+
+服务端日志基于 Winston + 每日轮转（移植自 YYC3-AI-Growth-Companion）：
+
+| 模块 | 职责 |
+| ------ | ------ |
+| `lib/logger/server.ts` | 服务端日志：控制台 + `logs/error-%DATE%.log`（错误，30 天）+ `logs/combined-%DATE%.log`（全量，14 天），20MB 轮转 |
+| `lib/logger/analyzer.ts` | 日志分析器：解析/统计/告警规则（高错误率/错误数/警告数/重复错误） |
+| `lib/logger.ts` | 前端浏览器日志（localStorage，原有） |
+
+**用法**：服务端路由 `import { error, info } from "@/lib/logger/server"`；已接入 auth 全部端点与 error-report。`LOG_DIR`（默认 `logs/`）、`LOG_LEVEL`（默认 dev=debug / prod=info）可配置；`logs/` 已 gitignore。
 
 ## 错误码约定
 

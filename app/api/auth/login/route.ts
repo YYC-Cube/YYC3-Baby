@@ -1,7 +1,8 @@
+import { generateRefreshToken, generateToken } from "@/lib/auth/jwt"
+import { findUserByEmail, toAuthUser, touchLastLogin, verifyPassword } from "@/lib/auth/service"
+import { error as logError, info as logInfo } from "@/lib/logger/server"
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { findUserByEmail, toAuthUser, verifyPassword, touchLastLogin } from "@/lib/auth/service"
-import { generateToken, generateRefreshToken } from "@/lib/auth/jwt"
 
 const loginSchema = z.object({
   email: z.string().email("邮箱格式不正确"),
@@ -39,6 +40,8 @@ export async function POST(request: Request) {
     void touchLastLogin(user.id)
 
     const payload = { userId: user.id, email: user.email, role: user.role }
+    logInfo("登录成功", { userId: user.id, email: user.email }, { module: "auth", function: "login" })
+
     return NextResponse.json({
       success: true,
       message: "登录成功",
@@ -53,7 +56,7 @@ export async function POST(request: Request) {
       meta: { timestamp: new Date().toISOString() },
     })
   } catch (error) {
-    console.error("[auth] login error:", error)
+    logError("登录失败", error, { module: "auth", function: "login" })
     return NextResponse.json({ success: false, error: "Server Error", message: "登录失败" }, { status: 500 })
   }
 }

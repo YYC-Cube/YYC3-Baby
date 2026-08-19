@@ -1,3 +1,4 @@
+import { error as logError } from "@/lib/logger/server"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
       meta: { timestamp: new Date().toISOString() },
     })
   } catch (error) {
-    console.error("[auth] logout error:", error)
+    logError("登出失败", error, { module: "auth", function: "logout" })
     return NextResponse.json({ success: false, error: "Server Error", message: "登出失败" }, { status: 500 })
   }
 }

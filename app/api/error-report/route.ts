@@ -3,6 +3,7 @@
  * 第五阶段系统优化与扩展
  */
 
+import { error as logError } from "@/lib/logger/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 interface ErrorReport {
@@ -34,14 +35,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 记录错误到控制台
-    console.error('Error Report:', {
+    // 记录错误到服务端日志（Winston 落盘）
+    logError("前端错误上报", {
       message: report.error.message,
       stack: report.error.stack,
       timestamp: report.timestamp,
       url: report.url,
       userAgent: report.userAgent
-    })
+    }, { module: "error-report", userId: report.userId })
 
     // 这里可以集成外部错误监控服务
     // 例如：Sentry, LogRocket, 或者自建的错误收集系统
