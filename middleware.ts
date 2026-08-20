@@ -5,12 +5,44 @@ import { routing } from "./i18n/routing"
 const intlMiddleware = createMiddleware(routing)
 
 /**
+ * 数据敏感页：未登录（无 yyc3_at Cookie）时重定向首页并提示登录。
+ * 仅做 Cookie 存在性探测（UX 门禁）；真正的鉴权在 API 层（requireAuth），
+ * 携带过期 Cookie 进入的请求仍会被 API 401/自动刷新接管。
+ */
+const PROTECTED_PAGES = [
+  "/growth",
+  "/children",
+  "/homework",
+  "/badges",
+  "/interactions",
+  "/schedule",
+  "/curriculum",
+  "/ai-creative",
+]
+
+// 首页读取该一次性 Cookie 自动弹出登录框（middleware 写入，HomeHeader 消费后清除）
+const LOGIN_PROMPT_COOKIE = "yyc3_prompt_login"
+
+/**
  * 混合路由架构：
  * - 根路由（/growth、/homework…）= 中文主应用，不经 next-intl 处理
  * - /en/*、/zh/* = 国际化镜像路由，交由 next-intl（默认语言 zh 自动去前缀）
  */
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // 敏感页会话探测：去掉 locale 前缀后匹配
+  const barePath = pathname.replace(/^\/(zh|en)(?=\/|$)/, "")
+  if (PROTECTED_PAGES.some((p) => barePath === p || barePath.startsWith(`${p}/`))) {
+    if (!request.cookies.has("yyc3_at")) {
+      const url = request.nextUrl.clone()
+      url.pathname = "/"
+      url.search = ""
+      const res = NextResponse.redirect(url)
+      res.cookies.set(LOGIN_PROMPT_COOKIE, "1", { path: "/", maxAge: 60, sameSite: "lax" })
+      return res
+    }
+  }
 
   const isLocalePath = routing.locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)

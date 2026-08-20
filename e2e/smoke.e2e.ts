@@ -1,14 +1,20 @@
 /**
- * 最小业务闭环 e2e 冒烟（含数据自清理）
- * 流程：UI 登录（演示账号）→ 建娃 → 写成长记录 → 复核落库 → 删除娃（级联清理）→ 校验租户隔离 → 登出 → 401
- * 全程 httpOnly Cookie 认证；数据经真实服务端 API（mock 层已于 2026-08 移除）。
+ * 最小业务闭环 e2e 冒烟（含数据自清理 + 账号自举）
+ * 流程：账号自举（register，已存在则 no-op）→ UI 登录 → 建娃 → 写成长记录 → 复核落库
+ *       → 删除娃（级联清理）→ 校验租户隔离 → 登出 → 401
+ * 不依赖种子数据：CI 的 production 模式不种演示账号，由自举步骤保证账号存在。
  */
 import { expect, test } from "@playwright/test"
 
 const DEMO = { email: "parent@yyc3.com", password: "demo123456" }
 
-test("登录 → 建娃 → 写记录 → 登出 全链路", async ({ page }) => {
+test("登录 → 建娃 → 写记录 → 登出 全链路", async ({ page, request }) => {
   const stamp = Date.now()
+
+  // —— 0. 账号自举：register 对已注册邮箱是静默 no-op，任何结果都无碍后续登录 ——
+  await request.post("/api/auth/register", {
+    data: { email: DEMO.email, password: DEMO.password, firstName: "演示", lastName: "" },
+  })
 
   // —— 1. UI 登录（首页 LoginModal 弹窗）——
   await page.goto("/")
@@ -22,19 +28,20 @@ test("登录 → 建娃 → 写记录 → 登出 全链路", async ({ page }) =>
   await expect(page.getByText("欢迎回来")).toBeHidden({ timeout: 10_000 })
 
   // —— 2. 建娃（浏览器内 fetch，凭 httpOnly Cookie）——
-  const child = await page.evaluate(async (name) => {
+  type Envelope<T> = { status: number; body: { success?: boolean; data?: T; message?: string } }
+  const child = await page.evaluate(async (name): Promise<Envelope<{ id: string }>> => {
     const res = await fetch("/api/children", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name, birth_date: "2020-06-01", gender: "female" }),
     })
-    return { status: res.status, body: await res.json() }
+    return { status: res.status, body: (await res.json()) as Envelope<never>['body'] }
   }, `e2e娃娃${stamp}`)
   expect(child.status).toBe(201)
-  const childId = child.body.data.id as string
+  const childId = child.body.data!.id
 
   // —— 3. 写成长记录 ——
-  const record = await page.evaluate(async (cid) => {
+  const record = await page.evaluate(async (cid): Promise<Envelope<{ id: string }>> => {
     const res = await fetch("/api/growth-records", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -43,27 +50,27 @@ test("登录 → 建娃 → 写记录 → 登出 全链路", async ({ page }) =>
         title: "e2e 冒烟记录", content: "由 Playwright 写入",
       }),
     })
-    return { status: res.status, body: await res.json() }
+    return { status: res.status, body: (await res.json()) as Envelope<never>['body'] }
   }, childId)
   expect(record.status).toBe(201)
 
   // —— 4. 租户隔离：列表能看到自己的娃，记录可查 ——
-  const list = await page.evaluate(async () => {
+  const list = await page.evaluate(async (): Promise<Envelope<{ name: string }[]>> => {
     const res = await fetch("/api/children")
-    return { status: res.status, body: await res.json() }
+    return { status: res.status, body: (await res.json()) as Envelope<never>['body'] }
   })
   expect(list.status).toBe(200)
-  const names = (list.body.data as Array<{ name: string }>).map((c) => c.name)
+  const names = (list.body.data ?? []).map((c) => c.name)
   expect(names).toContain(`e2e娃娃${stamp}`)
   expect(names).not.toContain("小明") // 其他用户的数据不可见
 
   // —— 5. 记录可按 childId 查询（复核写入真实落库）——
-  const records = await page.evaluate(async (cid) => {
+  const records = await page.evaluate(async (cid): Promise<Envelope<{ title: string }[]>> => {
     const res = await fetch(`/api/growth-records?childId=${cid}`)
-    return { status: res.status, body: await res.json() }
+    return { status: res.status, body: (await res.json()) as Envelope<never>['body'] }
   }, childId)
   expect(records.status).toBe(200)
-  expect((records.body.data as Array<{ title: string }>).some((r) => r.title === "e2e 冒烟记录")).toBe(true)
+  expect((records.body.data ?? []).some((r) => r.title === "e2e 冒烟记录")).toBe(true)
 
   // —— 6. 自清理：删除 e2e 娃娃（级联删除记录）并复核 ——
   const cleanup = await page.evaluate(async (cid) => {
@@ -71,10 +78,10 @@ test("登录 → 建娃 → 写记录 → 登出 全链路", async ({ page }) =>
     return res.status
   }, childId)
   expect(cleanup).toBe(200)
-  const stillThere = await page.evaluate(async (name) => {
+  const stillThere = await page.evaluate(async (name): Promise<boolean> => {
     const res = await fetch("/api/children")
-    const body = await res.json()
-    return (body.data as Array<{ name: string }>).some((c) => c.name === name)
+    const body = (await res.json()) as { data?: Array<{ name: string }> }
+    return (body.data ?? []).some((c) => c.name === name)
   }, `e2e娃娃${stamp}`)
   expect(stillThere).toBe(false)
 
@@ -94,4 +101,12 @@ test("未登录访问数据 API 一律 401", async ({ request }) => {
     const res = await request.post(path, { data: { message: "x" } })
     expect(res.status(), path).toBe(401)
   }
+})
+
+test("未登录访问敏感页 → 重定向首页并提示登录", async ({ page }) => {
+  await page.goto("/growth")
+  // 中间件重定向到 /
+  expect(page.url()).toBe("http://localhost:1228/")
+  // 登录提示 Cookie 生效：登录弹窗自动弹出
+  await expect(page.getByText("欢迎回来")).toBeVisible({ timeout: 5_000 })
 })

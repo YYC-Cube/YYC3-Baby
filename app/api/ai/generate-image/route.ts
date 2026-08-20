@@ -97,10 +97,10 @@ export async function POST(req: NextRequest) {
       })
 
       if (falResponse.ok) {
-        const falData = await falResponse.json()
+        const falData = (await falResponse.json()) as { images?: Array<{ url?: string }> }
         if (falData.images && falData.images.length > 0) {
           return NextResponse.json({
-            imageUrl: falData.images[0].url,
+            imageUrl: falData.images[0]?.url ?? "",
             prompt: safePrompt,
             style,
           })

@@ -21,10 +21,20 @@ export interface AuthContext {
 /**
  * CSRF 纵深防御：Cookie 认证的非 GET 请求必须同源。
  * SameSite=Lax 已阻断跨站携带，此处校验 Origin 头作为兜底（老浏览器/自定义客户端）。
+ * 显式配置：
+ * - CSRF_TRUSTED_ORIGINS：逗号分隔的受信 Origin（如反向代理/小程序 WebView 场景）
+ * - CSRF_REQUIRE_ORIGIN=true：严格模式，缺失 Origin 的 Cookie 写请求直接拒绝（默认放行——非浏览器客户端无 Origin）
  */
 function isSameOriginCSRF(request: Request): boolean {
   const origin = request.headers.get("origin")
-  if (!origin) return true // 非浏览器客户端（curl/SDK）无 Origin，放行交由其他校验
+  if (!origin) {
+    return process.env.CSRF_REQUIRE_ORIGIN !== "true"
+  }
+  const trusted = (process.env.CSRF_TRUSTED_ORIGINS ?? "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean)
+  if (trusted.includes(origin)) return true
   try {
     const originHost = new URL(origin).host
     const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host")

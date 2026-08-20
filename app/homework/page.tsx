@@ -6,6 +6,7 @@ import Navigation from "@/components/Navigation"
 import PageHeader from "@/components/headers/PageHeader"
 import ChildSelector from "@/components/ChildSelector"
 import { useChildren } from "@/hooks/useChildren"
+import { useGrowthStage } from "@/hooks/useGrowthStage"
 import SmartHomeworkHelper from "@/components/homework/SmartHomeworkHelper"
 
 type HomeworkStatus = "pending" | "done" | "review"
@@ -52,10 +53,11 @@ export default function HomeworkPage() {
   const [filter, setFilter] = useState<HomeworkStatus>("pending")
   const [activeHomeworkId, setActiveHomeworkId] = useState<string | null>(null)
   const { currentChild } = useChildren()
+  const { exactAge } = useGrowthStage(currentChild?.birth_date ? new Date(currentChild.birth_date) : undefined)
 
   const filteredHomework = homeworkData.filter((hw) => hw.status === filter)
 
-  const handleHomeworkComplete = (homeworkId: string, results: any[]) => {
+  const handleHomeworkComplete = (homeworkId: string, results: unknown[]) => {
     console.log(`作业 ${homeworkId} 已完成，批改结果:`, results)
     setActiveHomeworkId(null)
     // Here you would normally update the homework status in your database
@@ -82,7 +84,7 @@ export default function HomeworkPage() {
               <div className="flex-1">
                 <h3 className="font-bold text-slate-800">{currentChild.name}的作业</h3>
                 <p className="text-sm text-slate-500">
-                  {(currentChild as any).age_years || 0}岁{(currentChild as any).age_months || 0}个月
+                  {exactAge?.years ?? 0}岁{exactAge?.months ?? 0}个月
                 </p>
               </div>
               <ChildSelector />

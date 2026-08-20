@@ -28,9 +28,9 @@ export function useAIVideo() {
     try {
       const stored = localStorage.getItem(VIDEO_STORAGE_KEY)
       if (stored) {
-        const parsed = JSON.parse(stored)
+        const parsed = JSON.parse(stored) as Array<GeneratedVideo & { createdAt: string }>
         setVideos(
-          parsed.map((v: GeneratedVideo) => ({
+          parsed.map((v) => ({
             ...v,
             createdAt: new Date(v.createdAt),
           })),

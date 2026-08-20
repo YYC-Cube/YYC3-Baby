@@ -38,3 +38,13 @@ jobs:
 
       - name: Build
         run: bun run build
+
+      - name: Install Playwright chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: e2e (生产构建 + 账号自举，无需种子数据)
+        env:
+          # next start 为 production 模式：必须显式提供 JWT_SECRET；种子演示账号被生产守卫跳过，
+          # e2e 第 0 步经 register 自举账号
+          JWT_SECRET: ci-test-secret-not-for-production
+        run: bun run test:e2e

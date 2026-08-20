@@ -30,8 +30,8 @@ function loadSchedules(): Schedule[] {
   const saved = localStorage.getItem(STORAGE_KEY)
   if (saved) {
     try {
-      const parsed = JSON.parse(saved)
-      return parsed.map((s: Schedule) => ({
+      const parsed = JSON.parse(saved) as Array<Omit<Schedule, 'startTime' | 'endTime' | 'createdAt' | 'updatedAt'> & Record<string, string>>
+      return parsed.map((s) => ({
         ...s,
         startTime: new Date(s.startTime),
         endTime: new Date(s.endTime),

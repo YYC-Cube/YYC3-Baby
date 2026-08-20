@@ -169,9 +169,9 @@ export function useInteractions() {
         const stored = localStorage.getItem(STORAGE_KEY)
 
         if (stored) {
-          const parsed = JSON.parse(stored)
+          const parsed = JSON.parse(stored) as Array<InteractionRecord & { createdAt: string; updatedAt: string }>
           setInteractions(
-            parsed.map((r: InteractionRecord) => ({
+            parsed.map((r) => ({
               ...r,
               createdAt: new Date(r.createdAt).getTime(),
               updatedAt: new Date(r.updatedAt).getTime(),

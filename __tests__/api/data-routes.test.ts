@@ -130,6 +130,34 @@ describe("GET /api/children", () => {
     expect(status).toBe(403)
   })
 
+  test("CSRF_TRUSTED_ORIGINS 显式放行受信源；严格模式拒绝缺失 Origin", async () => {
+    const prevTrusted = process.env.CSRF_TRUSTED_ORIGINS
+    const prevRequire = process.env.CSRF_REQUIRE_ORIGIN
+    try {
+      process.env.CSRF_TRUSTED_ORIGINS = "https://miniapp.example"
+      const ok = new NextRequest("http://x/api/children", {
+        method: "POST",
+        headers: { cookie: `yyc3_at=${tokenFor("user-a")}`, "content-type": "application/json", origin: "https://miniapp.example" },
+        body: JSON.stringify({ name: "x", birth_date: "2020-01-01" }),
+      })
+      const { status } = await j(await childrenRoute.POST(ok))
+      expect(status).toBe(201)
+
+      process.env.CSRF_TRUSTED_ORIGINS = ""
+      process.env.CSRF_REQUIRE_ORIGIN = "true"
+      const noOrigin = new NextRequest("http://x/api/children", {
+        method: "POST",
+        headers: { cookie: `yyc3_at=${tokenFor("user-a")}`, "content-type": "application/json" },
+        body: JSON.stringify({ name: "x", birth_date: "2020-01-01" }),
+      })
+      const strict = await j(await childrenRoute.POST(noOrigin))
+      expect(strict.status).toBe(403)
+    } finally {
+      process.env.CSRF_TRUSTED_ORIGINS = prevTrusted
+      process.env.CSRF_REQUIRE_ORIGIN = prevRequire
+    }
+  })
+
   test("只返回当前用户的孩子（租户隔离）", async () => {
     const { status, body } = await j(await childrenRoute.GET(authed("http://x/api/children", "user-a")))
     expect(status).toBe(200)

@@ -10,6 +10,7 @@ import { dirname } from "node:path"
 import { DatabaseSync, type SQLInputValue } from "node:sqlite"
 import bcrypt from "bcryptjs"
 import { assertSQLIdentifier } from "./identifier"
+import { error as logQueryError } from "@/lib/logger/server"
 import type { Assessment, Child, GrowthRecord, Milestone } from "./types"
 
 // 数据库表创建SQL
@@ -227,7 +228,7 @@ export class SQLiteDatabase {
       const stmt = this.db.prepare(query)
       return stmt.all(...params) as T[]
     } catch (error) {
-      console.error(`查询失败 ${table}:`, error)
+      logQueryError(`查询失败 ${table}`, error, { module: "db", function: "findMany" })
       return []
     }
   }
@@ -239,7 +240,7 @@ export class SQLiteDatabase {
       const result = stmt.get(id) as T | undefined
       return result || null
     } catch (error) {
-      console.error(`查询单条记录失败 ${table}:`, error)
+      logQueryError(`查询单条记录失败 ${table}`, error, { module: "db", function: "findOne" })
       return null
     }
   }
@@ -249,7 +250,7 @@ export class SQLiteDatabase {
       const results = await this.findMany<T>(table, conditions)
       return results[0] || null
     } catch (error) {
-      console.error(`查询首条记录失败 ${table}:`, error)
+      logQueryError(`查询首条记录失败 ${table}`, error, { module: "db", function: "findFirst" })
       return null
     }
   }
@@ -276,7 +277,7 @@ export class SQLiteDatabase {
 
       return item
     } catch (error) {
-      console.error(`创建记录失败 ${table}:`, error)
+      logQueryError(`创建记录失败 ${table}`, error, { module: "db", function: "create" })
       throw error
     }
   }
@@ -324,7 +325,7 @@ export class SQLiteDatabase {
 
       return this.findOne<T>(table, id)
     } catch (error) {
-      console.error(`更新记录失败 ${table}:`, error)
+      logQueryError(`更新记录失败 ${table}`, error, { module: "db", function: "update" })
       return null
     }
   }
@@ -353,7 +354,7 @@ export class SQLiteDatabase {
       const result = stmt.run(id)
       return result.changes > 0
     } catch (error) {
-      console.error(`删除记录失败 ${table}:`, error)
+      logQueryError(`删除记录失败 ${table}`, error, { module: "db", function: "delete" })
       return false
     }
   }
@@ -369,7 +370,7 @@ export class SQLiteDatabase {
       const result = stmt.run(...ids)
       return Number(result.changes)
     } catch (error) {
-      console.error(`批量删除记录失败 ${table}:`, error)
+      logQueryError(`批量删除记录失败 ${table}`, error, { module: "db", function: "deleteMany" })
       return 0
     }
   }
@@ -394,7 +395,7 @@ export class SQLiteDatabase {
       const result = stmt.get(...params) as { count: number }
       return result.count
     } catch (error) {
-      console.error(`统计记录数失败 ${table}:`, error)
+      logQueryError(`统计记录数失败 ${table}`, error, { module: "db", function: "count" })
       return 0
     }
   }
@@ -444,7 +445,7 @@ export class SQLiteDatabase {
 
       return { data, total, totalPages }
     } catch (error) {
-      console.error(`分页查询失败 ${table}:`, error)
+      logQueryError(`分页查询失败 ${table}`, error, { module: "db", function: "paginate" })
       return { data: [], total: 0, totalPages: 0 }
     }
   }

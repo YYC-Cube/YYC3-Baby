@@ -29,6 +29,15 @@ export default function HomeHeader() {
     return () => { clearInterval(timer); }
   }, [])
 
+  // 敏感页重定向回来的登录提示（middleware 写入的一次性 Cookie）
+  useEffect(() => {
+    if (typeof document === "undefined") return
+    if (document.cookie.split(";").some((c) => c.trim().startsWith("yyc3_prompt_login="))) {
+      setAuthModal("login")
+      document.cookie = "yyc3_prompt_login=; path=/; max-age=0"
+    }
+  }, [])
+
   return (
     <motion.header
       className="w-full px-8 py-4 flex items-center justify-between z-20"
